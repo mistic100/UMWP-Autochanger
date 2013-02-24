@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/img">
+        <file alias="bullet_green">images/bullet_green.png</file>
+        <file alias="bullet_red">images/bullet_red.png</file>
+        <file alias="error">images/error.png</file>
+        <file alias="icon">images/icon.png</file>
+        <file alias="playpause">images/play_pause.png</file>
+        <file alias="hide">images/hide.png</file>
+        <file alias="refresh">images/refresh.png</file>
+    </qresource>
+    <qresource prefix="/lang">
+        <file alias="en">lang/en.qm</file>
+        <file alias="fr">lang/fr.qm</file>
+        <file alias="help_en">lang/help_en.htm</file>
+        <file alias="help_fr">lang/help_fr.htm</file>
+    </qresource>
+</RCC>
