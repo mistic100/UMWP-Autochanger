@@ -30,14 +30,14 @@ public:
     void    vSetWidget(MainWidget* _w) { m_poMainWidget=_w; }
 
     bool    const bIsRunning() { return m_poMainTimer->isActive(); }
-    void    vStartTimer(bool _update=true);
+    void    vStartTimer(bool _forcecheck=false);
     void    vStartPause();
     QString sGetRandomFile(int _total=-1);
     QString const sGetStatusText();
     void    vGenerateFile(QVector<QString> _files);
 
 public slots:
-    void    vSlotUpdate();
+    void    vSlotUpdate(bool _forcecheck=false);
 
 };
 

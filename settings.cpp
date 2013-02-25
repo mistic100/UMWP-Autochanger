@@ -6,9 +6,6 @@
 #include "settings.h"
 #include <QDebug>
 
-typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-LPFN_ISWOW64PROCESS fnIsWow64Process;
-
 
 /*
  * constructor
@@ -26,16 +23,9 @@ Settings::Settings()
     m_iNbMonitors = 1;
     m_oWindowSize = QSize(460, 240);
     m_iDelay = 60;
-    m_bIsWow64 = false;
     m_bMinimize = true;
     m_bCheckFiles = true;
-
-    // http://msdn.microsoft.com/en-us/library/ms684139
-    fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
-    if (fnIsWow64Process != NULL)
-    {
-        fnIsWow64Process(GetCurrentProcess(), (PBOOL)&m_bIsWow64);
-    }
+    m_iMsgCount = 0;
 
     vReadXML();
     vInit();
@@ -56,7 +46,7 @@ Settings::~Settings()
  */
 void Settings::vDumpConfig()
 {
-    qDebug()<<"state : "<<m_iState<<" - x64 : "<<m_bIsWow64;
+    qDebug()<<"state : "<<m_iState;
     qDebug()<<"UltraMon "<<m_sUMVersion<<" : "<<m_sExePath;
     qDebug()<<m_iNbWallpapers<<" wallpapers - "<<iNbSets()<<" sets";
     qDebug()<<m_iDelay<<" secondes - "<<iNbFiles()<<" files";
@@ -189,7 +179,6 @@ void Settings::vInit()
  */
 void Settings::vReadNbWalls()
 {
-
     std::string file = m_sWallPath.toStdString().append(APP_WALLPAPER_FILE);
     std::ifstream ifs(file, std::ios::in | std::ios::binary);
 
@@ -261,6 +250,11 @@ void Settings::vReadXML()
                 {
                     m_bCheckFiles = config.text().toInt();
                 }
+                // msgcount
+                else if (config.tagName() == "msgcount")
+                {
+                    m_iMsgCount = config.text().toInt();
+                }
 
                 config = config.nextSibling().toElement();
             }
@@ -323,21 +317,7 @@ void Settings::vWriteXML()
     addSimpleTextNode(pDom, &config, "minimize", QString::number(m_bMinimize));
     addSimpleTextNode(pDom, &config, "delay", QString::number(m_iDelay));
     addSimpleTextNode(pDom, &config, "check", QString::number(m_bCheckFiles));
-
-        // umpath
-        /*QDomElement umpath = pDom->createElement("umpath");
-        setDomNodeValue(pDom, &umpath, m_sExePath);
-        config.appendChild(umpath);
-
-        // minimize
-        QDomElement minimize = pDom->createElement("minimize");
-        setDomNodeValue(pDom, &minimize, QString::number(m_bMinimize));
-        config.appendChild(minimize);
-
-        // delay
-        QDomElement delay = pDom->createElement("delay");
-        setDomNodeValue(pDom, &delay, QString::number(m_iDelay));
-        config.appendChild(delay);*/
+    addSimpleTextNode(pDom, &config, "msgcount", QString::number(m_iMsgCount));
 
     settings.appendChild(config);
 
@@ -379,7 +359,7 @@ void Settings::vWriteXML()
 /*
  * change the path of UltraMonDesktop.exe
  */
-bool Settings::bSetExePath(QString _sPath)
+bool Settings::bSetExePath(const QString &_sPath)
 {
     if (bFileExists(_sPath.toStdString()))
     {
@@ -427,7 +407,7 @@ Set* Settings::oAddSet(QString _sPath, QString _sName, bool _bActive)
 /*
  * delete a set
  */
-void Settings::vDeleteSet(int _i)
+void Settings::vDeleteSet(short int _i)
 {
     if ( _i < m_oSets.size())
     {
@@ -460,7 +440,7 @@ void Settings::vDeleteAll()
 /*
  * switch the status of a set
  */
-bool const Settings::bSwitchSet(int _i)
+bool const Settings::bSwitchSet(short int _i)
 {
     if ( _i < m_oSets.size())
     {
@@ -474,7 +454,7 @@ bool const Settings::bSwitchSet(int _i)
 /*
  * rename a set
  */
-QString Settings::sRenameSet(int _i, const QString &_name, bool _returnFull)
+QString Settings::sRenameSet(short int _i, const QString &_name, bool _returnFull)
 {
     if ( _i < m_oSets.size())
     {

@@ -34,11 +34,11 @@ Controller::~Controller()
 /*
  * update the wallpaper and start the timer
  */
-void Controller::vStartTimer(bool _update)
+void Controller::vStartTimer(bool _forcecheck)
 {
     m_poMainTimer->stop();
     m_poMainTimer->setInterval(m_poSettings->iDelay()*1000);
-    if (_update) vSlotUpdate();
+    vSlotUpdate(_forcecheck);
     m_poMainTimer->start();
 }
 
@@ -61,7 +61,7 @@ void Controller::vStartPause()
 /*
  * update the wallpaper
  */
-void Controller::vSlotUpdate()
+void Controller::vSlotUpdate(bool _forcecheck)
 {
     // update config
     if (m_poSettings->bCheckFiles())

@@ -27,7 +27,8 @@ private:
     // reference to some QAction modified after initilization
     QAction*            m_poActionHide1; // menu
     QAction*            m_poActionHide2; // tray
-    QAction*            m_poActionPause;
+    QAction*            m_poActionPause1; // menu
+    QAction*            m_poActionPause2; // tray
 
 public:
     MainWindow(Controller* _oCtrl);
@@ -43,7 +44,7 @@ public slots:
     void vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason);
     void vSlotQuit();
     void vSlotApply();
-    void vSlotToggleWindow();
+    void vSlotToggleWindow(bool _forcehide=false);
     void vSlotStartPause();
     void vSlotShowHelp();
     void vSlotOptionMinimizeChanged(bool _a);

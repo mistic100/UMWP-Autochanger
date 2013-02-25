@@ -31,7 +31,7 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
             && m_poCtrl->settings()->bMinimize()
             && m_poCtrl->settings()->iState()==UM_OK
     ) {
-        vSlotToggleWindow();
+        vSlotToggleWindow(true);
     }
     else
     {
@@ -84,7 +84,7 @@ void MainWindow::vInit()
     // START TIMER if config is ok
     if (iState == UM_OK)
     {
-        m_poCtrl->vStartTimer(true);
+        m_poCtrl->vStartTimer(!(m_poCtrl->settings()->bCheckFiles()));
     }
 
 
@@ -108,6 +108,7 @@ void MainWindow::vInit()
         m_poMenuBar = new QMenuBar();
 
         QAction* poActionQuit1 =    m_poMenuBar->addAction(tr("Quit"));
+        m_poActionPause1 =          m_poMenuBar->addAction(tr("Pause"));
         m_poActionHide1 =           m_poMenuBar->addAction(tr("Hide"));
                                     m_poMenuBar->addSeparator();
         m_poOptionsMenu =           m_poMenuBar->addMenu(tr("Options"));
@@ -124,6 +125,7 @@ void MainWindow::vInit()
 
         connect(poActionQuit1, SIGNAL(triggered()), this, SLOT(vSlotQuit()));
         connect(m_poActionHide1, SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
+        connect(m_poActionPause1, SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
         connect(poActionHelp, SIGNAL(triggered()), this, SLOT(vSlotShowHelp()));
         connect(poOptionMinimize, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionMinimizeChanged(bool)));
         connect(poOptionCheck, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionCheckChanged(bool)));
@@ -132,13 +134,15 @@ void MainWindow::vInit()
     }
     if (iState == UM_OK)
     {
-        m_poActionHide1->setDisabled(false);
-        m_poOptionsMenu->setDisabled(false);
+        m_poActionHide1->setVisible(true);
+        m_poActionPause1->setVisible(true);
+        m_poOptionsMenu->menuAction()->setVisible(true);
     }
     else
     {
-        m_poActionHide1->setDisabled(true);
-        m_poOptionsMenu->setDisabled(true);
+        m_poActionHide1->setVisible(false);
+        m_poActionPause1->setVisible(false);
+        m_poOptionsMenu->menuAction()->setVisible(false);
     }
 
 
@@ -151,19 +155,19 @@ void MainWindow::vInit()
         connect(m_poTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(vSlotTrayAction(QSystemTrayIcon::ActivationReason)));
 
         QMenu* poTrayMenu = new QMenu;
-        m_poActionPause =           poTrayMenu->addAction(tr("Pause"));
-        QAction* poActionRefresh =  poTrayMenu->addAction(tr("Refresh"));
-        m_poActionHide2 =           poTrayMenu->addAction(tr("Hide"));
-                                    poTrayMenu->addSeparator();
-        QAction* poActionQuit2 =    poTrayMenu->addAction(tr("Quit"));
+        m_poActionPause2 =           poTrayMenu->addAction(tr("Pause"));
+        QAction* poActionRefresh =   poTrayMenu->addAction(tr("Refresh"));
+        m_poActionHide2 =            poTrayMenu->addAction(tr("Hide"));
+                                     poTrayMenu->addSeparator();
+        QAction* poActionQuit2 =     poTrayMenu->addAction(tr("Quit"));
 
-        m_poActionPause->setIcon(QPixmap(":/img/playpause"));
+        m_poActionPause2->setIcon(QPixmap(":/img/playpause"));
         poActionRefresh->setIcon(QPixmap(":/img/refresh"));
         m_poActionHide2->setIcon(QPixmap(":/img/hide"));
 
         connect(poActionQuit2, SIGNAL(triggered()), this, SLOT(vSlotQuit()));
         connect(m_poActionHide2, SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
-        connect(m_poActionPause, SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
+        connect(m_poActionPause2, SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
         connect(poActionRefresh, SIGNAL(triggered()), this, SLOT(vSlotApply()));
 
         m_poTrayIcon->setContextMenu(poTrayMenu);
@@ -185,9 +189,9 @@ void MainWindow::vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason)
 /*
  * minimize to tray or open from tray
  */
-void MainWindow::vSlotToggleWindow()
+void MainWindow::vSlotToggleWindow(bool _forcehide)
 {
-    if (isVisible())
+    if (_forcehide || isVisible())
     {
         hide();
 
@@ -195,7 +199,12 @@ void MainWindow::vSlotToggleWindow()
         m_poCtrl->settings()->vWriteXML();
 
         m_poActionHide2->setText(tr("Show"));
-        m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+
+        if (m_poCtrl->settings()->iMsgCount() < 3)
+        {
+            m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+            m_poCtrl->settings()->vAddMsgCount();
+        }
     }
     else
     {
@@ -214,7 +223,10 @@ void MainWindow::vSlotApply()
 {
     m_poCtrl->settings()->vSetWindowSize(size());
     m_poCtrl->settings()->vWriteXML();
+
+    bool must_pause = !(m_poCtrl->bIsRunning());
     m_poCtrl->vStartTimer();
+    if (must_pause) vSlotStartPause();
 }
 
 /*
@@ -226,11 +238,13 @@ void MainWindow::vSlotStartPause()
 
     if (m_poCtrl->bIsRunning())
     {
-        m_poActionPause->setText(tr("Pause"));
+        m_poActionPause1->setText(tr("Pause"));
+        m_poActionPause2->setText(tr("Pause"));
     }
     else
     {
-        m_poActionPause->setText(tr("Start"));
+        m_poActionPause1->setText(tr("Start"));
+        m_poActionPause2->setText(tr("Start"));
     }
 }
 
