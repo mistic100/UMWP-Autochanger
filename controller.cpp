@@ -64,7 +64,7 @@ void Controller::vStartPause()
 void Controller::vSlotUpdate(bool _forcecheck)
 {
     // update config
-    if (m_poSettings->bCheckFiles())
+    if (_forcecheck || m_poSettings->bCheckFiles())
     {
         m_poSettings->vUpdateSets();
         m_poSettings->vReadNbWalls();

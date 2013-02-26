@@ -11,6 +11,12 @@
 
 int main(int argc, char *argv[])
 {
+    HANDLE hMutexHandle = CreateMutex( NULL, TRUE, L"com.strangeplanet.umwp_autochanger" );
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+    {
+        return 0;
+    }
+
     QApplication a(argc, argv);
 
     // default translations
@@ -34,6 +40,9 @@ int main(int argc, char *argv[])
     delete oWindow;
     delete oCtrl;
     delete oData;
+
+    ReleaseMutex(hMutexHandle);
+    CloseHandle(hMutexHandle);
 
     return ret;
 }
