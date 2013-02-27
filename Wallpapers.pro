@@ -6,8 +6,10 @@
 
 QT += core gui xml
 
-TARGET = Wallpapers
+TARGET = UMWP_Autochanger
 TEMPLATE = app
+
+RC_FILE = Wallpapers.rc
 
 
 SOURCES += \

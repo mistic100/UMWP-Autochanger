@@ -219,6 +219,7 @@ void MainWindow::vSlotToggleWindow(bool _forcehide)
         show();
         raise();
         setFocus();
+        activateWindow();
 
         m_poActionHide2->setText(tr("Hide"));
     }
