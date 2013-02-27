@@ -49,6 +49,7 @@ public slots:
     void vSlotShowHelp();
     void vSlotOptionMinimizeChanged(bool _a);
     void vSlotOptionCheckChanged(bool _a);
+    void vSlotOptionAutostartChanged(bool _a);
 };
 
 #endif // MAINWINDOW_H

@@ -121,7 +121,7 @@ void MainWindow::vInit()
         poOptionMinimize->setCheckable(true);
         poOptionMinimize->setChecked(m_poCtrl->settings()->bMinimize());
         poOptionCheck->setCheckable(true);
-        poOptionCheck->setChecked(m_poCtrl->settings()->bMinimize());
+        poOptionCheck->setChecked(m_poCtrl->settings()->bCheckFiles());
 
         connect(poActionQuit1, SIGNAL(triggered()), this, SLOT(vSlotQuit()));
         connect(m_poActionHide1, SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
@@ -129,6 +129,14 @@ void MainWindow::vInit()
         connect(poActionHelp, SIGNAL(triggered()), this, SLOT(vSlotShowHelp()));
         connect(poOptionMinimize, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionMinimizeChanged(bool)));
         connect(poOptionCheck, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionCheckChanged(bool)));
+
+        if (m_poCtrl->settings()->bCanAddShortcut())
+        {
+            QAction* poOptionAutostart = m_poOptionsMenu->addAction(tr("Start with Windows"));
+            poOptionAutostart->setCheckable(true);
+            poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
+            connect(poOptionAutostart, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionAutostartChanged(bool)));
+        }
 
         setMenuBar(m_poMenuBar);
     }
@@ -305,6 +313,18 @@ void MainWindow::vSlotOptionCheckChanged(bool _a)
     }
 
     m_poCtrl->settings()->vSetCheckFiles(_a);
+}
+
+void MainWindow::vSlotOptionAutostartChanged(bool _a)
+{
+    if (_a)
+    {
+        m_poCtrl->settings()->vCreateShortcut();
+    }
+    else
+    {
+        m_poCtrl->settings()->vDeleteShortcut();
+    }
 }
 
 /*

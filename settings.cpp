@@ -3,7 +3,9 @@
 #include <atlbase.h>
 #include <iostream>
 #include <fstream>
+#include <direct.h>
 #include "settings.h"
+#include "createshortcut.h"
 #include <QDebug>
 
 
@@ -19,6 +21,7 @@ Settings::Settings()
     m_sWallPath = "";
     m_sBMPPath = "";
     m_sUMVersion = "unknown";
+    m_sStartLnkPath = "";
     m_iNbWallpapers = 1;
     m_iNbMonitors = 1;
     m_oWindowSize = QSize(460, 240);
@@ -172,6 +175,19 @@ void Settings::vInit()
     {
         vReadNbWalls();
     }
+
+
+    // SEARCH SHORTCUT FILE
+    wchar_t* sPath4 = (wchar_t*) malloc(256);
+
+    iResult = SHGetKnownFolderPath( FOLDERID_Startup, 0, NULL, &sPath4 );
+    if (iResult == S_OK)
+    {
+        m_sStartLnkPath = QString::fromWCharArray(sPath4);
+        m_sStartLnkPath.append("\\UMWP Autochanger.lnk");
+    }
+
+    CoTaskMemFree(sPath4);
 }
 
 /*
@@ -511,4 +527,32 @@ int const Settings::iNbFiles()
         }
     }
     return iTotalFiles;
+}
+
+/*
+ * create the startup shortcut
+ */
+void Settings::vCreateShortcut()
+{
+    if (!m_sStartLnkPath.isEmpty())
+    {
+        wchar_t* sPath = (wchar_t*) malloc(256);
+
+        GetModuleFileName(NULL, sPath, 256);
+
+        CreateShortcut(sPath, NULL, (LPCWSTR)m_sStartLnkPath.utf16());
+
+        free(sPath);
+    }
+}
+
+/*
+ * delete the startup shortcut
+ */
+void Settings::vDeleteShortcut()
+{
+    if (bIsAutostart())
+    {
+        remove(m_sStartLnkPath.toStdString().c_str());
+    }
 }

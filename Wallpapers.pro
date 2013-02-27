@@ -29,7 +29,8 @@ HEADERS += \
     listdelegate.h \
     settings.h \
     errorwidget.h \
-    mainwidget.h
+    mainwidget.h \
+    createshortcut.h
 
 RESOURCES += \
     ressources.qrc

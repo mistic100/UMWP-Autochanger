@@ -14,6 +14,7 @@ private:
     QString         m_sWallPath;     // path to folder containing *.wallpaper
     QString         m_sBMPPath;      // path to UltraMon Wallpaper.bmp
     QString         m_sUMVersion;    // UltraMon version
+    QString         m_sStartLnkPath;
     QVector<Set*>   m_oSets;         // list of wallpaper sets
     short int       m_iNbMonitors;   // number of monitors
     short int       m_iNbWallpapers; // number of wallpapers used
@@ -51,6 +52,8 @@ public:
     bool        const &bMinimize()      { return m_bMinimize; }
     bool        const &bCheckFiles()    { return m_bCheckFiles; }
     short int   const &iMsgCount()      { return m_iMsgCount; }
+    bool        const bCanAddShortcut() { return !m_sStartLnkPath.isEmpty(); }
+    bool        const bIsAutostart()    { return bFileExists(m_sStartLnkPath.toStdString()); }
     int         const iNbFiles();
 
     // setters
@@ -69,6 +72,9 @@ public:
     bool    const bSwitchSet(short int _i);
     QString sRenameSet(short int _i, const QString &_name, bool _returnFull);
     void    vUpdateSets();
+
+    void vCreateShortcut();
+    void vDeleteShortcut();
 };
 
 #endif // SETTINGS_H
