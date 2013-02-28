@@ -23,15 +23,6 @@ QString const Set::sGetFullName()
 }
 
 /*
- * switch the set state
- */
-bool const Set::bSwitchState()
-{
-    m_bActive = !m_bActive;
-    return m_bActive;
-}
-
-/*
  * get a file
  */
 QString const Set::sGetFile(int _i)

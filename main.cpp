@@ -6,7 +6,6 @@
 #include "mainwindow.h"
 #include "controller.h"
 #include "settings.h"
-#include <QDebug>
 
 
 int main(int argc, char *argv[])

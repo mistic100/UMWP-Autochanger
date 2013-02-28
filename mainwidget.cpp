@@ -17,32 +17,32 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 {
     m_poCtrl = _poCtrl;
     m_poCtrl->vSetWidget(this);
-    //m_iSelectedSet = -1; // done in vUpdateList()
 
+    // main list
     m_poList = new QListWidget();
     m_poList->setItemDelegate(new ListDelegate(m_poList));
-
+    m_poList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     // buttons
-    QPushButton* poAddButton = new QPushButton(tr("Add"));
-    m_poActivateButton = new QPushButton(tr("Activate"));
-    m_poDeleteButton = new QPushButton(tr("Delete"));
-    QPushButton* poApplyButton = new QPushButton(tr("Apply"));
+    QPushButton* poAddButton =      new QPushButton(tr("Add"));
+    m_poActivateButton =            new QPushButton(tr("Activate"));
+    m_poUnactivateButton =          new QPushButton(tr("Unactivate"));
+    m_poDeleteButton =              new QPushButton(tr("Delete"));
+    QPushButton* poApplyButton =    new QPushButton(tr("Apply"));
 
-    //m_poActivateButton->setDisabled(true); // done in vUpdateList()
-    //m_poDeleteButton->setDisabled(true); // done in vUpdateList()
-
+    // spin box
     m_poDelayInput = new QSpinBox();
-    m_poDelayInput->setValue(m_poCtrl->settings()->iDelay());
     m_poDelayInput->setRange(10, 3600);
     m_poDelayInput->setSingleStep(10);
     m_poDelayInput->setFixedWidth(60);
+    m_poDelayInput->setValue(m_poCtrl->settings()->iDelay());
 
 
     // layouts
     QVBoxLayout* poRightCollumn = new QVBoxLayout();
     poRightCollumn->addWidget(poAddButton);
     poRightCollumn->addWidget(m_poActivateButton);
+    poRightCollumn->addWidget(m_poUnactivateButton);
     poRightCollumn->addWidget(m_poDeleteButton);
     poRightCollumn->addStretch();
     poRightCollumn->addWidget(poApplyButton);
@@ -60,11 +60,12 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 
     // events
     connect(poAddButton, SIGNAL(clicked()), this, SLOT(vSlotAddSet()));
-    connect(m_poActivateButton, SIGNAL(clicked()), this, SLOT(vSlotSwitchSet()));
-    connect(m_poDeleteButton, SIGNAL(clicked()), this, SLOT(vSlotDeleteSet()));
+    connect(m_poActivateButton, SIGNAL(clicked()), this, SLOT(vSlotActivateSets()));
+    connect(m_poUnactivateButton, SIGNAL(clicked()), this, SLOT(vSlotUnactivateSets()));
+    connect(m_poDeleteButton, SIGNAL(clicked()), this, SLOT(vSlotDeleteSets()));
     connect(poApplyButton, SIGNAL(clicked()), _parent, SLOT(vSlotApply()));
 
-    connect(m_poList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(vSlotItemClicked(QListWidgetItem*)));
+    connect(m_poList, SIGNAL(itemSelectionChanged()), this, SLOT(vSlotSelectionChanged()));
     connect(m_poList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(vSlotItemDoubleClicked()));
 
     connect(m_poDelayInput, SIGNAL(valueChanged(int)), this, SLOT(vSlotDelayChanged(int)));
@@ -82,6 +83,7 @@ MainWidget::~MainWidget()
 {
     delete m_poDeleteButton;
     delete m_poActivateButton;
+    delete m_poUnactivateButton;
     delete m_poDelayInput;
     delete m_poList;
 }
@@ -91,11 +93,11 @@ MainWidget::~MainWidget()
  */
 void MainWidget::vUpdateList()
 {
-    m_iSelectedSet = -1;
     m_poList->clear();
 
-    m_poActivateButton->setDisabled(true);
-    m_poDeleteButton->setDisabled(true);
+    m_poActivateButton->setVisible(false);
+    m_poUnactivateButton->setVisible(false);
+    m_poDeleteButton->setVisible(false);
 
     for (int i=0; i<m_poCtrl->settings()->iNbSets(); i++)
     {
@@ -110,6 +112,22 @@ void MainWidget::vUpdateList()
 
         m_poList->addItem(poItem);
     }
+}
+
+/*
+ * get numerical indexes of selected items
+ */
+QList<int> MainWidget::oGetSelectedIndexes()
+{
+    QList<QListWidgetItem*> items = m_poList->selectedItems();
+    QList<int> list;
+
+    for (QList<QListWidgetItem*>::iterator it=items.begin(); it!=items.end(); it++)
+    {
+        list.push_back((*it)->data(Qt::UserRole).toInt());
+    }
+
+    return list;
 }
 
 /*
@@ -128,30 +146,55 @@ void MainWidget::vSlotAddSet()
 }
 
 /*
- * prompt to delete a set
+ * prompt to delete sets
  */
-void MainWidget::vSlotDeleteSet()
+void MainWidget::vSlotDeleteSets()
 {
     int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"), QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
 
     if (ret == QMessageBox::Ok)
     {
-        m_poCtrl->settings()->vDeleteSet(m_iSelectedSet);
+        m_poCtrl->settings()->vDeleteSets(oGetSelectedIndexes());
         vUpdateList();
     }
 }
 
 /*
- * switch the state of a set
+ * activate sets
  */
-void MainWidget::vSlotSwitchSet()
+void MainWidget::vSlotActivateSets()
 {
-    bool active = m_poCtrl->settings()->bSwitchSet(m_iSelectedSet);
-    QListWidgetItem* poItem = m_poList->item(m_iSelectedSet);
+    QList<int> list = oGetSelectedIndexes();
 
-    poItem->setData(Qt::UserRole+2, active);
-    vSetListItemIcon(poItem, active);
-    vSlotItemClicked(poItem);
+    for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
+    {
+        m_poCtrl->settings()->poGetSet(*i)->vSetActive(true);
+        QListWidgetItem* poItem = m_poList->item(*i);
+        poItem->setData(Qt::UserRole+2, true);
+        vSetListItemIcon(poItem, true);
+    }
+
+    m_poActivateButton->setVisible(false);
+    m_poUnactivateButton->setVisible(true);
+}
+
+/*
+ * unactivate sets
+ */
+void MainWidget::vSlotUnactivateSets()
+{
+    QList<int> list = oGetSelectedIndexes();
+
+    for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
+    {
+        m_poCtrl->settings()->poGetSet(*i)->vSetActive(false);
+        QListWidgetItem* poItem = m_poList->item(*i);
+        poItem->setData(Qt::UserRole+2, false);
+        vSetListItemIcon(poItem, false);
+    }
+
+    m_poActivateButton->setVisible(true);
+    m_poUnactivateButton->setVisible(false);
 }
 
 /*
@@ -170,43 +213,67 @@ void MainWidget::vSetListItemIcon(QListWidgetItem* _poItem, bool _active)
 }
 
 /*
- * an item is selected
- */
-void MainWidget::vSlotItemClicked(QListWidgetItem* _poItem)
-{
-    m_iSelectedSet = _poItem->data(Qt::UserRole).toInt();
-    Set* poSet = m_poCtrl->settings()->poGetSet(m_iSelectedSet);
-
-    if (poSet->isActive())
-    {
-        m_poActivateButton->setText(tr("Unactivate"));
-    }
-    else
-    {
-        m_poActivateButton->setText(tr("Activate"));
-    }
-
-    m_poActivateButton->setDisabled(false);
-    m_poDeleteButton->setDisabled(false);
-}
-
-/*
- * prompt to rename a set (always called AFTER vItemClicked)
+ * prompt to rename a set
  */
 void MainWidget::vSlotItemDoubleClicked()
 {
-    Set* poSet = m_poCtrl->settings()->poGetSet(m_iSelectedSet);
-    QListWidgetItem* poItem = m_poList->item(m_iSelectedSet);
+    int index = oGetSelectedIndexes().at(0);
+    Set* poSet = m_poCtrl->settings()->poGetSet(index);
+    QListWidgetItem* poItem = m_poList->item(index);
 
     bool ok;
     QString text = QInputDialog::getText(this, tr("Name"), tr("New name:"), QLineEdit::Normal, poSet->name(), &ok);
 
     if (ok && !text.isEmpty())
     {
-        QString name = m_poCtrl->settings()->sRenameSet(m_iSelectedSet, text, true);
+        QString name = m_poCtrl->settings()->sRenameSet(index, text, true);
         poItem->setText(name);
     }
 }
+
+/*
+ * the selection of the list changed
+ */
+void MainWidget::vSlotSelectionChanged()
+{
+    QList<int> list = oGetSelectedIndexes();
+
+    if (list.size() == 0)
+    {
+        m_poActivateButton->setVisible(false);
+        m_poUnactivateButton->setVisible(false);
+        m_poDeleteButton->setVisible(false);
+    }
+    else
+    {
+        int nb_active=0, nb_inactive=0;
+
+        for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
+        {
+            if (m_poCtrl->settings()->poGetSet(*i)->isActive())
+            {
+                nb_active++;
+            }
+            else
+            {
+                nb_inactive++;
+            }
+        }
+
+        if (nb_active>=nb_inactive)
+        {
+            m_poActivateButton->setVisible(false);
+            m_poUnactivateButton->setVisible(true);
+        }
+        else
+        {
+            m_poActivateButton->setVisible(true);
+            m_poUnactivateButton->setVisible(false);
+        }
+        m_poDeleteButton->setVisible(true);
+    }
+}
+
 
 /*
  * the delay value changed

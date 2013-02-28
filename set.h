@@ -23,8 +23,8 @@ public:
     int     const count() { return m_vFiles.size(); }
     bool    const &isActive() { return m_bActive; }
 
+    void    vSetActive(bool _a) { m_bActive=_a; }
     void    vSetName(const QString &_name) { m_sName=_name; }
-    bool    const bSwitchState();
 
     double  dReadLastModif(QString _sub="", int _level=0);
     void    vPopulateFiles(QString _sub="", int _level=0);

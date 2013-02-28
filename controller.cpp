@@ -68,7 +68,10 @@ void Controller::vSlotUpdate(bool _forcecheck)
     {
         m_poSettings->vUpdateSets();
         m_poSettings->vReadNbWalls();
-        if (m_poMainWidget!=NULL) m_poMainWidget->vUpdateList();
+        if (m_poMainWidget != NULL)
+        {
+            m_poMainWidget->vUpdateList();
+        }
     }
 
     int iTotalFiles = m_poSettings->iNbFiles();

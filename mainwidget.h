@@ -19,11 +19,10 @@ private:
 
     QPushButton*    m_poDeleteButton;
     QPushButton*    m_poActivateButton;
+    QPushButton*    m_poUnactivateButton;
 
     QSpinBox*       m_poDelayInput;
     QListWidget*    m_poList;
-
-    int             m_iSelectedSet; // index of selected item in the list
 
 public:
     MainWidget(QWidget* _parent=0, Controller* _poCtrl=0);
@@ -31,13 +30,15 @@ public:
 
     void vUpdateList();
     void vSetListItemIcon(QListWidgetItem* _poItem, bool _active);
+    QList<int> oGetSelectedIndexes();
 
 public slots:
     void vSlotAddSet();
-    void vSlotDeleteSet();
-    void vSlotSwitchSet();
+    void vSlotDeleteSets();
+    void vSlotActivateSets();
+    void vSlotUnactivateSets();
+    void vSlotSelectionChanged();
     void vSlotItemDoubleClicked();
-    void vSlotItemClicked(QListWidgetItem* _poItem);
     void vSlotDelayChanged(int _val);
 };
 

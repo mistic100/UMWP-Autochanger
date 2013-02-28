@@ -435,6 +435,14 @@ void Settings::vDeleteSet(short int _i)
     }
 }
 
+void Settings::vDeleteSets(const QList<int> &_list)
+{
+    for (QList<int>::const_iterator i=_list.begin(); i!=_list.end(); i++)
+    {
+        vDeleteSet(*i);
+    }
+}
+
 /*
  * delete all sets
  */
@@ -451,20 +459,6 @@ void Settings::vDeleteAll()
 
         m_oSets.clear();
     }
-}
-
-/*
- * switch the status of a set
- */
-bool const Settings::bSwitchSet(short int _i)
-{
-    if ( _i < m_oSets.size())
-    {
-        m_bUnsaved = true;
-        return m_oSets.at(_i)->bSwitchState();
-    }
-
-    return false;
 }
 
 /*
@@ -537,12 +531,16 @@ void Settings::vCreateShortcut()
     if (!m_sStartLnkPath.isEmpty())
     {
         wchar_t* sPath = (wchar_t*) malloc(256);
+        wchar_t* sPathE = (wchar_t*) malloc(256);
 
         GetModuleFileName(NULL, sPath, 256);
+        wcscpy(sPathE, sPath);
+        PathRemoveFileSpec(sPathE);
 
-        CreateShortcut(sPath, NULL, (LPCWSTR)m_sStartLnkPath.utf16());
+        CreateShortcut(sPath, sPathE, (LPCWSTR)m_sStartLnkPath.utf16());
 
         free(sPath);
+        free(sPathE);
     }
 }
 

@@ -58,7 +58,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, description, &rect);
 }
 
-QSize ListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
 {
     return QSize(200, 35);
 }

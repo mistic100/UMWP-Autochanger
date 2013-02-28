@@ -16,7 +16,7 @@
 * Description...: Creates a Shell link object (shortcut)
 **********************************************************************/
 HRESULT CreateShortcut(/*in*/ LPCTSTR lpszFileName,
-                    /*in*/ LPCTSTR lpszDesc,
+                    /*in*/ LPCTSTR lpszWorkingDir,
                     /*in*/ LPCTSTR lpszShortcutPath)
 {
     HRESULT hRes = E_FAIL;
@@ -49,12 +49,12 @@ HRESULT CreateShortcut(/*in*/ LPCTSTR lpszFileName,
         // Get a pointer to the IPersistFile interface
         CComQIPtr<IPersistFile> ipPersistFile(ipShellLink);
 
-        // Set the path to the shortcut target and add the description
+        // Set the path to the shortcut target and add the working directory
         hRes = ipShellLink->SetPath(szPath);
         if (FAILED(hRes))
             return hRes;
 
-        hRes = ipShellLink->SetDescription(lpszDesc);
+        hRes = ipShellLink->SetWorkingDirectory(lpszWorkingDir);
         if (FAILED(hRes))
             return hRes;
 
@@ -64,7 +64,7 @@ HRESULT CreateShortcut(/*in*/ LPCTSTR lpszFileName,
         MultiByteToWideChar(CP_ACP, 0,
                        lpszShortcutPath, -1, wszTemp, MAX_PATH);
 #else
-        wcsncpy(wszTemp, lpszShortcutPath, MAX_PATH);
+        wcsncpy_s(wszTemp, lpszShortcutPath, MAX_PATH);
 #endif
 
         // Write the shortcut to disk

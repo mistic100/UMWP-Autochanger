@@ -68,8 +68,8 @@ public:
     Set*    oAddSet(QString _sPath);
     Set*    oAddSet(QString _sPath, QString _sName, bool _bActive);
     void    vDeleteSet(short int _i);
+    void    vDeleteSets(const QList<int> &_list);
     void    vDeleteAll();
-    bool    const bSwitchSet(short int _i);
     QString sRenameSet(short int _i, const QString &_name, bool _returnFull);
     void    vUpdateSets();
 

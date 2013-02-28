@@ -2,7 +2,6 @@
 #define CONTROLLER_H
 
 #include <QTimer>
-#include <QWidget>
 #include "main.h"
 #include "set.h"
 #include "settings.h"
