@@ -71,6 +71,7 @@ public:
     void    vDeleteSets(const QList<int> &_list);
     void    vDeleteAll();
     QString sRenameSet(short int _i, const QString &_name, bool _returnFull);
+    void    vSetState(short int _i, bool _a);
     void    vUpdateSets();
 
     void vCreateShortcut();

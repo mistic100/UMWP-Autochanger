@@ -17,16 +17,12 @@ class Controller : public QObject
 
 private:
     Settings*       m_poSettings;
-    MainWidget*     m_poMainWidget;
     QTimer*         m_poMainTimer;
 
 public:
     Controller(Settings* _data);
-    ~Controller();
 
     Settings* const &settings() { return m_poSettings; }
-
-    void    vSetWidget(MainWidget* _w) { m_poMainWidget=_w; }
 
     bool    const bIsRunning() { return m_poMainTimer->isActive(); }
     void    vStartTimer(bool _forcecheck=false);
@@ -38,6 +34,8 @@ public:
 public slots:
     void    vSlotUpdate(bool _forcecheck=false);
 
+signals:
+    void listChanged();
 };
 
 #endif // CONTROLLER_H

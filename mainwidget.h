@@ -26,13 +26,12 @@ private:
 
 public:
     MainWidget(QWidget* _parent=0, Controller* _poCtrl=0);
-    ~MainWidget();
 
-    void vUpdateList();
     void vSetListItemIcon(QListWidgetItem* _poItem, bool _active);
     QList<int> oGetSelectedIndexes();
 
 public slots:
+    void vUpdateList();
     void vSlotAddSet();
     void vSlotDeleteSets();
     void vSlotActivateSets();

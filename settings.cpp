@@ -487,21 +487,30 @@ QString Settings::sRenameSet(short int _i, const QString &_name, bool _returnFul
 }
 
 /*
+ * set the state of a set
+ */
+void Settings::vSetState(short int _i, bool _a)
+{
+    m_bUnsaved = true;
+    m_oSets.at(_i)->vSetActive(_a);
+}
+
+/*
  * remove unexisting sets and update file lists
  */
 void Settings::vUpdateSets()
 {
-    for (int i=0; i<iNbSets(); i++)
+    for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); )
     {
-        Set* poSet = m_oSets.at(i);
-        if (!bDirectoryExists(poSet->path().toStdString()))
+        if (!bDirectoryExists((*it)->path().toStdString()))
         {
-            vDeleteSet(i);
-            i--;
+            m_bUnsaved = true;
+            m_oSets.erase(it);
         }
         else
         {
-            poSet->vPopulateFiles();
+            (*it)->vPopulateFiles();
+            it++;
         }
     }
 }
@@ -514,10 +523,9 @@ int const Settings::iNbFiles()
     int iTotalFiles = 0;
     for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
     {
-        Set* poSet = *it;
-        if (poSet->isActive())
+        if ((*it)->isActive())
         {
-            iTotalFiles+= poSet->count();
+            iTotalFiles+= (*it)->count();
         }
     }
     return iTotalFiles;

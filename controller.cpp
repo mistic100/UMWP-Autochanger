@@ -17,18 +17,9 @@ Controller::Controller(Settings* _data) : QObject(0)
     srand(time(NULL));
 
     m_poSettings = _data;
-    m_poMainTimer = new QTimer();
-    m_poMainWidget = NULL;
+    m_poMainTimer = new QTimer(this);
 
     connect(m_poMainTimer, SIGNAL(timeout()), this, SLOT(vSlotUpdate()));
-}
-
-/*
- * destructor
- */
-Controller::~Controller()
-{
-    delete m_poMainTimer;
 }
 
 /*
@@ -68,10 +59,7 @@ void Controller::vSlotUpdate(bool _forcecheck)
     {
         m_poSettings->vUpdateSets();
         m_poSettings->vReadNbWalls();
-        if (m_poMainWidget != NULL)
-        {
-            m_poMainWidget->vUpdateList();
-        }
+        emit listChanged();
     }
 
     int iTotalFiles = m_poSettings->iNbFiles();

@@ -40,17 +40,6 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
 }
 
 /*
- * destructor
- */
-MainWindow::~MainWindow()
-{
-    if (m_poCentralWidget != NULL)  delete m_poCentralWidget;
-    if (m_poStatusBar != NULL)      delete m_poStatusBar;
-    if (m_poMenuBar != NULL)        delete m_poMenuBar;
-    if (m_poTrayIcon != NULL)       delete m_poTrayIcon;
-}
-
-/*
  * init window, called in the constructor and by ErrorWidget
  */
 void MainWindow::vInit()
@@ -117,25 +106,26 @@ void MainWindow::vInit()
 
         QAction* poOptionMinimize = m_poOptionsMenu->addAction(tr("Minimize on startup"));
         QAction* poOptionCheck =    m_poOptionsMenu->addAction(tr("Check files periodically"));
+        QAction* poOptionAutostart = m_poOptionsMenu->addAction(tr("Start with Windows"));
 
         poOptionMinimize->setCheckable(true);
         poOptionMinimize->setChecked(m_poCtrl->settings()->bMinimize());
         poOptionCheck->setCheckable(true);
         poOptionCheck->setChecked(m_poCtrl->settings()->bCheckFiles());
+        poOptionAutostart->setCheckable(true);
+        poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
 
-        connect(poActionQuit1, SIGNAL(triggered()), this, SLOT(vSlotQuit()));
-        connect(m_poActionHide1, SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
-        connect(m_poActionPause1, SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
-        connect(poActionHelp, SIGNAL(triggered()), this, SLOT(vSlotShowHelp()));
-        connect(poOptionMinimize, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionMinimizeChanged(bool)));
-        connect(poOptionCheck, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionCheckChanged(bool)));
+        connect(poActionQuit1,      SIGNAL(triggered()), this, SLOT(vSlotQuit()));
+        connect(m_poActionHide1,    SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
+        connect(m_poActionPause1,   SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
+        connect(poActionHelp,       SIGNAL(triggered()), this, SLOT(vSlotShowHelp()));
+        connect(poOptionMinimize,   SIGNAL(toggled(bool)), this, SLOT(vSlotOptionMinimizeChanged(bool)));
+        connect(poOptionCheck,      SIGNAL(toggled(bool)), this, SLOT(vSlotOptionCheckChanged(bool)));
+        connect(poOptionAutostart,  SIGNAL(toggled(bool)), this, SLOT(vSlotOptionAutostartChanged(bool)));
 
-        if (m_poCtrl->settings()->bCanAddShortcut())
+        if (!(m_poCtrl->settings()->bCanAddShortcut()))
         {
-            QAction* poOptionAutostart = m_poOptionsMenu->addAction(tr("Start with Windows"));
-            poOptionAutostart->setCheckable(true);
-            poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
-            connect(poOptionAutostart, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionAutostartChanged(bool)));
+            poOptionAutostart->setVisible(false);
         }
 
         setMenuBar(m_poMenuBar);
@@ -158,7 +148,6 @@ void MainWindow::vInit()
     if (m_poTrayIcon == NULL && iState == UM_OK)
     {
         m_poTrayIcon = new QSystemTrayIcon(QIcon(":/img/icon"), this);
-        m_poTrayIcon->setToolTip(APP_NAME);
 
         connect(m_poTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(vSlotTrayAction(QSystemTrayIcon::ActivationReason)));
 
@@ -173,11 +162,12 @@ void MainWindow::vInit()
         poActionRefresh->setIcon(QPixmap(":/img/refresh"));
         m_poActionHide2->setIcon(QPixmap(":/img/hide"));
 
-        connect(poActionQuit2, SIGNAL(triggered()), this, SLOT(vSlotQuit()));
-        connect(m_poActionHide2, SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
-        connect(m_poActionPause2, SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
-        connect(poActionRefresh, SIGNAL(triggered()), this, SLOT(vSlotApply()));
+        connect(poActionQuit2,      SIGNAL(triggered()), this, SLOT(vSlotQuit()));
+        connect(m_poActionHide2,    SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
+        connect(m_poActionPause2,   SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
+        connect(poActionRefresh,    SIGNAL(triggered()), this, SLOT(vSlotApply()));
 
+        m_poTrayIcon->setToolTip(APP_NAME);
         m_poTrayIcon->setContextMenu(poTrayMenu);
         m_poTrayIcon->show();
     }
@@ -203,16 +193,16 @@ void MainWindow::vSlotToggleWindow(bool _forcehide)
     {
         hide();
 
-        m_poCtrl->settings()->vSetWindowSize(size());
-        m_poCtrl->settings()->vWriteXML();
-
-        m_poActionHide2->setText(tr("Show"));
-
         if (m_poCtrl->settings()->iMsgCount() < 3)
         {
             m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
             m_poCtrl->settings()->vAddMsgCount();
         }
+
+        m_poCtrl->settings()->vSetWindowSize(size());
+        m_poCtrl->settings()->vWriteXML();
+
+        m_poActionHide2->setText(tr("Show"));
     }
     else
     {

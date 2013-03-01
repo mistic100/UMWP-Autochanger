@@ -16,7 +16,6 @@
 MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 {
     m_poCtrl = _poCtrl;
-    m_poCtrl->vSetWidget(this);
 
     // main list
     m_poList = new QListWidget();
@@ -58,34 +57,27 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     poMainLayout->addLayout(poRightCollumn, 1, 1);
 
 
-    // events
-    connect(poAddButton, SIGNAL(clicked()), this, SLOT(vSlotAddSet()));
-    connect(m_poActivateButton, SIGNAL(clicked()), this, SLOT(vSlotActivateSets()));
-    connect(m_poUnactivateButton, SIGNAL(clicked()), this, SLOT(vSlotUnactivateSets()));
-    connect(m_poDeleteButton, SIGNAL(clicked()), this, SLOT(vSlotDeleteSets()));
-    connect(poApplyButton, SIGNAL(clicked()), _parent, SLOT(vSlotApply()));
+    // buttons events
+    connect(poAddButton,            SIGNAL(clicked()), this, SLOT(vSlotAddSet()));
+    connect(m_poActivateButton,     SIGNAL(clicked()), this, SLOT(vSlotActivateSets()));
+    connect(m_poUnactivateButton,   SIGNAL(clicked()), this, SLOT(vSlotUnactivateSets()));
+    connect(m_poDeleteButton,       SIGNAL(clicked()), this, SLOT(vSlotDeleteSets()));
+    connect(poApplyButton,          SIGNAL(clicked()), _parent, SLOT(vSlotApply()));
 
+    // list events
     connect(m_poList, SIGNAL(itemSelectionChanged()), this, SLOT(vSlotSelectionChanged()));
     connect(m_poList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(vSlotItemDoubleClicked()));
 
+    // spin box changed
     connect(m_poDelayInput, SIGNAL(valueChanged(int)), this, SLOT(vSlotDelayChanged(int)));
+
+    // list updated by the controller
+    connect(m_poCtrl, SIGNAL(listChanged()), this, SLOT(vUpdateList()));
 
 
     setLayout(poMainLayout);
 
     vUpdateList();
-}
-
-/*
- * destructor
- */
-MainWidget::~MainWidget()
-{
-    delete m_poDeleteButton;
-    delete m_poActivateButton;
-    delete m_poUnactivateButton;
-    delete m_poDelayInput;
-    delete m_poList;
 }
 
 /*
@@ -150,7 +142,8 @@ void MainWidget::vSlotAddSet()
  */
 void MainWidget::vSlotDeleteSets()
 {
-    int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"), QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
+    int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
+                                   QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
 
     if (ret == QMessageBox::Ok)
     {
@@ -168,7 +161,7 @@ void MainWidget::vSlotActivateSets()
 
     for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
     {
-        m_poCtrl->settings()->poGetSet(*i)->vSetActive(true);
+        m_poCtrl->settings()->vSetState(*i, true);
         QListWidgetItem* poItem = m_poList->item(*i);
         poItem->setData(Qt::UserRole+2, true);
         vSetListItemIcon(poItem, true);
@@ -187,7 +180,7 @@ void MainWidget::vSlotUnactivateSets()
 
     for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
     {
-        m_poCtrl->settings()->poGetSet(*i)->vSetActive(false);
+        m_poCtrl->settings()->vSetState(*i, false);
         QListWidgetItem* poItem = m_poList->item(*i);
         poItem->setData(Qt::UserRole+2, false);
         vSetListItemIcon(poItem, false);

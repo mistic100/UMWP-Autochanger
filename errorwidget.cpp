@@ -77,17 +77,6 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
 }
 
 /*
- * destructor
- */
-ErrorWidget::~ErrorWidget()
-{
-    if (m_poEditPath!=NULL)
-    {
-        delete m_poEditPath;
-    }
-}
-
-/*
  * open file dialog
  */
 void ErrorWidget::vSlotBrowse()

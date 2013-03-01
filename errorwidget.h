@@ -15,7 +15,6 @@ private:
 
 public:
     ErrorWidget(QWidget* _parent=0, Controller* _poCtrl=0);
-    ~ErrorWidget();
     
 public slots:
     void vSlotBrowse();

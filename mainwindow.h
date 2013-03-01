@@ -32,7 +32,6 @@ private:
 
 public:
     MainWindow(Controller* _oCtrl);
-    ~MainWindow();
 
     void vInit();
 
