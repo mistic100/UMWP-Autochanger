@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 
-Version       : 1.0 alpha2
-Release date  : February 28th, 2013
+Version       : 1.0
+Release date  : March 2nd, 2013
 Author        : Damien "Mistic" Sorel
 Website       : http://www.strangeplanet.fr
 License       : GNU General Public License Version 3
@@ -17,12 +17,12 @@ UMWP Autochanger is a little tool for UltraMon users. I has two main features :
 Requirement
 ===========
 UltraMon 3.2.1 or higher
-Windows 7/8
+Windows 7/8 32/64 bits
 
 
 Installation
 ============
- 1. Install and configure UlraMon on your computer.
+ 1. Install and configure UltraMon on your computer.
 
  2. Go to the wallpaper configuration of UltraMon, and configure the "default"
     wallpaper as you wish (you don't need to define an image file).
@@ -59,6 +59,9 @@ Known bugs
 
 Changelog
 =========
+
+--- 1.0 (02/03/2013)
+  - fixed: multi delete doesn't work correclty
 
 --- 1.0 alpha2 (28/02/2013)
   - fixed: autorun shortcut not starting in the good working directory

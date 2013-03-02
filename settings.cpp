@@ -435,11 +435,14 @@ void Settings::vDeleteSet(short int _i)
     }
 }
 
-void Settings::vDeleteSets(const QList<int> &_list)
+void Settings::vDeleteSets(QList<int> _list)
 {
-    for (QList<int>::const_iterator i=_list.begin(); i!=_list.end(); i++)
+    qSort(_list);
+    int off=0;
+    for (QList<int>::iterator i=_list.begin(); i!=_list.end(); i++)
     {
-        vDeleteSet(*i);
+        vDeleteSet(*i-off);
+        off++;
     }
 }
 
