@@ -1,7 +1,12 @@
 #include "listdelegate.h"
 
+
 ListDelegate::ListDelegate(QObject* _parent) : QAbstractItemDelegate(_parent) {}
 
+QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
+{
+    return QSize(200, 35);
+}
 
 void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -56,9 +61,4 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     if (hover) painter->setPen(QColor::fromRgb(200,200,200));
           else painter->setPen(QColor::fromRgb(120,120,120));
     painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, description, &rect);
-}
-
-QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
-{
-    return QSize(200, 35);
 }

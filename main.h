@@ -6,9 +6,11 @@
 #include <QString>
 #include <QVector>
 
+#include <QDebug>
+
 
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "1.0"
+#define APP_VERSION "1.1"
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
 

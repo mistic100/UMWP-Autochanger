@@ -2,20 +2,29 @@
 #define SETTINGS_H
 
 #include <QSize>
+
 #include "main.h"
 #include "set.h"
 
+
+/*
+ * Name: Settings
+ * Description: Class managing settings of the application
+ */
 class Settings
 {
 private:
     short int       m_iState;        // state if the installation
     bool            m_bUnsaved;      // true if there are unsaved data
+
     QString         m_sExePath;      // path to UltraMon.exe
     QString         m_sWallPath;     // path to folder containing *.wallpaper
     QString         m_sBMPPath;      // path to UltraMon Wallpaper.bmp
     QString         m_sUMVersion;    // UltraMon version
     QString         m_sStartLnkPath;
+
     QVector<Set*>   m_oSets;         // list of wallpaper sets
+
     short int       m_iNbMonitors;   // number of monitors
     short int       m_iNbWallpapers; // number of wallpapers used
     QSize           m_oWindowSize;   // size of the window
@@ -37,23 +46,23 @@ public:
     void vReadXML();
 
     // getters
-    Set*        const poGetSet(int _i)  { return m_oSets.at(_i); }
-    short int   const iNbSets()         { return m_oSets.size(); }
-    short int   const &iState()         { return m_iState; }
-    bool        const &bIsUnsaved()     { return m_bUnsaved; }
-    QString     const &sExePath()       { return m_sExePath; }
-    QString     const &sUMVersion()     { return m_sUMVersion; }
-    QString     const &sWallPath()      { return m_sWallPath; }
-    QString     const &sBMPPath()       { return m_sBMPPath; }
-    short int   const &iNbMonitors()    { return m_iNbMonitors; }
-    short int   const &iNbWallpapers()  { return m_iNbWallpapers; }
-    short int   const &iDelay()         { return m_iDelay; }
-    QSize       const &oWindowSize()    { return m_oWindowSize; }
-    bool        const &bMinimize()      { return m_bMinimize; }
-    bool        const &bCheckFiles()    { return m_bCheckFiles; }
-    short int   const &iMsgCount()      { return m_iMsgCount; }
-    bool        const bCanAddShortcut() { return !m_sStartLnkPath.isEmpty(); }
-    bool        const bIsAutostart()    { return bFileExists(m_sStartLnkPath.toStdString()); }
+    Set*        const poGetSet(int _i) const  { return m_oSets.at(_i); }
+    short int   const iNbSets() const         { return m_oSets.size(); }
+    short int   const &iState() const         { return m_iState; }
+    bool        const &bIsUnsaved() const     { return m_bUnsaved; }
+    QString     const &sExePath() const       { return m_sExePath; }
+    QString     const &sUMVersion() const     { return m_sUMVersion; }
+    QString     const &sWallPath() const      { return m_sWallPath; }
+    QString     const &sBMPPath() const       { return m_sBMPPath; }
+    short int   const &iNbMonitors() const    { return m_iNbMonitors; }
+    short int   const &iNbWallpapers() const  { return m_iNbWallpapers; }
+    short int   const &iDelay() const         { return m_iDelay; }
+    QSize       const &oWindowSize() const    { return m_oWindowSize; }
+    bool        const &bMinimize() const      { return m_bMinimize; }
+    bool        const &bCheckFiles() const    { return m_bCheckFiles; }
+    short int   const &iMsgCount() const      { return m_iMsgCount; }
+    bool        const bCanAddShortcut() const { return !m_sStartLnkPath.isEmpty(); }
+    bool        const bIsAutostart() const    { return bFileExists(m_sStartLnkPath.toStdString()); }
     int         const iNbFiles();
 
     // setters

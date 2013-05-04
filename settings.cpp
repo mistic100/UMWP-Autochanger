@@ -4,9 +4,9 @@
 #include <iostream>
 #include <fstream>
 #include <direct.h>
+
 #include "settings.h"
 #include "createshortcut.h"
-#include <QDebug>
 
 
 /*

@@ -3,11 +3,13 @@
 
 #include <QPainter>
 #include <QAbstractItemDelegate>
+
 #include "main.h"
 
+
 /*
- * a custom display of QListWidgetItem
- * with icon and description
+ * Name: ListDelegate
+ * Description: A custom display of QListWidgetItem with icon and description
  */
 class ListDelegate : public QAbstractItemDelegate
 {

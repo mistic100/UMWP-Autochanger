@@ -1,6 +1,8 @@
+#include <iostream>
+
 #include "set.h"
 #include "dirent.h"
-#include <iostream>
+
 
 /*
  * constructor
@@ -17,7 +19,7 @@ Set::Set(QString _path, QString _name, bool _active)
 /*
  * get name with file counter
  */
-QString const Set::sGetFullName()
+QString const Set::sGetFullName() const
 {
     return m_sName+" ("+QString::number(count())+")";
 }
@@ -25,7 +27,7 @@ QString const Set::sGetFullName()
 /*
  * get a file
  */
-QString const Set::sGetFile(int _i)
+QString const Set::sGetFile(int _i) const
 {
     if (_i <m_vFiles.size())
     {

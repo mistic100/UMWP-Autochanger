@@ -29,16 +29,12 @@ int main(int argc, char *argv[])
     a.installTranslator(&myappTranslator);
 
 
-    Settings* oData = new Settings;
-    Controller* oCtrl = new Controller(oData);
-    MainWindow* oWindow = new MainWindow(oCtrl);
+    Settings oData;
+    Controller oCtrl(&oData);
+    MainWindow oWindow(&oCtrl);
 
 
     int ret = a.exec();
-
-    delete oWindow;
-    delete oCtrl;
-    delete oData;
 
     ReleaseMutex(hMutexHandle);
     CloseHandle(hMutexHandle);
@@ -108,6 +104,7 @@ QString sGetDirName(const QString _sPath)
 bool bIsImageFile(const QString &_sFilename)
 {
     return _sFilename.endsWith(".jpg", Qt::CaseInsensitive)
+        || _sFilename.endsWith(".jpeg", Qt::CaseInsensitive)
         || _sFilename.endsWith(".bmp", Qt::CaseInsensitive)
         || _sFilename.endsWith(".png", Qt::CaseInsensitive)
         || _sFilename.endsWith(".gif", Qt::CaseInsensitive);

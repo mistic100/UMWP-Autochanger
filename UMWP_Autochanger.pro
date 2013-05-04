@@ -9,7 +9,7 @@ QT += core gui xml
 TARGET = UMWP_Autochanger
 TEMPLATE = app
 
-RC_FILE = Wallpapers.rc
+RC_FILE = UMWP_Autochanger.rc
 
 
 SOURCES += \
@@ -35,8 +35,11 @@ HEADERS += \
     createshortcut.h
 
 RESOURCES += \
-    ressources.qrc
+    UMWP_Autochanger.qrc
 
 TRANSLATIONS += \
     lang/en.ts \
     lang/fr.ts
+
+OTHER_FILES += \
+    UMWP_Autochanger.rc

@@ -1,12 +1,11 @@
 #include <ctime>
-#include <cmath>
 #include <iostream>
 #include <fstream>
+
 #include "dirent.h"
 #include "main.h"
 #include "controller.h"
 #include "mainwidget.h"
-#include <QDebug>
 
 
 /*
@@ -14,7 +13,7 @@
  */
 Controller::Controller(Settings* _data) : QObject(0)
 {
-    srand(time(NULL));
+    m_oRandom.seed((unsigned int)time(NULL));
 
     m_poSettings = _data;
     m_poMainTimer = new QTimer(this);
@@ -95,17 +94,17 @@ void Controller::vSlotUpdate(bool _forcecheck)
 /*
  * get a random file among all active sets
  */
-QString Controller::sGetRandomFile(int _total)
+QString const Controller::sGetRandomFile(int _total)
 {
     if (_total == -1)
     {
         _total = m_poSettings->iNbFiles();
     }
-    _total--;
 
     QString sPath = "";
-    int iCounter = (int)( ( rand()/(double)RAND_MAX )*_total );
-    iCounter = min(iCounter, _total);
+
+    uniform_int<int> unif(0, _total-1);
+    int iCounter = unif(m_oRandom);
 
     for (int i=0; i<m_poSettings->iNbSets(); i++)
     {

@@ -4,11 +4,14 @@
 #include <QPushButton>
 #include <QListWidget>
 #include <QSpinBox>
+
 #include "main.h"
 #include "controller.h"
 
+
 /*
- * the main widget of the software
+ * Name: MainWidget
+ * Description: The main widget of the software
  */
 class MainWidget : public QWidget
 {
@@ -25,19 +28,22 @@ private:
     QListWidget*    m_poList;
 
 public:
-    MainWidget(QWidget* _parent=0, Controller* _poCtrl=0);
+    MainWidget(QWidget* _parent, Controller* _poCtrl);
 
     void vSetListItemIcon(QListWidgetItem* _poItem, bool _active);
     QList<int> oGetSelectedIndexes();
 
 public slots:
     void vUpdateList();
+
     void vSlotAddSet();
     void vSlotDeleteSets();
     void vSlotActivateSets();
     void vSlotUnactivateSets();
+
     void vSlotSelectionChanged();
     void vSlotItemDoubleClicked();
+
     void vSlotDelayChanged(int _val);
 };
 

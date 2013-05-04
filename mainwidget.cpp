@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QResizeEvent>
 #include <QLabel>
+
 #include "mainwidget.h"
 #include "set.h"
 #include "listdelegate.h"

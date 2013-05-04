@@ -3,10 +3,11 @@
 #include <QLabel>
 #include <QFile>
 #include <QTextStream>
+
 #include "mainwindow.h"
 #include "errorwidget.h"
 #include "mainwidget.h"
-#include <QDebug>
+
 
 /*
  * constructor
@@ -14,7 +15,6 @@
 MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
 {
     m_poCtrl = _oCtrl;
-    m_poCentralWidget = NULL;
     m_poStatusBar = NULL;
     m_poMenuBar = NULL;
     m_poTrayIcon = NULL;
@@ -47,10 +47,9 @@ void MainWindow::vInit()
     int iState = m_poCtrl->settings()->iState();
 
     // SET CENTRAL WIDGET AND WINDOW SIZE
-    if (m_poCentralWidget != NULL)
+    if (centralWidget() != 0)
     {
         setMaximumSize(9999, 9999); // cancel maximum size
-        delete m_poCentralWidget;
     }
 
     QSize base_size = QSize(400, 200);
@@ -58,16 +57,14 @@ void MainWindow::vInit()
 
     if (iState == UM_OK)
     {
-        m_poCentralWidget = new MainWidget(this, m_poCtrl);
+        setCentralWidget(new MainWidget(this, m_poCtrl));
         resize(m_poCtrl->settings()->oWindowSize());
     }
     else
     {
-        m_poCentralWidget = new ErrorWidget(this, m_poCtrl);
+        setCentralWidget(new ErrorWidget(this, m_poCtrl));
         setMaximumSize(base_size);
     }
-
-    setCentralWidget(m_poCentralWidget);
 
 
     // START TIMER if config is ok
@@ -99,9 +96,9 @@ void MainWindow::vInit()
         QAction* poActionQuit1 =    m_poMenuBar->addAction(tr("Quit"));
         m_poActionPause1 =          m_poMenuBar->addAction(tr("Pause"));
         m_poActionHide1 =           m_poMenuBar->addAction(tr("Hide"));
-                                    m_poMenuBar->addSeparator();
+                                   m_poMenuBar->addSeparator();
         m_poOptionsMenu =           m_poMenuBar->addMenu(tr("Options"));
-                                    m_poMenuBar->addSeparator();
+                                   m_poMenuBar->addSeparator();
         QAction* poActionHelp =     m_poMenuBar->addAction(tr("?"));
 
         QAction* poOptionMinimize = m_poOptionsMenu->addAction(tr("Minimize on startup"));
@@ -155,7 +152,7 @@ void MainWindow::vInit()
         m_poActionPause2 =           poTrayMenu->addAction(tr("Pause"));
         QAction* poActionRefresh =   poTrayMenu->addAction(tr("Refresh"));
         m_poActionHide2 =            poTrayMenu->addAction(tr("Hide"));
-                                     poTrayMenu->addSeparator();
+                                    poTrayMenu->addSeparator();
         QAction* poActionQuit2 =     poTrayMenu->addAction(tr("Quit"));
 
         m_poActionPause2->setIcon(QPixmap(":/img/playpause"));
@@ -252,33 +249,29 @@ void MainWindow::vSlotStartPause()
  */
 void MainWindow::vSlotShowHelp()
 {
-    QFile* file;
+    QFile file;
     QString lang = QLocale::system().name().section('_', 0, 0);
     if (lang.compare("fr")==0)
     {
-        file = new QFile(":/lang/help_fr");
+        file = QFile(":/lang/help_fr");
     }
     else
     {
-        file = new QFile(":/lang/help_en");
+        file = QFile(":/lang/help_en");
     }
 
-    file->open(QIODevice::ReadOnly);
-    QTextStream* content = new QTextStream(file);
+    file.open(QIODevice::ReadOnly);
+    QTextStream content(&file);
     QString main_text = "<h3>"+QString::fromAscii(APP_NAME)+" "+QString::fromAscii(APP_VERSION)+"</h3>";
-    main_text.append(content->readAll());
-    file->close();
+    main_text.append(content.readAll());
+    file.close();
 
-    QMessageBox* about = new QMessageBox(this);
-    about->setIcon(QMessageBox::Information);
-    about->setWindowModality(Qt::NonModal);
-    about->setText(main_text);
-    about->setWindowTitle(tr("About %1").arg(APP_NAME));
-    about->exec();
-
-    delete file;
-    delete content;
-    delete about;
+    QMessageBox about(this);
+    about.setIcon(QMessageBox::Information);
+    about.setWindowModality(Qt::NonModal);
+    about.setText(main_text);
+    about.setWindowTitle(tr("About %1").arg(APP_NAME));
+    about.exec();
 }
 
 /*
