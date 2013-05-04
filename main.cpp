@@ -2,6 +2,7 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QLocale>
+
 #include "main.h"
 #include "mainwindow.h"
 #include "controller.h"
@@ -46,9 +47,9 @@ int main(int argc, char *argv[])
 /*
  * check if a file exists
  */
-bool bFileExists(const std::string &_sPath, bool _bCheckWrite)
+bool bFileExists(QString const &_sPath, bool _bCheckWrite)
 {
-    DWORD att = GetFileAttributesA(_sPath.c_str());
+    DWORD att = GetFileAttributesA(_sPath.toStdString().c_str());
     if (_bCheckWrite)
         return att!=INVALID_FILE_ATTRIBUTES && !(att&FILE_ATTRIBUTE_READONLY) && !(att&FILE_ATTRIBUTE_DIRECTORY);
     else
@@ -58,21 +59,21 @@ bool bFileExists(const std::string &_sPath, bool _bCheckWrite)
 /*
  * check if a directory exists
  */
-bool bDirectoryExists(const std::string &_sPath)
+bool bDirectoryExists(QString const &_sPath)
 {
-    DWORD att = GetFileAttributesA(_sPath.c_str());
+    DWORD att = GetFileAttributesA(_sPath.toStdString().c_str());
     return att!=INVALID_FILE_ATTRIBUTES && (att&FILE_ATTRIBUTE_DIRECTORY);
 }
 
 /*
  * helpers for simple XML text nodes
  */
-void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, const QString &_value)
+void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, QString const &_value)
 {
     _pNode->appendChild(_pDoc->createTextNode(_value));
 }
 
-void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _parent, const QString &_name, const QString &_value)
+void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _parent, QString const &_name, QString const &_value)
 {
     QDomElement element = _pDoc->createElement(_name);
     setDomNodeValue(_pDoc, &element, _value);
@@ -93,7 +94,7 @@ void vAddTrailingSlash(QString* _psPath)
 /*
  * get dir name from path
  */
-QString sGetDirName(const QString _sPath)
+QString sGetDirName(QString const &_sPath)
 {
     return _sPath.section('\\', -1, -1, QString::SectionSkipEmpty);
 }
@@ -101,7 +102,7 @@ QString sGetDirName(const QString _sPath)
 /*
  * determine is a filename corresponds to an image (jpg, bmp, png, gif)
  */
-bool bIsImageFile(const QString &_sFilename)
+bool bIsImageFile(QString const &_sFilename)
 {
     return _sFilename.endsWith(".jpg", Qt::CaseInsensitive)
         || _sFilename.endsWith(".jpeg", Qt::CaseInsensitive)

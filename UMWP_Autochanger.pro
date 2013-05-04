@@ -20,7 +20,8 @@ SOURCES += \
     listdelegate.cpp \
     settings.cpp \
     errorwidget.cpp \
-    mainwidget.cpp
+    mainwidget.cpp \
+    versionchecker.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -32,7 +33,8 @@ HEADERS += \
     settings.h \
     errorwidget.h \
     mainwidget.h \
-    createshortcut.h
+    createshortcut.h \
+    versionchecker.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc

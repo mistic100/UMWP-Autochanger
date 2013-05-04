@@ -1,7 +1,6 @@
 #ifndef MAIN_H
 
 #include <Windows.h>
-#include <string>
 #include <QtXml>
 #include <QString>
 #include <QVector>
@@ -13,6 +12,8 @@
 #define APP_VERSION "1.1"
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
+#define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
+#define APP_VERSION_URL L"http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
 
 
 // state values
@@ -20,6 +21,7 @@
 #define UM_NOT_INSTALLED 1
 #define UM_BAD_VERSION 2
 #define UM_FILE_NOT_FOUND 4
+#define UM_SETTINGS_FILE_ERROR 8
 
 
 // types for wallpaper file
@@ -52,15 +54,15 @@ struct WP_MONITOR_FILE
 
 
 // common functions
-bool bFileExists(const std::string &_sPath, bool _bCheckWrite=true);
-bool bDirectoryExists(const std::string &_sPath);
+bool bFileExists(QString const &_sPath, bool _bCheckWrite=true);
+bool bDirectoryExists(QString const &_sPath);
 
-QString sGetDirName(const QString _sPath);
+QString sGetDirName(const QString &_sPath);
 void vAddTrailingSlash(QString* _psPath);
-bool bIsImageFile(const QString &_sFilename);
+bool bIsImageFile(QString const &_sFilename);
 
-void setDomNodeValue(QDomDocument *_pDoc, QDomNode* _pNode, const QString &_value);
-void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _parent, const QString &_name, const QString &_value);
+void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, QString const &_value);
+void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _parent, QString const &_name, QString const &_value);
 
 #define MAIN_H
 #endif // MAIN_H

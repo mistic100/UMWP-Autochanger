@@ -15,7 +15,9 @@
 ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 {
     m_poCtrl = _poCtrl;
+
     m_poEditPath = NULL;
+
     int iState = m_poCtrl->settings()->iState();
 
 
@@ -47,7 +49,7 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
 
         QPushButton* poButtonBrowse = new QPushButton(tr("Browse"));
         QPushButton* poButtonSubmit = new QPushButton(tr("Continue"));
-        m_poEditPath = new QLineEdit(m_poCtrl->settings()->sExePath());
+        m_poEditPath = new QLineEdit(m_poCtrl->settings()->sParam("umpath"));
 
         poMainLayout->addWidget(m_poEditPath, 3, 0, 1, 5);
         poMainLayout->addWidget(poButtonBrowse, 3, 5, 1, 1);
@@ -57,21 +59,18 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
         connect(poButtonSubmit, SIGNAL(clicked()), this, SLOT(vSlotSubmit()));
     }
     // OTHER ERRORS
-    else
+    else if (iState & UM_FILE_NOT_FOUND)
     {
-        if (iState & UM_FILE_NOT_FOUND)
-        {
-            QString text = tr("<b>default.wallpaper</b> fil not found, impossible to continue.<br><br>Sould be at: %1")
-                                .arg("<i>"+m_poCtrl->settings()->sWallPath()+"</i>");
-            poDescription->setText(text);
-        }
-        else if (iState & UM_BAD_VERSION)
-        {
-            QString text = tr("%1 is incompatible with the current version of UltraMon (%2)")
-                                .arg(QString::fromAscii(APP_NAME)+" "+QString::fromAscii(APP_VERSION))
-                                .arg(m_poCtrl->settings()->sUMVersion());
-            poDescription->setText(text);
-        }
+        QString text = tr("<b>default.wallpaper</b> fil not found, impossible to continue.<br><br>Sould be at: %1")
+                        .arg("<i>"+m_poCtrl->settings()->sEnv("wallpath")+"</i>");
+        poDescription->setText(text);
+    }
+    else if (iState & UM_BAD_VERSION)
+    {
+        QString text = tr("%1 is incompatible with the current version of UltraMon (%2)")
+                        .arg(QString::fromAscii(APP_NAME)+" "+QString::fromAscii(APP_VERSION))
+                        .arg(m_poCtrl->settings()->sEnv("umversion"));
+        poDescription->setText(text);
     }
 
     setLayout(poMainLayout);

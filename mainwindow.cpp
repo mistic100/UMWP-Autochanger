@@ -2,7 +2,6 @@
 #include <QMessageBox>
 #include <QLabel>
 #include <QFile>
-#include <QTextStream>
 
 #include "mainwindow.h"
 #include "errorwidget.h"
@@ -19,6 +18,8 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     m_poMenuBar = NULL;
     m_poTrayIcon = NULL;
 
+    connect(m_poCtrl, SIGNAL(newVersionAvailable(QString)), this, SLOT(vSlotDisplayNewVersion(QString)));
+
     setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint); // disable maximise button
     setWindowTitle(APP_NAME);
     setWindowIcon(QPixmap(":/img/icon"));
@@ -28,7 +29,7 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     // window is hidden by default if the config is not empty
     if (
             m_poCtrl->settings()->iNbSets()>0
-            && m_poCtrl->settings()->bMinimize()
+            && m_poCtrl->settings()->bParam("minimize")
             && m_poCtrl->settings()->iState()==UM_OK
     ) {
         vSlotToggleWindow(true);
@@ -70,7 +71,7 @@ void MainWindow::vInit()
     // START TIMER if config is ok
     if (iState == UM_OK)
     {
-        m_poCtrl->vStartTimer(!(m_poCtrl->settings()->bCheckFiles()));
+        m_poCtrl->vStartTimer();
     }
 
 
@@ -101,24 +102,37 @@ void MainWindow::vInit()
                                    m_poMenuBar->addSeparator();
         QAction* poActionHelp =     m_poMenuBar->addAction(tr("?"));
 
-        QAction* poOptionMinimize = m_poOptionsMenu->addAction(tr("Minimize on startup"));
-        QAction* poOptionCheck =    m_poOptionsMenu->addAction(tr("Check files periodically"));
-        QAction* poOptionAutostart = m_poOptionsMenu->addAction(tr("Start with Windows"));
-
-        poOptionMinimize->setCheckable(true);
-        poOptionMinimize->setChecked(m_poCtrl->settings()->bMinimize());
-        poOptionCheck->setCheckable(true);
-        poOptionCheck->setChecked(m_poCtrl->settings()->bCheckFiles());
-        poOptionAutostart->setCheckable(true);
-        poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
-
         connect(poActionQuit1,      SIGNAL(triggered()), this, SLOT(vSlotQuit()));
         connect(m_poActionHide1,    SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
         connect(m_poActionPause1,   SIGNAL(triggered()), this, SLOT(vSlotStartPause()));
         connect(poActionHelp,       SIGNAL(triggered()), this, SLOT(vSlotShowHelp()));
-        connect(poOptionMinimize,   SIGNAL(toggled(bool)), this, SLOT(vSlotOptionMinimizeChanged(bool)));
-        connect(poOptionCheck,      SIGNAL(toggled(bool)), this, SLOT(vSlotOptionCheckChanged(bool)));
-        connect(poOptionAutostart,  SIGNAL(toggled(bool)), this, SLOT(vSlotOptionAutostartChanged(bool)));
+
+
+        QAction* poOptionMinimize =     m_poOptionsMenu->addAction(tr("Minimize on startup"));
+        QAction* poOptionCheckFiles =   m_poOptionsMenu->addAction(tr("Check files periodically"));
+        QAction* poOptionCheckUpdates = m_poOptionsMenu->addAction(tr("Check updates"));
+        QAction* poOptionAutostart =    m_poOptionsMenu->addAction(tr("Start with Windows"));
+
+        poOptionMinimize->setCheckable(true);
+        poOptionCheckFiles->setCheckable(true);
+        poOptionCheckUpdates->setCheckable(true);
+        poOptionAutostart->setCheckable(true);
+
+        poOptionMinimize->setChecked(m_poCtrl->settings()->bParam("minimize"));
+        poOptionCheckFiles->setChecked(m_poCtrl->settings()->bParam("check"));
+        poOptionCheckUpdates->setChecked(m_poCtrl->settings()->bParam("check_updates"));
+        poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
+
+        poOptionMinimize->setProperty("name", "minimize");
+        poOptionCheckFiles->setProperty("name", "check");
+        poOptionCheckUpdates->setProperty("name", "check_updates");
+        poOptionAutostart->setProperty("name", "autostart");
+
+        connect(poOptionMinimize,       SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+        connect(poOptionCheckFiles,     SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+        connect(poOptionCheckUpdates,   SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+        connect(poOptionAutostart,      SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+
 
         if (!(m_poCtrl->settings()->bCanAddShortcut()))
         {
@@ -171,7 +185,7 @@ void MainWindow::vInit()
 }
 
 /*
- * action on the tray menu
+ * action on the tray icon
  */
 void MainWindow::vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason)
 {
@@ -190,7 +204,7 @@ void MainWindow::vSlotToggleWindow(bool _forcehide)
     {
         hide();
 
-        if (m_poCtrl->settings()->iMsgCount() < 3)
+        if (m_poCtrl->settings()->iParam("msgcount") < 3)
         {
             m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
             m_poCtrl->settings()->vAddMsgCount();
@@ -220,9 +234,7 @@ void MainWindow::vSlotApply()
     m_poCtrl->settings()->vSetWindowSize(size());
     m_poCtrl->settings()->vWriteXML();
 
-    bool must_pause = !(m_poCtrl->bIsRunning());
-    m_poCtrl->vStartTimer();
-    if (must_pause) vSlotStartPause();
+    m_poCtrl->vStartTimer(true);
 }
 
 /*
@@ -253,11 +265,11 @@ void MainWindow::vSlotShowHelp()
     QString lang = QLocale::system().name().section('_', 0, 0);
     if (lang.compare("fr")==0)
     {
-        file = QFile(":/lang/help_fr");
+        file.setFileName(":/lang/help_fr");
     }
     else
     {
-        file = QFile(":/lang/help_en");
+        file.setFileName(":/lang/help_en");
     }
 
     file.open(QIODevice::ReadOnly);
@@ -277,37 +289,71 @@ void MainWindow::vSlotShowHelp()
 /*
  * options changed
  */
-void MainWindow::vSlotOptionMinimizeChanged(bool _a)
+void MainWindow::vSlotOptionToggled(bool _c)
 {
-    m_poCtrl->settings()->vSetMinimize(_a);
-}
+    QAction* action = (QAction*)(QObject::sender());
+    QString option_name = action->property("name").toString();
 
-void MainWindow::vSlotOptionCheckChanged(bool _a)
-{
-    if (!_a)
+    if (option_name == "autostart")
     {
-        int ret = QMessageBox::warning(this, tr("Warning"), tr("If you disable files check you may obtain<br>a black wallpaper if you manually edit your sets."),
-                                       QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Ok);
-
-        if (ret == QMessageBox::Cancel)
+        if (_c)
         {
-            ((QAction*) sender())->setChecked(true);
-            return;
+            m_poCtrl->settings()->vCreateShortcut();
+        }
+        else
+        {
+            m_poCtrl->settings()->vDeleteShortcut();
+        }
+
+        return;
+    }
+    else if (option_name == "check")
+    {
+        if (!_c)
+        {
+            int ret = QMessageBox::warning(this, tr("Warning"), tr("If you disable files check you may obtain<br>a black wallpaper if you manually edit your sets."),
+                                           QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Ok);
+
+            if (ret == QMessageBox::Cancel)
+            {
+                action->setChecked(true);
+                return;
+            }
         }
     }
 
-    m_poCtrl->settings()->vSetCheckFiles(_a);
+    m_poCtrl->settings()->vSetParam(option_name, _c);
+    m_poCtrl->settings()->vWriteXML();
 }
 
-void MainWindow::vSlotOptionAutostartChanged(bool _a)
+
+/*
+ * the delay value changed
+ */
+void MainWindow::vSlotDelayChanged(int _val)
 {
-    if (_a)
+    m_poCtrl->settings()->vSetParam("delay", _val);
+    m_poCtrl->settings()->vWriteXML();
+}
+
+
+/*
+ * new version message
+ */
+void MainWindow::vSlotDisplayNewVersion(QString _ver)
+{
+    if (!isVisible())
     {
-        m_poCtrl->settings()->vCreateShortcut();
+        m_poTrayIcon->showMessage(APP_NAME, tr("A new version is available : %1.").arg(_ver));
     }
     else
     {
-        m_poCtrl->settings()->vDeleteShortcut();
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle(tr("New version"));
+        msgBox.setText("<b>"+tr("A new version is available : %1.").arg(_ver)+"</b>");
+        msgBox.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.").arg(APP_HOMEPAGE));
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
     }
 }
 
@@ -324,7 +370,7 @@ void MainWindow::vSlotQuit()
 
     if (m_poCtrl->settings()->bIsUnsaved())
     {
-        int ret = QMessageBox::warning(this, tr("Quit"), tr("Quit without save?"),
+        int ret = QMessageBox::warning(this, tr("Quit"), tr("Save before quit?"),
                                        QMessageBox::Cancel | QMessageBox::Save | QMessageBox::Close, QMessageBox::Save);
 
         if (ret == QMessageBox::Cancel)

@@ -19,17 +19,33 @@ Controller::Controller(Settings* _data) : QObject(0)
     m_poMainTimer = new QTimer(this);
 
     connect(m_poMainTimer, SIGNAL(timeout()), this, SLOT(vSlotUpdate()));
+
+    if (m_poSettings->bParam("check_updates"))
+    {
+        VersionChecker* poVersionChecker = new VersionChecker(0);
+        connect(poVersionChecker, SIGNAL(newVersionAvailable(QString)), this, SLOT(vSlotNewVersion(QString)));
+
+        m_poVCThread = new QThread(this);
+        connect(m_poVCThread, SIGNAL(started()), poVersionChecker, SLOT(doCheckVersion()));
+        poVersionChecker->moveToThread(m_poVCThread);
+
+        QTimer::singleShot(1000, m_poVCThread, SLOT(start()));
+    }
 }
 
 /*
  * update the wallpaper and start the timer
  */
-void Controller::vStartTimer(bool _forcecheck)
+void Controller::vStartTimer(bool _keepPause)
 {
+    bool was_pause = !m_poMainTimer->isActive();
+
     m_poMainTimer->stop();
-    m_poMainTimer->setInterval(m_poSettings->iDelay()*1000);
-    vSlotUpdate(_forcecheck);
-    m_poMainTimer->start();
+    m_poMainTimer->setInterval(m_poSettings->iParam("delay")*1000);
+
+    vSlotUpdate();
+
+    if (!was_pause || !_keepPause) m_poMainTimer->start();
 }
 
 /*
@@ -51,10 +67,10 @@ void Controller::vStartPause()
 /*
  * update the wallpaper
  */
-void Controller::vSlotUpdate(bool _forcecheck)
+void Controller::vSlotUpdate()
 {
     // update config
-    if (_forcecheck || m_poSettings->bCheckFiles())
+    if (m_poSettings->bParam("check"))
     {
         m_poSettings->vUpdateSets();
         m_poSettings->vReadNbWalls();
@@ -70,7 +86,7 @@ void Controller::vSlotUpdate(bool _forcecheck)
 
     // get random files
     QVector<QString> files;
-    for (int i=0; i<m_poSettings->iNbWallpapers(); i++)
+    for (int i=0; i<m_poSettings->iEnv("nb_walls"); i++)
     {
         files.push_back(sGetRandomFile(iTotalFiles));
     }
@@ -79,16 +95,24 @@ void Controller::vSlotUpdate(bool _forcecheck)
     vGenerateFile(files);
 
     // remove old BMP file
-    std::string bmp_file = m_poSettings->sBMPPath().toStdString();
-    if (bFileExists(bmp_file))
+    if (bFileExists(m_poSettings->sEnv("bmppath")))
     {
-        remove(bmp_file.c_str());
+        QFile::remove(m_poSettings->sEnv("bmppath"));
     }
 
     // execute UltraMonDesktop
-    QString cmd = "\""+m_poSettings->sExePath()+"\" /load";
-    cmd+= " \""+m_poSettings->sWallPath()+QString::fromAscii(APP_WALLPAPER_FILE)+"\"";
+    QString cmd = "\""+m_poSettings->sParam("umpath")+"\" /load";
+    cmd+= " \""+m_poSettings->sEnv("wallpath")+QString::fromAscii(APP_WALLPAPER_FILE)+"\"";
     QProcess::execute(cmd);
+}
+
+/*
+ * new version available
+ */
+void Controller::vSlotNewVersion(QString _ver)
+{
+    m_poVCThread->exit();
+    emit newVersionAvailable(_ver);
 }
 
 /*
@@ -126,11 +150,11 @@ QString const Controller::sGetRandomFile(int _total)
 /*
  * get footer text, with hyperlinks
  */
-QString const Controller::sGetStatusText()
+QString const Controller::sGetStatusText() const
 {
-    QString msg = "<a href='http://www.strangeplanet.fr'>"+QString::fromAscii(APP_NAME)+"</a>";
+    QString msg = "<a href='"+QString::fromAscii(APP_HOMEPAGE)+"'>"+QString::fromAscii(APP_NAME)+"</a>";
     msg+= " "+QString::fromAscii(APP_VERSION);
-    msg+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a> "+m_poSettings->sUMVersion();
+    msg+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a> "+m_poSettings->sEnv("umversion");
     return msg;
 }
 
@@ -141,17 +165,18 @@ QString const Controller::sGetStatusText()
  */
 void Controller::vGenerateFile(QVector<QString> _files)
 {
-    if (_files.size() != m_poSettings->iNbWallpapers())
+    if (_files.size() != m_poSettings->iEnv("nb_walls"))
     {
         return;
     }
 
-    std::string file = m_poSettings->sWallPath().toStdString().append(APP_WALLPAPER_FILE);
-    int const header_size = 19 + m_poSettings->iNbMonitors()*16;
+    QString file = m_poSettings->sEnv("wallpath");
+    file.append(APP_WALLPAPER_FILE);
+    int const header_size = 19 + m_poSettings->iEnv("nb_monitors")*16;
 
-    std::fstream ofs(file, std::ios::out | std::ios::in | std::ios::binary);
+    std::fstream ofs(file.toStdString(), std::ios::out | std::ios::in | std::ios::binary);
 
-    for (int i=0; i<m_poSettings->iNbWallpapers(); i++)
+    for (int i=0; i<m_poSettings->iEnv("nb_walls"); i++)
     {
         // seek to the begining of the imgFile field
         int const wp_file_pos = header_size + i*260*sizeof(wchar_t) + (i+1)*16;
@@ -166,4 +191,3 @@ void Controller::vGenerateFile(QVector<QString> _files)
 
     ofs.close();
 }
-

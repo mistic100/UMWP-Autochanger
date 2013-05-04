@@ -19,7 +19,7 @@ Set::Set(QString _path, QString _name, bool _active)
 /*
  * get name with file counter
  */
-QString const Set::sGetFullName() const
+QString const Set::fullName() const
 {
     return m_sName+" ("+QString::number(count())+")";
 }

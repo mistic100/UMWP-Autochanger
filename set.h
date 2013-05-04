@@ -31,7 +31,7 @@ public:
     double  dReadLastModif(QString _sub="", int _level=0);
     void    vPopulateFiles(QString _sub="", int _level=0);
 
-    QString const sGetFullName() const;
+    QString const fullName() const;
     QString const sGetFile(int _i) const;
 };
 

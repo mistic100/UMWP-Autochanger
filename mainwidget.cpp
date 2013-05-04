@@ -3,8 +3,8 @@
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QResizeEvent>
 #include <QLabel>
+#include <QSpinBox>
 
 #include "mainwidget.h"
 #include "set.h"
@@ -31,11 +31,11 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     QPushButton* poApplyButton =    new QPushButton(tr("Apply"));
 
     // spin box
-    m_poDelayInput = new QSpinBox();
-    m_poDelayInput->setRange(10, 3600);
-    m_poDelayInput->setSingleStep(10);
-    m_poDelayInput->setFixedWidth(60);
-    m_poDelayInput->setValue(m_poCtrl->settings()->iDelay());
+    QSpinBox* poDelayInput = new QSpinBox();
+    poDelayInput->setRange(10, 3600);
+    poDelayInput->setSingleStep(10);
+    poDelayInput->setFixedWidth(60);
+    poDelayInput->setValue(m_poCtrl->settings()->iParam("delay"));
 
 
     // layouts
@@ -49,7 +49,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 
     QHBoxLayout* poTopLine = new QHBoxLayout();
     poTopLine->addWidget(new QLabel(tr("Delay (seconds) : ")));
-    poTopLine->addWidget(m_poDelayInput);
+    poTopLine->addWidget(poDelayInput);
     poTopLine->addStretch();
 
     QGridLayout* poMainLayout = new QGridLayout();
@@ -70,7 +70,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     connect(m_poList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(vSlotItemDoubleClicked()));
 
     // spin box changed
-    connect(m_poDelayInput, SIGNAL(valueChanged(int)), this, SLOT(vSlotDelayChanged(int)));
+    connect(poDelayInput, SIGNAL(valueChanged(int)), _parent, SLOT(vSlotDelayChanged(int)));
 
     // list updated by the controller
     connect(m_poCtrl, SIGNAL(listChanged()), this, SLOT(vUpdateList()));
@@ -97,7 +97,7 @@ void MainWidget::vUpdateList()
         Set* poSet = m_poCtrl->settings()->poGetSet(i);
 
         QListWidgetItem* poItem = new QListWidgetItem();
-        poItem->setData(Qt::DisplayRole, poSet->sGetFullName());
+        poItem->setData(Qt::DisplayRole, poSet->fullName());
         poItem->setData(Qt::UserRole, i);
         poItem->setData(Qt::UserRole+1, poSet->path());
         poItem->setData(Qt::UserRole+2, poSet->isActive());
@@ -134,6 +134,8 @@ void MainWidget::vSlotAddSet()
     {
         dirname.replace('/', '\\');
         m_poCtrl->settings()->oAddSet(dirname);
+        m_poCtrl->settings()->vWriteXML();
+
         vUpdateList();
     }
 }
@@ -149,6 +151,8 @@ void MainWidget::vSlotDeleteSets()
     if (ret == QMessageBox::Ok)
     {
         m_poCtrl->settings()->vDeleteSets(oGetSelectedIndexes());
+        m_poCtrl->settings()->vWriteXML();
+
         vUpdateList();
     }
 }
@@ -163,10 +167,13 @@ void MainWidget::vSlotActivateSets()
     for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
     {
         m_poCtrl->settings()->vSetState(*i, true);
+
         QListWidgetItem* poItem = m_poList->item(*i);
         poItem->setData(Qt::UserRole+2, true);
         vSetListItemIcon(poItem, true);
     }
+
+    m_poCtrl->settings()->vWriteXML();
 
     m_poActivateButton->setVisible(false);
     m_poUnactivateButton->setVisible(true);
@@ -182,10 +189,13 @@ void MainWidget::vSlotUnactivateSets()
     for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
     {
         m_poCtrl->settings()->vSetState(*i, false);
+
         QListWidgetItem* poItem = m_poList->item(*i);
         poItem->setData(Qt::UserRole+2, false);
         vSetListItemIcon(poItem, false);
     }
+
+    m_poCtrl->settings()->vWriteXML();
 
     m_poActivateButton->setVisible(true);
     m_poUnactivateButton->setVisible(false);
@@ -220,8 +230,10 @@ void MainWidget::vSlotItemDoubleClicked()
 
     if (ok && !text.isEmpty())
     {
-        QString name = m_poCtrl->settings()->sRenameSet(index, text, true);
-        poItem->setText(name);
+        m_poCtrl->settings()->vRenameSet(index, text);
+        m_poCtrl->settings()->vWriteXML();
+
+        poItem->setText(poSet->fullName());
     }
 }
 
@@ -266,13 +278,4 @@ void MainWidget::vSlotSelectionChanged()
         }
         m_poDeleteButton->setVisible(true);
     }
-}
-
-
-/*
- * the delay value changed
- */
-void MainWidget::vSlotDelayChanged(int _val)
-{
-    m_poCtrl->settings()->vSetDelay(_val);
 }

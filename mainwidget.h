@@ -3,7 +3,6 @@
 
 #include <QPushButton>
 #include <QListWidget>
-#include <QSpinBox>
 
 #include "main.h"
 #include "controller.h"
@@ -24,7 +23,6 @@ private:
     QPushButton*    m_poActivateButton;
     QPushButton*    m_poUnactivateButton;
 
-    QSpinBox*       m_poDelayInput;
     QListWidget*    m_poList;
 
 public:
@@ -43,8 +41,6 @@ public slots:
 
     void vSlotSelectionChanged();
     void vSlotItemDoubleClicked();
-
-    void vSlotDelayChanged(int _val);
 };
 
 #endif // MAINWIDGET_H

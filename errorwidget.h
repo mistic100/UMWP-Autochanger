@@ -15,9 +15,9 @@ class ErrorWidget : public QWidget
     Q_OBJECT
 
 private:
-    Controller*     m_poCtrl;
+    Controller* m_poCtrl;
 
-    QLineEdit*      m_poEditPath;
+    QLineEdit*  m_poEditPath;
 
 public:
     ErrorWidget(QWidget* _parent, Controller* _poCtrl);

@@ -49,12 +49,13 @@ public slots:
     void vSlotStartPause();
     void vSlotShowHelp();
 
+    void vSlotOptionToggled(bool _c);
+    void vSlotDelayChanged(int _val);
+
     void vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason);
     void vSlotToggleWindow(bool _forcehide=false);
 
-    void vSlotOptionMinimizeChanged(bool _a);
-    void vSlotOptionCheckChanged(bool _a);
-    void vSlotOptionAutostartChanged(bool _a);
+    void vSlotDisplayNewVersion(QString _ver);
 };
 
 #endif // MAINWINDOW_H
