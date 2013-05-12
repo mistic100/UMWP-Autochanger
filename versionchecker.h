@@ -18,10 +18,11 @@ public:
     VersionChecker(QObject* _parent);
 
 public slots:
-    void doCheckVersion();
+    void run();
     
 signals:
     void newVersionAvailable(QString);
+    void finished();
     
 };
 

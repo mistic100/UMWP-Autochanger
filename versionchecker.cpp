@@ -8,7 +8,7 @@
 VersionChecker::VersionChecker(QObject* _parent) : QObject(_parent) {}
 
 
-void VersionChecker::doCheckVersion()
+void VersionChecker::run()
 {
     HRESULT res = URLDownloadToFile( NULL, APP_VERSION_URL, L"version.txt", 0, NULL );
 
@@ -26,4 +26,6 @@ void VersionChecker::doCheckVersion()
             emit newVersionAvailable(ver);
         }
     }
+
+    emit finished();
 }

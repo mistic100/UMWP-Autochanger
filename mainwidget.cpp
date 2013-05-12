@@ -17,6 +17,10 @@
 MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 {
     m_poCtrl = _poCtrl;
+    connect(m_poCtrl, SIGNAL(listChanged()), this, SLOT(vUpdateList()));
+
+    m_sLastDir = QDir::homePath();
+
 
     // main list
     m_poList = new QListWidget();
@@ -69,11 +73,8 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     connect(m_poList, SIGNAL(itemSelectionChanged()), this, SLOT(vSlotSelectionChanged()));
     connect(m_poList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(vSlotItemDoubleClicked()));
 
-    // spin box changed
+    // spin box event
     connect(poDelayInput, SIGNAL(valueChanged(int)), _parent, SLOT(vSlotDelayChanged(int)));
-
-    // list updated by the controller
-    connect(m_poCtrl, SIGNAL(listChanged()), this, SLOT(vUpdateList()));
 
 
     setLayout(poMainLayout);
@@ -101,7 +102,11 @@ void MainWidget::vUpdateList()
         poItem->setData(Qt::UserRole, i);
         poItem->setData(Qt::UserRole+1, poSet->path());
         poItem->setData(Qt::UserRole+2, poSet->isActive());
-        vSetListItemIcon(poItem, poSet->isActive());
+
+        if (poSet->isActive())
+            poItem->setData(Qt::DecorationRole, QPixmap(":/img/bullet_green"));
+        else
+            poItem->setData(Qt::DecorationRole, QPixmap(":/img/bullet_red"));
 
         m_poList->addItem(poItem);
     }
@@ -120,6 +125,8 @@ QList<int> MainWidget::oGetSelectedIndexes()
         list.push_back((*it)->data(Qt::UserRole).toInt());
     }
 
+    qSort(list);
+
     return list;
 }
 
@@ -128,14 +135,16 @@ QList<int> MainWidget::oGetSelectedIndexes()
  */
 void MainWidget::vSlotAddSet()
 {
-    QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"), QDir::homePath());
+    QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"), m_sLastDir);
 
     if (!dirname.isEmpty())
     {
-        dirname.replace('/', '\\');
-        m_poCtrl->settings()->oAddSet(dirname);
+        QDir dir(dirname);
+        dir.cdUp();
+        m_sLastDir = dir.absolutePath();
 
-        vUpdateList();
+        dirname.replace('/', '\\');
+        m_poCtrl->vAddSet(dirname);
     }
 }
 
@@ -149,9 +158,7 @@ void MainWidget::vSlotDeleteSets()
 
     if (ret == QMessageBox::Ok)
     {
-        m_poCtrl->settings()->vDeleteSets(oGetSelectedIndexes());
-
-        vUpdateList();
+        m_poCtrl->vDeleteSets(oGetSelectedIndexes());
     }
 }
 
@@ -160,19 +167,7 @@ void MainWidget::vSlotDeleteSets()
  */
 void MainWidget::vSlotActivateSets()
 {
-    QList<int> list = oGetSelectedIndexes();
-
-    for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
-    {
-        m_poCtrl->settings()->vSetState(*i, true);
-
-        QListWidgetItem* poItem = m_poList->item(*i);
-        poItem->setData(Qt::UserRole+2, true);
-        vSetListItemIcon(poItem, true);
-    }
-
-    m_poActivateButton->setVisible(false);
-    m_poUnactivateButton->setVisible(true);
+    m_poCtrl->vActivateSets(oGetSelectedIndexes());
 }
 
 /*
@@ -180,34 +175,7 @@ void MainWidget::vSlotActivateSets()
  */
 void MainWidget::vSlotUnactivateSets()
 {
-    QList<int> list = oGetSelectedIndexes();
-
-    for (QList<int>::iterator i=list.begin(); i!=list.end(); i++)
-    {
-        m_poCtrl->settings()->vSetState(*i, false);
-
-        QListWidgetItem* poItem = m_poList->item(*i);
-        poItem->setData(Qt::UserRole+2, false);
-        vSetListItemIcon(poItem, false);
-    }
-
-    m_poActivateButton->setVisible(true);
-    m_poUnactivateButton->setVisible(false);
-}
-
-/*
- * set the icon of a list widget item
- */
-void MainWidget::vSetListItemIcon(QListWidgetItem* _poItem, bool _active)
-{
-    if (_active)
-    {
-        _poItem->setData(Qt::DecorationRole, QPixmap(":/img/bullet_green"));
-    }
-    else
-    {
-        _poItem->setData(Qt::DecorationRole, QPixmap(":/img/bullet_red"));
-    }
+    m_poCtrl->vUnactivateSets(oGetSelectedIndexes());
 }
 
 /*
@@ -217,21 +185,18 @@ void MainWidget::vSlotItemDoubleClicked()
 {
     int index = oGetSelectedIndexes().at(0);
     Set* poSet = m_poCtrl->settings()->poGetSet(index);
-    QListWidgetItem* poItem = m_poList->item(index);
 
     bool ok;
     QString text = QInputDialog::getText(this, tr("Name"), tr("New name:"), QLineEdit::Normal, poSet->name(), &ok);
 
     if (ok && !text.isEmpty())
     {
-        m_poCtrl->settings()->vRenameSet(index, text);
-
-        poItem->setText(poSet->fullName());
+        m_poCtrl->vRenameSet(index, text);
     }
 }
 
 /*
- * the selection of the list changed
+ * update buttons depending on list selection
  */
 void MainWidget::vSlotSelectionChanged()
 {

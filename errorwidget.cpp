@@ -18,8 +18,6 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
 
     m_poEditPath = NULL;
 
-    int iState = m_poCtrl->settings()->iState();
-
 
     QGridLayout* poMainLayout = new QGridLayout(); // 6 columns
 
@@ -41,6 +39,8 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
     // spacer
     QSpacerItem* poSpacer = new QSpacerItem(100, 100, QSizePolicy::Ignored, QSizePolicy::Ignored);
     poMainLayout->addItem(poSpacer, 2, 0, 1, 6);
+
+    int iState = m_poCtrl->settings()->iState();
 
     // ASK ULTRAMON.EXE PATH
     if (iState & UM_NOT_INSTALLED)
@@ -99,8 +99,7 @@ void ErrorWidget::vSlotSubmit()
 
     if (m_poCtrl->settings()->bSetExePath(filename))
     {
-        MainWindow* w = qobject_cast<MainWindow*>(parent());
-        w->vInit();
+        emit pathSaved();
     }
     else
     {

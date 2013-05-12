@@ -7,6 +7,7 @@
         <file alias="playpause">images/play_pause.png</file>
         <file alias="hide">images/hide.png</file>
         <file alias="refresh">images/refresh.png</file>
+        <file alias="quick">images/quick.png</file>
     </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>

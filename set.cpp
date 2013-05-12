@@ -13,6 +13,7 @@ Set::Set(QString _path, QString _name, bool _active)
     m_sName = _name;
     m_bActive = _active;
     m_dLastModif = 0;
+
     vPopulateFiles();
 }
 

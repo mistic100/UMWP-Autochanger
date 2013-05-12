@@ -25,6 +25,9 @@ public:
 public slots:
     void vSlotBrowse();
     void vSlotSubmit();
+
+signals:
+    void pathSaved();
 };
 
 #endif // ERRORWIDGET_H

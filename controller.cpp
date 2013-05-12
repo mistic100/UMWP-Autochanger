@@ -16,25 +16,34 @@ Controller::Controller(Settings* _data) : QObject(0)
     m_oRandom.seed((unsigned int)time(NULL));
 
     m_poSettings = _data;
+
     m_poMainTimer = new QTimer(this);
-
     connect(m_poMainTimer, SIGNAL(timeout()), this, SLOT(vSlotUpdate()));
+}
 
+/*
+ * init threads
+ */
+void Controller::vStart()
+{
     if (m_poSettings->bParam("check_updates"))
     {
         VersionChecker* poVersionChecker = new VersionChecker(0);
-        connect(poVersionChecker, SIGNAL(newVersionAvailable(QString)), this, SLOT(vSlotNewVersion(QString)));
+        connect(poVersionChecker, SIGNAL(newVersionAvailable(QString)), this, SIGNAL(newVersionAvailable(QString)));
 
-        m_poVCThread = new QThread(this);
-        connect(m_poVCThread, SIGNAL(started()), poVersionChecker, SLOT(doCheckVersion()));
-        poVersionChecker->moveToThread(m_poVCThread);
+        QThread* poVCThread = new QThread(this);
+        poVersionChecker->moveToThread(poVCThread);
 
-        QTimer::singleShot(1000, m_poVCThread, SLOT(start()));
+        connect(poVCThread, SIGNAL(started()), poVersionChecker, SLOT(run()));
+        connect(poVersionChecker, SIGNAL(finished()), poVCThread, SLOT(quit()));
+        connect(poVersionChecker, SIGNAL(finished()), poVersionChecker, SLOT(deleteLater()));
+
+        QTimer::singleShot(1000, poVCThread, SLOT(start()));
     }
 }
 
 /*
- * update the wallpaper and start the timer
+ * start the timer and update the wallpaper
  */
 void Controller::vStartTimer(bool _keepPause)
 {
@@ -51,7 +60,7 @@ void Controller::vStartTimer(bool _keepPause)
 /*
  * pause or start the timer
  */
-void Controller::vStartPause()
+bool Controller::bStartPause()
 {
     if (m_poMainTimer->isActive())
     {
@@ -61,6 +70,80 @@ void Controller::vStartPause()
     {
         m_poMainTimer->start();
     }
+
+    return m_poMainTimer->isActive();
+}
+
+/*
+ * add a new set
+ */
+void Controller::vAddSet(QString const _dirname)
+{
+    m_poSettings->oAddSet(_dirname);
+    emit listChanged();
+}
+
+/*
+ * delete sets
+ */
+void Controller::vDeleteSets(QList<int> const _list)
+{
+    int off=0;
+    for (QList<int>::const_iterator i=_list.begin(); i!=_list.end(); i++)
+    {
+        m_poSettings->vDeleteSet(*i-off);
+        off++;
+    }
+
+    emit listChanged();
+}
+
+/*
+ * activate sets
+ */
+void Controller::vActivateSets(QList<int> const _list)
+{
+    for (QList<int>::const_iterator i=_list.begin(); i!=_list.end(); i++)
+    {
+        m_poSettings->vSetState(*i, true);
+    }
+
+    emit listChanged();
+}
+
+/*
+ * unactivate sets
+ */
+void Controller::vUnactivateSets(QList<int> const _list)
+{
+    for (QList<int>::const_iterator i=_list.begin(); i!=_list.end(); i++)
+    {
+        m_poSettings->vSetState(*i, false);
+    }
+
+    emit listChanged();
+}
+
+/*
+ * set only one set as active and unactive any other sets
+ */
+void Controller::vSetOneActiveSet(int _idx)
+{
+    for (int i=0; i<m_poSettings->iNbSets(); i++)
+    {
+        m_poSettings->vSetState(i, i==_idx);
+    }
+
+    emit listChanged();
+}
+
+/*
+ * rename a set
+ */
+void Controller::vRenameSet(int _idx, QString const _name)
+{
+    m_poSettings->vRenameSet(_idx, _name);
+    emit listChanged();
 }
 
 
@@ -107,15 +190,6 @@ void Controller::vSlotUpdate()
 }
 
 /*
- * new version available
- */
-void Controller::vSlotNewVersion(QString _ver)
-{
-    m_poVCThread->exit();
-    emit newVersionAvailable(_ver);
-}
-
-/*
  * get a random file among all active sets
  */
 QString const Controller::sGetRandomFile(int _total)
@@ -146,18 +220,6 @@ QString const Controller::sGetRandomFile(int _total)
 
     return sPath;
 }
-
-/*
- * get footer text, with hyperlinks
- */
-QString const Controller::sGetStatusText() const
-{
-    QString msg = "<a href='"+QString::fromAscii(APP_HOMEPAGE)+"'>"+QString::fromAscii(APP_NAME)+"</a>";
-    msg+= " "+QString::fromAscii(APP_VERSION);
-    msg+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a> "+m_poSettings->sEnv("umversion");
-    return msg;
-}
-
 
 /*
  * generate .wallpaper file

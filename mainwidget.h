@@ -25,10 +25,11 @@ private:
 
     QListWidget*    m_poList;
 
+    QString         m_sLastDir;
+
 public:
     MainWidget(QWidget* _parent, Controller* _poCtrl);
 
-    void vSetListItemIcon(QListWidgetItem* _poItem, bool _active);
     QList<int> oGetSelectedIndexes();
 
 public slots:

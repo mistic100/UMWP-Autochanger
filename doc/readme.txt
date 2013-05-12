@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 
-Version       : 1.0
-Release date  : March 2nd, 2013
+Version       : 1.1
+Release date  : May 12th, 2013
 Author        : Damien "Mistic" Sorel
 Website       : http://www.strangeplanet.fr
 License       : GNU General Public License Version 3
@@ -53,12 +53,18 @@ Troubleshouting
 
 Known bugs
 ==========
- - When changing the wallpaper, the software freezes for some seconds, 
-  that's because I don't use multi-threading.
+ - When changing the wallpaper, with file check activated, the software freezes 
+  for some seconds, that's because I don't use multi-threading.
 
 
 Changelog
 =========
+
+--- 1.1 (12/05/2013)
+  - fixed: use better shuffle
+  - new: add version checker
+  - new: add quick switch menu in tray con
+  - code optimizations
 
 --- 1.0 (02/03/2013)
   - fixed: multi delete doesn't work correclty

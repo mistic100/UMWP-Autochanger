@@ -26,6 +26,7 @@ private:
     QStatusBar*         m_poStatusBar;
     QMenuBar*           m_poMenuBar;
     QMenu*              m_poOptionsMenu;
+    QMenu*              m_poTrayQuickMenu;
 
     // reference to some QAction modified after initilization
     QAction*            m_poActionHide1; // menu
@@ -36,14 +37,17 @@ private:
 public:
     MainWindow(Controller* _oCtrl);
 
-    void vInit();
-
 protected:
-    void showEvent(QShowEvent*) { resize(m_poCtrl->settings()->oWindowSize()); }
+    void showEvent(QShowEvent*)            { resize(m_poCtrl->settings()->oWindowSize()); }
     void resizeEvent(QResizeEvent* _event) { m_poCtrl->settings()->vSetWindowSize(_event->size()); }
     void closeEvent(QCloseEvent* _event);
 
 public slots:
+    void vShowMain();
+    void vShowError();
+
+    void vUpdateTrayQuickMenu();
+
     void vSlotQuit();
     void vSlotApply();
     void vSlotStartPause();
@@ -53,8 +57,9 @@ public slots:
     void vSlotDelayChanged(int _val);
 
     void vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason);
-    void vSlotToggleWindow(bool _forcehide=false);
+    void vSlotTrayQuickClicked();
 
+    void vSlotToggleWindow(bool _forcehide=false);
     void vSlotDisplayNewVersion(QString _ver);
 };
 

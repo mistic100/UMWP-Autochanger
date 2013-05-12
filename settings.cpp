@@ -415,6 +415,8 @@ bool Settings::bSetExePath(const QString &_sPath)
         if (filename.compare("UltraMonDesktop.exe")==0)
         {
             vSetParam("umpath", _sPath);
+            vWriteXML();
+
             m_iState&= ~UM_NOT_INSTALLED;
             return true;
         }
@@ -461,23 +463,8 @@ void Settings::vDeleteSet(int _i)
     {
         m_bUnsaved = true;
 
-        Set* poSet = m_oSets.at(_i);
+        delete m_oSets.at(_i);
         m_oSets.remove(_i);
-        delete poSet;
-    }
-}
-
-/*
- * delete a list of sets
- */
-void Settings::vDeleteSets(QList<int> _list)
-{
-    qSort(_list);
-    int off=0;
-    for (QList<int>::iterator i=_list.begin(); i!=_list.end(); i++)
-    {
-        vDeleteSet(*i-off);
-        off++;
     }
 }
 
