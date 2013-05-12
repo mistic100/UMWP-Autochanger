@@ -28,7 +28,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     m_poActivateButton =            new QPushButton(tr("Activate"));
     m_poUnactivateButton =          new QPushButton(tr("Unactivate"));
     m_poDeleteButton =              new QPushButton(tr("Delete"));
-    QPushButton* poApplyButton =    new QPushButton(tr("Apply"));
+    QPushButton* poApplyButton =    new QPushButton(tr("Save"));
 
     // spin box
     QSpinBox* poDelayInput = new QSpinBox();
@@ -134,7 +134,6 @@ void MainWidget::vSlotAddSet()
     {
         dirname.replace('/', '\\');
         m_poCtrl->settings()->oAddSet(dirname);
-        m_poCtrl->settings()->vWriteXML();
 
         vUpdateList();
     }
@@ -151,7 +150,6 @@ void MainWidget::vSlotDeleteSets()
     if (ret == QMessageBox::Ok)
     {
         m_poCtrl->settings()->vDeleteSets(oGetSelectedIndexes());
-        m_poCtrl->settings()->vWriteXML();
 
         vUpdateList();
     }
@@ -173,8 +171,6 @@ void MainWidget::vSlotActivateSets()
         vSetListItemIcon(poItem, true);
     }
 
-    m_poCtrl->settings()->vWriteXML();
-
     m_poActivateButton->setVisible(false);
     m_poUnactivateButton->setVisible(true);
 }
@@ -194,8 +190,6 @@ void MainWidget::vSlotUnactivateSets()
         poItem->setData(Qt::UserRole+2, false);
         vSetListItemIcon(poItem, false);
     }
-
-    m_poCtrl->settings()->vWriteXML();
 
     m_poActivateButton->setVisible(true);
     m_poUnactivateButton->setVisible(false);
@@ -231,7 +225,6 @@ void MainWidget::vSlotItemDoubleClicked()
     if (ok && !text.isEmpty())
     {
         m_poCtrl->settings()->vRenameSet(index, text);
-        m_poCtrl->settings()->vWriteXML();
 
         poItem->setText(poSet->fullName());
     }

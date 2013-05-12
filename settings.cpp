@@ -283,16 +283,16 @@ void Settings::vReadNbWalls()
  */
 void Settings::vReadXML()
 {
-    // initialize domdocument
-    QDomDocument oDom;
+    // open xml file
     QFile oXML(QString::fromAscii(APP_CONFIG_FILE));
 
     if (!oXML.open(QIODevice::ReadOnly))
     {
-        vWriteXML();
         return;
     }
 
+    // initialize domdocument
+    QDomDocument oDom;
     oDom.setContent(oXML.readAll());
 
     oXML.close();

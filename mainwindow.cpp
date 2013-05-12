@@ -29,8 +29,8 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     // window is hidden by default if the config is not empty
     if (
             m_poCtrl->settings()->iNbSets()>0
-            && m_poCtrl->settings()->bParam("minimize")
-            && m_poCtrl->settings()->iState()==UM_OK
+         && m_poCtrl->settings()->bParam("minimize")
+         && m_poCtrl->settings()->iState()==UM_OK
     ) {
         vSlotToggleWindow(true);
     }
@@ -163,15 +163,11 @@ void MainWindow::vInit()
         connect(m_poTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(vSlotTrayAction(QSystemTrayIcon::ActivationReason)));
 
         QMenu* poTrayMenu = new QMenu;
-        m_poActionPause2 =           poTrayMenu->addAction(tr("Pause"));
-        QAction* poActionRefresh =   poTrayMenu->addAction(tr("Refresh"));
-        m_poActionHide2 =            poTrayMenu->addAction(tr("Hide"));
+        m_poActionPause2 =           poTrayMenu->addAction(QIcon(":/img/playpause"), tr("Pause"));
+        QAction* poActionRefresh =   poTrayMenu->addAction(QIcon(":/img/refresh"), tr("Refresh"));
+        m_poActionHide2 =            poTrayMenu->addAction(QIcon(":/img/hide"), tr("Hide"));
                                     poTrayMenu->addSeparator();
         QAction* poActionQuit2 =     poTrayMenu->addAction(tr("Quit"));
-
-        m_poActionPause2->setIcon(QPixmap(":/img/playpause"));
-        poActionRefresh->setIcon(QPixmap(":/img/refresh"));
-        m_poActionHide2->setIcon(QPixmap(":/img/hide"));
 
         connect(poActionQuit2,      SIGNAL(triggered()), this, SLOT(vSlotQuit()));
         connect(m_poActionHide2,    SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
@@ -291,10 +287,10 @@ void MainWindow::vSlotShowHelp()
  */
 void MainWindow::vSlotOptionToggled(bool _c)
 {
-    QAction* action = (QAction*)(QObject::sender());
-    QString option_name = action->property("name").toString();
+    QAction* poAction = (QAction*)(QObject::sender());
+    QString sOptionName = poAction->property("name").toString();
 
-    if (option_name == "autostart")
+    if (sOptionName == "autostart")
     {
         if (_c)
         {
@@ -307,7 +303,7 @@ void MainWindow::vSlotOptionToggled(bool _c)
 
         return;
     }
-    else if (option_name == "check")
+    else if (sOptionName == "check")
     {
         if (!_c)
         {
@@ -316,14 +312,13 @@ void MainWindow::vSlotOptionToggled(bool _c)
 
             if (ret == QMessageBox::Cancel)
             {
-                action->setChecked(true);
+                poAction->setChecked(true);
                 return;
             }
         }
     }
 
-    m_poCtrl->settings()->vSetParam(option_name, _c);
-    m_poCtrl->settings()->vWriteXML();
+    m_poCtrl->settings()->vSetParam(sOptionName, _c);
 }
 
 
@@ -333,7 +328,6 @@ void MainWindow::vSlotOptionToggled(bool _c)
 void MainWindow::vSlotDelayChanged(int _val)
 {
     m_poCtrl->settings()->vSetParam("delay", _val);
-    m_poCtrl->settings()->vWriteXML();
 }
 
 
@@ -368,31 +362,16 @@ void MainWindow::vSlotQuit()
         return;
     }
 
-    if (m_poCtrl->settings()->bIsUnsaved())
-    {
-        int ret = QMessageBox::warning(this, tr("Quit"), tr("Save before quit?"),
-                                       QMessageBox::Cancel | QMessageBox::Save | QMessageBox::Close, QMessageBox::Save);
+    int ret = QMessageBox::warning(this, tr("Quit"), tr("If you quit the application now,<br>the wallpaper will not change anymore."),
+                                   QMessageBox::Cancel | QMessageBox::Close, QMessageBox::Close);
 
-        if (ret == QMessageBox::Cancel)
-        {
-            return;
-        }
-        else if (ret == QMessageBox::Save)
-        {
-            m_poCtrl->settings()->vSetWindowSize(size());
-            m_poCtrl->settings()->vWriteXML();
-        }
-    }
-    else
+    if (ret == QMessageBox::Cancel)
     {
-        int ret = QMessageBox::warning(this, tr("Quit"), tr("If you quit the application now,<br>the wallpaper will not change anymore."),
-                                       QMessageBox::Cancel | QMessageBox::Close, QMessageBox::Close);
-
-        if (ret == QMessageBox::Cancel)
-        {
-            return;
-        }
+        return;
     }
+
+    m_poCtrl->settings()->vSetWindowSize(size());
+    m_poCtrl->settings()->vWriteXML();
 
     qApp->quit();
 }

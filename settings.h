@@ -68,7 +68,7 @@ public:
     void    vDeleteSets(QList<int> _list);
     void    vDeleteAll();
 
-    void vRenameSet(int _i, QString const &_sName);
+    void    vRenameSet(int _i, QString const &_sName);
     void    vSetState(int _i, bool _a);
 
     // shortcut

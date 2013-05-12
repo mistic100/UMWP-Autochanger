@@ -26,7 +26,7 @@ public:
     bool    const &isActive() const { return m_bActive; }
 
     void    vSetActive(bool _a) { m_bActive=_a; }
-    void    vSetName(const QString &_name) { m_sName=_name; }
+    void    vSetName(QString const &_name) { m_sName=_name; }
 
     double  dReadLastModif(QString _sub="", int _level=0);
     void    vPopulateFiles(QString _sub="", int _level=0);
