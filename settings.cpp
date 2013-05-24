@@ -510,6 +510,22 @@ void Settings::vSetState(int _i, bool _a)
 }
 
 /*
+ * move a set in the vector
+ */
+void Settings::vMoveSet(int _from, int _to)
+{
+    Set* poSet = m_oSets.at(_from);
+    m_oSets.insert(_to, poSet);
+
+    if (_from<_to)
+        m_oSets.remove(_from);
+    else
+        m_oSets.remove(_from+1);
+
+    m_bUnsaved = true;
+}
+
+/*
  * remove unexisting sets and update file lists
  */
 void Settings::vUpdateSets()

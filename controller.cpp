@@ -146,14 +146,23 @@ void Controller::vRenameSet(int _idx, QString const _name)
     emit listChanged();
 }
 
+/*
+ * move a set
+ */
+void Controller::vMoveSet(int _from, int _to)
+{
+    m_poSettings->vMoveSet(_from, _to);
+    emit listChanged();
+}
+
 
 /*
  * update the wallpaper
  */
-void Controller::vSlotUpdate()
+void Controller::vSlotUpdate(bool _check)
 {
     // update config
-    if (m_poSettings->bParam("check"))
+    if (_check && m_poSettings->bParam("check"))
     {
         m_poSettings->vUpdateSets();
         m_poSettings->vReadNbWalls();

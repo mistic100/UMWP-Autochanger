@@ -65,11 +65,12 @@ public:
     Set*    oAddSet(QString _sPath, QString &_sName, bool _bActive);
 
     void    vDeleteSet(int _i);
-    void    vDeleteSets(QList<int> _list);
     void    vDeleteAll();
 
     void    vRenameSet(int _i, QString const &_sName);
     void    vSetState(int _i, bool _a);
+
+    void    vMoveSet(int _from, int _to);
 
     // shortcut
     bool const bCanAddShortcut() const;

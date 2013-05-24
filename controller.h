@@ -46,9 +46,10 @@ public:
     void vUnactivateSets(QList<int> const _list);
     void vSetOneActiveSet(int _idx);
     void vRenameSet(int _idx, QString const _name);
+    void vMoveSet(int _from, int _to);
 
 public slots:
-    void vSlotUpdate();
+    void vSlotUpdate(bool _check=true);
 
 signals:
     void listChanged();

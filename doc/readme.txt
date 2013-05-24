@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 
-Version       : 1.1
-Release date  : May 12th, 2013
+Version       : 1.2
+Release date  : ???
 Author        : Damien "Mistic" Sorel
 Website       : http://www.strangeplanet.fr
 License       : GNU General Public License Version 3
@@ -60,8 +60,13 @@ Known bugs
 Changelog
 =========
 
---- 1.1 (12/05/2013)
+--- 1.2 (???)
+  - new: reorder sets with drag'n'drop
+
+--- 1.1 (13/05/2013)
   - fixed: use better shuffle
+  - fixed: remember last used directory
+  - fixed: accept files with .jpeg extension
   - new: add version checker
   - new: add quick switch menu in tray con
   - code optimizations

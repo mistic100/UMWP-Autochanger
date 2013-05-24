@@ -26,6 +26,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     m_poList = new QListWidget();
     m_poList->setItemDelegate(new ListDelegate(m_poList));
     m_poList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_poList->setDragDropMode(QAbstractItemView::InternalMove);
 
     // buttons
     QPushButton* poAddButton =      new QPushButton(tr("Add"));
@@ -72,6 +73,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     // list events
     connect(m_poList, SIGNAL(itemSelectionChanged()), this, SLOT(vSlotSelectionChanged()));
     connect(m_poList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(vSlotItemDoubleClicked()));
+    connect(m_poList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(vSlotItemMoved(QModelIndex,int,int,QModelIndex,int)));
 
     // spin box event
     connect(poDelayInput, SIGNAL(valueChanged(int)), _parent, SLOT(vSlotDelayChanged(int)));
@@ -193,6 +195,14 @@ void MainWidget::vSlotItemDoubleClicked()
     {
         m_poCtrl->vRenameSet(index, text);
     }
+}
+
+/*
+ * update model when an item is moved
+ */
+void MainWidget::vSlotItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
+{
+    m_poCtrl->vMoveSet(from, to);
 }
 
 /*

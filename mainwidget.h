@@ -42,6 +42,7 @@ public slots:
 
     void vSlotSelectionChanged();
     void vSlotItemDoubleClicked();
+    void vSlotItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to);
 };
 
 #endif // MAINWIDGET_H
