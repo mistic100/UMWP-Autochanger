@@ -3,7 +3,7 @@
 
 ListProxyStyle::ListProxyStyle() {}
 
-void ListProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+void ListProxyStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
 {
     if (element == QStyle::PE_IndicatorItemViewItemDrop)
     {
@@ -15,14 +15,15 @@ void ListProxyStyle::drawPrimitive(PrimitiveElement element, const QStyleOption*
         painter->setBrush(QColor(200,0,100));
 
         QPoint points[4] = {
-            rect.topLeft()+QPoint(-3,0),
-            rect.topLeft()+QPoint(0,-3),
-            rect.topLeft()+QPoint(3,0),
-            rect.topLeft()+QPoint(0,3),
+            QPoint(-3,0),
+            QPoint(0,-3),
+            QPoint(3,0),
+            QPoint(0,3),
         };
 
+        painter->translate(rect.topLeft());
         painter->drawConvexPolygon(points, 4);
-        painter->drawLine(rect.topLeft(), rect.topRight());
+        painter->drawLine(QPoint(0,0), QPoint(rect.width(),0));
         painter->translate(QPoint(rect.width()-1,0));
         painter->drawConvexPolygon(points, 4);
     }

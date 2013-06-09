@@ -52,13 +52,13 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     rect = option.rect.adjusted(imageSpace, 1, 0, 0);
     painter->setFont(QFont("Calibri", 11));
     if (active) painter->setPen(Qt::white);
-          else painter->setPen(QColor(51,51,51));
+           else painter->setPen(QColor(51,51,51));
     painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title, &rect);
 
     // DESCRIPTION
     rect = option.rect.adjusted(imageSpace, 19, 0, 0);
     painter->setFont(QFont("Calibri", 9, -1, true));
-    if (active) painter->setPen(QColor(200,200,200));
-          else painter->setPen(QColor(120,120,120));
+    if (active) painter->setPen(Qt::lightGray);
+           else painter->setPen(Qt::darkGray);
     painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, description, &rect);
 }

@@ -17,7 +17,7 @@ class ListProxyStyle : public QProxyStyle
 public:
     ListProxyStyle();
 
-    void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const;
+    void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const;
 };
 
 #endif // LISTPROXYSTYLE_H
