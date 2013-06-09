@@ -9,6 +9,7 @@
 #include "mainwidget.h"
 #include "set.h"
 #include "listdelegate.h"
+#include "listproxystyle.h"
 
 
 /*
@@ -27,6 +28,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     m_poList->setItemDelegate(new ListDelegate(m_poList));
     m_poList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_poList->setDragDropMode(QAbstractItemView::InternalMove);
+    m_poList->setStyle(new ListProxyStyle);
 
     // buttons
     QPushButton* poAddButton =      new QPushButton(tr("Add"));

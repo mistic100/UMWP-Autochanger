@@ -21,7 +21,8 @@ SOURCES += \
     settings.cpp \
     errorwidget.cpp \
     mainwidget.cpp \
-    versionchecker.cpp
+    versionchecker.cpp \
+    listproxystyle.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -34,7 +35,8 @@ HEADERS += \
     errorwidget.h \
     mainwidget.h \
     createshortcut.h \
-    versionchecker.h
+    versionchecker.h \
+    listproxystyle.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc

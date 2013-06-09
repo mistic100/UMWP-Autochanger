@@ -9,7 +9,7 @@
 
 
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "1.1"
+#define APP_VERSION "1.2"
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
