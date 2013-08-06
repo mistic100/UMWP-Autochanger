@@ -5,11 +5,11 @@ UMWP Autochanger is a little tool for UltraMon users. I has two main features :
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.2
-Release date  : ???
-Author        : Damien "Mistic" Sorel
-Website       : http://www.strangeplanet.fr
-License       : GNU General Public License Version 3
+Version       : 1.2  
+Release date  : ???  
+Author        : Damien "Mistic" Sorel  
+Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
+License       : GNU General Public License Version 3  
 
 
 ## Requirement
@@ -19,7 +19,7 @@ License       : GNU General Public License Version 3
 ## Installation
 1. Install and configure UltraMon on your computer.
 
-2. Go to the wallpaper configuration of UltraMon, and configure the "default" wallpaper as you wish (you don't need to define an image file).
+2. Go to the wallpaper configuration of [UltraMon](http://www.realtimesoft.com/ultramon/), and configure the "default" wallpaper as you wish (you don't need to define an image file).
 
 3. Launch "UMWP Autochanger.exe".
     * Depending on your configuration, you might be asked to locate  "UltraMonDesktop.exe".
@@ -30,10 +30,10 @@ License       : GNU General Public License Version 3
 
 
 ## Troubleshouting
-Q: When I launch UMWP Autochanger, the window doesn't appear.
+Q: When I launch UMWP Autochanger, the window doesn't appear.  
 A: When you have already registered sets, the window automatically minimize to the system bar, double-click on the icon (or right-click => "Show") to open it. This behavior can be changed on the "Options" menu.
 
-Q: Can I rename a set ?
+Q: Can I rename a set ?  
 A: Yes. Double-click on it's name, you will be asked to enter the new name.
 
 
