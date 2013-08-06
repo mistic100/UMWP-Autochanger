@@ -45,7 +45,7 @@ A: Yes. Double-click on it's name, you will be asked to enter the new name.
 * 1.2 (???)
     * new: reorder sets with drag'n'drop
 
-* 1.1 (13/05/2013)
+* [1.1 (13/05/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.1)
     * fixed: use better shuffle
     * fixed: remember last used directory
     * fixed: accept files with .jpeg extension
@@ -53,13 +53,13 @@ A: Yes. Double-click on it's name, you will be asked to enter the new name.
     * new: add quick switch menu in tray con
     * code optimizations
 
-* 1.0 (02/03/2013)
+* [1.0 (02/03/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.0)
     * fixed: multi delete doesn't work correclty
 
-* 1.0 alpha2 (28/02/2013)
+* [1.0 alpha2 (28/02/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.0a2)
     * fixed: autorun shortcut not starting in the good working directory
     * fixed: delay spinbox no initialized correctly
     * new: multiple selection
 
-* 1.0 alpha1 (27/02/2013)
+* [1.0 alpha1 (27/02/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.0a1)
     * first version
