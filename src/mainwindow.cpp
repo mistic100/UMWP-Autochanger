@@ -115,6 +115,15 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
 
     m_poTrayIcon->setToolTip(APP_NAME);
     m_poTrayIcon->setContextMenu(poTrayMenu);
+
+
+    // register global hotkey if configured
+    if (m_poCtrl->settings()->iParam("safe_mod", 16) > 0
+        && m_poCtrl->settings()->iParam("safe_vk", 16) > 0
+        && !m_poCtrl->settings()->sParam("safe_set").isEmpty())
+    {
+        RegisterHotKey(winId(), 100, m_poCtrl->settings()->iParam("safe_mod", 16) | MOD_NOREPEAT, m_poCtrl->settings()->iParam("safe_vk", 16));
+    }
 }
 
 /*
@@ -410,4 +419,37 @@ void MainWindow::closeEvent(QCloseEvent* _event)
         _event->ignore();
         vSlotToggleWindow();
     }
+}
+
+/*
+ * intercept global shortcut
+ */
+bool MainWindow::winEvent(MSG* message, long*)
+{
+    int idx = -1;
+
+    switch (message->message)
+    {
+    case WM_HOTKEY:
+        for (int i=0; i<m_poCtrl->settings()->iNbSets(); i++)
+        {
+            Set* poSet = m_poCtrl->settings()->poGetSet(i);
+            if (poSet->name().compare(m_poCtrl->settings()->sParam("safe_set")) == 0)
+            {
+                idx = i;
+                break;
+            }
+        }
+        if (idx > -1)
+        {
+            m_poCtrl->vSetOneActiveSet(idx);
+            vSlotApply();
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    return false;
 }

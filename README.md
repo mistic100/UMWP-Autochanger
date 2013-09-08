@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 ================
 
-UMWP Autochanger is a little tool for UltraMon users. I has two main features :
+UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ultramon/) users. I has two main features :
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
@@ -19,7 +19,7 @@ License       : GNU General Public License Version 3
 ## Installation
 1. Install and configure UltraMon on your computer.
 
-2. Go to the wallpaper configuration of [UltraMon](http://www.realtimesoft.com/ultramon/), and configure the "default" wallpaper as you wish (you don't need to define an image file).
+2. Go to the wallpaper configuration of UltraMon, and configure the "default" wallpaper as you wish (you don't need to define an image file).
 
 3. Launch "UMWP Autochanger.exe".
     * Depending on your configuration, you might be asked to locate  "UltraMonDesktop.exe".

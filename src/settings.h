@@ -41,7 +41,8 @@ public:
 
     QString const   sParam(QString const _key) const;
     bool const      bParam(QString const _key) const;
-    int const       iParam(QString const _key) const;
+    int const       iParam(QString const _key, int _base=10) const;
+
 
     QString const   sEnv(QString const _key) const;
     bool const      bEnv(QString const _key) const;

@@ -26,6 +26,9 @@ Settings::Settings()
     m_options["check"] = true;
     m_options["check_updates"] = true;
     m_options["msgcount"] = 0;
+    m_options["safe_mod"] = "0x00";
+    m_options["safe_vk"] = "0x00";
+    m_options["safe_set"] = "";
 
     m_env["wallpath"] = QVariant();
     m_env["bmppath"] = QVariant();
@@ -58,9 +61,9 @@ bool const Settings::bParam(QString const key) const
     return m_options.value(key, false).toBool();
 }
 
-int const Settings::iParam(QString const key) const
+int const Settings::iParam(QString const key, int _base) const
 {
-    return m_options.value(key, 0).toInt();
+    return m_options.value(key, 0).toString().toInt(0, _base);
 }
 
 QString const Settings::sParam(QString const key) const
