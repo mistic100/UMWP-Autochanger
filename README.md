@@ -30,11 +30,20 @@ License       : GNU General Public License Version 3
 
 
 ## Troubleshouting
-Q: When I launch UMWP Autochanger, the window doesn't appear.  
+Q: When I launch UMWP Autochanger, the window doesn't appear.
 A: When you have already registered sets, the window automatically minimize to the system bar, double-click on the icon (or right-click => "Show") to open it. This behavior can be changed on the "Options" menu.
 
-Q: Can I rename a set ?  
+Q: Can I rename a set ?
 A: Yes. Double-click on it's name, you will be asked to enter the new name.
+
+Q: How hotkeys work ?
+A: Hotkeys allows you two quickly change witch set is activated from the keyboard even when the application window is hidden. You can configure which keys must be pressed in the "Options" menu. Say you choosed Shift+Ctrl, press Shift+Ctrl+1 to activate the first set, Shift+Ctrl+2 for the second set, and so on. Only the 9 first sets can be activated from the keyboard.
+
+Q: How can I unactivate hotkeys ?
+A: Uncheck all keys in the "Options" menu.
+
+Q: Can I reorder sets ?
+A: Yes. Simply drag & drop them.
 
 
 ## Known bugs

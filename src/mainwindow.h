@@ -36,6 +36,7 @@ private:
 
 public:
     MainWindow(Controller* _oCtrl);
+    void vRegisterHotkeys();
 
 protected:
     void showEvent(QShowEvent*)            { resize(m_poCtrl->settings()->oWindowSize()); }
@@ -55,6 +56,7 @@ public slots:
     void vSlotShowHelp();
 
     void vSlotOptionToggled(bool _c);
+    void vSlotHotkeyToggled(bool _c);
     void vSlotDelayChanged(int _val);
 
     void vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason);

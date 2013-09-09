@@ -46,13 +46,13 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     // MENUBAR
     m_poMenuBar = new QMenuBar(this);
 
-    QAction* poActionQuit1 =    m_poMenuBar->addAction(tr("Quit"));
-    m_poActionPause1 =          m_poMenuBar->addAction(tr("Pause"));
-    m_poActionHide1 =           m_poMenuBar->addAction(tr("Hide"));
-                               m_poMenuBar->addSeparator();
-    m_poOptionsMenu =           m_poMenuBar->addMenu(tr("Options"));
-                               m_poMenuBar->addSeparator();
-    QAction* poActionHelp =     m_poMenuBar->addAction(tr("?"));
+    QAction* poActionQuit1 = m_poMenuBar->addAction(tr("Quit"));
+    m_poActionPause1 =       m_poMenuBar->addAction(tr("Pause"));
+    m_poActionHide1 =        m_poMenuBar->addAction(tr("Hide"));
+                            m_poMenuBar->addSeparator();
+    m_poOptionsMenu =        m_poMenuBar->addMenu(tr("Options"));
+                            m_poMenuBar->addSeparator();
+    QAction* poActionHelp =  m_poMenuBar->addAction(tr("?"));
 
     connect(poActionQuit1,      SIGNAL(triggered()), this, SLOT(vSlotQuit()));
     connect(m_poActionHide1,    SIGNAL(triggered()), this, SLOT(vSlotToggleWindow()));
@@ -64,26 +64,62 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     QAction* poOptionCheckFiles =   m_poOptionsMenu->addAction(tr("Check files periodically"));
     QAction* poOptionCheckUpdates = m_poOptionsMenu->addAction(tr("Check updates"));
     QAction* poOptionAutostart =    m_poOptionsMenu->addAction(tr("Start with Windows"));
+    QMenu* poHotkeysMenu =          m_poOptionsMenu->addMenu(tr("Hotkeys"));
+
+    QIcon icon_alt = QIcon(":/img/key_alt");
+    icon_alt.addPixmap(QPixmap(":/img/key_alt_on"), QIcon::Normal, QIcon::On);
+    QIcon icon_ctrl = QIcon(":/img/key_ctrl");
+    icon_ctrl.addPixmap(QPixmap(":/img/key_ctrl_on"), QIcon::Normal, QIcon::On);
+    QIcon icon_shift = QIcon(":/img/key_shift");
+    icon_shift.addPixmap(QPixmap(":/img/key_shift_on"), QIcon::Normal, QIcon::On);
+    QIcon icon_win = QIcon(":/img/key_win");
+    icon_win.addPixmap(QPixmap(":/img/key_win_on"), QIcon::Normal, QIcon::On);
+
+    QAction* poHotkeysAlt =   poHotkeysMenu->addAction(icon_alt, tr("Alt"));
+    QAction* poHotkeysCtrl =  poHotkeysMenu->addAction(icon_ctrl, tr("Ctrl"));
+    QAction* poHotkeysShift = poHotkeysMenu->addAction(icon_shift, tr("Shift"));
+    QAction* poHotkeysWin =   poHotkeysMenu->addAction(icon_win, tr("Win"));
 
     poOptionMinimize->setCheckable(true);
     poOptionCheckFiles->setCheckable(true);
     poOptionCheckUpdates->setCheckable(true);
     poOptionAutostart->setCheckable(true);
 
+    poHotkeysAlt->setCheckable(true);
+    poHotkeysCtrl->setCheckable(true);
+    poHotkeysShift->setCheckable(true);
+    poHotkeysWin->setCheckable(true);
+
     poOptionMinimize->setChecked(m_poCtrl->settings()->bParam("minimize"));
     poOptionCheckFiles->setChecked(m_poCtrl->settings()->bParam("check"));
     poOptionCheckUpdates->setChecked(m_poCtrl->settings()->bParam("check_updates"));
     poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
+
+    int hotkey = m_poCtrl->settings()->iParam("hotkey");
+    poHotkeysAlt->setChecked(hotkey & MOD_ALT);
+    poHotkeysCtrl->setChecked(hotkey & MOD_CONTROL);
+    poHotkeysShift->setChecked(hotkey & MOD_SHIFT);
+    poHotkeysWin->setChecked(hotkey & MOD_WIN);
 
     poOptionMinimize->setProperty("name", "minimize");
     poOptionCheckFiles->setProperty("name", "check");
     poOptionCheckUpdates->setProperty("name", "check_updates");
     poOptionAutostart->setProperty("name", "autostart");
 
-    connect(poOptionMinimize,       SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
-    connect(poOptionCheckFiles,     SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
-    connect(poOptionCheckUpdates,   SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
-    connect(poOptionAutostart,      SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+    poHotkeysAlt->setProperty("key", MOD_ALT);
+    poHotkeysCtrl->setProperty("key", MOD_CONTROL);
+    poHotkeysShift->setProperty("key", MOD_SHIFT);
+    poHotkeysWin->setProperty("key", MOD_WIN);
+
+    connect(poOptionMinimize,     SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+    connect(poOptionCheckFiles,   SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+    connect(poOptionCheckUpdates, SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+    connect(poOptionAutostart,    SIGNAL(toggled(bool)), this, SLOT(vSlotOptionToggled(bool)));
+
+    connect(poHotkeysAlt,   SIGNAL(toggled(bool)), this, SLOT(vSlotHotkeyToggled(bool)));
+    connect(poHotkeysCtrl,  SIGNAL(toggled(bool)), this, SLOT(vSlotHotkeyToggled(bool)));
+    connect(poHotkeysShift, SIGNAL(toggled(bool)), this, SLOT(vSlotHotkeyToggled(bool)));
+    connect(poHotkeysWin,   SIGNAL(toggled(bool)), this, SLOT(vSlotHotkeyToggled(bool)));
 
     if (!(m_poCtrl->settings()->bCanAddShortcut()))
     {
@@ -117,13 +153,8 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     m_poTrayIcon->setContextMenu(poTrayMenu);
 
 
-    // register global hotkey if configured
-    if (m_poCtrl->settings()->iParam("safe_mod", 16) > 0
-        && m_poCtrl->settings()->iParam("safe_vk", 16) > 0
-        && !m_poCtrl->settings()->sParam("safe_set").isEmpty())
-    {
-        RegisterHotKey(winId(), 100, m_poCtrl->settings()->iParam("safe_mod", 16) | MOD_NOREPEAT, m_poCtrl->settings()->iParam("safe_vk", 16));
-    }
+    // register global hotkeys
+    vRegisterHotkeys();
 }
 
 /*
@@ -178,6 +209,29 @@ void MainWindow::vShowMain()
 }
 
 /*
+ * register hotkeys 1 to 9
+ */
+void MainWindow::vRegisterHotkeys()
+{
+    int hotkey = m_poCtrl->settings()->iParam("hotkey");
+
+    if (hotkey > 0)
+    {
+        for (int i=0; i<9; i++)
+        {
+            RegisterHotKey(winId(), 100 + i, hotkey | MOD_NOREPEAT, 0x31 + i);
+        }
+    }
+    else
+    {
+        for (int i=0; i<9; i++)
+        {
+            UnregisterHotKey(winId(), 100 + i);
+        }
+    }
+}
+
+/*
  * update the quick switch menu
  */
 void MainWindow::vUpdateTrayQuickMenu()
@@ -208,7 +262,6 @@ void MainWindow::vSlotTrayQuickClicked()
     int idx = poAction->data().toInt();
 
     m_poCtrl->vSetOneActiveSet(idx);
-
     vSlotApply();
 }
 
@@ -354,6 +407,27 @@ void MainWindow::vSlotOptionToggled(bool _c)
     m_poCtrl->settings()->vSetParam(sOptionName, _c);
 }
 
+/*
+ * hotkeys changed
+ */
+void MainWindow::vSlotHotkeyToggled(bool _c)
+{
+    QAction* poAction = (QAction*)(QObject::sender());
+    int mod = poAction->property("key").toInt();
+    int hotkey = m_poCtrl->settings()->iParam("hotkey");
+
+    if (_c)
+    {
+        hotkey |= mod;
+    }
+    else
+    {
+        hotkey &= ~mod;
+    }
+
+    m_poCtrl->settings()->vSetParam("hotkey", hotkey);
+    vRegisterHotkeys();
+}
 
 /*
  * the delay value changed
@@ -431,16 +505,8 @@ bool MainWindow::winEvent(MSG* message, long*)
     switch (message->message)
     {
     case WM_HOTKEY:
-        for (int i=0; i<m_poCtrl->settings()->iNbSets(); i++)
-        {
-            Set* poSet = m_poCtrl->settings()->poGetSet(i);
-            if (poSet->name().compare(m_poCtrl->settings()->sParam("safe_set")) == 0)
-            {
-                idx = i;
-                break;
-            }
-        }
-        if (idx > -1)
+        idx = message->wParam - 100;
+        if (idx >=0 && idx < m_poCtrl->settings()->iNbSets())
         {
             m_poCtrl->vSetOneActiveSet(idx);
             vSlotApply();

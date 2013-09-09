@@ -8,6 +8,14 @@
         <file alias="hide">images/hide.png</file>
         <file alias="refresh">images/refresh.png</file>
         <file alias="quick">images/quick.png</file>
+        <file alias="key_alt">images/key_alt.png</file>
+        <file alias="key_ctrl">images/key_ctrl.png</file>
+        <file alias="key_shift">images/key_shift.png</file>
+        <file alias="key_win">images/key_win.png</file>
+        <file alias="key_alt_on">images/key_alt_on.png</file>
+        <file alias="key_ctrl_on">images/key_ctrl_on.png</file>
+        <file alias="key_shift_on">images/key_shift_on.png</file>
+        <file alias="key_win_on">images/key_win_on.png</file>
     </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>
