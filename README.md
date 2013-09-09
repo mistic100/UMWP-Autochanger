@@ -6,7 +6,7 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
 Version       : 1.2  
-Release date  : ???  
+Release date  : 09/09/2013  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -51,8 +51,10 @@ A: Yes. Simply drag & drop them.
 
 
 ## Changelog
-* 1.2 (???)
+* [1.2 (09/09/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.2)
+    * new: system-wide hotkeys for quick change
     * new: reorder sets with drag'n'drop
+    * new: integrated help
 
 * [1.1 (13/05/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.1)
     * fixed: use better shuffle

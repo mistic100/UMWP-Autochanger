@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<!DOCTYPE TS><TS version="1.1" language="fr_FR">
+<defaultcodec></defaultcodec>
 <context>
     <name>ErrorWidget</name>
     <message>
-        <location filename="../errorwidget.cpp" line="32"/>
+        <location filename="../errorwidget.cpp" line="30"/>
         <source>Oops !</source>
         <translation>Oups !</translation>
     </message>
@@ -56,19 +56,17 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../mainwidget.cpp" line="31"/>
-        <location filename="../mainwidget.cpp" line="138"/>
+        <location filename="../mainwidget.cpp" line="142"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="32"/>
+        <location filename="../mainwidget.cpp" line="35"/>
         <source>Activate</source>
         <translation>Activer</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="34"/>
-        <location filename="../mainwidget.cpp" line="156"/>
+        <location filename="../mainwidget.cpp" line="160"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
@@ -77,32 +75,32 @@
         <translation type="obsolete">Appliquer</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="55"/>
+        <location filename="../mainwidget.cpp" line="58"/>
         <source>Delay (seconds) : </source>
         <translation>Delai (secondes) :</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="156"/>
+        <location filename="../mainwidget.cpp" line="160"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="33"/>
+        <location filename="../mainwidget.cpp" line="36"/>
         <source>Unactivate</source>
         <translation>Désactiver</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="35"/>
+        <location filename="../mainwidget.cpp" line="38"/>
         <source>Save</source>
         <translation>Sauvegarder</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="190"/>
+        <location filename="../mainwidget.cpp" line="194"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="190"/>
+        <location filename="../mainwidget.cpp" line="194"/>
         <source>New name:</source>
         <translation>Nouveau nom :</translation>
     </message>
@@ -110,29 +108,22 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="49"/>
-        <location filename="../mainwindow.cpp" line="107"/>
-        <location filename="../mainwindow.cpp" line="389"/>
+        <location filename="../mainwindow.cpp" line="472"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="51"/>
-        <location filename="../mainwindow.cpp" line="104"/>
-        <location filename="../mainwindow.cpp" line="247"/>
+        <location filename="../mainwindow.cpp" line="309"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="50"/>
-        <location filename="../mainwindow.cpp" line="102"/>
-        <location filename="../mainwindow.cpp" line="269"/>
-        <location filename="../mainwindow.cpp" line="270"/>
+        <location filename="../mainwindow.cpp" line="332"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="103"/>
+        <location filename="../mainwindow.cpp" line="139"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
@@ -167,28 +158,52 @@
         <translation>Démarrer avec Windows</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="105"/>
+        <location filename="../mainwindow.cpp" line="67"/>
+        <source>Hotkeys</source>
+        <translation>Raccourcis</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="78"/>
+        <source>Alt</source>
+        <translation>Alt</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="79"/>
+        <source>Ctrl</source>
+        <translation>Ctrl</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="80"/>
+        <source>Shift</source>
+        <translation>Maj</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="81"/>
+        <source>Win</source>
+        <translation>Win</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="141"/>
         <source>Quick switch</source>
         <translation>Changement rapide</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="238"/>
+        <location filename="../mainwindow.cpp" line="300"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="365"/>
-        <location filename="../mainwindow.cpp" line="371"/>
+        <location filename="../mainwindow.cpp" line="454"/>
         <source>A new version is available : %1.</source>
         <translation>Une nouvelle version est disponible : %1.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="370"/>
+        <location filename="../mainwindow.cpp" line="453"/>
         <source>New version</source>
         <translation>Nouvelle version</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="372"/>
+        <location filename="../mainwindow.cpp" line="455"/>
         <source>Visit the &lt;a href=&apos;%1&apos;&gt;project homepage&lt;/a&gt; to download the latest version.</source>
         <translation>Visitez la &lt;a href=&apos;%1&apos;&gt;page du projet&lt;/a&gt; pour télécharger la dernière version.</translation>
     </message>
@@ -197,28 +212,27 @@
         <translation type="obsolete">Sauvegarder avant de quitter?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="228"/>
+        <location filename="../mainwindow.cpp" line="290"/>
         <source>%1 is still running</source>
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="274"/>
-        <location filename="../mainwindow.cpp" line="275"/>
+        <location filename="../mainwindow.cpp" line="337"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="305"/>
+        <location filename="../mainwindow.cpp" line="367"/>
         <source>About %1</source>
         <translation>À propos de %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="334"/>
+        <location filename="../mainwindow.cpp" line="396"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="334"/>
+        <location filename="../mainwindow.cpp" line="396"/>
         <source>If you disable files check you may obtain&lt;br&gt;a black wallpaper if you manually edit your sets.</source>
         <translation>Si vous désactivez la vérification des fichiers vous risquez d&apos;obtenir&lt;br&gt;un fond d&apos;écran noir si vous modifiez manuellement vos sets.</translation>
     </message>
@@ -227,7 +241,7 @@
         <translation type="obsolete">Quitter sans sauvegarder ?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="389"/>
+        <location filename="../mainwindow.cpp" line="472"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
     </message>

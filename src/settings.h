@@ -41,12 +41,12 @@ public:
 
     QString const   sParam(QString const _key) const;
     bool const      bParam(QString const _key) const;
-    int const       iParam(QString const _key, int _base=10) const;
+    int const       iParam(QString const _key) const;
 
 
     QString const   sEnv(QString const _key) const;
     bool const      bEnv(QString const _key) const;
-    int const       iEnv(QString const _key, int _base=10) const;
+    int const       iEnv(QString const _key) const;
 
     Set*            poGetSet(int _i) const  { return m_oSets.at(_i); }
     int const       iNbSets() const         { return m_oSets.size(); }
