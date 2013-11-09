@@ -13,6 +13,7 @@ class Set
 private :
     QString             m_sPath;
     QString             m_sName;
+    QString             m_sUID;
     bool                m_bActive;
     QVector<QString>    m_vFiles;
     double              m_dLastModif;
@@ -30,6 +31,10 @@ public:
 
     double  dReadLastModif(QString _sub="", int _level=0);
     void    vPopulateFiles(QString _sub="", int _level=0);
+
+    void    vReadCache();
+    void    vWriteCache();
+    void    vDeleteCache();
 
     QString const fullName() const;
     QString const sGetFile(int _i) const;

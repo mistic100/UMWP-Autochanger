@@ -13,7 +13,9 @@ Set::Set(QString _path, QString _name, bool _active)
     m_sName = _name;
     m_bActive = _active;
     m_dLastModif = 0;
+    m_sUID = QString(QCryptographicHash::hash(m_sPath.toUtf8(), QCryptographicHash::Md5).toHex());
 
+    vReadCache();
     vPopulateFiles();
 }
 
@@ -136,4 +138,43 @@ void Set::vPopulateFiles(QString _sub, int _level)
 
         closedir(dir);
     }
+
+    if (_sub.isEmpty())
+    {
+        vWriteCache();
+    }
+}
+
+/*
+ * read m_dLastModif and m_vFiles from cache
+ */
+void Set::vReadCache()
+{
+    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
+    if (file.exists())
+    {
+        file.open(QIODevice::ReadOnly);
+        QDataStream in(&file);
+        in>>m_dLastModif;
+        in>>m_vFiles;
+        file.close();
+    }
+}
+
+/*
+ * write m_dLastModif and m_vFiles into a cache file
+ */
+void Set::vWriteCache()
+{
+    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);
+    out<<m_dLastModif;
+    out<<m_vFiles;
+    file.close();
+}
+
+void Set::vDeleteCache()
+{
+    QFile::remove(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
 }

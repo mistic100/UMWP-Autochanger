@@ -40,6 +40,12 @@ Settings::Settings()
 
     //qDebug()<<m_options;
     //qDebug()<<m_env;
+
+    QDir oDirHelper;
+    if (!oDirHelper.exists(APP_CACHE_DIR))
+    {
+        oDirHelper.mkdir(APP_CACHE_DIR);
+    }
 }
 
 /*
@@ -464,6 +470,7 @@ void Settings::vDeleteSet(int _i)
     {
         m_bUnsaved = true;
 
+        m_oSets.at(_i)->vDeleteCache();
         delete m_oSets.at(_i);
         m_oSets.remove(_i);
     }
