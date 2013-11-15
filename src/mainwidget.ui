@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWidget</class>
+ <widget class="QWidget" name="MainWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>451</width>
+    <height>278</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="2" column="0">
+    <widget class="QListWidget" name="m_poList"/>
+   </item>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Delay (seconds) : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="m_poInputDelay">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>3600</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="m_poButtonAdd">
+       <property name="maximumSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Add</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/img/button_add</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_poButtonActivate">
+       <property name="maximumSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Activate</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/img/button_activate</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_poButtonDeactivate">
+       <property name="maximumSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Deactivate</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/img/button_deactivate</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_poButtonDelete">
+       <property name="maximumSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Delete</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/img/button_delete</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_poButtonSave">
+       <property name="maximumSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Save</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/img/button_save</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>62</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

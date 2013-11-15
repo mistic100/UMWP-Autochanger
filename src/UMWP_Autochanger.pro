@@ -20,9 +20,9 @@ SOURCES += \
     listdelegate.cpp \
     settings.cpp \
     errorwidget.cpp \
-    mainwidget.cpp \
     versionchecker.cpp \
-    listproxystyle.cpp
+    listproxystyle.cpp \
+    mainwidget.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -33,10 +33,10 @@ HEADERS += \
     listdelegate.h \
     settings.h \
     errorwidget.h \
-    mainwidget.h \
     createshortcut.h \
     versionchecker.h \
-    listproxystyle.h
+    listproxystyle.h \
+    mainwidget.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc
@@ -47,3 +47,6 @@ TRANSLATIONS += \
 
 OTHER_FILES += \
     UMWP_Autochanger.rc
+
+FORMS += \
+    mainwidget.ui

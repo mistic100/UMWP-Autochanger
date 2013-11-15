@@ -1,12 +1,14 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QPushButton>
 #include <QListWidget>
 
 #include "main.h"
 #include "controller.h"
 
+namespace Ui {
+    class MainWidget;
+}
 
 /*
  * Name: MainWidget
@@ -17,32 +19,28 @@ class MainWidget : public QWidget
     Q_OBJECT
 
 private:
+    Ui::MainWidget* ui;
+
     Controller*     m_poCtrl;
 
-    QPushButton*    m_poDeleteButton;
-    QPushButton*    m_poActivateButton;
-    QPushButton*    m_poUnactivateButton;
-
-    QListWidget*    m_poList;
-
     QString         m_sLastDir;
-
+    
 public:
     MainWidget(QWidget* _parent, Controller* _poCtrl);
+    ~MainWidget();
 
     QList<int> oGetSelectedIndexes();
 
 public slots:
     void vUpdateList();
-
-    void vSlotAddSet();
-    void vSlotDeleteSets();
-    void vSlotActivateSets();
-    void vSlotUnactivateSets();
-
-    void vSlotSelectionChanged();
-    void vSlotItemDoubleClicked();
     void vSlotItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to);
+
+    void on_m_poButtonAdd_clicked();
+    void on_m_poButtonActivate_clicked();
+    void on_m_poButtonDeactivate_clicked();
+    void on_m_poButtonDelete_clicked();
+    void on_m_poList_itemSelectionChanged();
+    void on_m_poList_itemDoubleClicked(QListWidgetItem*);
 };
 
 #endif // MAINWIDGET_H

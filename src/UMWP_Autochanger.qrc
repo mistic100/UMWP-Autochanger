@@ -16,6 +16,11 @@
         <file alias="key_ctrl_on">images/key_ctrl_on.png</file>
         <file alias="key_shift_on">images/key_shift_on.png</file>
         <file alias="key_win_on">images/key_win_on.png</file>
+        <file alias="button_activate">images/button_activate.png</file>
+        <file alias="button_add">images/button_add.png</file>
+        <file alias="button_deactivate">images/button_deactivate.png</file>
+        <file alias="button_delete">images/button_delete.png</file>
+        <file alias="button_save">images/button_save.png</file>
     </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>

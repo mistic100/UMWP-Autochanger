@@ -53,7 +53,7 @@ Settings::Settings()
  */
 Settings::~Settings()
 {
-    vDeleteAll();
+    vDeleteAll(); // clear memory but do not save changes !
 }
 
 

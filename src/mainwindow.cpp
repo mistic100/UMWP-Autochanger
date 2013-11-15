@@ -23,7 +23,6 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint); // disable maximise button
     setWindowTitle(APP_NAME);
     setWindowIcon(QPixmap(":/img/icon"));
-    setMinimumSize(400, 200);
 
 
     // STATUS BAR
@@ -171,6 +170,7 @@ void MainWindow::vShowError()
     connect(widget, SIGNAL(pathSaved()), this, SLOT(vShowMain()));
 
     setCentralWidget(widget);
+    setMinimumSize(400, 200);
     setMaximumSize(400, 200);
 
     show();
@@ -189,7 +189,8 @@ void MainWindow::vShowMain()
     MainWidget* widget = new MainWidget(this, m_poCtrl);
 
     setCentralWidget(widget);
-    setMaximumSize(9999, 9999); // cancel maximum size
+    setMinimumSize(450, 262);
+    setMaximumSize(9999, 9999); // no maximum size
     resize(m_poCtrl->settings()->oWindowSize());
 
     m_poCtrl->vStart();
