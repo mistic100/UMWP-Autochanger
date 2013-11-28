@@ -16,7 +16,7 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
 {
     m_poCtrl = _oCtrl;
     connect(m_poCtrl, SIGNAL(newVersionAvailable(QString)), this, SLOT(vSlotDisplayNewVersion(QString)));
-    connect(m_poCtrl, SIGNAL(listChanged()), this, SLOT(vUpdateTrayQuickMenu()));
+    connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(vUpdateTrayQuickMenu()));
 
 
     // WINDOW PROPERTIES

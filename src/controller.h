@@ -34,7 +34,8 @@ public:
 
     Settings* const settings() const { return m_poSettings; }
 
-    QString const   sGetRandomFile(int _total=-1);
+    Set*    poGetRandomSet(int _iTotal);
+    QString sGetRandomFile(Set* _poSet, QVector<QString> const &_sFiles);
 
     void vStartTimer(bool _keepPause=false);
     bool bStartPause();
@@ -52,7 +53,7 @@ public slots:
     void vSlotUpdate(bool _check=true);
 
 signals:
-    void listChanged();
+    void listChanged(bool);
     void newVersionAvailable(QString);
 };
 

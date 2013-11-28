@@ -80,7 +80,7 @@ bool Controller::bStartPause()
 void Controller::vAddSet(QString const _dirname)
 {
     m_poSettings->oAddSet(_dirname);
-    emit listChanged();
+    emit listChanged(false);
 }
 
 /*
@@ -95,7 +95,7 @@ void Controller::vDeleteSets(QList<int> const _list)
         off++;
     }
 
-    emit listChanged();
+    emit listChanged(true);
 }
 
 /*
@@ -108,7 +108,7 @@ void Controller::vActivateSets(QList<int> const _list)
         m_poSettings->vSetState(*i, true);
     }
 
-    emit listChanged();
+    emit listChanged(false);
 }
 
 /*
@@ -121,7 +121,7 @@ void Controller::vUnactivateSets(QList<int> const _list)
         m_poSettings->vSetState(*i, false);
     }
 
-    emit listChanged();
+    emit listChanged(false);
 }
 
 /*
@@ -134,7 +134,7 @@ void Controller::vSetOneActiveSet(int _idx)
         m_poSettings->vSetState(i, i==_idx);
     }
 
-    emit listChanged();
+    emit listChanged(false);
 }
 
 /*
@@ -143,7 +143,7 @@ void Controller::vSetOneActiveSet(int _idx)
 void Controller::vRenameSet(int _idx, QString const _name)
 {
     m_poSettings->vRenameSet(_idx, _name);
-    emit listChanged();
+    emit listChanged(false);
 }
 
 /*
@@ -152,7 +152,7 @@ void Controller::vRenameSet(int _idx, QString const _name)
 void Controller::vMoveSet(int _from, int _to)
 {
     m_poSettings->vMoveSet(_from, _to);
-    emit listChanged();
+    emit listChanged(false);
 }
 
 
@@ -166,21 +166,23 @@ void Controller::vSlotUpdate(bool _check)
     {
         m_poSettings->vUpdateSets();
         m_poSettings->vReadNbWalls();
-        emit listChanged();
+        emit listChanged(false);
     }
 
-    int iTotalFiles = m_poSettings->iNbFiles();
+    int iTotalSets = m_poSettings->iNbActiveSets(true);
 
-    if (iTotalFiles == 0)
+    if (iTotalSets == 0)
     {
         return;
     }
 
     // get random files
+    Set* poSet = poGetRandomSet(iTotalSets);
+
     QVector<QString> files;
     for (int i=0; i<m_poSettings->iEnv("nb_walls"); i++)
     {
-        files.push_back(sGetRandomFile(iTotalFiles));
+        files.push_back(sGetRandomFile(poSet, files));
     }
 
     // generate .wallpaper file
@@ -199,35 +201,61 @@ void Controller::vSlotUpdate(bool _check)
 }
 
 /*
- * get a random file among all active sets
+ * get a random Set among all active sets
  */
-QString const Controller::sGetRandomFile(int _total)
+Set* Controller::poGetRandomSet(int _iTotal)
 {
-    if (_total == -1)
+    if (_iTotal == 1)
     {
-        _total = m_poSettings->iNbFiles();
+        return m_poSettings->poGetActiveSet(0);
     }
 
-    QString sPath = "";
-
-    uniform_int<int> unif(0, _total-1);
+    uniform_int<int> unif(0, _iTotal-1);
     int iCounter = unif(m_oRandom);
 
-    for (int i=0; i<m_poSettings->iNbSets(); i++)
+    return m_poSettings->poGetActiveSet(iCounter);
+}
+
+/*
+ * get a random file within a Set
+ */
+QString Controller::sGetRandomFile(Set* _poSet, QVector<QString> const &_sFiles)
+{
+    int iTotal = _poSet->count();
+
+    // only one file in the set ?!
+    if (iTotal == 1)
     {
-        Set* poSet = m_poSettings->poGetSet(i);
-        if (poSet->isActive())
-        {
-            if (iCounter < poSet->count())
-            {
-                sPath = poSet->sGetFile(iCounter);
-                break;
-            }
-            iCounter-= poSet->count();
-        }
+        return _poSet->sGetFile(0);
     }
 
-    return sPath;
+    // rare case for small sets
+    if (iTotal <= _sFiles.size())
+    {
+        uniform_int<int> unif(0, _sFiles.size()-1);
+        int iCounter = unif(m_oRandom);
+        return _sFiles.at(iCounter);
+    }
+
+    // search a random unused file
+    short iLoop = 10;
+    QString sFile;
+    uniform_int<int> unif(0, iTotal-1);
+
+    while (iLoop > 0)
+    {
+        int iCounter = unif(m_oRandom);
+        sFile = _poSet->sGetFile(iCounter);
+
+        if (!_sFiles.contains(sFile))
+        {
+            iLoop = 0;
+        }
+
+        iLoop--;
+    }
+
+    return sFile;
 }
 
 /*

@@ -554,6 +554,38 @@ void Settings::vUpdateSets()
 }
 
 /*
+ * get one of teh active sets
+ */
+Set* Settings::poGetActiveSet(int _i) const
+{
+    QVector<Set*> poActiveSets;
+    for (QVector<Set*>::const_iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
+    {
+        if ((*it)->isActive())
+        {
+            poActiveSets.push_back((*it));
+        }
+    }
+    return poActiveSets.at(_i);
+}
+
+/*
+ * get the number of active sets
+ */
+int const Settings::iNbActiveSets(bool _bWithFiles) const
+{
+    int iTotalSets = 0;
+    for (QVector<Set*>::const_iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
+    {
+        if ((*it)->isActive() && (!_bWithFiles || (*it)->count()>0))
+        {
+            iTotalSets++;
+        }
+    }
+    return iTotalSets;
+}
+
+/*
  * get total files among active sets
  */
 int const Settings::iNbFiles()

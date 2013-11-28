@@ -49,7 +49,9 @@ public:
     int const       iEnv(QString const _key) const;
 
     Set*            poGetSet(int _i) const  { return m_oSets.at(_i); }
+    Set*            poGetActiveSet(int _i) const;
     int const       iNbSets() const         { return m_oSets.size(); }
+    int const       iNbActiveSets(bool _bWithFiles) const;
     int const       iNbFiles();
 
     bool const      bIsAutostart() const;

@@ -23,7 +23,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) :
     // controller
     m_poCtrl = _poCtrl;
 
-    connect(m_poCtrl, SIGNAL(listChanged()), this, SLOT(vUpdateList()));
+    connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(vUpdateList(bool)));
 
     // main list
     ui->m_poList->setItemDelegate(new ListDelegate(ui->m_poList));
@@ -41,7 +41,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) :
     // save button
     connect(ui->m_poButtonSave, SIGNAL(clicked()), _parent, SLOT(vSlotApply()));
 
-    vUpdateList();
+    vUpdateList(true);
 }
 
 /*
@@ -55,9 +55,14 @@ MainWidget::~MainWidget()
 /*
  * update list widget contents
  */
-void MainWidget::vUpdateList()
+void MainWidget::vUpdateList(bool _bResetSel)
 {
-    QList<int> aiSelection = oGetSelectedIndexes();
+    QList<int> aiSelection;
+
+    if (!_bResetSel)
+    {
+        oGetSelectedIndexes();
+    }
 
     ui->m_poList->clear();
 
@@ -89,7 +94,10 @@ void MainWidget::vUpdateList()
 
     foreach (int i, aiSelection)
     {
-        ui->m_poList->item(i)->setSelected(true);
+        if (i<ui->m_poList->count())
+        {
+            ui->m_poList->item(i)->setSelected(true);
+        }
     }
 }
 

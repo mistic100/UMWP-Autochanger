@@ -52,7 +52,10 @@ A: Yes. Simply drag & drop them.
 
 ## Changelog
 * 1.2.1 (???)
-    * use a cache to speed up startup
+    * new: icons for main buttons (add, [de]activate, delete)
+    * change: use a cache to speed up startup
+    * change: random images are taken from the same (random too) set if more than one is active
+    * fixed: refresh issue of the list when deleting sets
 
 * [1.2 (09/09/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.2)
     * new: system-wide hotkeys for quick change

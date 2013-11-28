@@ -32,7 +32,7 @@ public:
     QList<int> oGetSelectedIndexes();
 
 public slots:
-    void vUpdateList();
+    void vUpdateList(bool _bResetSel);
     void vSlotItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to);
 
     void on_m_poButtonAdd_clicked();
