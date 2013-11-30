@@ -156,7 +156,7 @@ void Controller::vEditSet(int _idx, QString const &_sName, const int _iType, con
 void Controller::vMoveSet(int _from, int _to)
 {
     m_poSettings->vMoveSet(_from, _to);
-    emit listChanged(false);
+    emit listChanged(true);
 }
 
 

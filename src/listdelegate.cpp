@@ -1,7 +1,11 @@
 #include "listdelegate.h"
+#include "set.h"
 
 
-ListDelegate::ListDelegate(QObject* _parent) : QAbstractItemDelegate(_parent) {}
+ListDelegate::ListDelegate(QObject* _parent, Controller* _ctrl) : QAbstractItemDelegate(_parent)
+{
+    m_poCtrl = _ctrl;
+}
 
 QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
 {
@@ -11,17 +15,16 @@ QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) 
 void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     // get configuration
-    bool active = option.state & QStyle::State_Selected;
-    QRect rect = option.rect.adjusted(0, 0, -1, 0);
-    QIcon icon = QIcon(qvariant_cast<QPixmap>(index.data(Qt::DecorationRole)));
-    QString title = index.data(Qt::DisplayRole).toString();
-    QString description = index.data(Qt::UserRole+1).toString();
-    bool enabled = index.data(Qt::UserRole+2).toBool();
+    Set* poSet = m_poCtrl->settings()->poGetSet(index.data(Qt::UserRole).toInt());
+    bool selected = option.state & QStyle::State_Selected;
+    QRect rect;
 
-    painter->setOpacity(!enabled ? 0.7 : 1.0);
+    painter->setOpacity(!poSet->isActive() ? 0.7 : 1.0);
+
 
     // BACKGROUND
-    if (active)
+    rect = option.rect.adjusted(0, 0, -1, 0);
+    if (selected)
     {
         QLinearGradient gradientSelected(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
         gradientSelected.setColorAt(0.0, QColor(119,213,247));
@@ -39,26 +42,66 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         painter->drawRoundedRect(rect, 2, 2);
     }
 
-    int imageSpace = 5;
-    // ICON
-    if (!icon.isNull())
+
+    // ICONS
+    QIcon a_icon, w_icon, im_icon;
+    rect = option.rect.adjusted(3, 3, -3, -1);
+
+    switch (poSet->isActive())
     {
-        rect = option.rect.adjusted(3, 0, 0, 0);
-        icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
-        imageSpace = 20;
+    case true:
+        a_icon = QIcon(":/img/bullet_green"); break;
+    default:
+        a_icon = QIcon(":/img/bullet_red"); break;
     }
+    a_icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
+
+    switch (poSet->type())
+    {
+    case 0:
+        w_icon = QIcon(":/img/w_desktop"); break;
+    default:
+        w_icon = QIcon(":/img/w_monitor"); break;
+    }
+    w_icon.paint(painter, rect, Qt::AlignTop|Qt::AlignRight);
+
+    switch (poSet->style())
+    {
+    case 0:
+        im_icon = QIcon(":/img/im_center"); break;
+    case 1:
+        im_icon = QIcon(":/img/im_tile"); break;
+    case 2:
+        im_icon = QIcon(":/img/im_stretch"); break;
+    default:
+        im_icon = QIcon(":/img/im_stretch_prop"); break;
+    }
+    im_icon.paint(painter, rect, Qt::AlignBottom|Qt::AlignRight);
+
 
     // TITLE
-    rect = option.rect.adjusted(imageSpace, 1, 0, 0);
+    rect = option.rect.adjusted(20, 1, 0, 0);
     painter->setFont(QFont("Calibri", 11));
-    if (active) painter->setPen(Qt::white);
-           else painter->setPen(QColor(51,51,51));
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title, &rect);
+    if (selected)
+    {
+        painter->setPen(Qt::white);
+    }
+    else
+    {
+        painter->setPen(QColor(51,51,51));
+    }
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, poSet->fullName(), &rect);
 
-    // DESCRIPTION
-    rect = option.rect.adjusted(imageSpace, 19, 0, 0);
+    // PATH
+    rect = option.rect.adjusted(20, 19, 0, 0);
     painter->setFont(QFont("Calibri", 9, -1, true));
-    if (active) painter->setPen(Qt::lightGray);
-           else painter->setPen(Qt::darkGray);
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, description, &rect);
+    if (selected)
+    {
+        painter->setPen(Qt::lightGray);
+    }
+    else
+    {
+        painter->setPen(Qt::darkGray);
+    }
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, poSet->path(), &rect);
 }

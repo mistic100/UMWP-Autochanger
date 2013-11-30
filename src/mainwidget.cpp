@@ -26,7 +26,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) :
     connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(vUpdateList(bool)));
 
     // main list
-    ui->m_poList->setItemDelegate(new ListDelegate(ui->m_poList));
+    ui->m_poList->setItemDelegate(new ListDelegate(ui->m_poList, m_poCtrl));
     ui->m_poList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->m_poList->setDragDropMode(QAbstractItemView::InternalMove);
     ui->m_poList->setStyle(new ListProxyStyle);
@@ -61,43 +61,24 @@ void MainWidget::vUpdateList(bool _bResetSel)
 
     if (!_bResetSel)
     {
-        oGetSelectedIndexes();
+        aiSelection = oGetSelectedIndexes();
+    }
+    else
+    {
+        ui->m_poButtonActivate->setVisible(false);
+        ui->m_poButtonDeactivate->setVisible(false);
+        ui->m_poButtonDelete->setVisible(false);
     }
 
     ui->m_poList->clear();
 
-    ui->m_poButtonActivate->setVisible(false);
-    ui->m_poButtonDeactivate->setVisible(false);
-    ui->m_poButtonDelete->setVisible(false);
-
     for (int i=0; i<m_poCtrl->settings()->iNbSets(); i++)
     {
-        Set* poSet = m_poCtrl->settings()->poGetSet(i);
-
         QListWidgetItem* poItem = new QListWidgetItem();
-        poItem->setData(Qt::DisplayRole, poSet->fullName());
         poItem->setData(Qt::UserRole, i);
-        poItem->setData(Qt::UserRole+1, poSet->path());
-        poItem->setData(Qt::UserRole+2, poSet->isActive());
-
-        if (poSet->isActive())
-        {
-            poItem->setData(Qt::DecorationRole, QPixmap(":/img/bullet_green"));
-        }
-        else
-        {
-            poItem->setData(Qt::DecorationRole, QPixmap(":/img/bullet_red"));
-        }
 
         ui->m_poList->addItem(poItem);
-    }
-
-    foreach (int i, aiSelection)
-    {
-        if (i<ui->m_poList->count())
-        {
-            ui->m_poList->item(i)->setSelected(true);
-        }
+        poItem->setSelected(aiSelection.contains(i));
     }
 }
 

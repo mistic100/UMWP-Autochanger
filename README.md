@@ -33,8 +33,8 @@ License       : GNU General Public License Version 3
 Q: When I launch UMWP Autochanger, the window doesn't appear.  
 A: When you have already registered sets, the window automatically minimize to the system bar, double-click on the icon (or right-click => "Show") to open it. This behavior can be changed on the "Options" menu.
 
-Q: Can I rename a set ?  
-A: Yes. Double-click on it's name, you will be asked to enter the new name.
+Q: Can I edit a set ?  
+A: Yes. Double-click on it's name, you can set the name, the type and the style of wallpaper.
 
 Q: How hotkeys work ?  
 A: Hotkeys allows you two quickly change witch set is activated from the keyboard even when the application window is hidden. You can configure which keys must be pressed in the "Options" menu. Say you choosed Shift+Ctrl, press Shift+Ctrl+1 to activate the first set, Shift+Ctrl+2 for the second set, and so on. Only the 9 first sets can be activated from the keyboard.
@@ -52,7 +52,7 @@ A: Yes. Simply drag & drop them.
 
 ## Changelog
 * 1.3 (???)
-    * new: can choose the type of set ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
+    * new: can choose the type of wallpaper ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
     * new: icons for main buttons (add, [de]activate, delete)
     * change: use a cache to speed up startup
     * change: random images are taken from the same (random too) set if more than one is active

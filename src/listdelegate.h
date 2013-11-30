@@ -5,6 +5,7 @@
 #include <QAbstractItemDelegate>
 
 #include "main.h"
+#include "controller.h"
 
 
 /*
@@ -13,8 +14,11 @@
  */
 class ListDelegate : public QAbstractItemDelegate
 {
+private:
+    Controller* m_poCtrl;
+
 public:
-    ListDelegate(QObject* _parent=0);
+    ListDelegate(QObject* _parent, Controller* _ctrl);
 
     void    paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize   sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;

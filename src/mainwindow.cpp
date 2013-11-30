@@ -156,6 +156,9 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     vRegisterHotkeys();
 }
 
+/*
+ * display error or main widget
+ */
 void MainWindow::vInit()
 {
     if (m_poCtrl->settings()->iState() == UM_OK)
