@@ -84,12 +84,13 @@ void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _parent, QString const &_n
 /*
  * add trailling slash to a path if not present
  */
-void vAddTrailingSlash(QString* _psPath)
+QString sAddTrailingSlash(const QString &_sPath)
 {
-    if ( !_psPath->isEmpty() && !_psPath->endsWith('\\') )
+    if (!_sPath.isEmpty() && !_sPath.endsWith('\\'))
     {
-        _psPath->append('\\');
+        return _sPath+"\\";
     }
+    return _sPath;
 }
 
 /*

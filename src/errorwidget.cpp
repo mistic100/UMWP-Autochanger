@@ -9,8 +9,10 @@
 #include "errorwidget.h"
 
 
-/*
- * constructor
+/**
+ * @brief ErrorWidget::ErrorWidget
+ * @param QWidget* _parent
+ * @param Controller* _poCtrl
  */
 ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 {
@@ -32,6 +34,7 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
     poMainLayout->addWidget(poTitle, 0, 1, 1, 5);
 
     // error description
+    QString sDescription;
     QLabel* poDescription = new QLabel();
     poDescription->setWordWrap(true);
     poMainLayout->addWidget(poDescription, 1, 1, 1, 5);
@@ -45,7 +48,7 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
     // ASK ULTRAMON.EXE PATH
     if (iState & UM_NOT_INSTALLED)
     {
-        poDescription->setText(tr("Unable to locate UltraMon install directory.<br>Please indicate the location of <b>UltraMonDesktop.exe</b>"));
+        sDescription = tr("Unable to locate UltraMon install directory.<br>Please indicate the location of <b>UltraMonDesktop.exe</b>");
 
         QPushButton* poButtonBrowse = new QPushButton(tr("Browse"));
         QPushButton* poButtonSubmit = new QPushButton(tr("Continue"));
@@ -55,45 +58,47 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
         poMainLayout->addWidget(poButtonBrowse, 3, 5, 1, 1);
         poMainLayout->addWidget(poButtonSubmit, 4, 5, 1, 1);
 
-        connect(poButtonBrowse, SIGNAL(clicked()), this, SLOT(vSlotBrowse()));
-        connect(poButtonSubmit, SIGNAL(clicked()), this, SLOT(vSlotSubmit()));
+        connect(m_poEditPath,   SIGNAL(returnPressed()), this, SLOT(slotSubmit()));
+        connect(poButtonBrowse, SIGNAL(clicked()), this, SLOT(slotBrowse()));
+        connect(poButtonSubmit, SIGNAL(clicked()), this, SLOT(slotSubmit()));
     }
     // OTHER ERRORS
     else if (iState & UM_FILE_NOT_FOUND)
     {
-        QString text = tr("<b>default.wallpaper</b> fil not found, impossible to continue.<br><br>Sould be at: %1")
+        sDescription = tr("<b>default.wallpaper</b> fil not found, impossible to continue.<br><br>Sould be at: %1")
                         .arg("<i>"+m_poCtrl->settings()->sEnv("wallpath")+"</i>");
-        poDescription->setText(text);
     }
     else if (iState & UM_BAD_VERSION)
     {
-        QString text = tr("%1 is incompatible with the current version of UltraMon (%2)")
+        sDescription = tr("%1 is incompatible with the current version of UltraMon (%2)")
                         .arg(QString::fromAscii(APP_NAME)+" "+QString::fromAscii(APP_VERSION))
                         .arg(m_poCtrl->settings()->sEnv("umversion"));
-        poDescription->setText(text);
     }
+
+    poDescription->setText(sDescription);
 
     setLayout(poMainLayout);
 }
 
-/*
- * open file dialog
+/**
+ * @brief Open file dialog
  */
-void ErrorWidget::vSlotBrowse()
+void ErrorWidget::slotBrowse()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Locate UltraMonDesktop"), QDir::rootPath(), "UltraMonDesktop (UltraMonDesktop.exe)");
+    QString sFilename = QFileDialog::getOpenFileName(this, tr("Locate UltraMonDesktop"), QDir::rootPath(), "UltraMonDesktop (UltraMonDesktop.exe)");
 
-    if (!filename.isEmpty())
+    if (!sFilename.isEmpty())
     {
-        filename.replace('/', '\\');
-        m_poEditPath->setText(filename);
+        sFilename.replace('/', '\\');
+        m_poEditPath->setText(sFilename);
     }
 }
 
-/*
- * submit UltraMonDesktop.exe path
+/**
+ * @brief Submit UltraMonDesktop.exe path
+ * If success this widget will be destroyed and replaced by MainWidget
  */
-void ErrorWidget::vSlotSubmit()
+void ErrorWidget::slotSubmit()
 {
     QString filename = m_poEditPath->text();
 

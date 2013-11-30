@@ -2,47 +2,66 @@
 #include "ui_setedit.h"
 
 
-SetEdit::SetEdit(const QString &_sName, int const _iType, int const _iStyle, QWidget* parent) :
-    QDialog(parent),
+/**
+ * @brief SetEdit::SetEdit
+ * @param QWidget* _parent
+ * @param Set* _poSet
+ */
+SetEdit::SetEdit(QWidget* _parent, Set* _poSet) : QDialog(_parent),
     ui(new Ui::SetEdit)
 {
     ui->setupUi(this);
 
-    ui->m_poTypeSelect->addItem(QIcon(":/img/w_monitor"), tr("One image for each monitor"), 1);
-    ui->m_poTypeSelect->addItem(QIcon(":/img/w_desktop"), tr("One image for the whole desktop"), 0);
+    ui->m_poTypeSelect->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"), 1);
+    ui->m_poTypeSelect->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), 0);
 
-    ui->m_poStyleSelect->addItem(QIcon(":/img/im_center"), tr("Center"), 0);
-    ui->m_poStyleSelect->addItem(QIcon(":/img/im_tile"), tr("Tile"), 1);
-    ui->m_poStyleSelect->addItem(QIcon(":/img/im_stretch"), tr("Stretch"), 2);
-    ui->m_poStyleSelect->addItem(QIcon(":/img/im_stretch_prop"), tr("Strecth proportional"), 3);
+    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_center"), tr("Center"), 0);
+    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_tile"), tr("Tile"), 1);
+    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_stretch"), tr("Stretch"), 2);
+    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), 3);
 
-    ui->m_poNameInput->setText(_sName);
+    ui->m_poNameInput->setText(_poSet->name());
 
-    int index = ui->m_poTypeSelect->findData(_iType);
-    ui->m_poTypeSelect->setCurrentIndex(index);
+    int iIndex = ui->m_poTypeSelect->findData(_poSet->type());
+    ui->m_poTypeSelect->setCurrentIndex(iIndex);
 
-    index = ui->m_poStyleSelect->findData(_iStyle);
-    ui->m_poStyleSelect->setCurrentIndex(index);
+    iIndex = ui->m_poStyleSelect->findData(_poSet->style());
+    ui->m_poStyleSelect->setCurrentIndex(iIndex);
 }
 
+/**
+ * @brief SetEdit::~SetEdit
+ */
 SetEdit::~SetEdit()
 {
     delete ui;
 }
 
-QString const SetEdit::name() const
+/**
+ * @brief SetEdit::name
+ * @return string
+ */
+const QString SetEdit::name() const
 {
     return ui->m_poNameInput->text();
 }
 
-int const SetEdit::type() const
+/**
+ * @brief SetEdit::type
+ * @return int
+ */
+const int SetEdit::type() const
 {
-    int index = ui->m_poTypeSelect->currentIndex();
-    return ui->m_poTypeSelect->itemData(index).toInt();
+    int iIndex = ui->m_poTypeSelect->currentIndex();
+    return ui->m_poTypeSelect->itemData(iIndex).toInt();
 }
 
-int const SetEdit::style() const
+/**
+ * @brief SetEdit::style
+ * @return int
+ */
+const int SetEdit::style() const
 {
-    int index = ui->m_poStyleSelect->currentIndex();
-    return ui->m_poStyleSelect->itemData(index).toInt();
+    int iIndex = ui->m_poStyleSelect->currentIndex();
+    return ui->m_poStyleSelect->itemData(iIndex).toInt();
 }

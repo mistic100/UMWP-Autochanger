@@ -9,8 +9,8 @@
 #include "createshortcut.h"
 
 
-/*
- * constructor
+/**
+ * @brief Settings::Settings
  */
 Settings::Settings()
 {
@@ -47,59 +47,59 @@ Settings::Settings()
     }
 }
 
-/*
- * destructor
+/**
+ * @brief Settings::~Settings
  */
 Settings::~Settings()
 {
-    vDeleteAll(); // clear memory but do not save changes !
+    vClearSets(); // clear memory but do not save changes !
 }
 
 
 /*
  * getters
  */
-bool const Settings::bParam(QString const key) const
+const bool Settings::bParam(QString const &_key) const
 {
-    return m_options.value(key, false).toBool();
+    return m_options.value(_key, false).toBool();
 }
 
-int const Settings::iParam(QString const key) const
+const int Settings::iParam(QString const &_key) const
 {
-    return m_options.value(key, 0).toInt();
+    return m_options.value(_key, 0).toInt();
 }
 
-QString const Settings::sParam(QString const key) const
+const QString Settings::sParam(QString const &_key) const
 {
-    return m_options.value(key, "").toString();
+    return m_options.value(_key, "").toString();
 }
 
-bool const Settings::bEnv(QString const key) const
+const bool Settings::bEnv(QString const &_key) const
 {
-    return m_env.value(key, false).toBool();
+    return m_env.value(_key, false).toBool();
 }
 
-int const Settings::iEnv(QString const key) const
+const int Settings::iEnv(QString const &_key) const
 {
-    return m_env.value(key, 0).toInt();
+    return m_env.value(_key, 0).toInt();
 }
 
-QString const Settings::sEnv(QString const key) const
+const QString Settings::sEnv(QString const &_key) const
 {
-    return m_env.value(key, "").toString();
+    return m_env.value(_key, "").toString();
 }
 
-QSize const Settings::oWindowSize() const
+const QSize Settings::oWindowSize() const
 {
     return QSize(m_options["window_width"].toInt(), m_options["window_height"].toInt());
 }
 
-bool const Settings::bCanAddShortcut() const
+const bool Settings::bCanAddShortcut()
 {
     return !m_env["startlinkpath"].isNull();
 }
 
-bool const Settings::bIsAutostart() const
+const bool Settings::bIsAutostart() const
 {
     return bFileExists(m_env["startlinkpath"].toString());
 }
@@ -108,7 +108,7 @@ bool const Settings::bIsAutostart() const
 /*
  * setters
  */
-void Settings::vSetParam(QString const _key, QVariant _val)
+void Settings::vSetParam(const QString &_key, const QVariant &_val)
 {
     m_options[_key] = _val;
     m_bUnsaved = true;
@@ -126,8 +126,8 @@ void Settings::vAddMsgCount()
 }
 
 
-/*
- * init environnement variables
+/**
+ * @brief Init environnement variables
  */
 void Settings::vInit()
 {
@@ -142,10 +142,10 @@ void Settings::vInit()
         wchar_t* sPath1 = (wchar_t*) malloc(256);
         dwLen = 256;
 
-        iResult = oReg.Open( HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"), KEY_READ | KEY_WOW64_64KEY );
+        iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"), KEY_READ | KEY_WOW64_64KEY);
         if (iResult == ERROR_SUCCESS)
         {
-            iResult = oReg.QueryStringValue( _T("ProgramFilesDir"), sPath1, &dwLen );
+            iResult = oReg.QueryStringValue(_T("ProgramFilesDir"), sPath1, &dwLen);
             if (iResult == ERROR_SUCCESS)
             {
                  QString sExePath = QString::fromWCharArray(sPath1, dwLen-1); // remove the \0 termination
@@ -168,10 +168,10 @@ void Settings::vInit()
     wchar_t* sVer = (wchar_t*) malloc(16);
     dwLen = 16;
 
-    iResult = oReg.Open( HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Realtime Soft\\UltraMon"), KEY_READ | KEY_WOW64_64KEY );
+    iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Realtime Soft\\UltraMon"), KEY_READ | KEY_WOW64_64KEY);
     if (iResult == ERROR_SUCCESS)
     {
-        iResult = oReg.QueryStringValue( _T("CurrentVersion"), sVer, &dwLen );
+        iResult = oReg.QueryStringValue(_T("CurrentVersion"), sVer, &dwLen);
         if (iResult == ERROR_SUCCESS)
         {
             m_env["umversion"] = QString::fromWCharArray(sVer, dwLen-1); // remove the \0 termination
@@ -191,7 +191,7 @@ void Settings::vInit()
     // SEARCH BMP PATH
     wchar_t* sPath2 = (wchar_t*) malloc(256);
 
-    iResult = SHGetKnownFolderPath( FOLDERID_LocalAppData, 0, NULL, &sPath2 );
+    iResult = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &sPath2);
     if (iResult == S_OK)
     {
         QString sBMPPath = QString::fromWCharArray(sPath2);
@@ -208,7 +208,7 @@ void Settings::vInit()
     {
         wchar_t* sPath3 = (wchar_t*) malloc(256);
 
-        int iResult = SHGetKnownFolderPath( FOLDERID_RoamingAppData, 0, NULL, &sPath3 );
+        int iResult = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &sPath3);
         if (iResult == S_OK)
         {
             QString sWallPath = QString::fromWCharArray(sPath3);
@@ -226,30 +226,23 @@ void Settings::vInit()
     }
     else
     {
-        QString file_src = m_env["wallpath"].toString().append("default.wallpaper");
-        QString file_dst = m_env["wallpath"].toString().append(APP_WALLPAPER_FILE);
+        QString sFilename = m_env["wallpath"].toString().append("default.wallpaper");
 
-        if (!bFileExists(file_src))
+        if (!bFileExists(sFilename))
         {
             m_iState|= UM_FILE_NOT_FOUND;
         }
-        else if (!bFileExists(file_dst))
+        else
         {
-            QFile::copy(file_src, file_dst);
+            vReadNbMonitors();
         }
-    }
-
-    // READ WALLPAPER FILE
-    if (!(m_iState & UM_FILE_NOT_FOUND))
-    {
-        vReadNbMonitors();
     }
 
 
     // SEARCH SHORTCUT FILE
     wchar_t* sPath4 = (wchar_t*) malloc(256);
 
-    iResult = SHGetKnownFolderPath( FOLDERID_Startup, 0, NULL, &sPath4 );
+    iResult = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &sPath4);
     if (iResult == S_OK)
     {
         QString sStartLnkPath = QString::fromWCharArray(sPath4);
@@ -260,13 +253,13 @@ void Settings::vInit()
     CoTaskMemFree(sPath4);
 }
 
-/*
- * read nb of wallpapers and monitors from .wallpaper file
+/**
+ * @brief Read the number of monitors from .wallpaper file
  */
 void Settings::vReadNbMonitors()
 {
-    QString file = m_env["wallpath"].toString().append(APP_WALLPAPER_FILE);
-    std::ifstream ifs(file.toStdString(), std::ios::in | std::ios::binary);
+    QString sFilename = m_env["wallpath"].toString().append("default.wallpaper");
+    std::ifstream ifs(sFilename.toStdString(), std::ios::in | std::ios::binary);
 
     ifs.ignore(7); // "UMWP",  version, activedesktop
 
@@ -278,8 +271,8 @@ void Settings::vReadNbMonitors()
 }
 
 
-/*
- * load contents of the settings file
+/**
+ * @brief Load contents of the settings file
  */
 void Settings::vReadXML()
 {
@@ -301,7 +294,7 @@ void Settings::vReadXML()
     QDomElement main_node = oDom.documentElement();
     QDomElement setting_node = main_node.firstChild().toElement();
 
-    vDeleteAll();
+    vClearSets();
 
     while (!setting_node.isNull())
     {
@@ -330,7 +323,7 @@ void Settings::vReadXML()
                     QString sPath = set_node.text().trimmed();
                     if (bDirectoryExists(sPath))
                     {
-                        Set* poNewSet = oAddSet(
+                        Set* poNewSet = poAddSet(
                             sPath,
                             set_node.attribute("name"),
                             set_node.attribute("active").toInt()
@@ -354,8 +347,8 @@ void Settings::vReadXML()
     m_bUnsaved = false;
 }
 
-/*
- * write parameters to the settings file
+/**
+ * @brief Write parameters into the settings file
  */
 void Settings::vWriteXML()
 {
@@ -412,15 +405,17 @@ void Settings::vWriteXML()
 }
 
 
-/*
- * change the path of UltraMonDesktop.exe
+/**
+ * @brief Change the path of UltraMonDesktop.exe
+ * @param string _sPath
+ * @return bool - true if the path is valid
  */
 bool Settings::bSetExePath(const QString &_sPath)
 {
     if (bFileExists(_sPath))
     {
-        QString filename = _sPath.section('\\', -1);
-        if (filename.compare("UltraMonDesktop.exe")==0)
+        QString sFilename = _sPath.section('\\', -1);
+        if (sFilename.compare("UltraMonDesktop.exe")==0)
         {
             vSetParam("umpath", _sPath);
             vWriteXML();
@@ -434,36 +429,43 @@ bool Settings::bSetExePath(const QString &_sPath)
 }
 
 
-/*
- * add a set from path
+/**
+ * @brief Add a new set from path
+ * @param string _sPath
+ * @return Set*
  */
-Set* Settings::oAddSet(QString _sPath)
+Set* Settings::poAddSet(const QString &_sPath)
 {
-    return oAddSet(_sPath, sGetDirName(_sPath), true);
+    return poAddSet(_sPath, sGetDirName(_sPath), true);
 }
 
-/*
- * add a set
+/**
+ * @brief Add a new set
+ * @param string _sPath
+ * @param string _sName
+ * @param bool _bActive
+ * @return Set*
  */
-Set* Settings::oAddSet(QString _sPath, QString &_sName, bool _bActive)
+Set* Settings::poAddSet(const QString &_sPath, QString &_sName, bool _bActive)
 {
-    vAddTrailingSlash(&_sPath);
+    QString sPath = sAddTrailingSlash(_sPath);
 
-    if (!bDirectoryExists(_sPath))
+    if (!bDirectoryExists(sPath))
     {
         return NULL;
     }
 
     m_bUnsaved = true;
 
-    Set* poSet = new Set(_sPath, _sName, _bActive);
+    Set* poSet = new Set(sPath, _sName, _bActive);
     m_oSets.push_back(poSet);
 
     return poSet;
 }
 
-/*
- * delete a set
+/**
+ * @brief Delete a set
+ * @param int _i - position in vector
  */
 void Settings::vDeleteSet(int _i)
 {
@@ -477,10 +479,11 @@ void Settings::vDeleteSet(int _i)
     }
 }
 
-/*
- * delete all sets
+/**
+ * @brief Unload all sets
+ * Sets are only onloaded from memory, they are not deleted
  */
-void Settings::vDeleteAll()
+void Settings::vClearSets()
 {
     if (!m_oSets.empty())
     {
@@ -495,10 +498,14 @@ void Settings::vDeleteAll()
     }
 }
 
-/*
- * rename a set
+/**
+ * @brief Edit a set
+ * @param int _i - position in vecto
+ * @param stirng _sName
+ * @param int _iType
+ * @param int _iStyle
  */
-void Settings::vEditSet(int _i, QString const &_sName, const int _iType, const int _iStyle)
+void Settings::vEditSet(int _i, const QString &_sName, const int _iType, const int _iStyle)
 {
     if ( _i < m_oSets.size())
     {
@@ -511,17 +518,21 @@ void Settings::vEditSet(int _i, QString const &_sName, const int _iType, const i
     }
 }
 
-/*
- * set the state of a set
+/**
+ * @brief Set the state of a set
+ * @param int _i - positon in vector
+ * @param bool _bState
  */
-void Settings::vSetState(int _i, bool _a)
+void Settings::vSetState(int _i, bool _bState)
 {
     m_bUnsaved = true;
-    m_oSets.at(_i)->vSetActive(_a);
+    m_oSets.at(_i)->vSetActive(_bState);
 }
 
-/*
- * move a set in the vector
+/**
+ * @brief Move a set
+ * @param int _from - positon in vector
+ * @param int _to - new position in vector
  */
 void Settings::vMoveSet(int _from, int _to)
 {
@@ -529,15 +540,19 @@ void Settings::vMoveSet(int _from, int _to)
     m_oSets.insert(_to, poSet);
 
     if (_from<_to)
+    {
         m_oSets.remove(_from);
+    }
     else
+    {
         m_oSets.remove(_from+1);
+    }
 
     m_bUnsaved = true;
 }
 
-/*
- * remove unexisting sets and update file lists
+/**
+ * @brief Remove unexisting sets and update file lists
  */
 void Settings::vUpdateSets()
 {
@@ -556,8 +571,10 @@ void Settings::vUpdateSets()
     }
 }
 
-/*
- * get one of teh active sets
+/**
+ * @brief Get one of the active sets
+ * @param int _i - position in the sub-vector of active sets
+ * @return Set*
  */
 Set* Settings::poGetActiveSet(int _i) const
 {
@@ -572,8 +589,10 @@ Set* Settings::poGetActiveSet(int _i) const
     return poActiveSets.at(_i);
 }
 
-/*
- * get the number of active sets
+/**
+ * @brief Get the number of active sets
+ * @param bool _bWithFiles - if true, only non-empty sets are counted
+ * @return  int
  */
 int const Settings::iNbActiveSets(bool _bWithFiles) const
 {
@@ -588,10 +607,11 @@ int const Settings::iNbActiveSets(bool _bWithFiles) const
     return iTotalSets;
 }
 
-/*
- * get total files among active sets
+/**
+ * @brief Get total files among active sets
+ * @return int
  */
-int const Settings::iNbFiles()
+int const Settings::iNbActiveFiles()
 {
     int iTotalFiles = 0;
     for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
@@ -605,8 +625,8 @@ int const Settings::iNbFiles()
 }
 
 
-/*
- * create the startup shortcut
+/**
+ * @brief Create the startup shortcut
  */
 void Settings::vCreateShortcut()
 {
@@ -626,8 +646,8 @@ void Settings::vCreateShortcut()
     }
 }
 
-/*
- * delete the startup shortcut
+/**
+ * @brief Delete the startup shortcut
  */
 void Settings::vDeleteShortcut()
 {

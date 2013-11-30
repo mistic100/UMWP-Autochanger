@@ -4,9 +4,8 @@
 #include "main.h"
 
 
-/*
- * Name: Set
- * Description: An object representing a single wallpaper folder
+/**
+ * @brief An object representing a single wallpaper folder
  */
 class Set
 {
@@ -21,29 +20,29 @@ private :
     double              m_dLastModif;
 
 public:
-    Set(QString const &_path, QString const &_name, bool _active);
+    Set(const QString &_path, const QString &_name, const bool _active);
 
-    QString const &path() const { return m_sPath; }
-    QString const &name() const { return m_sName; }
-    int     const &type() const  { return m_iType; }
-    int     const &style() const { return m_iStyle; }
-    int     const count() const { return m_vFiles.size(); }
-    bool    const &isActive() const { return m_bActive; }
+    const QString &path() const { return m_sPath; }
+    const QString &name() const { return m_sName; }
+    const int     &type() const  { return m_iType; }
+    const int     &style() const { return m_iStyle; }
+    const int     count() const { return m_vFiles.size(); }
+    const bool    &isActive() const { return m_bActive; }
 
-    void    vSetActive(bool const _a) { m_bActive=_a; }
-    void    vSetName(QString const &_name) { m_sName=_name; }
-    void    vSetType(int const _type) { m_iType=_type; }
-    void    vSetStyle(int const _style) { m_iStyle=_style; }
+    void    vSetActive(const bool _a) { m_bActive=_a; }
+    void    vSetName(const QString &_name) { m_sName=_name; }
+    void    vSetType(const int _type) { m_iType=_type; }
+    void    vSetStyle(const int _style) { m_iStyle=_style; }
 
-    double  dReadLastModif(QString _sub="", int _level=0);
-    void    vPopulateFiles(QString _sub="", int _level=0);
+    double  dReadLastModif(QString _sChild="", int _iLevel=0);
+    void    vPopulateFiles(QString _sChild="", int _iLevel=0);
 
     void    vReadCache();
     void    vWriteCache();
     void    vDeleteCache();
 
-    QString const fullName() const;
-    QString const sGetFile(int _i) const;
+    const QString fullName() const;
+    const QString sGetFile(int _i) const;
 };
 
 #endif // SET_H

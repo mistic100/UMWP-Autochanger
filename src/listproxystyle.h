@@ -8,9 +8,8 @@
 #include "main.h"
 
 
-/*
- * Name: ListProxyStyle
- * Description: A custom display of QListWidget drop indicator
+/**
+ * @brief A custom display of QListWidget drop indicator
  */
 class ListProxyStyle : public QProxyStyle
 {

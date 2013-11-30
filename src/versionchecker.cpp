@@ -5,9 +5,15 @@
 #include "versionchecker.h"
 
 
+/**
+ * @brief VersionChecker::VersionChecker
+ * @param QWidget* _parent
+ */
 VersionChecker::VersionChecker(QObject* _parent) : QObject(_parent) {}
 
-
+/**
+ * @brief Tries to download the version file and compare version
+ */
 void VersionChecker::run()
 {
     HRESULT res = URLDownloadToFile( NULL, APP_VERSION_URL, L"version.txt", 0, NULL );

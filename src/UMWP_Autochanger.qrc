@@ -1,9 +1,11 @@
 <RCC>
     <qresource prefix="/img">
-        <file alias="bullet_green">images/icons/bullet_green.png</file>
-        <file alias="bullet_red">images/icons/bullet_red.png</file>
         <file alias="error">images/error.png</file>
         <file alias="icon">images/icon.png</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file alias="bullet_green">images/icons/bullet_green.png</file>
+        <file alias="bullet_red">images/icons/bullet_red.png</file>
         <file alias="playpause">images/icons/play_pause.png</file>
         <file alias="hide">images/icons/hide.png</file>
         <file alias="refresh">images/icons/refresh.png</file>
@@ -16,17 +18,19 @@
         <file alias="key_ctrl_on">images/icons/key_ctrl_on.png</file>
         <file alias="key_shift_on">images/icons/key_shift_on.png</file>
         <file alias="key_win_on">images/icons/key_win_on.png</file>
-        <file alias="button_activate">images/buttons/button_activate.png</file>
-        <file alias="button_add">images/buttons/button_add.png</file>
-        <file alias="button_deactivate">images/buttons/button_deactivate.png</file>
-        <file alias="button_delete">images/buttons/button_delete.png</file>
-        <file alias="button_save">images/buttons/button_save.png</file>
         <file alias="im_center">images/icons/im_center.png</file>
         <file alias="im_stretch">images/icons/im_stretch.png</file>
         <file alias="im_stretch_prop">images/icons/im_stretch_prop.png</file>
         <file alias="im_tile">images/icons/im_tile.png</file>
         <file alias="w_desktop">images/icons/w_desktop.png</file>
         <file alias="w_monitor">images/icons/w_monitor.png</file>
+    </qresource>
+    <qresource prefix="/button">
+        <file alias="activate">images/buttons/button_activate.png</file>
+        <file alias="add">images/buttons/button_add.png</file>
+        <file alias="deactivate">images/buttons/button_deactivate.png</file>
+        <file alias="delete">images/buttons/button_delete.png</file>
+        <file alias="save">images/buttons/button_save.png</file>
     </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>

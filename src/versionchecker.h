@@ -1,14 +1,13 @@
-#ifndef PROCESS_H
-#define PROCESS_H
+#ifndef VERSIONCHECKER_H
+#define VERSIONCHECKER_H
 
 #include <QObject>
 
 #include "main.h"
 
 
-/*
- * Name: VersionChecker
- * Description: Used to download version file and compare to current version
+/**
+ * @brief Used to download version file and compare to current version
  */
 class VersionChecker : public QObject
 {
@@ -21,9 +20,9 @@ public slots:
     void run();
     
 signals:
-    void newVersionAvailable(QString);
+    void newVersionAvailable(const QString);
     void finished();
     
 };
 
-#endif // PROCESS_H
+#endif // VERSIONCHECKER_H

@@ -1,8 +1,14 @@
 #include "listproxystyle.h"
 
 
+/**
+ * @brief ListProxyStyle::ListProxyStyle
+ */
 ListProxyStyle::ListProxyStyle() {}
 
+/**
+ * @brief ListProxyStyle::drawPrimitive
+ */
 void ListProxyStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
 {
     if (element == QStyle::PE_IndicatorItemViewItemDrop)

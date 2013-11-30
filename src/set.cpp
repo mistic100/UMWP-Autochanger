@@ -1,13 +1,14 @@
-#include <iostream>
-
 #include "set.h"
 #include "dirent.h"
 
 
-/*
- * constructor
+/**
+ * @brief Set::Set
+ * @param string _path
+ * @param string _name
+ * @param bool _active
  */
-Set::Set(const QString &_path, const QString &_name, bool _active)
+Set::Set(const QString &_path, const QString &_name, const bool _active)
 {
     m_sPath = _path;
     m_sName = _name;
@@ -21,20 +22,23 @@ Set::Set(const QString &_path, const QString &_name, bool _active)
     vPopulateFiles();
 }
 
-/*
- * get name with file counter
+/**
+ * @brief Get name with file counter
+ * @return string
  */
-QString const Set::fullName() const
+const QString Set::fullName() const
 {
     return m_sName+" ("+QString::number(count())+")";
 }
 
-/*
- * get a file
+/**
+ * @brief Get a file path
+ * @param int _i
+ * @return  string
  */
-QString const Set::sGetFile(int _i) const
+const QString Set::sGetFile(int _i) const
 {
-    if (_i <m_vFiles.size())
+    if (_i < m_vFiles.size())
     {
         return m_vFiles.at(_i);
     }
@@ -44,20 +48,22 @@ QString const Set::sGetFile(int _i) const
     }
 }
 
-/*
- * recursively read the last modificatio date of a folder
+/**
+ * @brief Recursively read the last modification date of a folder
  * must not be directly called with parameters
+ * @param string _sChild
+ * @param int _iLevel
+ * @return double
  */
-double Set::dReadLastModif(QString _sub, int _level)
+double Set::dReadLastModif(QString _sChild, int _iLevel)
 {
-    QString sPath = m_sPath+_sub;
-    std::wstring stemp = sPath.toStdWString();
+    QString sPath = m_sPath+_sChild;
 
     double dDate;
     FILETIME ftWrite;
     SYSTEMTIME stWrite;
 
-    HANDLE hDir = CreateFile( stemp.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
+    HANDLE hDir = CreateFile(sPath.toStdWString().c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (!GetFileTime( hDir, NULL, NULL, &ftWrite ))
     {
         GetSystemTime(&stWrite);
@@ -69,41 +75,43 @@ double Set::dReadLastModif(QString _sub, int _level)
     FileTimeToSystemTime(&ftWrite, &stWrite);
     SystemTimeToVariantTime(&stWrite, &dDate);
 
-    if (_level < 2)
+    if (_iLevel < 2)
     {
-        DIR* dir = opendir(sPath.toStdString().c_str());
-        struct dirent* entry = readdir(dir);
+        DIR* poDir = opendir(sPath.toStdString().c_str());
+        struct dirent* poEntry = readdir(poDir);
 
-        QString filename = QString(entry->d_name);
+        QString sFilename = QString(poEntry->d_name);
 
-        while (entry != NULL)
+        while (poEntry != NULL)
         {
-            if (entry->d_type == DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
+            if (poEntry->d_type==DT_DIR && sFilename.compare(".")!=0 && sFilename.compare("..")!=0)
             {
-                double dSubDate = dReadLastModif(filename+"\\", _level+1);
+                double dSubDate = dReadLastModif(sFilename+"\\", _iLevel+1);
                 if (dSubDate > dDate)
                 {
                     dDate = dSubDate;
                 }
             }
 
-            entry = readdir(dir);
-            filename = QString(entry->d_name);
+            poEntry = readdir(poDir);
+            sFilename = QString(poEntry->d_name);
         }
 
-        closedir(dir);
+        closedir(poDir);
     }
 
     return dDate;
 }
 
-/*
- * recursively construct the list of files (if changed)
+/**
+ * @brief Recursively construct the list of files (if changed)
  * must not be directly called with parameters
+ * @param string _sChild
+ * @param int _iLevel
  */
-void Set::vPopulateFiles(QString _sub, int _level)
+void Set::vPopulateFiles(QString _sChild, int _iLevel)
 {
-    if (_sub.isEmpty())
+    if (_sChild.isEmpty())
     {
         double dNewDate = dReadLastModif();
         if (dNewDate <= m_dLastModif)
@@ -115,67 +123,70 @@ void Set::vPopulateFiles(QString _sub, int _level)
         m_vFiles.clear();
     }
 
-    if (_level < 2)
+    if (_iLevel < 2)
     {
-        QString sPath = m_sPath+_sub;
-        DIR* dir = opendir(sPath.toStdString().c_str());
+        QString sPath = m_sPath+_sChild;
+        DIR* poDir = opendir(sPath.toStdString().c_str());
 
-        struct dirent* entry = readdir(dir);
-        QString filename = QString(entry->d_name);
+        struct dirent* poEntry = readdir(poDir);
+        QString sFilename = QString(poEntry->d_name);
 
-        while (entry != NULL)
+        while (poEntry != NULL)
         {
-            if (entry->d_type == DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
+            if (poEntry->d_type==DT_DIR && sFilename.compare(".")!=0 && sFilename.compare("..")!=0)
             {
-                vPopulateFiles(filename+"\\", _level+1);
+                vPopulateFiles(sFilename+"\\", _iLevel+1);
             }
-            else if (entry->d_type == DT_REG && bIsImageFile(filename))
+            else if (poEntry->d_type == DT_REG && bIsImageFile(sFilename))
             {
-                m_vFiles.push_back(sPath+filename);
+                m_vFiles.push_back(sPath+sFilename);
             }
 
-            entry = readdir(dir);
-            filename = QString(entry->d_name);
+            poEntry = readdir(poDir);
+            sFilename = QString(poEntry->d_name);
         }
 
-        closedir(dir);
+        closedir(poDir);
     }
 
-    if (_sub.isEmpty())
+    if (_sChild.isEmpty())
     {
         vWriteCache();
     }
 }
 
-/*
- * read m_dLastModif and m_vFiles from cache
+/**
+ * @brief Read cached data
  */
 void Set::vReadCache()
 {
-    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
-    if (file.exists())
+    QFile oFile(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
+    if (oFile.exists())
     {
-        file.open(QIODevice::ReadOnly);
-        QDataStream in(&file);
+        oFile.open(QIODevice::ReadOnly);
+        QDataStream in(&oFile);
         in>>m_dLastModif;
         in>>m_vFiles;
-        file.close();
+        oFile.close();
     }
 }
 
-/*
- * write m_dLastModif and m_vFiles into a cache file
+/**
+ * @brief Write cache data
  */
 void Set::vWriteCache()
 {
-    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
-    file.open(QIODevice::WriteOnly);
-    QDataStream out(&file);
+    QFile oFile(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
+    oFile.open(QIODevice::WriteOnly);
+    QDataStream out(&oFile);
     out<<m_dLastModif;
     out<<m_vFiles;
-    file.close();
+    oFile.close();
 }
 
+/**
+ * @brief Delete cache file
+ */
 void Set::vDeleteCache()
 {
     QFile::remove(QString::fromAscii(APP_CACHE_DIR)+m_sUID);

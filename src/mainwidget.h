@@ -10,9 +10,9 @@ namespace Ui {
     class MainWidget;
 }
 
-/*
- * Name: MainWidget
- * Description: The main widget of the software
+
+/**
+ * @brief The main widget of the software
  */
 class MainWidget : public QWidget
 {
@@ -20,20 +20,18 @@ class MainWidget : public QWidget
 
 private:
     Ui::MainWidget* ui;
-
     Controller*     m_poCtrl;
-
     QString         m_sLastDir;
     
 public:
     MainWidget(QWidget* _parent, Controller* _poCtrl);
     ~MainWidget();
 
-    QList<int> oGetSelectedIndexes();
+    QList<int> aiGetSelectedIndexes();
 
 public slots:
-    void vUpdateList(bool _bResetSel);
-    void vSlotItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to);
+    void slotUpdateList(bool _bResetSel);
+    void slotMoveItem(const QModelIndex &, int from, int, const QModelIndex &, int to);
 
     void on_m_poButtonAdd_clicked();
     void on_m_poButtonActivate_clicked();

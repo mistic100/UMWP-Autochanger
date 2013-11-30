@@ -11,9 +11,8 @@
 #include "controller.h"
 
 
-/*
- * Name: MainWindows
- * Description: The main window containing the main widget
+/**
+ * @brief The main window containing the main widget
  */
 class MainWindow : public QMainWindow
 {
@@ -35,8 +34,12 @@ private:
     QAction*            m_poActionPause2; // tray
 
 public:
-    MainWindow(Controller* _oCtrl);
-    void vRegisterHotkeys();
+    MainWindow(Controller* _poCtrl);
+
+    void vUpdateHotkeys();
+
+    void vShowMain();
+    void vShowError();
 
 protected:
     void showEvent(QShowEvent*)            { resize(m_poCtrl->settings()->oWindowSize()); }
@@ -46,25 +49,23 @@ protected:
 
 public slots:
     void vInit();
-    void vShowMain();
-    void vShowError();
 
     void vUpdateTrayQuickMenu();
 
-    void vSlotQuit();
-    void vSlotApply();
-    void vSlotStartPause();
-    void vSlotShowHelp();
+    void slotQuit();
+    void slotApply();
+    void slotStartPause();
+    void slotShowHelp();
 
-    void vSlotOptionToggled(bool _c);
-    void vSlotHotkeyToggled(bool _c);
-    void vSlotDelayChanged(int _val);
+    void slotOptionToggled(bool _c);
+    void slotHotkeyToggled(bool _c);
+    void slotDelayChanged(int _iVal);
 
-    void vSlotTrayAction(QSystemTrayIcon::ActivationReason _reason);
-    void vSlotTrayQuickClicked();
+    void slotTrayAction(QSystemTrayIcon::ActivationReason _reason);
+    void slotTrayQuickClicked();
 
-    void vSlotToggleWindow(bool _forcehide=false);
-    void vSlotDisplayNewVersion(QString _ver);
+    void slotToggleWindow(bool _bForceHide=false);
+    void slotDisplayNewVersion(const QString &_sVersion);
 };
 
 #endif // MAINWINDOW_H

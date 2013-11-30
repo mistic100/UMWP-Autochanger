@@ -2,26 +2,32 @@
 #define SETEDIT_H
 
 #include <QDialog>
+
 #include "main.h"
+#include "set.h"
 
 namespace Ui {
     class SetEdit;
 }
 
+
+/**
+ * @brief Dialog for Set edition
+ */
 class SetEdit : public QDialog
 {
     Q_OBJECT
-    
-public:
-    explicit SetEdit(QString const &_sName, const int _iType, const int _iStyle, QWidget* parent=0);
-    ~SetEdit();
 
-    QString const name() const;
-    int const type() const;
-    int const style() const;
-    
 private:
     Ui::SetEdit *ui;
+
+public:
+    SetEdit(QWidget* _parent, Set* _poSet);
+    ~SetEdit();
+
+    const QString name() const;
+    const int type() const;
+    const int style() const;
 };
 
 #endif // SETEDIT_H

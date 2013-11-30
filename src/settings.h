@@ -9,9 +9,8 @@
 #include "set.h"
 
 
-/*
- * Name: Settings
- * Description: Class managing settings of the application
+/**
+ * @brief Class managing settings of the application
  */
 class Settings
 {
@@ -19,7 +18,7 @@ private:
     QHash<QString, QVariant> m_options; // configurable options
     QHash<QString, QVariant> m_env;     // environnement variables
 
-    short           m_iState;   // state if the installation
+    short           m_iState;   // state of the installation
     bool            m_bUnsaved; // true if there are unsaved data
 
     QVector<Set*>   m_oSets;    // list of wallpaper sets
@@ -36,47 +35,46 @@ public:
     void vUpdateSets();
 
     // getters
-    short const     &iState() const         { return m_iState; }
-    bool const      &bIsUnsaved() const     { return m_bUnsaved; }
+    const short     &iState() const     { return m_iState; }
+    const bool      &bIsUnsaved() const { return m_bUnsaved; }
 
-    QString const   sParam(QString const _key) const;
-    bool const      bParam(QString const _key) const;
-    int const       iParam(QString const _key) const;
+    const QString   sParam(const QString &_key) const;
+    const bool      bParam(const QString &_key) const;
+    const int       iParam(const QString &_key) const;
 
-
-    QString const   sEnv(QString const _key) const;
-    bool const      bEnv(QString const _key) const;
-    int const       iEnv(QString const _key) const;
+    const QString   sEnv(const QString &_key) const;
+    const bool      bEnv(const QString &_key) const;
+    const int       iEnv(const QString &_key) const;
 
     Set*            poGetSet(int _i) const  { return m_oSets.at(_i); }
     Set*            poGetActiveSet(int _i) const;
-    int const       iNbSets() const         { return m_oSets.size(); }
-    int const       iNbActiveSets(bool _bWithFiles) const;
-    int const       iNbFiles();
+    const int       iNbSets() const         { return m_oSets.size(); }
+    const int       iNbActiveSets(bool _bWithFiles) const;
+    const int       iNbActiveFiles();
 
-    bool const      bIsAutostart() const;
-    QSize const     oWindowSize() const;
+    const bool      bIsAutostart() const;
+    const QSize     oWindowSize() const;
 
     // setters
-    void vSetParam(QString const _key, QVariant _val);
-    void vSetWindowSize(QSize const &_size);
+    void vSetParam(const QString &_key, const QVariant &_val);
+    void vSetWindowSize(const QSize &_size);
     void vAddMsgCount();
-    bool bSetExePath(QString const &_sPath);
+    bool bSetExePath(const QString &_sPath);
 
     // sets management
-    Set*    oAddSet(QString _sPath);
-    Set*    oAddSet(QString _sPath, QString &_sName, bool _bActive);
+    Set*    poAddSet(const QString &_sPath);
+    Set*    poAddSet(const QString &_sPath, QString &_sName, bool _bActive);
 
     void    vDeleteSet(int _i);
-    void    vDeleteAll();
+    void    vClearSets();
 
-    void    vEditSet(int _i, QString const &_sName, int const _iType, int const _iStyle);
-    void    vSetState(int _i, bool _a);
+    void    vEditSet(int _i, const QString &_sName, const int _iType, const int _iStyle);
+    void    vSetState(int _i, bool _bState);
 
     void    vMoveSet(int _from, int _to);
 
     // shortcut
-    bool const bCanAddShortcut() const;
+    const bool bCanAddShortcut();
     void vCreateShortcut();
     void vDeleteShortcut();
 };

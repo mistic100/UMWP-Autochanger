@@ -2,16 +2,28 @@
 #include "set.h"
 
 
-ListDelegate::ListDelegate(QObject* _parent, Controller* _ctrl) : QAbstractItemDelegate(_parent)
+/**
+ * @brief ListDelegate::ListDelegate
+ * @param QWidget* _parent
+ * @param Controller* _poCtrl
+ */
+ListDelegate::ListDelegate(QObject* _parent, Controller* _poCtrl) : QAbstractItemDelegate(_parent)
 {
-    m_poCtrl = _ctrl;
+    m_poCtrl = _poCtrl;
 }
 
+/**
+ * @brief ListDelegate::sizeHint
+ * @return QSize
+ */
 QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const
 {
     return QSize(200, 35);
 }
 
+/**
+ * @brief ListDelegate::paint
+ */
 void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     // get configuration
@@ -50,31 +62,31 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     switch (poSet->isActive())
     {
     case true:
-        a_icon = QIcon(":/img/bullet_green"); break;
+        a_icon = QIcon(":/icon/bullet_green"); break;
     default:
-        a_icon = QIcon(":/img/bullet_red"); break;
+        a_icon = QIcon(":/icon/bullet_red"); break;
     }
     a_icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
 
     switch (poSet->type())
     {
     case 0:
-        w_icon = QIcon(":/img/w_desktop"); break;
+        w_icon = QIcon(":/icon/w_desktop"); break;
     default:
-        w_icon = QIcon(":/img/w_monitor"); break;
+        w_icon = QIcon(":/icon/w_monitor"); break;
     }
     w_icon.paint(painter, rect, Qt::AlignTop|Qt::AlignRight);
 
     switch (poSet->style())
     {
     case 0:
-        im_icon = QIcon(":/img/im_center"); break;
+        im_icon = QIcon(":/icon/im_center"); break;
     case 1:
-        im_icon = QIcon(":/img/im_tile"); break;
+        im_icon = QIcon(":/icon/im_tile"); break;
     case 2:
-        im_icon = QIcon(":/img/im_stretch"); break;
+        im_icon = QIcon(":/icon/im_stretch"); break;
     default:
-        im_icon = QIcon(":/img/im_stretch_prop"); break;
+        im_icon = QIcon(":/icon/im_stretch_prop"); break;
     }
     im_icon.paint(painter, rect, Qt::AlignBottom|Qt::AlignRight);
 

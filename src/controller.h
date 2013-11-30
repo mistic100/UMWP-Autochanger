@@ -12,9 +12,8 @@ using namespace std::tr1;
 #include "versionchecker.h"
 
 
-/*
- * Name: Controller
- * Description: main controller of the application
+/**
+ * @brief Main controller of the application
  */
 class Controller : public QObject
 {
@@ -22,41 +21,38 @@ class Controller : public QObject
 
 private:
     Settings*       m_poSettings;
-
     QTimer*         m_poMainTimer;
-
     mt19937         m_oRandom; // mersenne_twister
-
     int             m_iHeaderSize;
 
 public:
     Controller(Settings* _data);
 
-    void vStart();
+    void vCheckVersion();
 
-    Settings* const settings() const { return m_poSettings; }
+    Settings* settings() const { return m_poSettings; }
 
-    Set*    poGetRandomSet(int _iTotal);
-    QString sGetRandomFile(Set* _poSet, QVector<QString> const &_sFiles);
+    Set* poGetRandomSet(int _iTotal);
+    void vGetRandomFile(Set* _poSet, QVector<QString> &_asFiles);
+    void vGenerateFile(const QString &_sFilename, const Set* _poSet, const QVector<QString> &_asFiles);
 
-    void vStartTimer(bool _keepPause=false);
+    void vStartTimer(bool _bKeepPause=false);
     bool bStartPause();
-    void vGenerateFile(const QString &_sFilename, Set* _poSet, const QVector<QString> &_files);
 
-    void vAddSet(QString const _dirname);
-    void vDeleteSets(QList<int> const _list);
-    void vActivateSets(QList<int> const _list);
-    void vUnactivateSets(QList<int> const _list);
-    void vSetOneActiveSet(int _idx);
-    void vEditSet(int _idx, QString const &_sName, int const _iType, int const _iStyle);
+    void vAddSet(const QString _sDirname);
+    void vDeleteSets(const QList<int> _ai);
+    void vActivateSets(const QList<int> _ai);
+    void vUnactivateSets(const QList<int> _ai);
+    void vSetOneActiveSet(int _i);
+    void vEditSet(int _i, const QString &_sName, const int _iType, const int _iStyle);
     void vMoveSet(int _from, int _to);
 
 public slots:
-    void vSlotUpdate(bool _check=true);
+    void slotUpdate(bool _bCheckFiles=true);
 
 signals:
     void listChanged(bool);
-    void newVersionAvailable(QString);
+    void newVersionAvailable(const QString);
 };
 
 #endif // CONTROLLER_H

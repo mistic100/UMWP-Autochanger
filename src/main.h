@@ -59,7 +59,7 @@ bool bFileExists(QString const &_sPath, bool _bCheckWrite=true);
 bool bDirectoryExists(QString const &_sPath);
 
 QString sGetDirName(const QString &_sPath);
-void vAddTrailingSlash(QString* _psPath);
+QString sAddTrailingSlash(const QString &_sPath);
 bool bIsImageFile(QString const &_sFilename);
 
 void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, QString const &_value);

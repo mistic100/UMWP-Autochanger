@@ -72,7 +72,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/img/button_add</normalon>
+         <normalon>:/button/add</normalon>
         </iconset>
        </property>
        <property name="iconSize">
@@ -99,7 +99,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/img/button_activate</normalon>
+         <normalon>:/button/activate</normalon>
         </iconset>
        </property>
        <property name="iconSize">
@@ -126,7 +126,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/img/button_deactivate</normalon>
+         <normalon>:/button/deactivate</normalon>
         </iconset>
        </property>
        <property name="iconSize">
@@ -153,7 +153,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/img/button_delete</normalon>
+         <normalon>:/button/delete</normalon>
         </iconset>
        </property>
        <property name="iconSize">
@@ -193,7 +193,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/img/button_save</normalon>
+         <normalon>:/button/save</normalon>
         </iconset>
        </property>
        <property name="iconSize">
