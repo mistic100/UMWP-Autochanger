@@ -34,15 +34,7 @@ int main(int argc, char *argv[])
     Controller oCtrl(&oData);
     MainWindow oWindow(&oCtrl);
 
-    if (oData.iState() == UM_OK)
-    {
-        oWindow.vShowMain();
-    }
-    else
-    {
-        oWindow.vShowError();
-    }
-
+    oWindow.vInit();
 
     int ret = a.exec();
 

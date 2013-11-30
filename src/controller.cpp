@@ -19,6 +19,10 @@ Controller::Controller(Settings* _data) : QObject(0)
 
     m_poMainTimer = new QTimer(this);
     connect(m_poMainTimer, SIGNAL(timeout()), this, SLOT(vSlotUpdate()));
+
+    m_iHeaderSize = 4 + 2 + 1; // "UMWP",  version, activedesktop
+    m_iHeaderSize+= sizeof(DWORD); // nb monitors
+    m_iHeaderSize+= m_poSettings->iEnv("nb_monitors") * sizeof(RECT);
 }
 
 /*
@@ -140,9 +144,9 @@ void Controller::vSetOneActiveSet(int _idx)
 /*
  * rename a set
  */
-void Controller::vRenameSet(int _idx, QString const _name)
+void Controller::vEditSet(int _idx, QString const &_sName, const int _iType, const int _iStyle)
 {
-    m_poSettings->vRenameSet(_idx, _name);
+    m_poSettings->vEditSet(_idx, _sName, _iType, _iStyle);
     emit listChanged(false);
 }
 
@@ -165,7 +169,7 @@ void Controller::vSlotUpdate(bool _check)
     if (_check && m_poSettings->bParam("check"))
     {
         m_poSettings->vUpdateSets();
-        m_poSettings->vReadNbWalls();
+        m_poSettings->vReadNbMonitors();
         emit listChanged(false);
     }
 
@@ -180,13 +184,23 @@ void Controller::vSlotUpdate(bool _check)
     Set* poSet = poGetRandomSet(iTotalSets);
 
     QVector<QString> files;
-    for (int i=0; i<m_poSettings->iEnv("nb_walls"); i++)
+
+    if (poSet->type() == 1)
+    {
+        for (int i=0; i<m_poSettings->iEnv("nb_monitors"); i++)
+        {
+            files.push_back(sGetRandomFile(poSet, files));
+        }
+    }
+    else
     {
         files.push_back(sGetRandomFile(poSet, files));
     }
 
+    QString filename = m_poSettings->sEnv("wallpath")+QString::fromAscii(APP_WALLPAPER_FILE);
+
     // generate .wallpaper file
-    vGenerateFile(files);
+    vGenerateFile(filename, poSet, files);
 
     // remove old BMP file
     if (bFileExists(m_poSettings->sEnv("bmppath")))
@@ -195,8 +209,7 @@ void Controller::vSlotUpdate(bool _check)
     }
 
     // execute UltraMonDesktop
-    QString cmd = "\""+m_poSettings->sParam("umpath")+"\" /load";
-    cmd+= " \""+m_poSettings->sEnv("wallpath")+QString::fromAscii(APP_WALLPAPER_FILE)+"\"";
+    QString cmd = "\""+m_poSettings->sParam("umpath")+"\" /load \""+filename+"\"";
     QProcess::execute(cmd);
 }
 
@@ -262,31 +275,45 @@ QString Controller::sGetRandomFile(Set* _poSet, QVector<QString> const &_sFiles)
  * generate .wallpaper file
  * _files must contains exactly m_iNbWallpapers elements
  */
-void Controller::vGenerateFile(QVector<QString> _files)
+void Controller::vGenerateFile(QString const &_sFilename, Set* _poSet, QVector<QString> const &_files)
 {
-    if (_files.size() != m_poSettings->iEnv("nb_walls"))
+    // open default file
+    QString default_filename = m_poSettings->sEnv("wallpath")+"default.wallpaper";
+    QFile default_file(default_filename);
+    default_file.open(QIODevice::ReadOnly);
+
+    // get header from default.wallpaper
+    QByteArray buffer = default_file.readAll();
+    default_file.close();
+    buffer.truncate(m_iHeaderSize);
+
+    // write wallpaper type
+    WALLPAPER wp_type = static_cast<WALLPAPER>(_poSet->type());
+    buffer.append((char*)&wp_type, sizeof(WALLPAPER));
+
+    // write number of wallpapers
+    DWORD nb_walls = _files.size();
+    buffer.append((char*)&nb_walls, sizeof(DWORD));
+
+    IMAGE image_style = static_cast<IMAGE>(_poSet->style());
+
+    // write wallpapers
+    for (unsigned int i=0; i<nb_walls; i++)
     {
-        return;
+        WP_MONITOR_FILE wall;
+        wall.bgType = BG_SOLID;
+        wall.color1 = 0x00000000;
+        wall.color2 = 0x00000000;
+        wall.imgStyle = image_style;
+        memset(wall.imgFile, 0, 260*sizeof(wchar_t));
+        _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
+
+        buffer.append((char*)&wall, sizeof(WP_MONITOR_FILE));
     }
 
-    QString file = m_poSettings->sEnv("wallpath");
-    file.append(APP_WALLPAPER_FILE);
-    int const header_size = 19 + m_poSettings->iEnv("nb_monitors")*16;
-
-    std::fstream ofs(file.toStdString(), std::ios::out | std::ios::in | std::ios::binary);
-
-    for (int i=0; i<m_poSettings->iEnv("nb_walls"); i++)
-    {
-        // seek to the begining of the imgFile field
-        int const wp_file_pos = header_size + i*260*sizeof(wchar_t) + (i+1)*16;
-        ofs.seekp(wp_file_pos, std::ios_base::beg);
-
-        // change imgFile
-        wchar_t temp[260];
-        memset(temp, 0, 260*sizeof(wchar_t));
-        _files.at(i).toWCharArray((wchar_t*)temp);
-        ofs.write((char*)&temp, 260*sizeof(wchar_t));
-    }
-
-    ofs.close();
+    // save file
+    QFile file(_sFilename);
+    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    file.write(buffer);
+    file.close();
 }

@@ -7,10 +7,12 @@
 /*
  * constructor
  */
-Set::Set(QString _path, QString _name, bool _active)
+Set::Set(const QString &_path, const QString &_name, bool _active)
 {
     m_sPath = _path;
     m_sName = _name;
+    m_iType = 1;
+    m_iStyle = 0;
     m_bActive = _active;
     m_dLastModif = 0;
     m_sUID = QString(QCryptographicHash::hash(m_sPath.toUtf8(), QCryptographicHash::Md5).toHex());

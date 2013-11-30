@@ -16,9 +16,9 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     QIcon icon = QIcon(qvariant_cast<QPixmap>(index.data(Qt::DecorationRole)));
     QString title = index.data(Qt::DisplayRole).toString();
     QString description = index.data(Qt::UserRole+1).toString();
-    bool transparent = !index.data(Qt::UserRole+2).toBool();
+    bool enabled = index.data(Qt::UserRole+2).toBool();
 
-    painter->setOpacity(transparent ? 0.7 : 1.0);
+    painter->setOpacity(!enabled ? 0.7 : 1.0);
 
     // BACKGROUND
     if (active)

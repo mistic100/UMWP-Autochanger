@@ -156,6 +156,18 @@ MainWindow::MainWindow(Controller* _oCtrl) : QMainWindow(0)
     vRegisterHotkeys();
 }
 
+void MainWindow::vInit()
+{
+    if (m_poCtrl->settings()->iState() == UM_OK)
+    {
+        vShowMain();
+    }
+    else
+    {
+        vShowError();
+    }
+}
+
 /*
  * display error widget
  */
@@ -167,7 +179,7 @@ void MainWindow::vShowError()
     m_poOptionsMenu->menuAction()->setVisible(false);
 
     ErrorWidget* widget = new ErrorWidget(this, m_poCtrl);
-    connect(widget, SIGNAL(pathSaved()), this, SLOT(vShowMain()));
+    connect(widget, SIGNAL(pathSaved()), this, SLOT(vInit()));
 
     setCentralWidget(widget);
     setMinimumSize(400, 200);

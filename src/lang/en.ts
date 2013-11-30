@@ -53,7 +53,7 @@
     <name>MainWidget</name>
     <message>
         <location filename="../mainwidget.ui" line="71"/>
-        <location filename="../mainwidget.cpp" line="119"/>
+        <location filename="../mainwidget.cpp" line="127"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
@@ -69,7 +69,7 @@
     </message>
     <message>
         <location filename="../mainwidget.ui" line="152"/>
-        <location filename="../mainwidget.cpp" line="137"/>
+        <location filename="../mainwidget.cpp" line="145"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -79,7 +79,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwidget.cpp" line="137"/>
+        <location filename="../mainwidget.cpp" line="145"/>
         <source>Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -88,38 +88,28 @@
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../mainwidget.cpp" line="171"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwidget.cpp" line="171"/>
-        <source>New name:</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.cpp" line="48"/>
         <location filename="../mainwindow.cpp" line="142"/>
-        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="485"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="50"/>
         <location filename="../mainwindow.cpp" line="139"/>
-        <location filename="../mainwindow.cpp" line="310"/>
+        <location filename="../mainwindow.cpp" line="322"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="49"/>
         <location filename="../mainwindow.cpp" line="137"/>
-        <location filename="../mainwindow.cpp" line="332"/>
-        <location filename="../mainwindow.cpp" line="333"/>
+        <location filename="../mainwindow.cpp" line="344"/>
+        <location filename="../mainwindow.cpp" line="345"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
@@ -189,55 +179,108 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="301"/>
+        <location filename="../mainwindow.cpp" line="313"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="449"/>
-        <location filename="../mainwindow.cpp" line="455"/>
+        <location filename="../mainwindow.cpp" line="461"/>
+        <location filename="../mainwindow.cpp" line="467"/>
         <source>A new version is available : %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="454"/>
+        <location filename="../mainwindow.cpp" line="466"/>
         <source>New version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="456"/>
+        <location filename="../mainwindow.cpp" line="468"/>
         <source>Visit the &lt;a href=&apos;%1&apos;&gt;project homepage&lt;/a&gt; to download the latest version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="291"/>
+        <location filename="../mainwindow.cpp" line="303"/>
         <source>%1 is still running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="337"/>
-        <location filename="../mainwindow.cpp" line="338"/>
+        <location filename="../mainwindow.cpp" line="349"/>
+        <location filename="../mainwindow.cpp" line="350"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="368"/>
+        <location filename="../mainwindow.cpp" line="380"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="409"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="409"/>
         <source>If you disable files check you may obtain&lt;br&gt;a black wallpaper if you manually edit your sets.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="485"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SetEdit</name>
+    <message>
+        <location filename="../setedit.ui" line="29"/>
+        <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.ui" line="35"/>
+        <source>Name :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.ui" line="45"/>
+        <source>Type :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.ui" line="55"/>
+        <source>Style :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.cpp" line="11"/>
+        <source>One image for each monitor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.cpp" line="12"/>
+        <source>One image for the whole desktop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.cpp" line="14"/>
+        <source>Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.cpp" line="15"/>
+        <source>Tile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.cpp" line="16"/>
+        <source>Stretch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setedit.cpp" line="17"/>
+        <source>Strecth proportional</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

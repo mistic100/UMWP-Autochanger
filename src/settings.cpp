@@ -32,7 +32,6 @@ Settings::Settings()
     m_env["bmppath"] = QVariant();
     m_env["umversion"] = "unknown";
     m_env["startlinkpath"] = QVariant();
-    m_env["nb_walls"] = 1;
     m_env["nb_monitors"] = 1;
 
     vReadXML();
@@ -243,7 +242,7 @@ void Settings::vInit()
     // READ WALLPAPER FILE
     if (!(m_iState & UM_FILE_NOT_FOUND))
     {
-        vReadNbWalls();
+        vReadNbMonitors();
     }
 
 
@@ -264,7 +263,7 @@ void Settings::vInit()
 /*
  * read nb of wallpapers and monitors from .wallpaper file
  */
-void Settings::vReadNbWalls()
+void Settings::vReadNbMonitors()
 {
     QString file = m_env["wallpath"].toString().append(APP_WALLPAPER_FILE);
     std::ifstream ifs(file.toStdString(), std::ios::in | std::ios::binary);
@@ -274,12 +273,6 @@ void Settings::vReadNbWalls()
     int iNbMonitors;
     ifs.read((char*)&iNbMonitors, sizeof(DWORD)); // number of monitors
     m_env["nb_monitors"] = iNbMonitors;
-
-    ifs.ignore(iNbMonitors*sizeof(RECT) + sizeof(WALLPAPER)); // one RECT for each monitor, wallpaper style
-
-    int iNbWallpapers;
-    ifs.read((char*)&iNbWallpapers, sizeof(DWORD)); // number of files
-    m_env["nb_walls"] = iNbWallpapers;
 
     ifs.close();
 }
@@ -337,11 +330,17 @@ void Settings::vReadXML()
                     QString sPath = set_node.text().trimmed();
                     if (bDirectoryExists(sPath))
                     {
-                        oAddSet(
+                        Set* poNewSet = oAddSet(
                             sPath,
                             set_node.attribute("name"),
                             set_node.attribute("active").toInt()
                             );
+
+                        if (set_node.hasAttribute("type"))
+                        {
+                            poNewSet->vSetType(set_node.attribute("type").toInt());
+                            poNewSet->vSetStyle(set_node.attribute("style").toInt());
+                        }
                     }
                 }
 
@@ -388,6 +387,8 @@ void Settings::vWriteXML()
         // set node
         QDomElement set = oDom.createElement("set");
         set.setAttribute("name", poSet->name());
+        set.setAttribute("type", poSet->type());
+        set.setAttribute("style", poSet->style());
         set.setAttribute("active", poSet->isActive());
         setDomNodeValue(&oDom, &set, poSet->path());
 
@@ -497,7 +498,7 @@ void Settings::vDeleteAll()
 /*
  * rename a set
  */
-void Settings::vRenameSet(int _i, QString const &_sName)
+void Settings::vEditSet(int _i, QString const &_sName, const int _iType, const int _iStyle)
 {
     if ( _i < m_oSets.size())
     {
@@ -505,6 +506,8 @@ void Settings::vRenameSet(int _i, QString const &_sName)
 
         Set* poSet = m_oSets.at(_i);
         poSet->vSetName(_sName);
+        poSet->vSetType(_iType);
+        poSet->vSetStyle(_iStyle);
     }
 }
 

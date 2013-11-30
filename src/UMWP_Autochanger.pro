@@ -22,7 +22,8 @@ SOURCES += \
     errorwidget.cpp \
     versionchecker.cpp \
     listproxystyle.cpp \
-    mainwidget.cpp
+    mainwidget.cpp \
+    setedit.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -36,7 +37,8 @@ HEADERS += \
     createshortcut.h \
     versionchecker.h \
     listproxystyle.h \
-    mainwidget.h
+    mainwidget.h \
+    setedit.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc
@@ -49,4 +51,5 @@ OTHER_FILES += \
     UMWP_Autochanger.rc
 
 FORMS += \
-    mainwidget.ui
+    mainwidget.ui \
+    setedit.ui

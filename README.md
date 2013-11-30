@@ -5,7 +5,7 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.2.1  
+Version       : 1.3  
 Release date  : ???  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
@@ -51,7 +51,8 @@ A: Yes. Simply drag & drop them.
 
 
 ## Changelog
-* 1.2.1 (???)
+* 1.3 (???)
+    * new: can choose the type of set ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
     * new: icons for main buttons (add, [de]activate, delete)
     * change: use a cache to speed up startup
     * change: random images are taken from the same (random too) set if more than one is active

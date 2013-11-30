@@ -27,6 +27,8 @@ private:
 
     mt19937         m_oRandom; // mersenne_twister
 
+    int             m_iHeaderSize;
+
 public:
     Controller(Settings* _data);
 
@@ -39,14 +41,14 @@ public:
 
     void vStartTimer(bool _keepPause=false);
     bool bStartPause();
-    void vGenerateFile(QVector<QString> _files);
+    void vGenerateFile(const QString &_sFilename, Set* _poSet, const QVector<QString> &_files);
 
     void vAddSet(QString const _dirname);
     void vDeleteSets(QList<int> const _list);
     void vActivateSets(QList<int> const _list);
     void vUnactivateSets(QList<int> const _list);
     void vSetOneActiveSet(int _idx);
-    void vRenameSet(int _idx, QString const _name);
+    void vEditSet(int _idx, QString const &_sName, int const _iType, int const _iStyle);
     void vMoveSet(int _from, int _to);
 
 public slots:

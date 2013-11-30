@@ -1,4 +1,3 @@
-#include <QInputDialog>
 #include <QFileDialog>
 #include <QMessageBox>
 
@@ -7,6 +6,7 @@
 #include "set.h"
 #include "listdelegate.h"
 #include "listproxystyle.h"
+#include "setedit.h"
 
 
 /*
@@ -175,12 +175,11 @@ void MainWidget::on_m_poList_itemDoubleClicked(QListWidgetItem*)
     int index = oGetSelectedIndexes().at(0);
     Set* poSet = m_poCtrl->settings()->poGetSet(index);
 
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Name"), tr("New name:"), QLineEdit::Normal, poSet->name(), &ok);
+    SetEdit* dialog = new SetEdit(poSet->name(), poSet->type(), poSet->style());
 
-    if (ok && !text.isEmpty())
+    if (dialog->exec())
     {
-        m_poCtrl->vRenameSet(index, text);
+        m_poCtrl->vEditSet(index, dialog->name(), dialog->type(), dialog->style());
     }
 }
 

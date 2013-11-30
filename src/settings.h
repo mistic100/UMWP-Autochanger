@@ -30,7 +30,7 @@ public:
 
     // main methods
     void vInit();
-    void vReadNbWalls();
+    void vReadNbMonitors();
     void vWriteXML();
     void vReadXML();
     void vUpdateSets();
@@ -70,7 +70,7 @@ public:
     void    vDeleteSet(int _i);
     void    vDeleteAll();
 
-    void    vRenameSet(int _i, QString const &_sName);
+    void    vEditSet(int _i, QString const &_sName, int const _iType, int const _iStyle);
     void    vSetState(int _i, bool _a);
 
     void    vMoveSet(int _from, int _to);

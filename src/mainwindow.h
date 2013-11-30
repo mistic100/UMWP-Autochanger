@@ -45,6 +45,7 @@ protected:
     bool winEvent(MSG* message, long*);
 
 public slots:
+    void vInit();
     void vShowMain();
     void vShowError();
 
