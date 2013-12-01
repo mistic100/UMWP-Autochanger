@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[])
 {
-    HANDLE hMutexHandle = CreateMutex( NULL, TRUE, L"com.strangeplanet.umwp_autochanger" );
+    HANDLE hMutexHandle = CreateMutex(NULL, TRUE, L"com.strangeplanet.umwp_autochanger");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
         return 0;
@@ -50,35 +50,35 @@ int main(int argc, char *argv[])
  */
 bool bFileExists(QString const &_sPath, bool _bCheckWrite)
 {
-    DWORD att = GetFileAttributesA(_sPath.toStdString().c_str());
-    if (_bCheckWrite)
-        return att!=INVALID_FILE_ATTRIBUTES && !(att&FILE_ATTRIBUTE_READONLY) && !(att&FILE_ATTRIBUTE_DIRECTORY);
-    else
-        return att!=INVALID_FILE_ATTRIBUTES && !(att&FILE_ATTRIBUTE_DIRECTORY);
+    DWORD dAtt = GetFileAttributesA(_sPath.toStdString().c_str());
+
+    return dAtt!=INVALID_FILE_ATTRIBUTES
+           && !(dAtt&FILE_ATTRIBUTE_DIRECTORY)
+           && (!(dAtt&FILE_ATTRIBUTE_READONLY) || !_bCheckWrite);
 }
 
 /*
  * check if a directory exists
  */
-bool bDirectoryExists(QString const &_sPath)
+bool bDirectoryExists(const QString &_sPath)
 {
-    DWORD att = GetFileAttributesA(_sPath.toStdString().c_str());
-    return att!=INVALID_FILE_ATTRIBUTES && (att&FILE_ATTRIBUTE_DIRECTORY);
+    DWORD dAtt = GetFileAttributesA(_sPath.toStdString().c_str());
+    return dAtt!=INVALID_FILE_ATTRIBUTES && (dAtt&FILE_ATTRIBUTE_DIRECTORY);
 }
 
 /*
  * helpers for simple XML text nodes
  */
-void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, QString const &_value)
+void setDomNodeValue(QDomDocument* _poDoc, QDomNode* _poNode, const QString &_sValue)
 {
-    _pNode->appendChild(_pDoc->createTextNode(_value));
+    _poNode->appendChild(_poDoc->createTextNode(_sValue));
 }
 
-void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _parent, QString const &_name, QString const &_value)
+void addSimpleTextNode(QDomDocument* _poDoc, QDomNode* _poParent, const QString &_sName, const QString &_sValue)
 {
-    QDomElement element = _pDoc->createElement(_name);
-    setDomNodeValue(_pDoc, &element, _value);
-    _parent->appendChild(element);
+    QDomElement element = _poDoc->createElement(_sName);
+    setDomNodeValue(_poDoc, &element, _sValue);
+    _poParent->appendChild(element);
 }
 
 /*

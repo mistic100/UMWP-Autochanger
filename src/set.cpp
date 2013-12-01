@@ -12,8 +12,8 @@ Set::Set(const QString &_path, const QString &_name, const bool _active)
 {
     m_sPath = _path;
     m_sName = _name;
-    m_iType = 1;
-    m_iStyle = 0;
+    m_iType = UM::W_MONITOR;
+    m_iStyle = UM::IM_CENTER;
     m_bActive = _active;
     m_dLastModif = 0;
     m_sUID = QString(QCryptographicHash::hash(m_sPath.toUtf8(), QCryptographicHash::Md5).toHex());
@@ -63,7 +63,9 @@ double Set::dReadLastModif(QString _sChild, int _iLevel)
     FILETIME ftWrite;
     SYSTEMTIME stWrite;
 
-    HANDLE hDir = CreateFile(sPath.toStdWString().c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    HANDLE hDir = CreateFile(sPath.toStdWString().c_str(), GENERIC_READ,FILE_SHARE_READ,
+                             NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+
     if (!GetFileTime( hDir, NULL, NULL, &ftWrite ))
     {
         GetSystemTime(&stWrite);

@@ -62,16 +62,16 @@ public:
     bool bSetExePath(const QString &_sPath);
 
     // sets management
-    Set*    poAddSet(const QString &_sPath);
-    Set*    poAddSet(const QString &_sPath, QString &_sName, bool _bActive);
+    Set* poAddSet(const QString &_sPath);
+    Set* poAddSet(const QString &_sPath, QString &_sName, bool _bActive);
 
-    void    vDeleteSet(int _i);
-    void    vClearSets();
+    void vDeleteSet(int _i);
+    void vClearSets();
 
-    void    vEditSet(int _i, const QString &_sName, const int _iType, const int _iStyle);
-    void    vSetState(int _i, bool _bState);
+    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle);
+    void vSetState(int _i, bool _bState);
 
-    void    vMoveSet(int _from, int _to);
+    void vMoveSet(int _from, int _to);
 
     // shortcut
     const bool bCanAddShortcut();

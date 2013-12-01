@@ -16,12 +16,13 @@
 MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 {
     m_poCtrl = _poCtrl;
-    connect(m_poCtrl, SIGNAL(newVersionAvailable(const QString)), this, SLOT(slotDisplayNewVersion(const QString)));
+    connect(m_poCtrl, SIGNAL(newVersionAvailable(const QString)),
+            this, SLOT(slotDisplayNewVersion(const QString)));
     connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(vUpdateTrayQuickMenu()));
 
 
     // WINDOW PROPERTIES
-    setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint); // disable maximise button
+    setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
     setWindowTitle(APP_NAME);
     setWindowIcon(QPixmap(":/img/icon"));
 
@@ -29,10 +30,11 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
     // STATUS BAR
     m_poStatusBar = new QStatusBar(this);
 
-    QString sCopyright = "<a href='"+QString::fromAscii(APP_HOMEPAGE)+"'>"+QString::fromAscii(APP_NAME)+"</a>";
-    sCopyright+= " "+QString::fromAscii(APP_VERSION);
+    QString sCopyright = "<a href='" + QString::fromAscii(APP_HOMEPAGE) + "'>";
+    sCopyright+= QString::fromAscii(APP_NAME) + "</a>";
+    sCopyright+= " " + QString::fromAscii(APP_VERSION);
     sCopyright+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a>";
-    sCopyright+= " "+m_poCtrl->settings()->sEnv("umversion");
+    sCopyright+= " " + m_poCtrl->settings()->sEnv("umversion");
 
     QLabel* poStatusLabel = new QLabel(sCopyright);
     poStatusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -131,7 +133,8 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
     // TRAY ICON
     m_poTrayIcon = new QSystemTrayIcon(QIcon(":/img/icon"), this);
 
-    connect(m_poTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(slotTrayAction(QSystemTrayIcon::ActivationReason)));
+    connect(m_poTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(slotTrayAction(QSystemTrayIcon::ActivationReason)));
 
     QMenu* poTrayMenu = new QMenu();
     m_poActionPause2 =           poTrayMenu->addAction(QIcon(":/icon/playpause"), tr("Pause"));
@@ -377,7 +380,7 @@ void MainWindow::slotShowHelp()
         oFile.setFileName(":/lang/help_en");
     }
 
-    QString sMainText = "<h3>"+QString::fromAscii(APP_NAME)+" "+QString::fromAscii(APP_VERSION)+"</h3>";
+    QString sMainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
 
     oFile.open(QIODevice::ReadOnly);
     QTextStream content(&oFile);
@@ -418,7 +421,7 @@ void MainWindow::slotOptionToggled(bool _c)
     {
         if (!_c)
         {
-            int iRet = QMessageBox::warning(this, tr("Warning"), tr("If you disable files check you may obtain<br>a black wallpaper if you manually edit your sets."),
+            int iRet = QMessageBox::warning(this, tr("Warning"),tr("If you disable files check you may obtain<br>a black wallpaper if you manually edit your sets."),
                                            QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Ok);
 
             if (iRet == QMessageBox::Cancel)
@@ -479,8 +482,9 @@ void MainWindow::slotDisplayNewVersion(const QString &_sVersion)
     {
         QMessageBox oDialog(this);
         oDialog.setWindowTitle(tr("New version"));
-        oDialog.setText("<b>"+tr("A new version is available : %1.").arg(_sVersion)+"</b>");
-        oDialog.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.").arg(APP_HOMEPAGE));
+        oDialog.setText("<b>" + tr("A new version is available : %1.").arg(_sVersion) + "</b>");
+        oDialog.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.")
+                                   .arg(APP_HOMEPAGE));
         oDialog.setStandardButtons(QMessageBox::Close);
         oDialog.exec();
     }
@@ -510,6 +514,23 @@ void MainWindow::slotQuit()
     m_poCtrl->settings()->vWriteXML();
 
     qApp->quit();
+}
+
+/**
+ * @brief Resize the window when showed
+ */
+void MainWindow::showEvent(QShowEvent*)
+{
+    resize(m_poCtrl->settings()->oWindowSize());
+}
+
+/**
+ * @brief Save the window size
+ * @param QResizeEvent* _event
+ */
+void MainWindow::resizeEvent(QResizeEvent* _event)
+{
+    m_poCtrl->settings()->vSetWindowSize(_event->size());
 }
 
 /**

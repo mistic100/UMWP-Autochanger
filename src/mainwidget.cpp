@@ -29,7 +29,8 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     ui->m_poList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->m_poList->setDragDropMode(QAbstractItemView::InternalMove);
     ui->m_poList->setStyle(new ListProxyStyle);
-    connect(ui->m_poList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(slotMoveItem(QModelIndex,int,int,QModelIndex,int)));
+    connect(ui->m_poList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+            this, SLOT(slotMoveItem(QModelIndex,int,int,QModelIndex,int)));
 
     // spin box
     ui->m_poInputDelay->setValue(m_poCtrl->settings()->iParam("delay"));

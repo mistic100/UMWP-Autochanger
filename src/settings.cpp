@@ -212,7 +212,7 @@ void Settings::vInit()
         if (iResult == S_OK)
         {
             QString sWallPath = QString::fromWCharArray(sPath3);
-            sWallPath.append("\\Realtime Soft\\UltraMon\\"+m_env["umversion"].toString()+"\\Wallpapers\\");
+            sWallPath.append("\\Realtime Soft\\UltraMon\\" + m_env["umversion"].toString() + "\\Wallpapers\\");
             m_env["wallpath"] = sWallPath;
         }
 
@@ -258,7 +258,7 @@ void Settings::vInit()
  */
 void Settings::vReadNbMonitors()
 {
-    QString sFilename = m_env["wallpath"].toString().append("default.wallpaper");
+    QString sFilename = m_env["wallpath"].toString() + "default.wallpaper";
     std::ifstream ifs(sFilename.toStdString(), std::ios::in | std::ios::binary);
 
     ifs.ignore(7); // "UMWP",  version, activedesktop
@@ -331,8 +331,10 @@ void Settings::vReadXML()
 
                         if (set_node.hasAttribute("type"))
                         {
-                            poNewSet->vSetType(set_node.attribute("type").toInt());
-                            poNewSet->vSetStyle(set_node.attribute("style").toInt());
+                            UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(set_node.attribute("type").toInt());
+                            UM::IMAGE im_style = static_cast<UM::IMAGE>(set_node.attribute("style").toInt());
+                            poNewSet->vSetType(wp_type);
+                            poNewSet->vSetStyle(im_style);
                         }
                     }
                 }
@@ -505,7 +507,7 @@ void Settings::vClearSets()
  * @param int _iType
  * @param int _iStyle
  */
-void Settings::vEditSet(int _i, const QString &_sName, const int _iType, const int _iStyle)
+void Settings::vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle)
 {
     if ( _i < m_oSets.size())
     {

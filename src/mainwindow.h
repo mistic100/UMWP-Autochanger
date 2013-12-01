@@ -42,8 +42,8 @@ public:
     void vShowError();
 
 protected:
-    void showEvent(QShowEvent*)            { resize(m_poCtrl->settings()->oWindowSize()); }
-    void resizeEvent(QResizeEvent* _event) { m_poCtrl->settings()->vSetWindowSize(_event->size()); }
+    void showEvent(QShowEvent*);
+    void resizeEvent(QResizeEvent* _event);
     void closeEvent(QCloseEvent* _event);
     bool winEvent(MSG* message, long*);
 

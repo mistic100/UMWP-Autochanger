@@ -34,7 +34,8 @@ void Controller::vCheckVersion()
     if (m_poSettings->bParam("check_updates"))
     {
         VersionChecker* poVersionChecker = new VersionChecker(0);
-        connect(poVersionChecker, SIGNAL(newVersionAvailable(const QString)), this, SIGNAL(newVersionAvailable(const QString)));
+        connect(poVersionChecker, SIGNAL(newVersionAvailable(const QString)),
+                this, SIGNAL(newVersionAvailable(const QString)));
 
         QThread* poVCThread = new QThread(this);
         poVersionChecker->moveToThread(poVCThread);
@@ -159,7 +160,7 @@ void Controller::vSetOneActiveSet(int _i)
  * @param int _iType
  * @param int _iStyle
  */
-void Controller::vEditSet(int _i, QString const &_sName, const int _iType, const int _iStyle)
+void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle)
 {
     m_poSettings->vEditSet(_i, _sName, _iType, _iStyle);
     emit listChanged(false);
@@ -215,7 +216,7 @@ void Controller::slotUpdate(bool _bCheckFiles)
         vGetRandomFile(poSet, asFiles);
     }
 
-    QString sFilename = m_poSettings->sEnv("wallpath")+QString::fromAscii(APP_WALLPAPER_FILE);
+    QString sFilename = m_poSettings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
     vGenerateFile(sFilename, poSet, asFiles);
@@ -227,7 +228,7 @@ void Controller::slotUpdate(bool _bCheckFiles)
     }
 
     // execute UltraMonDesktop
-    QString cmd = "\""+m_poSettings->sParam("umpath")+"\" /load \""+sFilename+"\"";
+    QString cmd = "\"" + m_poSettings->sParam("umpath") + "\" /load \"" + sFilename + "\"";
     QProcess::execute(cmd);
 }
 
@@ -302,7 +303,7 @@ void Controller::vGetRandomFile(Set* _poSet, QVector<QString> &_asFiles)
 void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet, const QVector<QString> &_asFiles)
 {
     // open default file
-    QString sDefaultFilename = m_poSettings->sEnv("wallpath")+"default.wallpaper";
+    QString sDefaultFilename = m_poSettings->sEnv("wallpath") + "default.wallpaper";
     QFile oDefaultFile(sDefaultFilename);
     oDefaultFile.open(QIODevice::ReadOnly);
 
@@ -312,27 +313,25 @@ void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet, con
     aBuffer.truncate(m_iHeaderSize);
 
     // write wallpaper type
-    WALLPAPER wp_type = static_cast<WALLPAPER>(_poSet->type());
-    aBuffer.append((char*)&wp_type, sizeof(WALLPAPER));
+    UM::WALLPAPER wp_type = _poSet->type();
+    aBuffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
 
     // write number of wallpapers
     DWORD nb_walls = _asFiles.size();
     aBuffer.append((char*)&nb_walls, sizeof(DWORD));
 
-    IMAGE image_style = static_cast<IMAGE>(_poSet->style());
-
     // write wallpapers
     for (unsigned int i=0; i<nb_walls; i++)
     {
-        WP_MONITOR_FILE wall;
-        wall.bgType = BG_SOLID;
+        UM::WP_MONITOR_FILE wall;
+        wall.bgType = UM::BG_SOLID;
         wall.color1 = 0x00000000;
         wall.color2 = 0x00000000;
-        wall.imgStyle = image_style;
+        wall.imgStyle = _poSet->style();
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
         _asFiles.at(i).toWCharArray((wchar_t*)wall.imgFile);
 
-        aBuffer.append((char*)&wall, sizeof(WP_MONITOR_FILE));
+        aBuffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
     }
 
     // save file

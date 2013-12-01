@@ -26,8 +26,8 @@ public:
     ~SetEdit();
 
     const QString name() const;
-    const int type() const;
-    const int style() const;
+    const UM::WALLPAPER type() const;
+    const UM::IMAGE style() const;
 };
 
 #endif // SETEDIT_H

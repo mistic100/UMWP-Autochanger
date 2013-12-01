@@ -66,12 +66,12 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
     else if (iState & UM_FILE_NOT_FOUND)
     {
         sDescription = tr("<b>default.wallpaper</b> fil not found, impossible to continue.<br><br>Sould be at: %1")
-                        .arg("<i>"+m_poCtrl->settings()->sEnv("wallpath")+"</i>");
+                        .arg("<i>" + m_poCtrl->settings()->sEnv("wallpath") + "</i>");
     }
     else if (iState & UM_BAD_VERSION)
     {
         sDescription = tr("%1 is incompatible with the current version of UltraMon (%2)")
-                        .arg(QString::fromAscii(APP_NAME)+" "+QString::fromAscii(APP_VERSION))
+                        .arg(QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION))
                         .arg(m_poCtrl->settings()->sEnv("umversion"));
     }
 
@@ -85,7 +85,8 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
  */
 void ErrorWidget::slotBrowse()
 {
-    QString sFilename = QFileDialog::getOpenFileName(this, tr("Locate UltraMonDesktop"), QDir::rootPath(), "UltraMonDesktop (UltraMonDesktop.exe)");
+    QString sFilename = QFileDialog::getOpenFileName(this, tr("Locate UltraMonDesktop"),
+                                                     QDir::rootPath(), "UltraMonDesktop (UltraMonDesktop.exe)");
 
     if (!sFilename.isEmpty())
     {

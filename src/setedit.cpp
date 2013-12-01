@@ -50,18 +50,18 @@ const QString SetEdit::name() const
  * @brief SetEdit::type
  * @return int
  */
-const int SetEdit::type() const
+const UM::WALLPAPER SetEdit::type() const
 {
     int iIndex = ui->m_poTypeSelect->currentIndex();
-    return ui->m_poTypeSelect->itemData(iIndex).toInt();
+    return static_cast<UM::WALLPAPER>(ui->m_poTypeSelect->itemData(iIndex).toInt());
 }
 
 /**
  * @brief SetEdit::style
  * @return int
  */
-const int SetEdit::style() const
+const UM::IMAGE SetEdit::style() const
 {
     int iIndex = ui->m_poStyleSelect->currentIndex();
-    return ui->m_poStyleSelect->itemData(iIndex).toInt();
+    return static_cast<UM::IMAGE>(ui->m_poStyleSelect->itemData(iIndex).toInt());
 }
