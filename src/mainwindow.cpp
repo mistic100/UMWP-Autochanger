@@ -474,15 +474,22 @@ void MainWindow::slotDelayChanged(int _iVal)
  */
 void MainWindow::slotDisplayNewVersion(const QString &_sVersion)
 {
+    // message in status bar
+    QLabel* poVersionLabel = new QLabel(tr("A new version is available : %1").arg(_sVersion));
+    poVersionLabel->setStyleSheet("QLabel { color : red; }");
+    m_poStatusBar->insertPermanentWidget(0, poVersionLabel);
+
     if (!isVisible())
     {
-        m_poTrayIcon->showMessage(APP_NAME, tr("A new version is available : %1.").arg(_sVersion));
+        // tray tootlip
+        m_poTrayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(_sVersion));
     }
     else
     {
+        // popup alert
         QMessageBox oDialog(this);
         oDialog.setWindowTitle(tr("New version"));
-        oDialog.setText("<b>" + tr("A new version is available : %1.").arg(_sVersion) + "</b>");
+        oDialog.setText("<b>" + tr("A new version is available : %1").arg(_sVersion) + "</b>");
         oDialog.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.")
                                    .arg(APP_HOMEPAGE));
         oDialog.setStandardButtons(QMessageBox::Close);

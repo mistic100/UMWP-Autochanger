@@ -186,8 +186,8 @@
     <message>
         <location filename="../mainwindow.cpp" line="461"/>
         <location filename="../mainwindow.cpp" line="467"/>
-        <source>A new version is available : %1.</source>
-        <translation>Une nouvelle version est disponible : %1.</translation>
+        <source>A new version is available : %1</source>
+        <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="466"/>
