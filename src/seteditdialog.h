@@ -1,5 +1,5 @@
-#ifndef SETEDIT_H
-#define SETEDIT_H
+#ifndef SETEDITDIALOG_H
+#define SETEDITDIALOG_H
 
 #include <QDialog>
 
@@ -7,27 +7,27 @@
 #include "set.h"
 
 namespace Ui {
-    class SetEdit;
+    class SetEditDialog;
 }
 
 
 /**
  * @brief Dialog for Set edition
  */
-class SetEdit : public QDialog
+class SetEditDialog : public QDialog
 {
     Q_OBJECT
 
 private:
-    Ui::SetEdit *ui;
+    Ui::SetEditDialog *ui;
 
 public:
-    SetEdit(QWidget* _parent, Set* _poSet);
-    ~SetEdit();
+    SetEditDialog(QWidget* _parent, Set* _poSet);
+    ~SetEditDialog();
 
     const QString name() const;
     const UM::WALLPAPER type() const;
     const UM::IMAGE style() const;
 };
 
-#endif // SETEDIT_H
+#endif // SETEDITDIALOG_H

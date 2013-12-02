@@ -7,6 +7,7 @@
 #include "mainwindow.h"
 #include "errorwidget.h"
 #include "mainwidget.h"
+#include "configdialog.h"
 
 
 /**
@@ -51,81 +52,15 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
     m_poActionPause1 =       m_poMenuBar->addAction(tr("Pause"));
     m_poActionHide1 =        m_poMenuBar->addAction(tr("Hide"));
                             m_poMenuBar->addSeparator();
-    m_poOptionsMenu =        m_poMenuBar->addMenu(tr("Options"));
+    m_poActionOptions =      m_poMenuBar->addAction(tr("Options"));
                             m_poMenuBar->addSeparator();
     QAction* poActionHelp =  m_poMenuBar->addAction(tr("?"));
 
     connect(poActionQuit1,      SIGNAL(triggered()), this, SLOT(slotQuit()));
     connect(m_poActionHide1,    SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
     connect(m_poActionPause1,   SIGNAL(triggered()), this, SLOT(slotStartPause()));
+    connect(m_poActionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
     connect(poActionHelp,       SIGNAL(triggered()), this, SLOT(slotShowHelp()));
-
-
-    QAction* poOptionMinimize =     m_poOptionsMenu->addAction(tr("Minimize on startup"));
-    QAction* poOptionCheckFiles =   m_poOptionsMenu->addAction(tr("Check files periodically"));
-    QAction* poOptionCheckUpdates = m_poOptionsMenu->addAction(tr("Check updates"));
-    QAction* poOptionAutostart =    m_poOptionsMenu->addAction(tr("Start with Windows"));
-    QMenu* poHotkeysMenu =          m_poOptionsMenu->addMenu(tr("Hotkeys"));
-
-    QIcon icon_alt = QIcon(":/icon/key_alt");
-    icon_alt.addPixmap(QPixmap(":/icon/key_/alt_on"), QIcon::Normal, QIcon::On);
-    QIcon icon_ctrl = QIcon(":/icon/key_ctrl");
-    icon_ctrl.addPixmap(QPixmap(":/icon/key_ctrl_on"), QIcon::Normal, QIcon::On);
-    QIcon icon_shift = QIcon(":/icon/key_shift");
-    icon_shift.addPixmap(QPixmap(":/icon/key_shift_on"), QIcon::Normal, QIcon::On);
-    QIcon icon_win = QIcon(":/icon/key_win");
-    icon_win.addPixmap(QPixmap(":/icon/key_win_on"), QIcon::Normal, QIcon::On);
-
-    QAction* poHotkeysAlt =   poHotkeysMenu->addAction(icon_alt, tr("Alt"));
-    QAction* poHotkeysCtrl =  poHotkeysMenu->addAction(icon_ctrl, tr("Ctrl"));
-    QAction* poHotkeysShift = poHotkeysMenu->addAction(icon_shift, tr("Shift"));
-    QAction* poHotkeysWin =   poHotkeysMenu->addAction(icon_win, tr("Win"));
-
-    poOptionMinimize->setCheckable(true);
-    poOptionCheckFiles->setCheckable(true);
-    poOptionCheckUpdates->setCheckable(true);
-    poOptionAutostart->setCheckable(true);
-
-    poHotkeysAlt->setCheckable(true);
-    poHotkeysCtrl->setCheckable(true);
-    poHotkeysShift->setCheckable(true);
-    poHotkeysWin->setCheckable(true);
-
-    poOptionMinimize->setChecked(m_poCtrl->settings()->bParam("minimize"));
-    poOptionCheckFiles->setChecked(m_poCtrl->settings()->bParam("check"));
-    poOptionCheckUpdates->setChecked(m_poCtrl->settings()->bParam("check_updates"));
-    poOptionAutostart->setChecked(m_poCtrl->settings()->bIsAutostart());
-
-    int iHotkey = m_poCtrl->settings()->iParam("hotkey");
-    poHotkeysAlt->setChecked(iHotkey & MOD_ALT);
-    poHotkeysCtrl->setChecked(iHotkey & MOD_CONTROL);
-    poHotkeysShift->setChecked(iHotkey & MOD_SHIFT);
-    poHotkeysWin->setChecked(iHotkey & MOD_WIN);
-
-    poOptionMinimize->setProperty("name", "minimize");
-    poOptionCheckFiles->setProperty("name", "check");
-    poOptionCheckUpdates->setProperty("name", "check_updates");
-    poOptionAutostart->setProperty("name", "autostart");
-
-    poHotkeysAlt->setProperty("key", MOD_ALT);
-    poHotkeysCtrl->setProperty("key", MOD_CONTROL);
-    poHotkeysShift->setProperty("key", MOD_SHIFT);
-    poHotkeysWin->setProperty("key", MOD_WIN);
-
-    connect(poOptionMinimize,     SIGNAL(toggled(bool)), this, SLOT(slotOptionToggled(bool)));
-    connect(poOptionCheckFiles,   SIGNAL(toggled(bool)), this, SLOT(slotOptionToggled(bool)));
-    connect(poOptionCheckUpdates, SIGNAL(toggled(bool)), this, SLOT(slotOptionToggled(bool)));
-    connect(poOptionAutostart,    SIGNAL(toggled(bool)), this, SLOT(slotOptionToggled(bool)));
-
-    connect(poHotkeysAlt,   SIGNAL(toggled(bool)), this, SLOT(slotHotkeyToggled(bool)));
-    connect(poHotkeysCtrl,  SIGNAL(toggled(bool)), this, SLOT(slotHotkeyToggled(bool)));
-    connect(poHotkeysShift, SIGNAL(toggled(bool)), this, SLOT(slotHotkeyToggled(bool)));
-    connect(poHotkeysWin,   SIGNAL(toggled(bool)), this, SLOT(slotHotkeyToggled(bool)));
-
-    if (!(m_poCtrl->settings()->bCanAddShortcut()))
-    {
-        poOptionAutostart->setVisible(false);
-    }
 
     setMenuBar(m_poMenuBar);
 
@@ -182,7 +117,7 @@ void MainWindow::vShowError()
     m_poTrayIcon->hide();
     m_poActionHide1->setVisible(false);
     m_poActionPause1->setVisible(false);
-    m_poOptionsMenu->menuAction()->setVisible(false);
+    m_poActionOptions->setVisible(false);
 
     ErrorWidget* widget = new ErrorWidget(this, m_poCtrl);
     connect(widget, SIGNAL(pathSaved()), this, SLOT(vInit()));
@@ -202,12 +137,12 @@ void MainWindow::vShowMain()
     m_poTrayIcon->show();
     m_poActionHide1->setVisible(true);
     m_poActionPause1->setVisible(true);
-    m_poOptionsMenu->menuAction()->setVisible(true);
+    m_poActionOptions->setVisible(true);
 
     MainWidget* widget = new MainWidget(this, m_poCtrl);
 
     setCentralWidget(widget);
-    setMinimumSize(450, 262);
+    setMinimumSize(400, 240);
     setMaximumSize(9999, 9999); // no maximum size
     resize(m_poCtrl->settings()->oWindowSize());
 
@@ -365,6 +300,27 @@ void MainWindow::slotStartPause()
 }
 
 /**
+ * @brief Open configuration dialog
+ */
+void MainWindow::slotConfigDialog()
+{
+    ConfigDialog oDialog(this, m_poCtrl->settings());
+
+    if (oDialog.exec())
+    {
+        oDialog.vSave();
+        if (oDialog.bDelayChanged())
+        {
+            m_poCtrl->slotUpdate();
+        }
+        if (oDialog.bHotkeysChanged())
+        {
+            vUpdateHotkeys();
+        }
+    }
+}
+
+/**
  * @brief Open help dialog
  */
 void MainWindow::slotShowHelp()
@@ -394,79 +350,6 @@ void MainWindow::slotShowHelp()
     oDialog.setWindowTitle(tr("About %1").arg(APP_NAME));
     oDialog.exec();
 }
-
-/**
- * @brief Update configuration when option is changed
- * @param bool _c
- */
-void MainWindow::slotOptionToggled(bool _c)
-{
-    QAction* poAction = (QAction*)(QObject::sender());
-    QString sOptionName = poAction->property("name").toString();
-
-    if (sOptionName == "autostart")
-    {
-        if (_c)
-        {
-            m_poCtrl->settings()->vCreateShortcut();
-        }
-        else
-        {
-            m_poCtrl->settings()->vDeleteShortcut();
-        }
-
-        return;
-    }
-    else if (sOptionName == "check")
-    {
-        if (!_c)
-        {
-            int iRet = QMessageBox::warning(this, tr("Warning"),tr("If you disable files check you may obtain<br>a black wallpaper if you manually edit your sets."),
-                                           QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Ok);
-
-            if (iRet == QMessageBox::Cancel)
-            {
-                poAction->setChecked(true);
-                return;
-            }
-        }
-    }
-
-    m_poCtrl->settings()->vSetParam(sOptionName, _c);
-}
-
-/**
- * @brief Update configuration when hotkeys are changed
- * @param bool _c
- */
-void MainWindow::slotHotkeyToggled(bool _c)
-{
-    QAction* poAction = (QAction*)(QObject::sender());
-    int iModifier = poAction->property("key").toInt();
-    int iHotkey = m_poCtrl->settings()->iParam("hotkey");
-
-    if (_c)
-    {
-        iHotkey |= iModifier;
-    }
-    else
-    {
-        iHotkey &= ~iModifier;
-    }
-
-    m_poCtrl->settings()->vSetParam("hotkey", iHotkey);
-    vUpdateHotkeys();
-}
-
-/**
- * @brief Update configuration when delay is changed
- * @param int _iVal
- */
-void MainWindow::slotDelayChanged(int _iVal)
-{
-    m_poCtrl->settings()->vSetParam("delay", _iVal);
-}
-
 
 /**
  * @brief Display a message when a new version is available

@@ -54,6 +54,7 @@ A: Yes. Simply drag & drop them.
 * 1.3 (???)
     * new: can choose the type of wallpaper ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
     * new: icons for main buttons (add, [de]activate, delete)
+    * change: dedicated configuration dialog
     * change: use a cache to speed up startup
     * change: random images are taken from the same (random too) set if more than one is active
     * fixed: refresh issue of the list when deleting sets

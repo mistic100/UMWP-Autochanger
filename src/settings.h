@@ -35,8 +35,8 @@ public:
     void vUpdateSets();
 
     // getters
-    const short     &iState() const     { return m_iState; }
-    const bool      &bIsUnsaved() const { return m_bUnsaved; }
+    const short     iState() const     { return m_iState; }
+    const bool      bIsUnsaved() const { return m_bUnsaved; }
 
     const QString   sParam(const QString &_key) const;
     const bool      bParam(const QString &_key) const;

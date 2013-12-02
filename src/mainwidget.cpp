@@ -6,7 +6,7 @@
 #include "set.h"
 #include "listdelegate.h"
 #include "listproxystyle.h"
-#include "setedit.h"
+#include "seteditdialog.h"
 
 
 /**
@@ -31,10 +31,6 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     ui->m_poList->setStyle(new ListProxyStyle);
     connect(ui->m_poList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotMoveItem(QModelIndex,int,int,QModelIndex,int)));
-
-    // spin box
-    ui->m_poInputDelay->setValue(m_poCtrl->settings()->iParam("delay"));
-    connect(ui->m_poInputDelay, SIGNAL(valueChanged(int)), _parent, SLOT(slotDelayChanged(int)));
 
     // save button
     connect(ui->m_poButtonSave, SIGNAL(clicked()), _parent, SLOT(slotApply()));
@@ -155,7 +151,7 @@ void MainWidget::on_m_poList_itemDoubleClicked(QListWidgetItem*)
     int iIndex = aiGetSelectedIndexes().at(0);
     Set* poSet = m_poCtrl->settings()->poGetSet(iIndex);
 
-    SetEdit oDialog(this, poSet);
+    SetEditDialog oDialog(this, poSet);
 
     if (oDialog.exec())
     {

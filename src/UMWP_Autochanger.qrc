@@ -10,14 +10,6 @@
         <file alias="hide">images/icons/hide.png</file>
         <file alias="refresh">images/icons/refresh.png</file>
         <file alias="quick">images/icons/quick.png</file>
-        <file alias="key_alt">images/icons/key_alt.png</file>
-        <file alias="key_ctrl">images/icons/key_ctrl.png</file>
-        <file alias="key_shift">images/icons/key_shift.png</file>
-        <file alias="key_win">images/icons/key_win.png</file>
-        <file alias="key_alt_on">images/icons/key_alt_on.png</file>
-        <file alias="key_ctrl_on">images/icons/key_ctrl_on.png</file>
-        <file alias="key_shift_on">images/icons/key_shift_on.png</file>
-        <file alias="key_win_on">images/icons/key_win_on.png</file>
         <file alias="im_center">images/icons/im_center.png</file>
         <file alias="im_stretch">images/icons/im_stretch.png</file>
         <file alias="im_stretch_prop">images/icons/im_stretch_prop.png</file>
@@ -31,6 +23,12 @@
         <file alias="deactivate">images/buttons/button_deactivate.png</file>
         <file alias="delete">images/buttons/button_delete.png</file>
         <file alias="save">images/buttons/button_save.png</file>
+    </qresource>
+    <qresource prefix="/key">
+        <file alias="alt">images/keys/alt.png</file>
+        <file alias="ctrl">images/keys/ctrl.png</file>
+        <file alias="shift">images/keys/shift.png</file>
+        <file alias="win">images/keys/win.png</file>
     </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>

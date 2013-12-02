@@ -24,10 +24,10 @@ public:
 
     const QString       &path() const { return m_sPath; }
     const QString       &name() const { return m_sName; }
-    const UM::WALLPAPER &type() const  { return m_iType; }
-    const UM::IMAGE     &style() const { return m_iStyle; }
+    const UM::WALLPAPER type() const  { return m_iType; }
+    const UM::IMAGE     style() const { return m_iStyle; }
     const int           count() const { return m_vFiles.size(); }
-    const bool          &isActive() const { return m_bActive; }
+    const bool          isActive() const { return m_bActive; }
 
     void    vSetActive(const bool _a)           { m_bActive=_a; }
     void    vSetName(const QString &_name)      { m_sName=_name; }

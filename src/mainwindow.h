@@ -24,10 +24,10 @@ private:
     QSystemTrayIcon*    m_poTrayIcon;
     QStatusBar*         m_poStatusBar;
     QMenuBar*           m_poMenuBar;
-    QMenu*              m_poOptionsMenu;
     QMenu*              m_poTrayQuickMenu;
 
     // reference to some QAction modified after initilization
+    QAction*            m_poActionOptions;
     QAction*            m_poActionHide1; // menu
     QAction*            m_poActionHide2; // tray
     QAction*            m_poActionPause1; // menu
@@ -55,11 +55,8 @@ public slots:
     void slotQuit();
     void slotApply();
     void slotStartPause();
+    void slotConfigDialog();
     void slotShowHelp();
-
-    void slotOptionToggled(bool _c);
-    void slotHotkeyToggled(bool _c);
-    void slotDelayChanged(int _iVal);
 
     void slotTrayAction(QSystemTrayIcon::ActivationReason _reason);
     void slotTrayQuickClicked();
