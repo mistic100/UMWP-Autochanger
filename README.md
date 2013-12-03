@@ -6,7 +6,7 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
 Version       : 1.3  
-Release date  : ???  
+Release date  : 03/12/2013  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -16,17 +16,25 @@ License       : GNU General Public License Version 3
 * UltraMon 3.2.1 or higher
 * Windows 7/8 32/64 bits
 
+
 ## Installation
 1. Install and configure UltraMon on your computer.
 
-2. Go to the wallpaper configuration of UltraMon, and configure the "default" wallpaper as you wish (you don't need to define an image file).
+2. Go to the wallpaper configuration of UltraMon and ensure that the profile "default" exists, if not, create it. You don't need to configure anything else on this screen.
 
 3. Launch "UMWP Autochanger.exe".
-    * Depending on your configuration, you might be asked to locate  "UltraMonDesktop.exe".
+    * Depending on your configuration, you might be asked to locate "UltraMonDesktop.exe".
 
-4. Click on "Add" to add a new set. A set is basically a directory containing  JPEG/PNG/BMP files. UMWP Autochanger will browse this directory recursively up to 3 levels searching for image files.
+4. Click on the plus button to add a new set. A set is basically a directory containing JPEG/PNG/BMP files. UMWP Autochanger will browse this directory recursively up to 3 levels searching for image files.
 
-5. Once you have added you sets, click on "Apply", the wallpaper will randomly change every 60 seconds (default delay).
+5. Once you have added your sets, click on the disk button, the wallpaper will randomly change every 60 seconds (default delay).
+
+
+## Configuration
+* Double-click on a set to edit it. You can change its name, its style (one image for each monitor or one image for the whole desktop) and the transformation style for images (center, tile or stretch).
+
+* On the "Options" dialog you can choose the delay, change the behavior of the tool and configure the hotkeys.  
+Hotkeys are a way to change the current set without opppening the application window : in default configuration, press Ctrl+Shift+1 for the first set, and up to Ctrl+Shift+9 for the ninth set.
 
 
 ## Troubleshouting
@@ -51,7 +59,7 @@ A: Yes. Simply drag & drop them.
 
 
 ## Changelog
-* 1.3 (???)
+* [1.3 (03/12/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.3)
     * new: can choose the type of wallpaper ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
     * new: icons for main buttons (add, [de]activate, delete)
     * change: dedicated configuration dialog
