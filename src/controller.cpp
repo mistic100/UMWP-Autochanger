@@ -140,6 +140,20 @@ void Controller::vUnactivateSets(const QList<int> _ai)
 }
 
 /**
+ * @brief Activate only some sets
+ * @param int[] _ai
+ */
+void Controller::vSetActiveSets(const QList<int> _ai)
+{
+    for (int i=0, l=m_poSettings->iNbSets(); i<l; i++)
+    {
+        m_poSettings->vSetState(i, _ai.contains(i));
+    }
+
+    emit listChanged(false);
+}
+
+/**
  * @brief Activate only one set and unactive any other sets
  * @param int _i
  */
@@ -160,9 +174,9 @@ void Controller::vSetOneActiveSet(int _i)
  * @param int _iType
  * @param int _iStyle
  */
-void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle)
+void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const Hotkey _oHotkey)
 {
-    m_poSettings->vEditSet(_i, _sName, _iType, _iStyle);
+    m_poSettings->vEditSet(_i, _sName, _iType, _iStyle, _oHotkey);
     emit listChanged(false);
 }
 
@@ -202,24 +216,24 @@ void Controller::slotUpdate(bool _bCheckFiles)
     // get random files
     Set* poSet = poGetRandomSet(iTotalSets);
 
-    QVector<QString> asFiles;
+    m_asFiles.clear();
 
     if (poSet->type() == 1)
     {
         for (int i=0, l=m_poSettings->iEnv("nb_monitors"); i<l; i++)
         {
-            vGetRandomFile(poSet, asFiles);
+            m_asFiles.push_back(sGetRandomFile(poSet));
         }
     }
     else
     {
-        vGetRandomFile(poSet, asFiles);
+        m_asFiles.push_back(sGetRandomFile(poSet));
     }
 
     QString sFilename = m_poSettings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
-    vGenerateFile(sFilename, poSet, asFiles);
+    vGenerateFile(sFilename, poSet);
 
     // remove old BMP file
     if (bFileExists(m_poSettings->sEnv("bmppath")))
@@ -253,24 +267,24 @@ Set* Controller::poGetRandomSet(int _iTotal)
 /**
  * @brief Get a random file within a Set
  * @param Set* _poSet
- * @param string[] &_asFiles - new file added at the end of the vector
+ * @return string
  */
-void Controller::vGetRandomFile(Set* _poSet, QVector<QString> &_asFiles)
+QString Controller::sGetRandomFile(Set* _poSet)
 {
     int iTotal = _poSet->count();
 
     // only one file in the set ?!
     if (iTotal == 1)
     {
-        _asFiles.push_back(_poSet->sGetFile(0));
+        return _poSet->sGetFile(0);
     }
 
     // rare case for small sets
-    if (iTotal <= _asFiles.size())
+    if (iTotal <= m_asFiles.size())
     {
-        uniform_int<int> unif(0, _asFiles.size()-1);
+        uniform_int<int> unif(0, m_asFiles.size()-1);
         int iCounter = unif(m_oRandom);
-        _asFiles.push_back(_asFiles.at(iCounter));
+        return m_asFiles.at(iCounter);
     }
 
     // search a random unused file
@@ -283,7 +297,7 @@ void Controller::vGetRandomFile(Set* _poSet, QVector<QString> &_asFiles)
         int iCounter = unif(m_oRandom);
         sFile = _poSet->sGetFile(iCounter);
 
-        if (!_asFiles.contains(sFile))
+        if (!m_asFiles.contains(sFile))
         {
             iLoop = 0;
         }
@@ -291,16 +305,15 @@ void Controller::vGetRandomFile(Set* _poSet, QVector<QString> &_asFiles)
         iLoop--;
     }
 
-    _asFiles.push_back(sFile);
+    return sFile;
 }
 
 /**
  * @brief Generate AutoChanger.wallpaper file
  * @param string _sFilename
  * @param Set* _poSet
- * @param string[] _asFiles
  */
-void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet, const QVector<QString> &_asFiles)
+void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet)
 {
     // open default file
     QString sDefaultFilename = m_poSettings->sEnv("wallpath") + "default.wallpaper";
@@ -317,7 +330,7 @@ void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet, con
     aBuffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
 
     // write number of wallpapers
-    DWORD nb_walls = _asFiles.size();
+    DWORD nb_walls = m_asFiles.size();
     aBuffer.append((char*)&nb_walls, sizeof(DWORD));
 
     // write wallpapers
@@ -329,7 +342,7 @@ void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet, con
         wall.color2 = 0x00000000;
         wall.imgStyle = _poSet->style();
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
-        _asFiles.at(i).toWCharArray((wchar_t*)wall.imgFile);
+        m_asFiles.at(i).toWCharArray((wchar_t*)wall.imgFile);
 
         aBuffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
     }

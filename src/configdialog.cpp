@@ -1,3 +1,5 @@
+#include <QMessageBox>
+
 #include "configdialog.h"
 #include "ui_configdialog.h"
 
@@ -20,18 +22,21 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _poSettings) : QDialog(_p
     ui->optionCheckFiles->setChecked(m_poSettings->bParam("check"));
     ui->optionCheckUpdates->setChecked(m_poSettings->bParam("check_updates"));
     ui->optionAutostart->setChecked(m_poSettings->bIsAutostart());
+    ui->optionUseHotkeys->setChecked(m_poSettings->bParam("use_hotkeys"));
+    ui->optionShowNotifications->setChecked(m_poSettings->bParam("show_notifications"));
 
     ui->optionAutostart->setDisabled(!m_poSettings->bCanAddShortcut());
 
-    int iHotkey = m_poSettings->iParam("hotkey");
-    ui->hotkeyCtrl->setChecked(iHotkey & MOD_CONTROL);
-    ui->hotkeyAlt->setChecked(iHotkey & MOD_ALT);
-    ui->hotkeyShift->setChecked(iHotkey & MOD_SHIFT);
-    ui->hotkeyWin->setChecked(iHotkey & MOD_WIN);
+    ui->hotkeyRefresh->setDisabled(!m_poSettings->bParam("use_hotkeys"));
+    ui->hotkeyShowHide->setDisabled(!m_poSettings->bParam("use_hotkeys"));
+    ui->hotkeyStartPause->setDisabled(!m_poSettings->bParam("use_hotkeys"));
+
+    ui->hotkeyRefresh->vSetHotkey(m_poSettings->oHotkey("refresh"));
+    ui->hotkeyShowHide->vSetHotkey(m_poSettings->oHotkey("showhide"));
+    ui->hotkeyStartPause->vSetHotkey(m_poSettings->oHotkey("startpause"));
 
     ui->optionDelay->setValue(m_poSettings->iParam("delay"));
 
-    m_bHotkeysChanged = false;
     m_bDelayChanged = false;
 }
 
@@ -44,6 +49,73 @@ ConfigDialog::~ConfigDialog()
 }
 
 /**
+ * @brief Validate hotkeys before save
+ * @param int result
+ */
+void ConfigDialog::done(int result)
+{
+    if (result == QDialog::Accepted)
+    {
+        QHash<char*, QLineEditHotkey*> requestHotkeys;
+        requestHotkeys.insert("Refresh", ui->hotkeyRefresh);
+        requestHotkeys.insert("Show/Hide", ui->hotkeyShowHide);
+        requestHotkeys.insert("Start/Pause", ui->hotkeyStartPause);
+
+        QString error;
+
+        for (QHash<char*, QLineEditHotkey*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
+        {
+            // check against other main hotkeys
+            for (QHash<char*, QLineEditHotkey*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
+            {
+                if (it.value()->hotkey() == it2.value()->hotkey())
+                {
+                    error = tr(it2.key());
+                    break;
+                }
+            }
+
+            if (!error.isEmpty())
+            {
+                QMessageBox::critical(this, tr(it.key()),
+                                      tr("Hotkey already used for \"%1\"").arg(error),
+                                      QMessageBox::Ok, QMessageBox::Ok);
+                break;
+            }
+
+            // check against sets hotkeys
+            for (int i=0, l=m_poSettings->iNbSets(); i<l; i++)
+            {
+                Set* poSet = m_poSettings->poGetSet(i);
+
+                if (poSet->hotkey() == it.value()->hotkey())
+                {
+                    error = poSet->name();
+                    break;
+                }
+            }
+
+            if (!error.isEmpty())
+            {
+                QMessageBox::critical(this, tr(it.key()),
+                                      tr("Hotkey already used for set \"%1\"").arg(error),
+                                      QMessageBox::Ok, QMessageBox::Ok);
+                break;
+            }
+        }
+
+        if (error.isEmpty())
+        {
+            QDialog::done(result);
+        }
+    }
+    else
+    {
+        QDialog::done(result);
+    }
+}
+
+/**
  * @brief Save changes in Settings object
  */
 void ConfigDialog::vSave()
@@ -52,6 +124,12 @@ void ConfigDialog::vSave()
     m_poSettings->vSetParam("minimize", ui->optionMinimize->isChecked());
     m_poSettings->vSetParam("check", ui->optionCheckFiles->isChecked());
     m_poSettings->vSetParam("check_updates", ui->optionCheckUpdates->isChecked());
+    m_poSettings->vSetParam("use_hotkeys", ui->optionUseHotkeys->isChecked());
+    m_poSettings->vSetParam("show_notifications", ui->optionShowNotifications->isChecked());
+
+    m_poSettings->vSetHotkey("refresh", ui->hotkeyRefresh->hotkey());
+    m_poSettings->vSetHotkey("showhide", ui->hotkeyShowHide->hotkey());
+    m_poSettings->vSetHotkey("startpause", ui->hotkeyStartPause->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {
@@ -62,34 +140,7 @@ void ConfigDialog::vSave()
         m_poSettings->vDeleteShortcut();
     }
 
-    int iHotKey = 0;
-    if (ui->hotkeyCtrl->isChecked())
-    {
-        iHotKey|= MOD_CONTROL;
-    }
-    if (ui->hotkeyAlt->isChecked())
-    {
-        iHotKey|= MOD_ALT;
-    }
-    if (ui->hotkeyShift->isChecked())
-    {
-        iHotKey|= MOD_SHIFT;
-    }
-    if (ui->hotkeyWin->isChecked())
-    {
-        iHotKey|= MOD_WIN;
-    }
-    m_poSettings->vSetParam("hotkey", iHotKey);
-
     m_poSettings->vWriteXML();
-}
-
-/**
- * @brief Track hotkeys changes
- */
-void ConfigDialog::hotkeysChanged()
-{
-    m_bHotkeysChanged = true;
 }
 
 /**
@@ -98,4 +149,15 @@ void ConfigDialog::hotkeysChanged()
 void ConfigDialog::on_optionDelay_valueChanged()
 {
     m_bDelayChanged = true;
+}
+
+/**
+ * @brief Disable hotkeys field
+ * @param bool checked
+ */
+void ConfigDialog::on_optionUseHotkeys_toggled(bool checked)
+{
+    ui->hotkeyRefresh->setDisabled(!checked);
+    ui->hotkeyShowHide->setDisabled(!checked);
+    ui->hotkeyStartPause->setDisabled(!checked);
 }

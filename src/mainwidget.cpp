@@ -3,6 +3,7 @@
 
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
+#include "mainwindow.h"
 #include "set.h"
 #include "listdelegate.h"
 #include "listproxystyle.h"
@@ -151,12 +152,14 @@ void MainWidget::on_m_poList_itemDoubleClicked(QListWidgetItem*)
     int iIndex = aiGetSelectedIndexes().at(0);
     Set* poSet = m_poCtrl->settings()->poGetSet(iIndex);
 
-    SetEditDialog oDialog(this, poSet);
+    SetEditDialog oDialog(this, poSet, m_poCtrl->settings());
 
+    ((MainWindow*)parent())->vClearHotkeys();
     if (oDialog.exec())
     {
-        m_poCtrl->vEditSet(iIndex, oDialog.name(), oDialog.type(), oDialog.style());
+        m_poCtrl->vEditSet(iIndex, oDialog.name(), oDialog.type(), oDialog.style(), oDialog.hotkey());
     }
+    ((MainWindow*)parent())->vUpdateHotkeys();
 }
 
 /**

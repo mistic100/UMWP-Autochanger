@@ -26,7 +26,12 @@ Settings::Settings()
     m_options["check"] = true;
     m_options["check_updates"] = true;
     m_options["msgcount"] = 0;
-    m_options["hotkey"] = MOD_CONTROL | MOD_SHIFT;
+    m_options["use_hotkeys"] = false;
+    m_options["show_notifications"] = true;
+
+    m_hotkeys["refresh"] = Hotkey();
+    m_hotkeys["startpause"] = Hotkey();
+    m_hotkeys["showhide"] = Hotkey();
 
     m_env["wallpath"] = QVariant();
     m_env["bmppath"] = QVariant();
@@ -104,6 +109,11 @@ const bool Settings::bIsAutostart() const
     return bFileExists(m_env["startlinkpath"].toString());
 }
 
+const Hotkey Settings::oHotkey(const QString &_key) const
+{
+    return m_hotkeys.value(_key, Hotkey());
+}
+
 
 /*
  * setters
@@ -111,6 +121,12 @@ const bool Settings::bIsAutostart() const
 void Settings::vSetParam(const QString &_key, const QVariant &_val)
 {
     m_options[_key] = _val;
+    m_bUnsaved = true;
+}
+
+void Settings::vSetHotkey(const QString &_key, const Hotkey &_val)
+{
+    m_hotkeys[_key] = _val;
     m_bUnsaved = true;
 }
 
@@ -296,6 +312,8 @@ void Settings::vReadXML()
 
     vClearSets();
 
+    int iNewHotkey = 0;
+
     while (!setting_node.isNull())
     {
         // config node
@@ -305,9 +323,31 @@ void Settings::vReadXML()
 
             while (!config_node.isNull())
             {
-                m_options[ config_node.tagName() ] = config_node.text();
+                // migration from 1.3
+                if (config_node.tagName() == "hotkey")
+                {
+                    iNewHotkey = config_node.text().toInt();
+                }
+                else
+                {
+                    m_options[ config_node.tagName() ] = config_node.text();
+                }
 
                 config_node = config_node.nextSibling().toElement();
+            }
+        }
+        else if (setting_node.tagName() == "hotkeys")
+        {
+            QDomElement hotkey_node = setting_node.firstChild().toElement();
+
+            while (!hotkey_node.isNull())
+            {
+                m_hotkeys[ hotkey_node.tagName() ] = Hotkey(
+                            hotkey_node.attribute("key").toInt(),
+                            hotkey_node.attribute("mod").toInt()
+                            );
+
+                hotkey_node = hotkey_node.nextSibling().toElement();
             }
         }
         // sets node
@@ -329,12 +369,22 @@ void Settings::vReadXML()
                             set_node.attribute("active").toInt()
                             );
 
+                        // added in 1.3
                         if (set_node.hasAttribute("type"))
                         {
                             UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(set_node.attribute("type").toInt());
                             UM::IMAGE im_style = static_cast<UM::IMAGE>(set_node.attribute("style").toInt());
                             poNewSet->vSetType(wp_type);
                             poNewSet->vSetStyle(im_style);
+                        }
+
+                        // added in 1.4
+                        if (set_node.hasAttribute("hotkey"))
+                        {
+                            poNewSet->vSetHotkey(Hotkey(
+                                        set_node.attribute("hotkey").toInt(),
+                                        set_node.attribute("hotkey_mod").toInt()
+                                        ));
                         }
                     }
                 }
@@ -344,6 +394,12 @@ void Settings::vReadXML()
         }
 
         setting_node = setting_node.nextSibling().toElement();
+    }
+
+    if (iNewHotkey > 0)
+    {
+        vUpgradeHotkeys(iNewHotkey);
+        vWriteXML();
     }
 
     m_bUnsaved = false;
@@ -372,6 +428,20 @@ void Settings::vWriteXML()
 
     main_node.appendChild(config_node);
 
+    // hotkeys node
+    QDomElement hotkeys_node = oDom.createElement("hotkeys");
+
+    for (QHash<QString, Hotkey>::iterator it = m_hotkeys.begin(); it != m_hotkeys.end(); ++it)
+    {
+        QDomElement set = oDom.createElement(it.key());
+        set.setAttribute("key", it.value().key);
+        set.setAttribute("mod", it.value().mod);
+
+        hotkeys_node.appendChild(set);
+    }
+
+    main_node.appendChild(hotkeys_node);
+
     // sets node
     QDomElement sets_node = oDom.createElement("sets");
 
@@ -385,6 +455,8 @@ void Settings::vWriteXML()
         set.setAttribute("type", poSet->type());
         set.setAttribute("style", poSet->style());
         set.setAttribute("active", poSet->isActive());
+        set.setAttribute("hotkey", poSet->hotkey().key);
+        set.setAttribute("hotkey_mod", poSet->hotkey().mod);
         setDomNodeValue(&oDom, &set, poSet->path());
 
         sets_node.appendChild(set);
@@ -491,11 +563,7 @@ void Settings::vClearSets()
     {
         m_bUnsaved = true;
 
-        for (int i=0; i<m_oSets.size(); i++)
-        {
-            delete m_oSets.at(i);
-        }
-
+        qDeleteAll(m_oSets);
         m_oSets.clear();
     }
 }
@@ -507,7 +575,7 @@ void Settings::vClearSets()
  * @param int _iType
  * @param int _iStyle
  */
-void Settings::vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle)
+void Settings::vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const Hotkey _oHotkey)
 {
     if ( _i < m_oSets.size())
     {
@@ -517,6 +585,7 @@ void Settings::vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iTyp
         poSet->vSetName(_sName);
         poSet->vSetType(_iType);
         poSet->vSetStyle(_iStyle);
+        poSet->vSetHotkey(_oHotkey);
     }
 }
 
@@ -657,4 +726,41 @@ void Settings::vDeleteShortcut()
     {
         QFile::remove(m_env["startlinkpath"].toString());
     }
+}
+
+/**
+ * @brief Build sets hotkeys when migrating from version 1.3
+ */
+void Settings::vUpgradeHotkeys(int iWinMod)
+{
+    int iQtMod = 0;
+    if (iWinMod & MOD_SHIFT)
+    {
+        iQtMod+= Qt::SHIFT;
+    }
+    if (iWinMod & MOD_CONTROL)
+    {
+        iQtMod+= Qt::CTRL;
+    }
+    if (iWinMod & MOD_ALT)
+    {
+        iQtMod+= Qt::ALT;
+    }
+    if (iWinMod & MOD_WIN)
+    {
+        iQtMod+= Qt::META;
+    }
+
+    int iKey = Qt::Key_1;
+    for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
+    {
+        (*it)->vSetHotkey(Hotkey(iKey, iQtMod));
+        iKey++;
+        if (iKey > Qt::Key_9)
+        {
+            break;
+        }
+    }
+
+    m_options["use_hotkeys"] = true;
 }

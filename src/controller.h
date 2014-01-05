@@ -24,6 +24,7 @@ private:
     QTimer*         m_poMainTimer;
     mt19937         m_oRandom; // mersenne_twister
     int             m_iHeaderSize;
+    QVector<QString> m_asFiles;
 
 public:
     Controller(Settings* _data);
@@ -31,27 +32,30 @@ public:
     void vCheckVersion();
 
     Settings* settings() const { return m_poSettings; }
+    const QVector<QString> &files() const { return m_asFiles; }
 
-    Set* poGetRandomSet(int _iTotal);
-    void vGetRandomFile(Set* _poSet, QVector<QString> &_asFiles);
-    void vGenerateFile(const QString &_sFilename, const Set* _poSet, const QVector<QString> &_asFiles);
+    Set*    poGetRandomSet(int _iTotal);
+    QString sGetRandomFile(Set* _poSet);
+    void    vGenerateFile(const QString &_sFilename, const Set* _poSet);
 
     void vStartTimer(bool _bKeepPause=false);
     bool bStartPause();
+    bool bIsPaused() const { return !m_poMainTimer->isActive(); }
 
     void vAddSet(const QString _sDirname);
     void vDeleteSets(const QList<int> _ai);
     void vActivateSets(const QList<int> _ai);
     void vUnactivateSets(const QList<int> _ai);
+    void vSetActiveSets(const QList<int> _ai);
     void vSetOneActiveSet(int _i);
-    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle);
+    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const Hotkey _oHotkey);
     void vMoveSet(int _from, int _to);
 
 public slots:
     void slotUpdate(bool _bCheckFiles=true);
 
 signals:
-    void listChanged(bool);
+    void listChanged(bool); // true to reset QListWidget selection
     void newVersionAvailable(const QString);
 };
 

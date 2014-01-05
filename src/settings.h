@@ -17,6 +17,7 @@ class Settings
 private:
     QHash<QString, QVariant> m_options; // configurable options
     QHash<QString, QVariant> m_env;     // environnement variables
+    QHash<QString, Hotkey>   m_hotkeys;
 
     short           m_iState;   // state of the installation
     bool            m_bUnsaved; // true if there are unsaved data
@@ -33,6 +34,7 @@ public:
     void vWriteXML();
     void vReadXML();
     void vUpdateSets();
+    void vUpgradeHotkeys(int iWinMod);
 
     // getters
     const short     iState() const     { return m_iState; }
@@ -46,6 +48,8 @@ public:
     const bool      bEnv(const QString &_key) const;
     const int       iEnv(const QString &_key) const;
 
+    const Hotkey    oHotkey(const QString &_key) const;
+
     Set*            poGetSet(int _i) const  { return m_oSets.at(_i); }
     Set*            poGetActiveSet(int _i) const;
     const int       iNbSets() const         { return m_oSets.size(); }
@@ -57,6 +61,8 @@ public:
 
     // setters
     void vSetParam(const QString &_key, const QVariant &_val);
+    void vSetHotkey(const QString &_key, const Hotkey &_val);
+
     void vSetWindowSize(const QSize &_size);
     void vAddMsgCount();
     bool bSetExePath(const QString &_sPath);
@@ -68,7 +74,7 @@ public:
     void vDeleteSet(int _i);
     void vClearSets();
 
-    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle);
+    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const Hotkey _oHotkey);
     void vSetState(int _i, bool _bState);
 
     void vMoveSet(int _from, int _to);

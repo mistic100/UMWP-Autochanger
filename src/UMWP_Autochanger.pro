@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT += core gui xml
+CONFIG += qxt
+QXT += core gui
 
 TARGET = UMWP_Autochanger
 TEMPLATE = app
@@ -24,7 +26,8 @@ SOURCES += \
     listproxystyle.cpp \
     mainwidget.cpp \
     seteditdialog.cpp \
-    configdialog.cpp
+    configdialog.cpp \
+    qlineedithotkey.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -40,7 +43,9 @@ HEADERS += \
     listproxystyle.h \
     mainwidget.h \
     seteditdialog.h \
-    configdialog.h
+    configdialog.h \
+    qlineedithotkey.h \
+    globalshortcut.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc

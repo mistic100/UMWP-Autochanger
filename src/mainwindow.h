@@ -9,6 +9,7 @@
 
 #include "main.h"
 #include "controller.h"
+#include "globalshortcut.h"
 
 
 /**
@@ -33,10 +34,14 @@ private:
     QAction*            m_poActionPause1; // menu
     QAction*            m_poActionPause2; // tray
 
+    QList<GlobalShortcut*> m_apoShortcuts;
+
 public:
     MainWindow(Controller* _poCtrl);
+    ~MainWindow();
 
     void vUpdateHotkeys();
+    void vClearHotkeys();
 
     void vShowMain();
     void vShowError();
@@ -45,7 +50,6 @@ protected:
     void showEvent(QShowEvent*);
     void resizeEvent(QResizeEvent* _event);
     void closeEvent(QCloseEvent* _event);
-    bool winEvent(MSG* message, long*);
 
 public slots:
     void vInit();
@@ -57,6 +61,7 @@ public slots:
     void slotStartPause();
     void slotConfigDialog();
     void slotShowHelp();
+    void slotHotkey();
 
     void slotTrayAction(QSystemTrayIcon::ActivationReason _reason);
     void slotTrayQuickClicked();

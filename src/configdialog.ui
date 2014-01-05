@@ -6,89 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>384</width>
-    <height>165</height>
+    <width>420</width>
+    <height>188</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_1">
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Hotkeys</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="hotkeyCtrl">
-        <property name="icon">
-         <iconset resource="UMWP_Autochanger.qrc">
-          <normaloff>:/key/ctrl</normaloff>:/key/ctrl</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="hotkeyAlt">
-        <property name="icon">
-         <iconset resource="UMWP_Autochanger.qrc">
-          <normaloff>:/key/alt</normaloff>:/key/alt</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="hotkeyShift">
-        <property name="icon">
-         <iconset resource="UMWP_Autochanger.qrc">
-          <normaloff>:/key/shift</normaloff>:/key/shift</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="hotkeyWin">
-        <property name="icon">
-         <iconset resource="UMWP_Autochanger.qrc">
-          <normaloff>:/key/win</normaloff>:/key/win</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" rowspan="3">
     <widget class="QGroupBox" name="groupBox_1">
      <property name="title">
@@ -160,14 +85,91 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="optionShowNotifications">
+        <property name="text">
+         <string>Show notifications</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Hotkeys</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Show/Hide :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEditHotkey" name="hotkeyRefresh"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Refresh :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Start/Pause :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEditHotkey" name="hotkeyShowHide"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEditHotkey" name="hotkeyStartPause"/>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="optionUseHotkeys">
+        <property name="text">
+         <string>Use hotkeys</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="UMWP_Autochanger.qrc"/>
- </resources>
+ <customwidgets>
+  <customwidget>
+   <class>QLineEditHotkey</class>
+   <extends>QLineEdit</extends>
+   <header>qlineedithotkey.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -198,70 +200,6 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>164</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hotkeyAlt</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>ConfigDialog</receiver>
-   <slot>hotkeysChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>332</x>
-     <y>49</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>191</x>
-     <y>82</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hotkeyCtrl</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>ConfigDialog</receiver>
-   <slot>hotkeysChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>260</x>
-     <y>49</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>191</x>
-     <y>82</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hotkeyShift</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>ConfigDialog</receiver>
-   <slot>hotkeysChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>260</x>
-     <y>91</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>191</x>
-     <y>82</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>hotkeyWin</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>ConfigDialog</receiver>
-   <slot>hotkeysChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>332</x>
-     <y>91</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>191</x>
-     <y>82</y>
     </hint>
    </hints>
   </connection>

@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "set.h"
+#include "settings.h"
 
 namespace Ui {
     class SetEditDialog;
@@ -21,13 +22,20 @@ class SetEditDialog : public QDialog
 private:
     Ui::SetEditDialog *ui;
 
+    Settings* m_poSettings;
+
 public:
-    SetEditDialog(QWidget* _parent, Set* _poSet);
+    SetEditDialog(QWidget* _parent, Set* _poSet, Settings* _poSettings);
     ~SetEditDialog();
 
-    const QString name() const;
+    const QString       name() const;
     const UM::WALLPAPER type() const;
-    const UM::IMAGE style() const;
+    const UM::IMAGE     style() const;
+    const Hotkey        hotkey() const;
+
+protected:
+    void done(int result);
+
 };
 
 #endif // SETEDITDIALOG_H

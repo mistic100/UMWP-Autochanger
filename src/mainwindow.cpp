@@ -88,10 +88,14 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 
     m_poTrayIcon->setToolTip(APP_NAME);
     m_poTrayIcon->setContextMenu(poTrayMenu);
+}
 
-
-    // register global hotkeys
-    vUpdateHotkeys();
+/**
+ * @brief MainWindow::~MainWindow
+ */
+MainWindow::~MainWindow()
+{
+    vClearHotkeys();
 }
 
 /**
@@ -102,6 +106,7 @@ void MainWindow::vInit()
     if (m_poCtrl->settings()->iState() == UM_OK)
     {
         vShowMain();
+        vUpdateHotkeys();
     }
     else
     {
@@ -163,25 +168,62 @@ void MainWindow::vShowMain()
 }
 
 /**
- * @brief Register or remove hotkeys
+ * @brief Remove all hotkeys
+ */
+void MainWindow::vClearHotkeys()
+{
+    qDeleteAll(m_apoShortcuts);
+    m_apoShortcuts.clear();
+}
+
+/**
+ * @brief Update hotkeys
  */
 void MainWindow::vUpdateHotkeys()
 {
-    int iHotkey = m_poCtrl->settings()->iParam("hotkey");
+    vClearHotkeys();
 
-    if (iHotkey > 0)
+    if (m_poCtrl->settings()->bParam("use_hotkeys"))
     {
-        for (int i=0; i<9; i++)
+        QHash<int, QListInt> mergedHotkeys;
+        GlobalShortcut* sh;
+
+        for (int i=0, l=m_poCtrl->settings()->iNbSets(); i<l; i++)
         {
-            RegisterHotKey(winId(), 100 + i, iHotkey | MOD_NOREPEAT, 0x31 + i);
+            Set* poSet = m_poCtrl->settings()->poGetSet(i);
+
+            if (poSet->hotkey().valid())
+            {
+                mergedHotkeys[poSet->hotkey().res()].push_back(i);
+            }
         }
-    }
-    else
-    {
-        for (int i=0; i<9; i++)
+
+        for (QHash<int, QListInt>::Iterator it=mergedHotkeys.begin(); it!=mergedHotkeys.end(); ++it)
         {
-            UnregisterHotKey(winId(), 100 + i);
+            sh = new GlobalShortcut();
+            sh->setShortcut(QKeySequence(it.key()));
+            sh->vSetSets(it.value());
+            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+            m_apoShortcuts.push_back(sh);
         }
+
+        sh = new GlobalShortcut();
+        sh->setShortcut(QKeySequence(m_poCtrl->settings()->oHotkey("refresh").res()));
+        sh->vSetRefresh();
+        connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+        m_apoShortcuts.push_back(sh);
+
+        sh = new GlobalShortcut();
+        sh->setShortcut(QKeySequence(m_poCtrl->settings()->oHotkey("startpause").res()));
+        sh->vSetStartPause();
+        connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+        m_apoShortcuts.push_back(sh);
+
+        sh = new GlobalShortcut();
+        sh->setShortcut(QKeySequence(m_poCtrl->settings()->oHotkey("showhide").res()));
+        sh->vSetShowHide();
+        connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+        m_apoShortcuts.push_back(sh);
     }
 }
 
@@ -248,7 +290,10 @@ void MainWindow::slotToggleWindow(bool _bForceHide)
 
         if (m_poCtrl->settings()->iParam("msgcount") < 3)
         {
-            m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+            if (m_poCtrl->settings()->bParam("show_notifications"))
+            {
+                m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+            }
             m_poCtrl->settings()->vAddMsgCount();
         }
 
@@ -306,6 +351,7 @@ void MainWindow::slotConfigDialog()
 {
     ConfigDialog oDialog(this, m_poCtrl->settings());
 
+    vClearHotkeys();
     if (oDialog.exec())
     {
         oDialog.vSave();
@@ -313,11 +359,8 @@ void MainWindow::slotConfigDialog()
         {
             m_poCtrl->slotUpdate();
         }
-        if (oDialog.bHotkeysChanged())
-        {
-            vUpdateHotkeys();
-        }
     }
+    vUpdateHotkeys();
 }
 
 /**
@@ -325,6 +368,10 @@ void MainWindow::slotConfigDialog()
  */
 void MainWindow::slotShowHelp()
 {
+    // title
+    QString sMainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
+
+    // help
     QFile oFile;
     QString sLang = QLocale::system().name().section('_', 0, 0);
     if (sLang.compare("fr")==0)
@@ -336,19 +383,80 @@ void MainWindow::slotShowHelp()
         oFile.setFileName(":/lang/help_en");
     }
 
-    QString sMainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
-
     oFile.open(QIODevice::ReadOnly);
     QTextStream content(&oFile);
     sMainText.append(content.readAll());
     oFile.close();
 
+    // files list
+    if (m_poCtrl->files().size() > 0)
+    {
+        sMainText.append("<hr><h3>" + tr("Current files") + "</h3><ul>");
+        for (QVector<QString>::const_iterator it=m_poCtrl->files().begin(); it!=m_poCtrl->files().end(); ++it)
+        {
+            sMainText.append("<li>" + (*it) + "</li>");
+        }
+        sMainText.append("</ul>");
+    }
+
     QMessageBox oDialog(this);
     oDialog.setIcon(QMessageBox::Information);
-    oDialog.setWindowModality(Qt::NonModal);
     oDialog.setText(sMainText);
     oDialog.setWindowTitle(tr("About %1").arg(APP_NAME));
     oDialog.exec();
+}
+
+/**
+ * @brief Perform action on hotkey hit
+ */
+void MainWindow::slotHotkey()
+{
+    GlobalShortcut* sender = (GlobalShortcut*)QObject::sender();
+
+    if (sender->refresh())
+    {
+        slotApply();
+    }
+    else if (sender->startPause())
+    {
+        if (!isVisible() && m_poCtrl->settings()->bParam("show_notifications"))
+        {
+            if (!m_poCtrl->bIsPaused())
+            {
+                m_poTrayIcon->showMessage(APP_NAME, tr("Paused"));
+            }
+            else
+            {
+                m_poTrayIcon->showMessage(APP_NAME, tr("Running"));
+            }
+        }
+
+        slotStartPause();
+    }
+    else if (sender->showHide())
+    {
+        slotToggleWindow();
+    }
+    else if (!sender->sets().empty())
+    {
+
+        if (!isVisible() && m_poCtrl->settings()->bParam("show_notifications"))
+        {
+            QString setsName;
+            for (int i=0, l=m_poCtrl->settings()->iNbActiveSets(false); i<l; i++)
+            {
+                Set* poSet = m_poCtrl->settings()->poGetActiveSet(i);
+
+                if (i>0) setsName+= ", ";
+                setsName+= poSet->name();
+            }
+
+            m_poTrayIcon->showMessage(APP_NAME, tr("Current sets : %1").arg(setsName));
+        }
+
+        m_poCtrl->vSetActiveSets(sender->sets());
+        slotApply();
+    }
 }
 
 /**
@@ -434,31 +542,4 @@ void MainWindow::closeEvent(QCloseEvent* _event)
         _event->ignore();
         slotToggleWindow();
     }
-}
-
-/**
- * @brief Intercept windows messages for hotkeys
- * @param MSG* message
- * @return bool
- */
-bool MainWindow::winEvent(MSG* message, long*)
-{
-    int idx = -1;
-
-    switch (message->message)
-    {
-    case WM_HOTKEY:
-        idx = message->wParam - 100;
-        if (idx >=0 && idx < m_poCtrl->settings()->iNbSets())
-        {
-            m_poCtrl->vSetOneActiveSet(idx);
-            slotApply();
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    return false;
 }

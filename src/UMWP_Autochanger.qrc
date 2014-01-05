@@ -24,12 +24,6 @@
         <file alias="delete">images/buttons/button_delete.png</file>
         <file alias="save">images/buttons/button_save.png</file>
     </qresource>
-    <qresource prefix="/key">
-        <file alias="alt">images/keys/alt.png</file>
-        <file alias="ctrl">images/keys/ctrl.png</file>
-        <file alias="shift">images/keys/shift.png</file>
-        <file alias="win">images/keys/win.png</file>
-    </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>
         <file alias="fr">lang/fr.qm</file>
