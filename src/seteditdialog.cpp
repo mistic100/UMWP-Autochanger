@@ -57,17 +57,20 @@ void SetEditDialog::done(int result)
         Hotkey hotkey = ui->m_poHotkeyInput->hotkey();
         QString error;
 
-        if (hotkey == m_poSettings->oHotkey("refresh"))
+        if (hotkey.valid())
         {
-            error = tr("Refresh");
-        }
-        else if (hotkey == m_poSettings->oHotkey("startpause"))
-        {
-            error = tr("Start/Pause");
-        }
-        else if (hotkey == m_poSettings->oHotkey("showhide"))
-        {
-            error = tr("Show/Hide");
+            if (hotkey == m_poSettings->oHotkey("refresh"))
+            {
+                error = tr("Refresh");
+            }
+            else if (hotkey == m_poSettings->oHotkey("startpause"))
+            {
+                error = tr("Start/Pause");
+            }
+            else if (hotkey == m_poSettings->oHotkey("showhide"))
+            {
+                error = tr("Show/Hide");
+            }
         }
 
         if (!error.isEmpty())

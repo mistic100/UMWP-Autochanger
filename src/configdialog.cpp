@@ -65,9 +65,18 @@ void ConfigDialog::done(int result)
 
         for (QHash<char*, QLineEditHotkey*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
         {
+            if (!it.value()->hotkey().valid())
+            {
+                continue;
+            }
+
             // check against other main hotkeys
             for (QHash<char*, QLineEditHotkey*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
             {
+                if (!it2.value()->hotkey().valid())
+                {
+                    continue;
+                }
                 if (it.value()->hotkey() == it2.value()->hotkey())
                 {
                     error = tr(it2.key());
@@ -88,6 +97,10 @@ void ConfigDialog::done(int result)
             {
                 Set* poSet = m_poSettings->poGetSet(i);
 
+                if (!poSet->hotkey().valid())
+                {
+                    continue;
+                }
                 if (poSet->hotkey() == it.value()->hotkey())
                 {
                     error = poSet->name();

@@ -207,23 +207,35 @@ void MainWindow::vUpdateHotkeys()
             m_apoShortcuts.push_back(sh);
         }
 
-        sh = new GlobalShortcut();
-        sh->setShortcut(QKeySequence(m_poCtrl->settings()->oHotkey("refresh").res()));
-        sh->vSetRefresh();
-        connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-        m_apoShortcuts.push_back(sh);
+        Hotkey hkRefresh = m_poCtrl->settings()->oHotkey("refresh");
+        if (hkRefresh.valid())
+        {
+            sh = new GlobalShortcut();
+            sh->setShortcut(QKeySequence(hkRefresh.res()));
+            sh->vSetRefresh();
+            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+            m_apoShortcuts.push_back(sh);
+        }
 
-        sh = new GlobalShortcut();
-        sh->setShortcut(QKeySequence(m_poCtrl->settings()->oHotkey("startpause").res()));
-        sh->vSetStartPause();
-        connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-        m_apoShortcuts.push_back(sh);
+        Hotkey hkStartPause = m_poCtrl->settings()->oHotkey("startpause");
+        if (hkStartPause.valid())
+        {
+            sh = new GlobalShortcut();
+            sh->setShortcut(QKeySequence(hkStartPause.res()));
+            sh->vSetStartPause();
+            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+            m_apoShortcuts.push_back(sh);
+        }
 
-        sh = new GlobalShortcut();
-        sh->setShortcut(QKeySequence(m_poCtrl->settings()->oHotkey("showhide").res()));
-        sh->vSetShowHide();
-        connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-        m_apoShortcuts.push_back(sh);
+        Hotkey hkShowHide = m_poCtrl->settings()->oHotkey("showhide");
+        if (hkShowHide.valid())
+        {
+            sh = new GlobalShortcut();
+            sh->setShortcut(QKeySequence(hkShowHide.res()));
+            sh->vSetShowHide();
+            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
+            m_apoShortcuts.push_back(sh);
+        }
     }
 }
 
@@ -419,6 +431,8 @@ void MainWindow::slotHotkey()
     }
     else if (sender->startPause())
     {
+        slotStartPause();
+
         if (!isVisible() && m_poCtrl->settings()->bParam("show_notifications"))
         {
             if (!m_poCtrl->bIsPaused())
@@ -430,8 +444,6 @@ void MainWindow::slotHotkey()
                 m_poTrayIcon->showMessage(APP_NAME, tr("Running"));
             }
         }
-
-        slotStartPause();
     }
     else if (sender->showHide())
     {
@@ -439,6 +451,8 @@ void MainWindow::slotHotkey()
     }
     else if (!sender->sets().empty())
     {
+        m_poCtrl->vSetActiveSets(sender->sets());
+        slotApply();
 
         if (!isVisible() && m_poCtrl->settings()->bParam("show_notifications"))
         {
@@ -447,15 +461,12 @@ void MainWindow::slotHotkey()
             {
                 Set* poSet = m_poCtrl->settings()->poGetActiveSet(i);
 
-                if (i>0) setsName+= ", ";
-                setsName+= poSet->name();
+                if (i>0) setsName.append(", ");
+                setsName.append(poSet->name());
             }
 
             m_poTrayIcon->showMessage(APP_NAME, tr("Current sets : %1").arg(setsName));
         }
-
-        m_poCtrl->vSetActiveSets(sender->sets());
-        slotApply();
     }
 }
 

@@ -5,8 +5,8 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.3  
-Release date  : 03/12/2013  
+Version       : 1.4-SNAPSHOT 
+Release date  : ??/??/2014  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -34,7 +34,7 @@ License       : GNU General Public License Version 3
 * Double-click on a set to edit it. You can change its name, its style (one image for each monitor or one image for the whole desktop) and the transformation style for images (center, tile or stretch).
 
 * On the "Options" dialog you can choose the delay, change the behavior of the tool and configure the hotkeys.  
-Hotkeys are a way to change the current set without opppening the application window : in default configuration, press Ctrl+Shift+1 for the first set, and up to Ctrl+Shift+9 for the ninth set.
+Hotkeys are a way to interact with the application while it is hidden in the the system bar. Hotkeys can also be defined for each individual sets.
 
 
 ## Troubleshouting
@@ -42,13 +42,14 @@ Q: When I launch UMWP Autochanger, the window doesn't appear.
 A: When you have already registered sets, the window automatically minimize to the system bar, double-click on the icon (or right-click => "Show") to open it. This behavior can be changed on the "Options" menu.
 
 Q: Can I edit a set ?  
-A: Yes. Double-click on it's name, you can set the name, the type and the style of wallpaper.
+A: Yes. Double-click on it's name, you can set the name, the type and the style of wallpaper and the hotkey of the set.
 
 Q: How hotkeys work ?  
-A: Hotkeys allows you two quickly change witch set is activated from the keyboard even when the application window is hidden. You can configure which keys must be pressed in the "Options" menu. Say you choosed Shift+Ctrl, press Shift+Ctrl+1 to activate the first set, Shift+Ctrl+2 for the second set, and so on. Only the 9 first sets can be activated from the keyboard.
+A: There are two kind of hotkeys: the ones defined in the "Options" dialog allow to show/hide the application window, refresh the wallpaper and start/pause the timer.  
+The ones defined in the set edit dialog allow to change the current set. You can assign the same hotkey to multiple sets.  
+In both cases, click on the input box and press the desired keys combinination. You must at least use one modifier (Ctrl, Shift, Alt, Win) and some keys are not available (Esc, Tab, Backspace, ...). Press Esc or Backspace to clear the hotkey.
 
-Q: How can I unactivate hotkeys ?  
-A: Uncheck all keys in the "Options" menu.
+A: Hotkeys allows you two quickly change witch set is activated from the keyboard even when the application window is hidden. You can configure which keys must be pressed in the "Options" menu. Say you choosed Shift+Ctrl, press Shift+Ctrl+1 to activate the first set, Shift+Ctrl+2 for the second set, and so on. Only the 9 first sets can be activated from the keyboard.
 
 Q: Can I reorder sets ?  
 A: Yes. Simply drag & drop them.
@@ -58,7 +59,15 @@ A: Yes. Simply drag & drop them.
 * When changing the wallpaper, with file check activated, the software freezes for some seconds, that's because I don't use multi-threading.
 
 
+## Compiling
+You can compile the application yourself with Qt Designer.  
+You will need Qt 4.8.4 and libqxt 0.6.2
+
+
 ## Changelog
+* 1.4 (??/??/2014)
+    * new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide
+
 * [1.3 (03/12/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.3)
     * new: can choose the type of wallpaper ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
     * new: icons for main buttons (add, [de]activate, delete)

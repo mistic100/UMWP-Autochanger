@@ -71,7 +71,7 @@
     <message>
         <location filename="../configdialog.cpp" line="81"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
-        <translation>Raccouric déjà utilisé pour &quot;%1&quot;</translation>
+        <translation>Raccourci déjà utilisé pour &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../configdialog.cpp" line="101"/>
@@ -338,7 +338,7 @@
     <message>
         <location filename="../seteditdialog.cpp" line="76"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
-        <translation>Raccouric déjà utilisé pour &quot;%1&quot;</translation>
+        <translation>Raccourci déjà utilisé pour &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../seteditdialog.cpp" line="83"/>
