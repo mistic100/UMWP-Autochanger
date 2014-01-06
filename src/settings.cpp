@@ -28,6 +28,7 @@ Settings::Settings()
     m_options["msgcount"] = 0;
     m_options["use_hotkeys"] = false;
     m_options["show_notifications"] = true;
+    m_options["last_dir"] = QVariant();
 
     m_hotkeys["refresh"] = Hotkey();
     m_hotkeys["startpause"] = Hotkey();

@@ -21,7 +21,6 @@ class MainWidget : public QWidget
 private:
     Ui::MainWidget* ui;
     Controller*     m_poCtrl;
-    QString         m_sLastDir;
     
 public:
     MainWidget(QWidget* _parent, Controller* _poCtrl);

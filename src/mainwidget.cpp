@@ -20,7 +20,6 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
 {
     ui->setupUi(this);
 
-    m_sLastDir = QDir::homePath();
     m_poCtrl = _poCtrl;
 
     connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
@@ -101,13 +100,18 @@ QList<int> MainWidget::aiGetSelectedIndexes()
  */
 void MainWidget::on_m_poButtonAdd_clicked()
 {
-    QString sDirname = QFileDialog::getExistingDirectory(this, tr("Add"), m_sLastDir);
+    QString sLastDir = m_poCtrl->settings()->sParam("last_dir");
+    if (sLastDir.isEmpty())
+    {
+        sLastDir = QDir::homePath();
+    }
+    QString sDirname = QFileDialog::getExistingDirectory(this, tr("Add"), sLastDir);
 
     if (!sDirname.isEmpty())
     {
         QDir oDir(sDirname);
         oDir.cdUp();
-        m_sLastDir = oDir.absolutePath();
+        m_poCtrl->settings()->vSetParam("last_dir", oDir.absolutePath());
 
         sDirname.replace('/', '\\');
         m_poCtrl->vAddSet(sDirname);
