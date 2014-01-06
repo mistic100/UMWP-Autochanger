@@ -49,8 +49,6 @@ A: There are two kind of hotkeys: the ones defined in the "Options" dialog allow
 The ones defined in the set edit dialog allow to change the current set. You can assign the same hotkey to multiple sets.  
 In both cases, click on the input box and press the desired keys combinination. You must at least use one modifier (Ctrl, Shift, Alt, Win) and some keys are not available (Esc, Tab, Backspace, ...). Press Esc or Backspace to clear the hotkey.
 
-A: Hotkeys allows you two quickly change witch set is activated from the keyboard even when the application window is hidden. You can configure which keys must be pressed in the "Options" menu. Say you choosed Shift+Ctrl, press Shift+Ctrl+1 to activate the first set, Shift+Ctrl+2 for the second set, and so on. Only the 9 first sets can be activated from the keyboard.
-
 Q: Can I reorder sets ?  
 A: Yes. Simply drag & drop them.
 

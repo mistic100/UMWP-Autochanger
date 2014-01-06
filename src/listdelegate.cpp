@@ -92,7 +92,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
 
 
     // TITLE
-    rect = option.rect.adjusted(20, 1, 0, 0);
+    rect = option.rect.adjusted(20, 1, -25, 0);
     painter->setFont(QFont("Calibri", 11));
     if (selected)
     {
@@ -102,10 +102,12 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     {
         painter->setPen(QColor(51,51,51));
     }
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, poSet->fullName(), &rect);
+
+    QString title = QFontMetrics(painter->font()).elidedText(poSet->fullName(), Qt::ElideMiddle, rect.width());
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title, &rect);
 
     // PATH
-    rect = option.rect.adjusted(20, 19, 0, 0);
+    rect = option.rect.adjusted(20, 19, -25, 0);
     painter->setFont(QFont("Calibri", 9, -1, true));
     if (selected)
     {
@@ -115,5 +117,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     {
         painter->setPen(Qt::darkGray);
     }
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, poSet->path(), &rect);
+
+    QString path = QFontMetrics(painter->font()).elidedText(poSet->path(), Qt::ElideMiddle, rect.width());
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, path, &rect);
 }
