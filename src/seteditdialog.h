@@ -31,7 +31,7 @@ public:
     const QString       name() const;
     const UM::WALLPAPER type() const;
     const UM::IMAGE     style() const;
-    const Hotkey        hotkey() const;
+    const int           hotkey() const;
 
 protected:
     void done(int result);

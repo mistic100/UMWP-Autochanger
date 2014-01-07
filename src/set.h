@@ -18,7 +18,7 @@ private :
     bool                m_bActive;
     QVector<QString>    m_vFiles;
     double              m_dLastModif;
-    Hotkey              m_oHotkey;
+    int                 m_iHotkey;
 
 public:
     Set(const QString &_path, const QString &_name, const bool _active);
@@ -29,13 +29,13 @@ public:
     const UM::IMAGE     style() const { return m_iStyle; }
     const int           count() const { return m_vFiles.size(); }
     const bool          isActive() const { return m_bActive; }
-    const Hotkey        hotkey() const { return m_oHotkey; }
+    const int           hotkey() const { return m_iHotkey; }
 
     void    vSetActive(const bool _a)           { m_bActive=_a; }
     void    vSetName(const QString &_name)      { m_sName=_name; }
     void    vSetType(const UM::WALLPAPER _type) { m_iType=_type; }
     void    vSetStyle(const UM::IMAGE _style)   { m_iStyle=_style; }
-    void    vSetHotkey(const Hotkey _hotkey)    { m_oHotkey=_hotkey; }
+    void    vSetHotkey(const int _hotkey)       { m_iHotkey=_hotkey; }
 
     double  dReadLastModif(QString _sChild="", int _iLevel=0);
     void    vPopulateFiles(QString _sChild="", int _iLevel=0);

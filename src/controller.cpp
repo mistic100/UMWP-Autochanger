@@ -174,9 +174,9 @@ void Controller::vSetOneActiveSet(int _i)
  * @param int _iType
  * @param int _iStyle
  */
-void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const Hotkey _oHotkey)
+void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey)
 {
-    m_poSettings->vEditSet(_i, _sName, _iType, _iStyle, _oHotkey);
+    m_poSettings->vEditSet(_i, _sName, _iType, _iStyle, _iHotkey);
     emit listChanged(false);
 }
 

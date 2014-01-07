@@ -48,7 +48,7 @@ public:
     void vUnactivateSets(const QList<int> _ai);
     void vSetActiveSets(const QList<int> _ai);
     void vSetOneActiveSet(int _i);
-    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const Hotkey _oHotkey);
+    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey);
     void vMoveSet(int _from, int _to);
 
 public slots:

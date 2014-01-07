@@ -56,25 +56,6 @@ namespace UM {
 }
 
 
-// custom struct for storing and comparing hotkeys
-struct Hotkey
-{
-    int key;
-    int mod;
-
-    Hotkey() { key=mod=0; }
-    Hotkey(const int k, const int m) { key=k; mod=m; }
-
-    const int res() const { return key+mod; }
-    const bool valid() const { return key>0 && mod>0; }
-
-    bool operator==(const Hotkey &o) const { return key==o.key && mod==o.mod; }
-};
-
-
-typedef QList<int> QListInt;
-
-
 // common functions
 bool bFileExists(const QString &_sPath, bool _bCheckWrite=true);
 bool bDirectoryExists(const QString &_sPath);

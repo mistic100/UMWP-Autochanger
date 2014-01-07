@@ -31,9 +31,9 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _poSettings) : QDialog(_p
     ui->hotkeyShowHide->setDisabled(!m_poSettings->bParam("use_hotkeys"));
     ui->hotkeyStartPause->setDisabled(!m_poSettings->bParam("use_hotkeys"));
 
-    ui->hotkeyRefresh->vSetHotkey(m_poSettings->oHotkey("refresh"));
-    ui->hotkeyShowHide->vSetHotkey(m_poSettings->oHotkey("showhide"));
-    ui->hotkeyStartPause->vSetHotkey(m_poSettings->oHotkey("startpause"));
+    ui->hotkeyRefresh->vSetHotkey(m_poSettings->iHotkey("refresh"));
+    ui->hotkeyShowHide->vSetHotkey(m_poSettings->iHotkey("showhide"));
+    ui->hotkeyStartPause->vSetHotkey(m_poSettings->iHotkey("startpause"));
 
     ui->optionDelay->setValue(m_poSettings->iParam("delay"));
 
@@ -65,7 +65,7 @@ void ConfigDialog::done(int result)
 
         for (QHash<char*, QLineEditHotkey*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
         {
-            if (!it.value()->hotkey().valid())
+            if (!it.value()->hotkey())
             {
                 continue;
             }
@@ -73,7 +73,7 @@ void ConfigDialog::done(int result)
             // check against other main hotkeys
             for (QHash<char*, QLineEditHotkey*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
             {
-                if (!it2.value()->hotkey().valid())
+                if (!it2.value()->hotkey())
                 {
                     continue;
                 }
@@ -97,7 +97,7 @@ void ConfigDialog::done(int result)
             {
                 Set* poSet = m_poSettings->poGetSet(i);
 
-                if (!poSet->hotkey().valid())
+                if (!poSet->hotkey())
                 {
                     continue;
                 }

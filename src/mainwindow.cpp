@@ -185,20 +185,20 @@ void MainWindow::vUpdateHotkeys()
 
     if (m_poCtrl->settings()->bParam("use_hotkeys"))
     {
-        QHash<int, QListInt> mergedHotkeys;
+        QHash<int, QList<int>> mergedHotkeys;
         GlobalShortcut* sh;
 
         for (int i=0, l=m_poCtrl->settings()->iNbSets(); i<l; i++)
         {
             Set* poSet = m_poCtrl->settings()->poGetSet(i);
 
-            if (poSet->hotkey().valid())
+            if (poSet->hotkey())
             {
-                mergedHotkeys[poSet->hotkey().res()].push_back(i);
+                mergedHotkeys[poSet->hotkey()].push_back(i);
             }
         }
 
-        for (QHash<int, QListInt>::Iterator it=mergedHotkeys.begin(); it!=mergedHotkeys.end(); ++it)
+        for (QHash<int, QList<int>>::Iterator it=mergedHotkeys.begin(); it!=mergedHotkeys.end(); ++it)
         {
             sh = new GlobalShortcut();
             sh->setShortcut(QKeySequence(it.key()));
@@ -207,31 +207,31 @@ void MainWindow::vUpdateHotkeys()
             m_apoShortcuts.push_back(sh);
         }
 
-        Hotkey hkRefresh = m_poCtrl->settings()->oHotkey("refresh");
-        if (hkRefresh.valid())
+        int hkRefresh = m_poCtrl->settings()->iHotkey("refresh");
+        if (hkRefresh)
         {
             sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(hkRefresh.res()));
+            sh->setShortcut(QKeySequence(hkRefresh));
             sh->vSetRefresh();
             connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
             m_apoShortcuts.push_back(sh);
         }
 
-        Hotkey hkStartPause = m_poCtrl->settings()->oHotkey("startpause");
-        if (hkStartPause.valid())
+        int hkStartPause = m_poCtrl->settings()->iHotkey("startpause");
+        if (hkStartPause)
         {
             sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(hkStartPause.res()));
+            sh->setShortcut(QKeySequence(hkStartPause));
             sh->vSetStartPause();
             connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
             m_apoShortcuts.push_back(sh);
         }
 
-        Hotkey hkShowHide = m_poCtrl->settings()->oHotkey("showhide");
-        if (hkShowHide.valid())
+        int hkShowHide = m_poCtrl->settings()->iHotkey("showhide");
+        if (hkShowHide)
         {
             sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(hkShowHide.res()));
+            sh->setShortcut(QKeySequence(hkShowHide));
             sh->vSetShowHide();
             connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
             m_apoShortcuts.push_back(sh);

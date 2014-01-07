@@ -54,20 +54,20 @@ void SetEditDialog::done(int result)
 {
     if (result == QDialog::Accepted)
     {
-        Hotkey hotkey = ui->m_poHotkeyInput->hotkey();
+        int hotkey = ui->m_poHotkeyInput->hotkey();
         QString error;
 
-        if (hotkey.valid())
+        if (hotkey)
         {
-            if (hotkey == m_poSettings->oHotkey("refresh"))
+            if (hotkey == m_poSettings->iHotkey("refresh"))
             {
                 error = tr("Refresh");
             }
-            else if (hotkey == m_poSettings->oHotkey("startpause"))
+            else if (hotkey == m_poSettings->iHotkey("startpause"))
             {
                 error = tr("Start/Pause");
             }
-            else if (hotkey == m_poSettings->oHotkey("showhide"))
+            else if (hotkey == m_poSettings->iHotkey("showhide"))
             {
                 error = tr("Show/Hide");
             }
@@ -131,7 +131,7 @@ const UM::IMAGE SetEditDialog::style() const
  * @brief SetEditDialog::hotkey
  * @return Hotkey
  */
-const Hotkey SetEditDialog::hotkey() const
+const int SetEditDialog::hotkey() const
 {
     return ui->m_poHotkeyInput->hotkey();
 }
