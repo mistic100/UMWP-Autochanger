@@ -111,7 +111,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     painter->setFont(QFont("Calibri", 9, -1, true));
     if (selected)
     {
-        painter->setPen(Qt::lightGray);
+        painter->setPen(QColor(230,230,230));
     }
     else
     {

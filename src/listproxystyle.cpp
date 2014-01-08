@@ -14,25 +14,30 @@ void ListProxyStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyl
 {
     if (element == QStyle::PE_IndicatorItemViewItemDrop)
     {
-        QRect rect = option->rect.adjusted(0, 1, 0, 1);
+        if (option->rect.width() == 0) return;
 
-        if (rect.width() == 0) return;
+        QRect rect = option->rect.adjusted(0, 1, 0, 1);
+        rect.setTop(qFloor(rect.top()/35)*35); // correct 1 pixel offset between bottom of element n and top of element n+1
 
         painter->setPen(QColor(200,0,100));
         painter->setBrush(QColor(200,0,100));
 
-        QPoint points[4] = {
-            QPoint(-3,0),
+        QPoint points[8] = {
+            QPoint(-4,0),
+            QPoint(-1,-3),
             QPoint(0,-3),
             QPoint(3,0),
-            QPoint(0,3),
+            QPoint(3,1),
+            QPoint(0,4),
+            QPoint(-1,4),
+            QPoint(-4,1)
         };
 
         painter->translate(rect.topLeft());
-        painter->drawConvexPolygon(points, 4);
-        painter->drawLine(QPoint(0,0), QPoint(rect.width(),0));
-        painter->translate(QPoint(rect.width()-1,0));
-        painter->drawConvexPolygon(points, 4);
+        painter->drawConvexPolygon(points, 8);
+        painter->drawRect(4, 0, rect.width()-8, 1);
+        painter->translate(rect.width(), 0);
+        painter->drawConvexPolygon(points, 8);
     }
     else
     {
