@@ -18,7 +18,8 @@ AppPublisherURL={#PublisherURL}
 AppSupportURL={#ProjectURL}
 AppUpdatesURL={#ProjectURL}
 
-MinVersion=6.1
+; Windows 7
+MinVersion=6.1 
 
 ; directories
 DefaultDirName={pf}\{#AppName}
@@ -46,10 +47,17 @@ english.DeleteSettings=Delete settings file?
 french.DeleteSettings=Supprimer le fichier de configuration ?
 
 english.NewerVersionExists=A newer version of {#AppName} is already installed.%n%nInstaller version: {#AppVersion}%nCurrent version: 
-french.NewerVersionExists=Une version plus récente de {#AppName} existe déjà.%n%nVersion de l'installeur : {#AppVersion}%nVersion actuelle : 
+french.NewerVersionExists=Une version plus récente de {#AppName} existe déjà.%n%nVersion de l'installeur : {#AppVersion}%nVersion actuelle :
+
+english.Options=Options:
+french.Options=Options :
+
+english.OptionAutostart=Launch {#AppName} with Windows
+french.OptionAutostart=Démarrer {#AppName} avec Windows
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "autostart"; Description: "{cm:OptionAutostart}"; GroupDescription: "{cm:Options}"
 
 [Files]
 Source: "{#DataRoot}\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
@@ -58,7 +66,10 @@ Source: "{#DataRoot}\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdir
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"; IconFilename: "{app}\icon.ico"
 Name: "{group}\{cm:ProgramOnTheWeb,{#AppName}}"; Filename: "{#ProjectURL}"
 Name: "{group}\{cm:UninstallProgram,{#AppName}}"; Filename: "{uninstallexe}"; IconFilename: "{app}\icon-uninst.ico"
-Name: "{commondesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
+
+Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
+
+Name: "{userstartup}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: autostart
 
 [Run]
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
@@ -67,6 +78,7 @@ Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(
 Type: filesandordirs; Name: "{app}\cache";
 
 [Code]
+// delete settings.xml during uninstall
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   case CurUninstallStep of
@@ -80,6 +92,7 @@ begin
   end;
 end; 
 
+// find current version before installation
 function InitializeSetup: Boolean;
 var
   Version: String;
@@ -102,3 +115,22 @@ begin
       Result := True;
     end
 end;
+
+// handle options
+{*
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  Result := True;
+  if CurPageID = wpSelectTasks then
+    begin
+      if IsTaskSelected('autostart') then
+        begin
+          MsgBox('Task has been checked.', mbInformation, MB_OK);
+        end
+      else
+        begin
+          MsgBox('Ttask has NOT been checked.', mbInformation, MB_OK);
+        end
+    end;
+end;
+*}
