@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QFile>
 #include <QProgressBar>
+#include <QFileDialog>
 
 #include "mainwindow.h"
 #include "errorwidget.h"
@@ -52,15 +53,23 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
     m_poActionPause1 =       m_poMenuBar->addAction(tr("Pause"));
     m_poActionHide1 =        m_poMenuBar->addAction(tr("Hide"));
                             m_poMenuBar->addSeparator();
-    m_poActionOptions =      m_poMenuBar->addAction(tr("Options"));
+    m_poMenuOptions =        m_poMenuBar->addMenu(tr("Configuration"));
                             m_poMenuBar->addSeparator();
     QAction* poActionHelp =  m_poMenuBar->addAction(tr("?"));
 
-    connect(poActionQuit1,      SIGNAL(triggered()), this, SLOT(slotQuit()));
-    connect(m_poActionHide1,    SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
-    connect(m_poActionPause1,   SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(m_poActionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
-    connect(poActionHelp,       SIGNAL(triggered()), this, SLOT(slotShowHelp()));
+    QAction* poActionOptions = m_poMenuOptions->addAction(QIcon(":/icon/settings"), tr("Options"));
+                              m_poMenuOptions->addSeparator();
+    QAction* poActionImport =  m_poMenuOptions->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
+    QAction* poActionExport =  m_poMenuOptions->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
+
+    connect(poActionQuit1,    SIGNAL(triggered()), this, SLOT(slotQuit()));
+    connect(m_poActionHide1,  SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
+    connect(m_poActionPause1, SIGNAL(triggered()), this, SLOT(slotStartPause()));
+    connect(poActionHelp,     SIGNAL(triggered()), this, SLOT(slotShowHelp()));
+
+    connect(poActionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
+    connect(poActionImport,   SIGNAL(triggered()), this, SLOT(slotImport()));
+    connect(poActionExport,   SIGNAL(triggered()), this, SLOT(slotExport()));
 
     setMenuBar(m_poMenuBar);
 
@@ -122,7 +131,7 @@ void MainWindow::vShowError()
     m_poTrayIcon->hide();
     m_poActionHide1->setVisible(false);
     m_poActionPause1->setVisible(false);
-    m_poActionOptions->setVisible(false);
+    m_poMenuOptions->menuAction()->setVisible(false);
 
     ErrorWidget* widget = new ErrorWidget(this, m_poCtrl);
     connect(widget, SIGNAL(pathSaved()), this, SLOT(vInit()));
@@ -142,7 +151,7 @@ void MainWindow::vShowMain()
     m_poTrayIcon->show();
     m_poActionHide1->setVisible(true);
     m_poActionPause1->setVisible(true);
-    m_poActionOptions->setVisible(true);
+    m_poMenuOptions->menuAction()->setVisible(true);
 
     MainWidget* widget = new MainWidget(this, m_poCtrl);
 
@@ -373,6 +382,40 @@ void MainWindow::slotConfigDialog()
         }
     }
     vUpdateHotkeys();
+}
+
+/**
+ * @brief Open dialog to export config file
+ */
+void MainWindow::slotExport()
+{
+    QString sFilename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
+                                                     QDir::homePath() + QDir::separator() + "umwp_settings.xml",
+                                                     tr("XML files (*.xml)"));
+
+    m_poCtrl->settings()->vWriteXML(sFilename);
+}
+
+/**
+ * @brief Open dialog to import config file
+ */
+void MainWindow::slotImport()
+{
+    QString sFilename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
+                                                     QDir::homePath(),
+                                                     tr("XML files (*.xml)"));
+
+    // overwrite file
+    QFile::remove(QString::fromAscii(APP_CONFIG_FILE));
+    QFile::copy(sFilename, QString::fromAscii(APP_CONFIG_FILE));
+
+    // reload config (preserve UM path)
+    QString sUMPath = m_poCtrl->settings()->sParam("umpath");
+    m_poCtrl->settings()->vReadXML();
+    m_poCtrl->settings()->vSetParam("umpath", sUMPath);
+
+    ((MainWidget*)centralWidget())->slotUpdateList(true);
+    m_poCtrl->slotUpdate();
 }
 
 /**

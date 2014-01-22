@@ -63,6 +63,9 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
+* 1.4.1
+    * new: export and import XML configuration file
+
 * [1.4 (06/01/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.4)
     * new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide
     * new: permanently save last used directory

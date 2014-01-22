@@ -16,6 +16,9 @@
         <file alias="im_tile">images/icons/im_tile.png</file>
         <file alias="w_desktop">images/icons/w_desktop.png</file>
         <file alias="w_monitor">images/icons/w_monitor.png</file>
+        <file alias="export">images/icons/export.png</file>
+        <file alias="import">images/icons/import.png</file>
+        <file alias="settings">images/icons/settings.png</file>
     </qresource>
     <qresource prefix="/button">
         <file alias="activate">images/buttons/button_activate.png</file>

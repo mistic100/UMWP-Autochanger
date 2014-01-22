@@ -419,8 +419,13 @@ void Settings::vReadXML()
 /**
  * @brief Write parameters into the settings file
  */
-void Settings::vWriteXML()
+void Settings::vWriteXML(QString _sFilename)
 {
+    if (_sFilename.isEmpty())
+    {
+        _sFilename = QString::fromAscii(APP_CONFIG_FILE);
+    }
+
     // initialize domdocument
     QDomDocument oDom;
     QDomProcessingInstruction header = oDom.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
@@ -473,7 +478,7 @@ void Settings::vWriteXML()
     oDom.appendChild(main_node);
 
     // save file
-    QFile oXML(QString::fromAscii(APP_CONFIG_FILE));
+    QFile oXML(_sFilename);
     oXML.open(QIODevice::WriteOnly);
 
     QTextStream stream(&oXML);

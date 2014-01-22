@@ -9,7 +9,7 @@
 
 
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "1.4"
+#define APP_VERSION "1.4.1"
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_CACHE_DIR "cache/"
 #define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
