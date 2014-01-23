@@ -19,6 +19,9 @@
         <file alias="export">images/icons/export.png</file>
         <file alias="import">images/icons/import.png</file>
         <file alias="settings">images/icons/settings.png</file>
+        <file alias="quit">images/icons/quit.png</file>
+        <file alias="config">images/icons/config.png</file>
+        <file alias="help">images/icons/help.png</file>
     </qresource>
     <qresource prefix="/button">
         <file alias="activate">images/buttons/button_activate.png</file>

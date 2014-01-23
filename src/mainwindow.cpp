@@ -1,4 +1,6 @@
 #include <QMenu>
+#include <QToolBar>
+#include <QToolButton>
 #include <QMessageBox>
 #include <QLabel>
 #include <QFile>
@@ -47,31 +49,34 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 
 
     // MENUBAR
-    m_poMenuBar = new QMenuBar(this);
+    m_poMenuBar = new QToolBarExt(this);
+    m_poMenuBar->setMovable(false);
+    m_poMenuBar->setIconSize(QSize(20, 20));
 
-    QAction* poActionQuit1 = m_poMenuBar->addAction(tr("Quit"));
-    m_poActionPause1 =       m_poMenuBar->addAction(tr("Pause"));
-    m_poActionHide1 =        m_poMenuBar->addAction(tr("Hide"));
-                            m_poMenuBar->addSeparator();
-    m_poMenuOptions =        m_poMenuBar->addMenu(tr("Configuration"));
-                            m_poMenuBar->addSeparator();
-    QAction* poActionHelp =  m_poMenuBar->addAction(tr("?"));
+    QMenu* poMenuConfig = new QMenu();
+    QAction* poActionOptions = poMenuConfig->addAction(QIcon(":/icon/settings"), tr("Options"));
+                               poMenuConfig->addSeparator();
+    QAction* poActionImport =  poMenuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
+    QAction* poActionExport =  poMenuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
 
-    QAction* poActionOptions = m_poMenuOptions->addAction(QIcon(":/icon/settings"), tr("Options"));
-                              m_poMenuOptions->addSeparator();
-    QAction* poActionImport =  m_poMenuOptions->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
-    QAction* poActionExport =  m_poMenuOptions->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
+    QToolButton* poActionQuit1 = m_poMenuBar->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextBesideIcon);
+    m_poActionPause1 =           m_poMenuBar->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextBesideIcon);
+    m_poActionHide1 =            m_poMenuBar->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextBesideIcon);
+                                 m_poMenuBar->addSeparator();
+    m_poActionConfig =           m_poMenuBar->addButton(QIcon(":/icon/config"), tr("Configuration"), poMenuConfig, Qt::ToolButtonTextBesideIcon);
+                                 m_poMenuBar->addSeparator();
+    QToolButton* poActionHelp =  m_poMenuBar->addButton(QIcon(":/icon/help"), tr("?"));
 
-    connect(poActionQuit1,    SIGNAL(triggered()), this, SLOT(slotQuit()));
-    connect(m_poActionHide1,  SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
-    connect(m_poActionPause1, SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(poActionHelp,     SIGNAL(triggered()), this, SLOT(slotShowHelp()));
+    connect(poActionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
+    connect(m_poActionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
+    connect(m_poActionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
+    connect(poActionHelp,     SIGNAL(clicked()), this, SLOT(slotShowHelp()));
 
     connect(poActionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
     connect(poActionImport,   SIGNAL(triggered()), this, SLOT(slotImport()));
     connect(poActionExport,   SIGNAL(triggered()), this, SLOT(slotExport()));
 
-    setMenuBar(m_poMenuBar);
+    addToolBar(m_poMenuBar);
 
 
     // TRAY ICON
@@ -85,8 +90,8 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
     QAction* poActionRefresh =   poTrayMenu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
     m_poActionHide2 =            poTrayMenu->addAction(QIcon(":/icon/hide"), tr("Hide"));
     m_poTrayQuickMenu =          poTrayMenu->addMenu(QIcon(":/icon/quick"), tr("Quick switch"));
-                                poTrayMenu->addSeparator();
-    QAction* poActionQuit2 =     poTrayMenu->addAction(tr("Quit"));
+                                 poTrayMenu->addSeparator();
+    QAction* poActionQuit2 =     poTrayMenu->addAction(QIcon(":/icon/quit"), tr("Quit"));
 
     vUpdateTrayQuickMenu();
 
@@ -129,9 +134,9 @@ void MainWindow::vInit()
 void MainWindow::vShowError()
 {
     m_poTrayIcon->hide();
-    m_poActionHide1->setVisible(false);
-    m_poActionPause1->setVisible(false);
-    m_poMenuOptions->menuAction()->setVisible(false);
+    m_poActionHide1->defaultAction()->setVisible(false);
+    m_poActionPause1->defaultAction()->setVisible(false);
+    m_poActionConfig->defaultAction()->setVisible(false);
 
     ErrorWidget* widget = new ErrorWidget(this, m_poCtrl);
     connect(widget, SIGNAL(pathSaved()), this, SLOT(vInit()));
@@ -149,9 +154,9 @@ void MainWindow::vShowError()
 void MainWindow::vShowMain()
 {
     m_poTrayIcon->show();
-    m_poActionHide1->setVisible(true);
-    m_poActionPause1->setVisible(true);
-    m_poMenuOptions->menuAction()->setVisible(true);
+    m_poActionHide1->defaultAction()->setVisible(true);
+    m_poActionPause1->defaultAction()->setVisible(true);
+    m_poActionConfig->defaultAction()->setVisible(true);
 
     MainWidget* widget = new MainWidget(this, m_poCtrl);
 

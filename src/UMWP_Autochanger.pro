@@ -27,7 +27,8 @@ SOURCES += \
     mainwidget.cpp \
     seteditdialog.cpp \
     configdialog.cpp \
-    qlineedithotkey.cpp
+    qlineedithotkey.cpp \
+    qtoolbarext.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     seteditdialog.h \
     configdialog.h \
     qlineedithotkey.h \
-    globalshortcut.h
+    globalshortcut.h \
+    qtoolbarext.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc

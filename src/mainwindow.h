@@ -10,6 +10,7 @@
 #include "main.h"
 #include "controller.h"
 #include "globalshortcut.h"
+#include "qtoolbarext.h"
 
 
 /**
@@ -24,14 +25,14 @@ private:
 
     QSystemTrayIcon*    m_poTrayIcon;
     QStatusBar*         m_poStatusBar;
-    QMenuBar*           m_poMenuBar;
+    QToolBarExt*        m_poMenuBar;
     QMenu*              m_poTrayQuickMenu;
 
     // reference to some QAction modified after initilization
-    QMenu*              m_poMenuOptions;
-    QAction*            m_poActionHide1; // menu
+    QToolButton*        m_poActionConfig;
+    QToolButton*        m_poActionHide1; // menu
     QAction*            m_poActionHide2; // tray
-    QAction*            m_poActionPause1; // menu
+    QToolButton*        m_poActionPause1; // menu
     QAction*            m_poActionPause2; // tray
 
     QList<GlobalShortcut*> m_apoShortcuts;
