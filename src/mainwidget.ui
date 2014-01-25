@@ -137,33 +137,6 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QPushButton" name="m_poButtonSave">
-       <property name="maximumSize">
-        <size>
-         <width>62</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Save</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normalon>:/button/save</normalon>
-        </iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>62</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>

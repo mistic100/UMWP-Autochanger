@@ -92,6 +92,8 @@ bool Controller::bStartPause()
 void Controller::vAddSet(const QString _sDirname)
 {
     m_poSettings->poAddSet(_sDirname);
+
+    m_poSettings->vWriteXML();
     emit listChanged(false);
 }
 
@@ -108,6 +110,7 @@ void Controller::vDeleteSets(const QList<int> _ai)
         iOffset++;
     }
 
+    m_poSettings->vWriteXML();
     emit listChanged(true);
 }
 
@@ -122,6 +125,7 @@ void Controller::vActivateSets(const QList<int> _ai)
         m_poSettings->vSetState(*i, true);
     }
 
+    m_poSettings->vWriteXML();
     emit listChanged(false);
 }
 
@@ -136,6 +140,7 @@ void Controller::vUnactivateSets(const QList<int> _ai)
         m_poSettings->vSetState(*i, false);
     }
 
+    m_poSettings->vWriteXML();
     emit listChanged(false);
 }
 
@@ -150,6 +155,7 @@ void Controller::vSetActiveSets(const QList<int> _ai)
         m_poSettings->vSetState(i, _ai.contains(i));
     }
 
+    m_poSettings->vWriteXML();
     emit listChanged(false);
 }
 
@@ -164,6 +170,7 @@ void Controller::vSetOneActiveSet(int _i)
         m_poSettings->vSetState(i, i==_i);
     }
 
+    m_poSettings->vWriteXML();
     emit listChanged(false);
 }
 
@@ -177,6 +184,8 @@ void Controller::vSetOneActiveSet(int _i)
 void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey)
 {
     m_poSettings->vEditSet(_i, _sName, _iType, _iStyle, _iHotkey);
+
+    m_poSettings->vWriteXML();
     emit listChanged(false);
 }
 
@@ -188,6 +197,8 @@ void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iT
 void Controller::vMoveSet(int _from, int _to)
 {
     m_poSettings->vMoveSet(_from, _to);
+
+    m_poSettings->vWriteXML();
     emit listChanged(true);
 }
 

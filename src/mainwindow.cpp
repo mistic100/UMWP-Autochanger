@@ -61,14 +61,14 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 
     QToolButton* poActionQuit1 = m_poMenuBar->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextBesideIcon);
     m_poActionPause1 =           m_poMenuBar->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextBesideIcon);
+    QToolButton* poActionRefresh1 = m_poMenuBar->addButton(QIcon(":/icon/refresh"), tr("Refresh"), Qt::ToolButtonTextBesideIcon);
     m_poActionHide1 =            m_poMenuBar->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextBesideIcon);
-                                 m_poMenuBar->addSeparator();
     m_poActionConfig =           m_poMenuBar->addButton(QIcon(":/icon/config"), tr("Configuration"), poMenuConfig, Qt::ToolButtonTextBesideIcon);
-                                 m_poMenuBar->addSeparator();
     QToolButton* poActionHelp =  m_poMenuBar->addButton(QIcon(":/icon/help"), tr("?"));
 
     connect(poActionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
     connect(m_poActionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
+    connect(poActionRefresh1, SIGNAL(clicked()), this, SLOT(slotApply()));
     connect(m_poActionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
     connect(poActionHelp,     SIGNAL(clicked()), this, SLOT(slotShowHelp()));
 
@@ -87,7 +87,7 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 
     QMenu* poTrayMenu = new QMenu();
     m_poActionPause2 =           poTrayMenu->addAction(QIcon(":/icon/playpause"), tr("Pause"));
-    QAction* poActionRefresh =   poTrayMenu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
+    QAction* poActionRefresh2 =  poTrayMenu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
     m_poActionHide2 =            poTrayMenu->addAction(QIcon(":/icon/hide"), tr("Hide"));
     m_poTrayQuickMenu =          poTrayMenu->addMenu(QIcon(":/icon/quick"), tr("Quick switch"));
                                  poTrayMenu->addSeparator();
@@ -98,7 +98,7 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
     connect(poActionQuit2,      SIGNAL(triggered()), this, SLOT(slotQuit()));
     connect(m_poActionHide2,    SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
     connect(m_poActionPause2,   SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(poActionRefresh,    SIGNAL(triggered()), this, SLOT(slotApply()));
+    connect(poActionRefresh2,   SIGNAL(triggered()), this, SLOT(slotApply()));
 
     m_poTrayIcon->setToolTip(APP_NAME);
     m_poTrayIcon->setContextMenu(poTrayMenu);
@@ -161,7 +161,7 @@ void MainWindow::vShowMain()
     MainWidget* widget = new MainWidget(this, m_poCtrl);
 
     setCentralWidget(widget);
-    setMinimumSize(400, 240);
+    setMinimumSize(440, 240);
     setMaximumSize(9999, 9999); // no maximum size
     resize(m_poCtrl->settings()->oWindowSize());
 
@@ -348,7 +348,6 @@ void MainWindow::slotToggleWindow(bool _bForceHide)
 void MainWindow::slotApply()
 {
     m_poCtrl->settings()->vSetWindowSize(size());
-    m_poCtrl->settings()->vWriteXML();
 
     m_poCtrl->vStartTimer(true);
 }
@@ -383,7 +382,7 @@ void MainWindow::slotConfigDialog()
         oDialog.vSave();
         if (oDialog.bDelayChanged())
         {
-            m_poCtrl->slotUpdate();
+            m_poCtrl->vStartTimer();
         }
     }
     vUpdateHotkeys();
@@ -417,7 +416,7 @@ void MainWindow::slotImport()
     {
         m_poCtrl->settings()->vSetParam("umpath", sUMPath);
 
-        ((MainWidget*)centralWidget())->slotUpdateList(true);
+        m_poCtrl->emitListChanged(true);
         m_poCtrl->slotUpdate();
     }
     else

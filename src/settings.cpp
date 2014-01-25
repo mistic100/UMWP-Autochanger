@@ -19,7 +19,7 @@ Settings::Settings()
     m_bUnsaved = false;
 
     m_options["umpath"] = QVariant();
-    m_options["window_width"] = 430;
+    m_options["window_width"] = 440;
     m_options["window_height"] = 240;
     m_options["delay"] = 60;
     m_options["minimize"] = true;
@@ -28,7 +28,7 @@ Settings::Settings()
     m_options["msgcount"] = 0;
     m_options["use_hotkeys"] = false;
     m_options["show_notifications"] = true;
-    m_options["last_dir"] = QVariant();
+    m_options["last_dir"] = QDir::homePath();
 
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;

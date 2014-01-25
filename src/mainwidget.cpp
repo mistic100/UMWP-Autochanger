@@ -32,9 +32,6 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent)
     connect(ui->m_poList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotMoveItem(QModelIndex,int,int,QModelIndex,int)));
 
-    // save button
-    connect(ui->m_poButtonSave, SIGNAL(clicked()), _parent, SLOT(slotApply()));
-
     slotUpdateList(true);
 }
 
@@ -100,12 +97,8 @@ QList<int> MainWidget::aiGetSelectedIndexes()
  */
 void MainWidget::on_m_poButtonAdd_clicked()
 {
-    QString sLastDir = m_poCtrl->settings()->sParam("last_dir");
-    if (sLastDir.isEmpty())
-    {
-        sLastDir = QDir::homePath();
-    }
-    QString sDirname = QFileDialog::getExistingDirectory(this, tr("Add"), sLastDir);
+    QString sDirname = QFileDialog::getExistingDirectory(this, tr("Add"),
+                                                         m_poCtrl->settings()->sParam("last_dir"));
 
     if (!sDirname.isEmpty())
     {

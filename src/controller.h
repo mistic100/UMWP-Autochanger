@@ -51,6 +51,8 @@ public:
     void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey);
     void vMoveSet(int _from, int _to);
 
+    void emitListChanged(bool _resetSel) { emit listChanged(_resetSel); }
+
 public slots:
     void slotUpdate(bool _bCheckFiles=true);
 
