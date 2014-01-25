@@ -40,7 +40,7 @@ Settings::Settings()
     m_env["startlinkpath"] = QVariant();
     m_env["nb_monitors"] = 1;
 
-    vReadXML();
+    bReadXML();
     vInit();
 
     //qDebug()<<m_options;
@@ -151,28 +151,51 @@ void Settings::vInit()
     CRegKey oReg;
     int iResult;
     DWORD dwLen;
+    wchar_t* wsValue1;
+    wchar_t* wsValue2;
 
 
     // SEARCH ULTRAMON EXE
     if (m_options["umpath"].isNull())
     {
-        wchar_t* sPath1 = (wchar_t*) malloc(256);
+        wsValue1 = (wchar_t*) malloc(256);
+        dwLen = 256;
+
+        iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{ED7FE81C-378C-411D-B5B4-509B978BA204}"), KEY_READ | KEY_WOW64_64KEY);
+        if (iResult == ERROR_SUCCESS)
+        {
+            iResult = oReg.QueryStringValue(_T("InstallLocation"), wsValue1, &dwLen);
+            if (iResult == ERROR_SUCCESS)
+            {
+                 QString sExePath = QString::fromWCharArray(wsValue1, dwLen-1); // remove the \0 termination
+                 sExePath.append("UltraMonDesktop.exe");
+                 m_options["umpath"] = sExePath;
+            }
+        }
+        oReg.Close();
+
+        free(wsValue1);
+    }
+
+    if (m_options["umpath"].isNull())
+    {
+        wsValue1 = (wchar_t*) malloc(256);
         dwLen = 256;
 
         iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"), KEY_READ | KEY_WOW64_64KEY);
         if (iResult == ERROR_SUCCESS)
         {
-            iResult = oReg.QueryStringValue(_T("ProgramFilesDir"), sPath1, &dwLen);
+            iResult = oReg.QueryStringValue(_T("ProgramFilesDir"), wsValue1, &dwLen);
             if (iResult == ERROR_SUCCESS)
             {
-                 QString sExePath = QString::fromWCharArray(sPath1, dwLen-1); // remove the \0 termination
+                 QString sExePath = QString::fromWCharArray(wsValue1, dwLen-1); // remove the \0 termination
                  sExePath.append("\\Realtime Soft\\UltraMon\\UltraMonDesktop.exe");
                  m_options["umpath"] = sExePath;
             }
         }
         oReg.Close();
 
-        free(sPath1);
+        free(wsValue1);
     }
 
     if (m_options["umpath"].isNull() || !bFileExists(m_options["umpath"].toString(), false))
@@ -182,58 +205,68 @@ void Settings::vInit()
 
 
     // SEARCH ULTRAMON VERSION
-    wchar_t* sVer = (wchar_t*) malloc(16);
+    wsValue1 = (wchar_t*) malloc(16);
     dwLen = 16;
 
     iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Realtime Soft\\UltraMon"), KEY_READ | KEY_WOW64_64KEY);
     if (iResult == ERROR_SUCCESS)
     {
-        iResult = oReg.QueryStringValue(_T("CurrentVersion"), sVer, &dwLen);
+        iResult = oReg.QueryStringValue(_T("CurrentVersion"), wsValue1, &dwLen);
         if (iResult == ERROR_SUCCESS)
         {
-            m_env["umversion"] = QString::fromWCharArray(sVer, dwLen-1); // remove the \0 termination
+            m_env["umversion"] = QString::fromWCharArray(wsValue1, dwLen-1); // remove the \0 termination
         }
     }
     oReg.Close();
 
-    free(sVer);
+    free(wsValue1);
 
     if (m_env["umversion"] == "unknown")
     {
         m_iState|= UM_BAD_VERSION;
     }
-    // TODO : check version
+    else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
+    {
+        m_iState|= UM_BAD_VERSION;
+    }
 
 
     // SEARCH BMP PATH
-    wchar_t* sPath2 = (wchar_t*) malloc(256);
+    wsValue2 = (wchar_t*) malloc(256);
 
-    iResult = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &sPath2);
+    iResult = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &wsValue2);
     if (iResult == S_OK)
     {
-        QString sBMPPath = QString::fromWCharArray(sPath2);
+        QString sBMPPath = QString::fromWCharArray(wsValue2);
         sBMPPath.append("\\Realtime Soft\\UltraMon\\UltraMon Wallpaper.bmp");
         m_env["bmppath"] = sBMPPath;
     }
-    // TODO : error check
+    else
+    {
+        m_iState|= UM_UNKNOWN_ERROR;
+    }
 
-    CoTaskMemFree(sPath2);
+    CoTaskMemFree(wsValue2);
 
 
     // SEARCH WALLPAPER FOLDER
     if (!(m_iState & UM_BAD_VERSION))
     {
-        wchar_t* sPath3 = (wchar_t*) malloc(256);
+        wsValue2 = (wchar_t*) malloc(256);
 
-        int iResult = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &sPath3);
+        int iResult = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &wsValue2);
         if (iResult == S_OK)
         {
-            QString sWallPath = QString::fromWCharArray(sPath3);
+            QString sWallPath = QString::fromWCharArray(wsValue2);
             sWallPath.append("\\Realtime Soft\\UltraMon\\" + m_env["umversion"].toString() + "\\Wallpapers\\");
             m_env["wallpath"] = sWallPath;
         }
+        else
+        {
+            m_iState|= UM_UNKNOWN_ERROR;
+        }
 
-        CoTaskMemFree(sPath3);
+        CoTaskMemFree(wsValue2);
     }
 
     // CHECK WALLPAPER FILE
@@ -257,17 +290,17 @@ void Settings::vInit()
 
 
     // SEARCH SHORTCUT FILE
-    wchar_t* sPath4 = (wchar_t*) malloc(256);
+    wsValue2 = (wchar_t*) malloc(256);
 
-    iResult = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &sPath4);
+    iResult = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &wsValue2);
     if (iResult == S_OK)
     {
-        QString sStartLnkPath = QString::fromWCharArray(sPath4);
+        QString sStartLnkPath = QString::fromWCharArray(wsValue2);
         sStartLnkPath.append("\\UMWP Autochanger.lnk");
         m_env["startlinkpath"] = sStartLnkPath;
     }
 
-    CoTaskMemFree(sPath4);
+    CoTaskMemFree(wsValue2);
 }
 
 /**
@@ -275,7 +308,7 @@ void Settings::vInit()
  */
 void Settings::vReadNbMonitors()
 {
-    QString sFilename = m_env["wallpath"].toString() + "default.wallpaper";
+    QString sFilename = m_env["wallpath"].toString().append("default.wallpaper");
     std::ifstream ifs(sFilename.toStdString(), std::ios::in | std::ios::binary);
 
     ifs.ignore(7); // "UMWP",  version, activedesktop
@@ -291,19 +324,27 @@ void Settings::vReadNbMonitors()
 /**
  * @brief Load contents of the settings file
  */
-void Settings::vReadXML()
+bool Settings::bReadXML(QString _sFilename)
 {
+    if (_sFilename.isEmpty())
+    {
+        _sFilename = QString::fromAscii(APP_CONFIG_FILE);
+    }
+
     // open xml file
-    QFile oXML(QString::fromAscii(APP_CONFIG_FILE));
+    QFile oXML(_sFilename);
 
     if (!oXML.open(QIODevice::ReadOnly))
     {
-        return;
+        return false;
     }
 
     // initialize domdocument
     QDomDocument oDom;
-    oDom.setContent(oXML.readAll());
+    if (!oDom.setContent(oXML.readAll()))
+    {
+        return false;
+    }
 
     oXML.close();
 
@@ -343,12 +384,14 @@ void Settings::vReadXML()
 
             while (!hotkey_node.isNull())
             {
+                // 1.3 format
                 if (hotkey_node.hasAttribute("key"))
                 {
                     m_hotkeys[ hotkey_node.tagName() ] =
                                 hotkey_node.attribute("key").toInt() +
                                 hotkey_node.attribute("mod").toInt();
                 }
+                // 1.4 format
                 else
                 {
                     m_hotkeys[ hotkey_node.tagName() ] = hotkey_node.text().toInt();
@@ -407,6 +450,7 @@ void Settings::vReadXML()
         setting_node = setting_node.nextSibling().toElement();
     }
 
+    // migration from 1.3
     if (iNewHotkey > 0)
     {
         vUpgradeHotkeys(iNewHotkey);
@@ -414,6 +458,8 @@ void Settings::vReadXML()
     }
 
     m_bUnsaved = false;
+
+    return true;
 }
 
 /**

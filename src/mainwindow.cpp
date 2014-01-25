@@ -410,17 +410,20 @@ void MainWindow::slotImport()
                                                      QDir::homePath(),
                                                      tr("XML files (*.xml)"));
 
-    // overwrite file
-    QFile::remove(QString::fromAscii(APP_CONFIG_FILE));
-    QFile::copy(sFilename, QString::fromAscii(APP_CONFIG_FILE));
-
-    // reload config (preserve UM path)
+    // preserve UM path
     QString sUMPath = m_poCtrl->settings()->sParam("umpath");
-    m_poCtrl->settings()->vReadXML();
-    m_poCtrl->settings()->vSetParam("umpath", sUMPath);
 
-    ((MainWidget*)centralWidget())->slotUpdateList(true);
-    m_poCtrl->slotUpdate();
+    if (m_poCtrl->settings()->bReadXML(sFilename))
+    {
+        m_poCtrl->settings()->vSetParam("umpath", sUMPath);
+
+        ((MainWidget*)centralWidget())->slotUpdateList(true);
+        m_poCtrl->slotUpdate();
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Invalid settings file"), QMessageBox::Ok);
+    }
 }
 
 /**

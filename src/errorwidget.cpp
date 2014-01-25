@@ -63,16 +63,21 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_paren
         connect(poButtonSubmit, SIGNAL(clicked()), this, SLOT(slotSubmit()));
     }
     // OTHER ERRORS
-    else if (iState & UM_FILE_NOT_FOUND)
-    {
-        sDescription = tr("<b>default.wallpaper</b> fil not found, impossible to continue.<br><br>Sould be at: %1")
-                        .arg("<i>" + m_poCtrl->settings()->sEnv("wallpath") + "</i>");
-    }
     else if (iState & UM_BAD_VERSION)
     {
-        sDescription = tr("%1 is incompatible with the current version of UltraMon (%2)")
+        sDescription = tr("%1 is incompatible with the current version of UltraMon (%2).<br>Minimum version: %3")
                         .arg(QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION))
-                        .arg(m_poCtrl->settings()->sEnv("umversion"));
+                        .arg(m_poCtrl->settings()->sEnv("umversion"))
+                        .arg(QString::fromAscii(APP_MIN_UM_VERSION));
+    }
+    else if (iState & UM_FILE_NOT_FOUND)
+    {
+        sDescription = tr("<b>default.wallpaper</b> file not found, impossible to continue.<br><br>Sould be at: %1")
+                        .arg("<i>" + m_poCtrl->settings()->sEnv("wallpath") + "</i>");
+    }
+    else if (iState & UM_UNKNOWN_ERROR)
+    {
+        sDescription = tr("An unknown error append!");
     }
 
     poDescription->setText(sDescription);

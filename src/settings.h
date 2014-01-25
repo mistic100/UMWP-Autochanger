@@ -31,8 +31,10 @@ public:
     // main methods
     void vInit();
     void vReadNbMonitors();
+
     void vWriteXML(QString _sFilename = "");
-    void vReadXML();
+    bool bReadXML(QString _sFilename = "");
+
     void vUpdateSets();
     void vUpgradeHotkeys(int iWinMod);
 

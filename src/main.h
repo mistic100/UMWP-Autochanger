@@ -10,6 +10,7 @@
 
 #define APP_NAME "UMWP Autochanger"
 #define APP_VERSION "1.4.1"
+#define APP_MIN_UM_VERSION "3.2.0"
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_CACHE_DIR "cache/"
 #define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
@@ -23,6 +24,7 @@
 #define UM_BAD_VERSION 2
 #define UM_FILE_NOT_FOUND 4
 #define UM_SETTINGS_FILE_ERROR 8
+#define UM_UNKNOWN_ERROR 256
 
 
 // types for wallpaper file
