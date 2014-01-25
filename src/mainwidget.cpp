@@ -15,21 +15,22 @@
  * @param QWidget* _parent
  * @param Controller* _poCtrl
  */
-MainWidget::MainWidget(QWidget* _parent, Controller* _poCtrl) : QWidget(_parent),
+MainWidget::MainWidget(QWidget* _parent, Controller* _pCtrl) : QWidget(_parent),
     ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
 
-    m_poCtrl = _poCtrl;
+    m_pCtrl = _pCtrl;
 
-    connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
+    connect(m_pCtrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
 
     // main list
-    ui->m_poList->setItemDelegate(new ListDelegate(ui->m_poList, m_poCtrl));
-    ui->m_poList->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    ui->m_poList->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->m_poList->setStyle(new ListProxyStyle);
-    connect(ui->m_poList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+    ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_pCtrl));
+    ui->mainList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    ui->mainList->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->mainList->setStyle(new ListProxyStyle);
+
+    connect(ui->mainList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(slotMoveItem(QModelIndex,int,int,QModelIndex,int)));
 
     slotUpdateList(true);
@@ -47,30 +48,30 @@ MainWidget::~MainWidget()
  * @brief Update list widget contents
  * @param bool _bResetSel - force reset of user selection
  */
-void MainWidget::slotUpdateList(bool _bResetSel)
+void MainWidget::slotUpdateList(bool _resetSel)
 {
-    QList<int> aiSelection;
+    QList<int> aIndexes;
 
-    if (!_bResetSel)
+    if (!_resetSel)
     {
-        aiSelection = aiGetSelectedIndexes();
+        aIndexes = aGetSelectedIndexes();
     }
     else
     {
-        ui->m_poButtonActivate->setVisible(false);
-        ui->m_poButtonDeactivate->setVisible(false);
-        ui->m_poButtonDelete->setVisible(false);
+        ui->buttonActivate->setVisible(false);
+        ui->buttonDeactivate->setVisible(false);
+        ui->buttonDelete->setVisible(false);
     }
 
-    ui->m_poList->clear();
+    ui->mainList->clear();
 
-    for (int i=0; i<m_poCtrl->settings()->iNbSets(); i++)
+    for (int i=0; i<m_pCtrl->pSettings()->nbSets(); i++)
     {
-        QListWidgetItem* poItem = new QListWidgetItem();
-        poItem->setData(Qt::UserRole, i);
+        QListWidgetItem* pItem = new QListWidgetItem();
+        pItem->setData(Qt::UserRole, i);
 
-        ui->m_poList->addItem(poItem);
-        poItem->setSelected(aiSelection.contains(i));
+        ui->mainList->addItem(pItem);
+        pItem->setSelected(aIndexes.contains(i));
     }
 }
 
@@ -78,127 +79,127 @@ void MainWidget::slotUpdateList(bool _bResetSel)
  * @brief Get numerical indexes of selected items
  * @return int[]
  */
-QList<int> MainWidget::aiGetSelectedIndexes()
+QList<int> MainWidget::aGetSelectedIndexes()
 {
-    QList<QListWidgetItem*> apoItems = ui->m_poList->selectedItems();
-    QList<int> aiList;
+    QList<QListWidgetItem*> apItems = ui->mainList->selectedItems();
+    QList<int> aIndexes;
 
-    for (QList<QListWidgetItem*>::iterator it=apoItems.begin(); it!=apoItems.end(); it++)
+    for (QList<QListWidgetItem*>::iterator it=apItems.begin(); it!=apItems.end(); it++)
     {
-        aiList.push_back((*it)->data(Qt::UserRole).toInt());
+        aIndexes.push_back((*it)->data(Qt::UserRole).toInt());
     }
 
-    qSort(aiList);
-    return aiList;
+    qSort(aIndexes);
+    return aIndexes;
 }
 
 /**
  * @brief Open file dialog to add a new set
  */
-void MainWidget::on_m_poButtonAdd_clicked()
+void MainWidget::on_buttonAdd_clicked()
 {
-    QString sDirname = QFileDialog::getExistingDirectory(this, tr("Add"),
-                                                         m_poCtrl->settings()->sParam("last_dir"));
+    QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"),
+                                                        m_pCtrl->pSettings()->sParam("last_dir"));
 
-    if (!sDirname.isEmpty())
+    if (!dirname.isEmpty())
     {
-        QDir oDir(sDirname);
-        oDir.cdUp();
-        m_poCtrl->settings()->vSetParam("last_dir", oDir.absolutePath());
+        QDir dir(dirname);
+        dir.cdUp();
+        m_pCtrl->pSettings()->setParam("last_dir", dir.absolutePath());
 
-        sDirname.replace('/', '\\');
-        m_poCtrl->vAddSet(sDirname);
+        dirname.replace('/', '\\');
+        m_pCtrl->addSet(dirname);
     }
 }
 
 /**
  * @brief Open confirmation to delete selected sets
  */
-void MainWidget::on_m_poButtonDelete_clicked()
+void MainWidget::on_buttonDelete_clicked()
 {
-    int iRet = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
+    int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
                                    QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
 
-    if (iRet == QMessageBox::Ok)
+    if (ret == QMessageBox::Ok)
     {
-        m_poCtrl->vDeleteSets(aiGetSelectedIndexes());
+        m_pCtrl->deleteSets(aGetSelectedIndexes());
     }
 }
 
 /**
  * @brief Activate selected sets
  */
-void MainWidget::on_m_poButtonActivate_clicked()
+void MainWidget::on_buttonActivate_clicked()
 {
-    m_poCtrl->vActivateSets(aiGetSelectedIndexes());
+    m_pCtrl->activateSets(aGetSelectedIndexes());
 }
 
 /**
  * @brief Deactivate selected sets
  */
-void MainWidget::on_m_poButtonDeactivate_clicked()
+void MainWidget::on_buttonDeactivate_clicked()
 {
-    m_poCtrl->vUnactivateSets(aiGetSelectedIndexes());
+    m_pCtrl->unactivateSets(aGetSelectedIndexes());
 }
 
 /**
  * @brief Open dialog for set edition
  */
-void MainWidget::on_m_poList_itemDoubleClicked(QListWidgetItem*)
+void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
 {
-    int iIndex = aiGetSelectedIndexes().at(0);
-    Set* poSet = m_poCtrl->settings()->poGetSet(iIndex);
+    int index = aGetSelectedIndexes().at(0);
+    Set* pSet = m_pCtrl->pSettings()->pGetSet(index);
 
-    SetEditDialog oDialog(this, poSet, m_poCtrl->settings());
+    SetEditDialog dialog(this, pSet, m_pCtrl->pSettings());
 
-    ((MainWindow*)parent())->vClearHotkeys();
-    if (oDialog.exec())
+    ((MainWindow*)parent())->clearHotkeys();
+    if (dialog.exec())
     {
-        m_poCtrl->vEditSet(iIndex, oDialog.name(), oDialog.type(), oDialog.style(), oDialog.hotkey());
+        m_pCtrl->editSet(index, dialog.name(), dialog.type(), dialog.style(), dialog.hotkey());
     }
-    ((MainWindow*)parent())->vUpdateHotkeys();
+    ((MainWindow*)parent())->defineHotkeys();
 }
 
 /**
  * @brief Update buttons visibility on user selection
  */
-void MainWidget::on_m_poList_itemSelectionChanged()
+void MainWidget::on_mainList_itemSelectionChanged()
 {
-    QList<int> aiList = aiGetSelectedIndexes();
+    QList<int> aIndexes = aGetSelectedIndexes();
 
-    if (aiList.size() == 0)
+    if (aIndexes.size() == 0)
     {
-        ui->m_poButtonActivate->setVisible(false);
-        ui->m_poButtonDeactivate->setVisible(false);
-        ui->m_poButtonDelete->setVisible(false);
+        ui->buttonActivate->setVisible(false);
+        ui->buttonDeactivate->setVisible(false);
+        ui->buttonDelete->setVisible(false);
     }
     else
     {
-        int nb_active=0, nb_inactive=0;
+        int nbActive = 0, nbInactive=0;
 
-        for (QList<int>::iterator i=aiList.begin(); i!=aiList.end(); i++)
+        for (QList<int>::iterator i=aIndexes.begin(); i!=aIndexes.end(); i++)
         {
-            if (m_poCtrl->settings()->poGetSet(*i)->isActive())
+            if (m_pCtrl->pSettings()->pGetSet(*i)->isActive())
             {
-                nb_active++;
+                nbActive++;
             }
             else
             {
-                nb_inactive++;
+                nbInactive++;
             }
         }
 
-        if (nb_active>=nb_inactive)
+        if (nbActive >= nbInactive)
         {
-            ui->m_poButtonActivate->setVisible(false);
-            ui->m_poButtonDeactivate->setVisible(true);
+            ui->buttonActivate->setVisible(false);
+            ui->buttonDeactivate->setVisible(true);
         }
         else
         {
-            ui->m_poButtonActivate->setVisible(true);
-            ui->m_poButtonDeactivate->setVisible(false);
+            ui->buttonActivate->setVisible(true);
+            ui->buttonDeactivate->setVisible(false);
         }
-        ui->m_poButtonDelete->setVisible(true);
+        ui->buttonDelete->setVisible(true);
     }
 }
 
@@ -209,5 +210,5 @@ void MainWidget::on_m_poList_itemSelectionChanged()
  */
 void MainWidget::slotMoveItem(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
-    m_poCtrl->vMoveSet(from, to);
+    m_pCtrl->moveSet(from, to);
 }

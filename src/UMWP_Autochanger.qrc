@@ -28,7 +28,6 @@
         <file alias="add">images/buttons/button_add.png</file>
         <file alias="deactivate">images/buttons/button_deactivate.png</file>
         <file alias="delete">images/buttons/button_delete.png</file>
-        <file alias="save">images/buttons/button_save.png</file>
     </qresource>
     <qresource prefix="/lang">
         <file alias="en">lang/en.qm</file>

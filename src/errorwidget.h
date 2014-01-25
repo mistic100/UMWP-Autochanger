@@ -15,11 +15,11 @@ class ErrorWidget : public QWidget
     Q_OBJECT
 
 private:
-    Controller* m_poCtrl;
-    QLineEdit*  m_poEditPath;
+    Controller* m_pCtrl;
+    QLineEdit*  m_pEditPath;
 
 public:
-    ErrorWidget(QWidget* _parent, Controller* _poCtrl);
+    ErrorWidget(QWidget* _parent, Controller* _pCtrl);
     
 public slots:
     void slotBrowse();

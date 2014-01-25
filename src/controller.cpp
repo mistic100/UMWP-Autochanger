@@ -12,39 +12,39 @@
  * @brief Controller::Controller
  * @param Settings* _data
  */
-Controller::Controller(Settings* _data) : QObject(0)
+Controller::Controller(Settings* _pSettings) : QObject(0)
 {
-    m_oRandom.seed((unsigned int)time(NULL));
+    m_randomEngine.seed((unsigned int)time(NULL));
 
-    m_poSettings = _data;
+    m_pSettings = _pSettings;
 
-    m_poMainTimer = new QTimer(this);
-    connect(m_poMainTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
+    m_pMainTimer = new QTimer(this);
+    connect(m_pMainTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
 
-    m_iHeaderSize = 4 + 2 + 1; // "UMWP",  version, activedesktop
-    m_iHeaderSize+= sizeof(DWORD); // nb monitors
-    m_iHeaderSize+= m_poSettings->iEnv("nb_monitors") * sizeof(RECT);
+    m_headerSize = 4 + 2 + 1; // "UMWP",  version, activedesktop
+    m_headerSize+= sizeof(DWORD); // nb monitors
+    m_headerSize+= m_pSettings->iEnv("nb_monitors") * sizeof(RECT);
 }
 
 /**
  * @brief Init version checker thread
  */
-void Controller::vCheckVersion()
+void Controller::checkVersion()
 {
-    if (m_poSettings->bParam("check_updates"))
+    if (m_pSettings->bParam("check_updates"))
     {
-        VersionChecker* poVersionChecker = new VersionChecker(0);
-        connect(poVersionChecker, SIGNAL(newVersionAvailable(const QString)),
+        VersionChecker* pVersionChecker = new VersionChecker(0);
+        connect(pVersionChecker, SIGNAL(newVersionAvailable(const QString)),
                 this, SIGNAL(newVersionAvailable(const QString)));
 
-        QThread* poVCThread = new QThread(this);
-        poVersionChecker->moveToThread(poVCThread);
+        QThread* pVCThread = new QThread(this);
+        pVersionChecker->moveToThread(pVCThread);
 
-        connect(poVCThread, SIGNAL(started()), poVersionChecker, SLOT(run()));
-        connect(poVersionChecker, SIGNAL(finished()), poVCThread, SLOT(quit()));
-        connect(poVersionChecker, SIGNAL(finished()), poVersionChecker, SLOT(deleteLater()));
+        connect(pVCThread, SIGNAL(started()), pVersionChecker, SLOT(run()));
+        connect(pVersionChecker, SIGNAL(finished()), pVCThread, SLOT(quit()));
+        connect(pVersionChecker, SIGNAL(finished()), pVersionChecker, SLOT(deleteLater()));
 
-        QTimer::singleShot(1000, poVCThread, SLOT(start()));
+        QTimer::singleShot(1000, pVCThread, SLOT(start()));
     }
 }
 
@@ -52,18 +52,18 @@ void Controller::vCheckVersion()
  * @brief Stop the timer, update the wallpaper and restart the timer
  * @param bool _bKeepPause - prevent timer to restart
  */
-void Controller::vStartTimer(bool _bKeepPause)
+void Controller::startTimer(bool _keepPause)
 {
-    bool bWasPaused = !m_poMainTimer->isActive();
+    bool wasPaused = !m_pMainTimer->isActive();
 
-    m_poMainTimer->stop();
-    m_poMainTimer->setInterval(m_poSettings->iParam("delay")*1000);
+    m_pMainTimer->stop();
+    m_pMainTimer->setInterval(m_pSettings->iParam("delay")*1000);
 
     slotUpdate();
 
-    if (!bWasPaused || !_bKeepPause)
+    if (!wasPaused || !_keepPause)
     {
-        m_poMainTimer->start();
+        m_pMainTimer->start();
     }
 }
 
@@ -71,29 +71,29 @@ void Controller::vStartTimer(bool _bKeepPause)
  * @brief Pause or start the timer
  * @return bool - true if the timer is running
  */
-bool Controller::bStartPause()
+bool Controller::startPause()
 {
-    if (m_poMainTimer->isActive())
+    if (m_pMainTimer->isActive())
     {
-        m_poMainTimer->stop();
+        m_pMainTimer->stop();
     }
     else
     {
-        m_poMainTimer->start();
+        m_pMainTimer->start();
     }
 
-    return m_poMainTimer->isActive();
+    return m_pMainTimer->isActive();
 }
 
 /**
  * @brief Add a new set
  * @param string _sDirname
  */
-void Controller::vAddSet(const QString _sDirname)
+void Controller::addSet(const QString _dirname)
 {
-    m_poSettings->poAddSet(_sDirname);
+    m_pSettings->pAddSet(_dirname);
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(false);
 }
 
@@ -101,16 +101,16 @@ void Controller::vAddSet(const QString _sDirname)
  * @brief Delete sets
  * @param int[] _ai
  */
-void Controller::vDeleteSets(const QList<int> _ai)
+void Controller::deleteSets(const QList<int> _aSets)
 {
-    int iOffset = 0;
-    for (QList<int>::const_iterator i=_ai.begin(); i!=_ai.end(); i++)
+    int offset = 0;
+    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
     {
-        m_poSettings->vDeleteSet(*i-iOffset);
-        iOffset++;
+        m_pSettings->deleteSet(*i-offset);
+        offset++;
     }
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(true);
 }
 
@@ -118,14 +118,14 @@ void Controller::vDeleteSets(const QList<int> _ai)
  * @brief Activate sets
  * @param int[] _ai
  */
-void Controller::vActivateSets(const QList<int> _ai)
+void Controller::activateSets(const QList<int> _aSets)
 {
-    for (QList<int>::const_iterator i=_ai.begin(); i!=_ai.end(); i++)
+    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
     {
-        m_poSettings->vSetState(*i, true);
+        m_pSettings->setState(*i, true);
     }
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(false);
 }
 
@@ -133,14 +133,14 @@ void Controller::vActivateSets(const QList<int> _ai)
  * @brief Unactivate sets
  * @param int[] _ai
  */
-void Controller::vUnactivateSets(const QList<int> _ai)
+void Controller::unactivateSets(const QList<int> _aSets)
 {
-    for (QList<int>::const_iterator i=_ai.begin(); i!=_ai.end(); i++)
+    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
     {
-        m_poSettings->vSetState(*i, false);
+        m_pSettings->setState(*i, false);
     }
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(false);
 }
 
@@ -148,14 +148,14 @@ void Controller::vUnactivateSets(const QList<int> _ai)
  * @brief Activate only some sets
  * @param int[] _ai
  */
-void Controller::vSetActiveSets(const QList<int> _ai)
+void Controller::setActiveSets(const QList<int> _aSets)
 {
-    for (int i=0, l=m_poSettings->iNbSets(); i<l; i++)
+    for (int i=0, l=m_pSettings->nbSets(); i<l; i++)
     {
-        m_poSettings->vSetState(i, _ai.contains(i));
+        m_pSettings->setState(i, _aSets.contains(i));
     }
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(false);
 }
 
@@ -163,14 +163,14 @@ void Controller::vSetActiveSets(const QList<int> _ai)
  * @brief Activate only one set and unactive any other sets
  * @param int _i
  */
-void Controller::vSetOneActiveSet(int _i)
+void Controller::setOneActiveSet(int _set)
 {
-    for (int i=0, l=m_poSettings->iNbSets(); i<l; i++)
+    for (int i=0, l=m_pSettings->nbSets(); i<l; i++)
     {
-        m_poSettings->vSetState(i, i==_i);
+        m_pSettings->setState(i, i==_set);
     }
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(false);
 }
 
@@ -181,11 +181,11 @@ void Controller::vSetOneActiveSet(int _i)
  * @param int _iType
  * @param int _iStyle
  */
-void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey)
+void Controller::editSet(int _set, QString const &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey)
 {
-    m_poSettings->vEditSet(_i, _sName, _iType, _iStyle, _iHotkey);
+    m_pSettings->editSet(_set, _name, _type, _style, _hotkey);
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(false);
 }
 
@@ -194,11 +194,11 @@ void Controller::vEditSet(int _i, QString const &_sName, const UM::WALLPAPER _iT
  * @param int _from - position in Settings vector
  * @param int _to - new position in Settings vector
  */
-void Controller::vMoveSet(int _from, int _to)
+void Controller::moveSet(int _from, int _to)
 {
-    m_poSettings->vMoveSet(_from, _to);
+    m_pSettings->moveSet(_from, _to);
 
-    m_poSettings->vWriteXML();
+    m_pSettings->writeXML();
     emit listChanged(true);
 }
 
@@ -207,53 +207,53 @@ void Controller::vMoveSet(int _from, int _to)
  * @brief Update the wallpaper
  * @param bool _bCheckFiles - if true, depends on configuration
  */
-void Controller::slotUpdate(bool _bCheckFiles)
+void Controller::slotUpdate(bool _checkFiles)
 {
     // update config
-    if (_bCheckFiles && m_poSettings->bParam("check"))
+    if (_checkFiles && m_pSettings->bParam("check"))
     {
-        m_poSettings->vUpdateSets();
-        m_poSettings->vReadNbMonitors();
+        m_pSettings->updateSets();
+        m_pSettings->readNbMonitors();
         emit listChanged(false);
     }
 
-    int iTotalSets = m_poSettings->iNbActiveSets(true);
+    int totalSets = m_pSettings->nbActiveSets(true);
 
-    if (iTotalSets == 0)
+    if (totalSets == 0)
     {
         return;
     }
 
     // get random files
-    Set* poSet = poGetRandomSet(iTotalSets);
+    Set* pSet = pGetRandomSet(totalSets);
 
-    m_asFiles.clear();
+    m_aFiles.clear();
 
-    if (poSet->type() == 1)
+    if (pSet->type() == 1)
     {
-        for (int i=0, l=m_poSettings->iEnv("nb_monitors"); i<l; i++)
+        for (int i=0, l=m_pSettings->iEnv("nb_monitors"); i<l; i++)
         {
-            m_asFiles.push_back(sGetRandomFile(poSet));
+            m_aFiles.push_back(getRandomFile(pSet));
         }
     }
     else
     {
-        m_asFiles.push_back(sGetRandomFile(poSet));
+        m_aFiles.push_back(getRandomFile(pSet));
     }
 
-    QString sFilename = m_poSettings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
+    QString filename = m_pSettings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
-    vGenerateFile(sFilename, poSet);
+    generateFile(filename, pSet);
 
     // remove old BMP file
-    if (bFileExists(m_poSettings->sEnv("bmppath")))
+    if (fileExists(m_pSettings->sEnv("bmppath")))
     {
-        QFile::remove(m_poSettings->sEnv("bmppath"));
+        QFile::remove(m_pSettings->sEnv("bmppath"));
     }
 
     // execute UltraMonDesktop
-    QString cmd = "\"" + m_poSettings->sParam("umpath") + "\" /load \"" + sFilename + "\"";
+    QString cmd = "\"" + m_pSettings->sParam("umpath") + "\" /load \"" + filename + "\"";
     QProcess::execute(cmd);
 }
 
@@ -262,17 +262,17 @@ void Controller::slotUpdate(bool _bCheckFiles)
  * @param int _iTotal - total number of Sets
  * @return Set*
  */
-Set* Controller::poGetRandomSet(int _iTotal)
+Set* Controller::pGetRandomSet(int _total)
 {
-    if (_iTotal == 1)
+    if (_total == 1)
     {
-        return m_poSettings->poGetActiveSet(0);
+        return m_pSettings->pGetActiveSet(0);
     }
 
-    uniform_int<int> unif(0, _iTotal-1);
-    int iCounter = unif(m_oRandom);
+    uniform_int<int> unif(0, _total-1);
+    int counter = unif(m_randomEngine);
 
-    return m_poSettings->poGetActiveSet(iCounter);
+    return m_pSettings->pGetActiveSet(counter);
 }
 
 /**
@@ -280,43 +280,43 @@ Set* Controller::poGetRandomSet(int _iTotal)
  * @param Set* _poSet
  * @return string
  */
-QString Controller::sGetRandomFile(Set* _poSet)
+QString Controller::getRandomFile(Set* _poSet)
 {
-    int iTotal = _poSet->count();
+    int total = _poSet->count();
 
     // only one file in the set ?!
-    if (iTotal == 1)
+    if (total == 1)
     {
-        return _poSet->sGetFile(0);
+        return _poSet->getFile(0);
     }
 
     // rare case for small sets
-    if (iTotal <= m_asFiles.size())
+    if (total <= m_aFiles.size())
     {
-        uniform_int<int> unif(0, m_asFiles.size()-1);
-        int iCounter = unif(m_oRandom);
-        return m_asFiles.at(iCounter);
+        uniform_int<int> unif(0, m_aFiles.size()-1);
+        int counter = unif(m_randomEngine);
+        return m_aFiles.at(counter);
     }
 
     // search a random unused file
-    short iLoop = 10;
-    QString sFile;
-    uniform_int<int> unif(0, iTotal-1);
+    short loop = 10;
+    QString file;
+    uniform_int<int> unif(0, total-1);
 
-    while (iLoop > 0)
+    while (loop > 0)
     {
-        int iCounter = unif(m_oRandom);
-        sFile = _poSet->sGetFile(iCounter);
+        int counter = unif(m_randomEngine);
+        file = _poSet->getFile(counter);
 
-        if (!m_asFiles.contains(sFile))
+        if (!m_aFiles.contains(file))
         {
-            iLoop = 0;
+            loop = 0;
         }
 
-        iLoop--;
+        loop--;
     }
 
-    return sFile;
+    return file;
 }
 
 /**
@@ -324,25 +324,25 @@ QString Controller::sGetRandomFile(Set* _poSet)
  * @param string _sFilename
  * @param Set* _poSet
  */
-void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet)
+void Controller::generateFile(const QString &_filename, const Set* _pSet)
 {
     // open default file
-    QString sDefaultFilename = m_poSettings->sEnv("wallpath") + "default.wallpaper";
-    QFile oDefaultFile(sDefaultFilename);
-    oDefaultFile.open(QIODevice::ReadOnly);
+    QString defaultFilename = m_pSettings->sEnv("wallpath") + "default.wallpaper";
+    QFile defaultFile(defaultFilename);
+    defaultFile.open(QIODevice::ReadOnly);
 
     // get header from default.wallpaper
-    QByteArray aBuffer = oDefaultFile.readAll();
-    oDefaultFile.close();
-    aBuffer.truncate(m_iHeaderSize);
+    QByteArray buffer = defaultFile.readAll();
+    defaultFile.close();
+    buffer.truncate(m_headerSize);
 
     // write wallpaper type
-    UM::WALLPAPER wp_type = _poSet->type();
-    aBuffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
+    UM::WALLPAPER wp_type = _pSet->type();
+    buffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
 
     // write number of wallpapers
-    DWORD nb_walls = m_asFiles.size();
-    aBuffer.append((char*)&nb_walls, sizeof(DWORD));
+    DWORD nb_walls = m_aFiles.size();
+    buffer.append((char*)&nb_walls, sizeof(DWORD));
 
     // write wallpapers
     for (unsigned int i=0; i<nb_walls; i++)
@@ -351,16 +351,16 @@ void Controller::vGenerateFile(const QString &_sFilename, const Set* _poSet)
         wall.bgType = UM::BG_SOLID;
         wall.color1 = 0x00000000;
         wall.color2 = 0x00000000;
-        wall.imgStyle = _poSet->style();
+        wall.imgStyle = _pSet->style();
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
-        m_asFiles.at(i).toWCharArray((wchar_t*)wall.imgFile);
+        m_aFiles.at(i).toWCharArray((wchar_t*)wall.imgFile);
 
-        aBuffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
+        buffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
     }
 
     // save file
-    QFile file(_sFilename);
+    QFile file(_filename);
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    file.write(aBuffer);
+    file.write(buffer);
     file.close();
 }

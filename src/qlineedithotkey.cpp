@@ -5,7 +5,7 @@
  * @brief QLineEditHotkey::QLineEditHotkey
  * @param QWidget* parent
  */
-QLineEditHotkey::QLineEditHotkey(QWidget* parent) : QLineEdit(parent) {}
+QLineEditHotkey::QLineEditHotkey(QWidget* _parent) : QLineEdit(_parent) {}
 
 /**
  * @brief QLineEditHotkey::keyPressEvent
@@ -19,7 +19,7 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
     // erase content if escape of return pressed
     if (key == Qt::Key_Escape || key == Qt::Key_Backspace)
     {
-        m_iHotkey = 0;
+        m_hotkey = 0;
         setText(NULL);
         return;
     }
@@ -51,7 +51,7 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
         mod+= Qt::META;
     }
 
-    m_iHotkey = key + mod;
+    m_hotkey = key + mod;
 
     setText(QKeySequence(key + mod).toString(QKeySequence::NativeText));
 
@@ -62,9 +62,9 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
  * @brief QLineEditHotkey::vSetHotkey
  * @param Hotkey _hotkey
  */
-void QLineEditHotkey::vSetHotkey(const int &_iHotkey)
+void QLineEditHotkey::setHotkey(const int &_hotkey)
 {
-    m_iHotkey = _iHotkey;
+    m_hotkey = _hotkey;
 
-    setText(QKeySequence(m_iHotkey).toString(QKeySequence::NativeText));
+    setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
 }

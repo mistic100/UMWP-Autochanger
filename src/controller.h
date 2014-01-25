@@ -20,41 +20,41 @@ class Controller : public QObject
     Q_OBJECT
 
 private:
-    Settings*       m_poSettings;
-    QTimer*         m_poMainTimer;
-    mt19937         m_oRandom; // mersenne_twister
-    int             m_iHeaderSize;
-    QVector<QString> m_asFiles;
+    Settings*           m_pSettings;
+    QTimer*             m_pMainTimer;
+    mt19937             m_randomEngine; // mersenne_twister
+    int                 m_headerSize;
+    QVector<QString>    m_aFiles;
 
 public:
-    Controller(Settings* _data);
+    Controller(Settings* _pSettings);
 
-    void vCheckVersion();
+    void checkVersion();
 
-    Settings* settings() const { return m_poSettings; }
-    const QVector<QString> &files() const { return m_asFiles; }
+    Settings* pSettings() const { return m_pSettings; }
+    const QVector<QString> &aFiles() const { return m_aFiles; }
 
-    Set*    poGetRandomSet(int _iTotal);
-    QString sGetRandomFile(Set* _poSet);
-    void    vGenerateFile(const QString &_sFilename, const Set* _poSet);
+    Set*    pGetRandomSet(int _total);
+    QString getRandomFile(Set* _pSet);
+    void    generateFile(const QString &_filename, const Set* _pSet);
 
-    void vStartTimer(bool _bKeepPause=false);
-    bool bStartPause();
-    bool bIsPaused() const { return !m_poMainTimer->isActive(); }
+    void startTimer(bool _keepPause=false);
+    bool startPause();
+    bool isPaused() const { return !m_pMainTimer->isActive(); }
 
-    void vAddSet(const QString _sDirname);
-    void vDeleteSets(const QList<int> _ai);
-    void vActivateSets(const QList<int> _ai);
-    void vUnactivateSets(const QList<int> _ai);
-    void vSetActiveSets(const QList<int> _ai);
-    void vSetOneActiveSet(int _i);
-    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey);
-    void vMoveSet(int _from, int _to);
+    void addSet(const QString _dirname);
+    void deleteSets(const QList<int> _aSets);
+    void activateSets(const QList<int> _aSets);
+    void unactivateSets(const QList<int> _aSets);
+    void setActiveSets(const QList<int> _aSets);
+    void setOneActiveSet(int _set);
+    void editSet(int _set, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey);
+    void moveSet(int _from, int _to);
 
     void emitListChanged(bool _resetSel) { emit listChanged(_resetSel); }
 
 public slots:
-    void slotUpdate(bool _bCheckFiles=true);
+    void slotUpdate(bool _checkFiles=true);
 
 signals:
     void listChanged(bool); // true to reset QListWidget selection

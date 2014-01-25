@@ -8,18 +8,18 @@
  * @param string _name
  * @param bool _active
  */
-Set::Set(const QString &_path, const QString &_name, const bool _active)
+Set::Set(const QString &_path, const QString &_name)
 {
-    m_sPath = _path;
-    m_sName = _name;
-    m_iType = UM::W_MONITOR;
-    m_iStyle = UM::IM_CENTER;
-    m_bActive = _active;
-    m_dLastModif = 0;
-    m_sUID = QString(QCryptographicHash::hash(m_sPath.toUtf8(), QCryptographicHash::Md5).toHex());
+    m_path = _path;
+    m_name = _name;
+    m_type = UM::W_MONITOR;
+    m_style = UM::IM_CENTER;
+    m_active = true;
+    m_lastModif = 0;
+    m_UID = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
-    vReadCache();
-    vPopulateFiles();
+    readCache();
+    populateFiles();
 }
 
 /**
@@ -28,7 +28,7 @@ Set::Set(const QString &_path, const QString &_name, const bool _active)
  */
 const QString Set::fullName() const
 {
-    return m_sName+" ("+QString::number(count())+")";
+    return m_name+" ("+QString::number(count())+")";
 }
 
 /**
@@ -36,15 +36,15 @@ const QString Set::fullName() const
  * @param int _i
  * @return  string
  */
-const QString Set::sGetFile(int _i) const
+const QString Set::getFile(int _i) const
 {
-    if (_i < m_vFiles.size())
+    if (_i < m_aFiles.size())
     {
-        return m_vFiles.at(_i);
+        return m_aFiles.at(_i);
     }
     else
     {
-        return m_vFiles.back();
+        return m_aFiles.back();
     }
 }
 
@@ -55,54 +55,54 @@ const QString Set::sGetFile(int _i) const
  * @param int _iLevel
  * @return double
  */
-double Set::dReadLastModif(QString _sChild, int _iLevel)
+double Set::getLastModif(QString _child, int _level)
 {
-    QString sPath = m_sPath+_sChild;
+    QString path = m_path+_child;
 
-    double dDate;
-    FILETIME ftWrite;
-    SYSTEMTIME stWrite;
+    double date;
+    FILETIME fileDate;
+    SYSTEMTIME systemDate;
 
-    HANDLE hDir = CreateFile(sPath.toStdWString().c_str(), GENERIC_READ,FILE_SHARE_READ,
-                             NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    HANDLE hDir = CreateFile(path.toStdWString().c_str(), GENERIC_READ,FILE_SHARE_READ,
+                            NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
 
-    if (!GetFileTime( hDir, NULL, NULL, &ftWrite ))
+    if (!GetFileTime(hDir, NULL, NULL, &fileDate))
     {
-        GetSystemTime(&stWrite);
-        SystemTimeToVariantTime(&stWrite, &dDate);
-        return dDate;
+        GetSystemTime(&systemDate);
+        SystemTimeToVariantTime(&systemDate, &date);
+        return date;
     }
     CloseHandle(hDir);
 
-    FileTimeToSystemTime(&ftWrite, &stWrite);
-    SystemTimeToVariantTime(&stWrite, &dDate);
+    FileTimeToSystemTime(&fileDate, &systemDate);
+    SystemTimeToVariantTime(&systemDate, &date);
 
-    if (_iLevel < 2)
+    if (_level < APP_MAX_TRAVERSAL)
     {
-        DIR* poDir = opendir(sPath.toStdString().c_str());
-        struct dirent* poEntry = readdir(poDir);
+        DIR* pDir = opendir(path.toStdString().c_str());
+        struct dirent* pEntry = readdir(pDir);
 
-        QString sFilename = QString(poEntry->d_name);
+        QString filename = QString(pEntry->d_name);
 
-        while (poEntry != NULL)
+        while (pEntry != NULL)
         {
-            if (poEntry->d_type==DT_DIR && sFilename.compare(".")!=0 && sFilename.compare("..")!=0)
+            if (pEntry->d_type==DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
             {
-                double dSubDate = dReadLastModif(sFilename+"\\", _iLevel+1);
-                if (dSubDate > dDate)
+                double subDate = getLastModif(_child+filename+"\\", _level+1);
+                if (subDate > date)
                 {
-                    dDate = dSubDate;
+                    date = subDate;
                 }
             }
 
-            poEntry = readdir(poDir);
-            sFilename = QString(poEntry->d_name);
+            pEntry = readdir(pDir);
+            filename = QString(pEntry->d_name);
         }
 
-        closedir(poDir);
+        closedir(pDir);
     }
 
-    return dDate;
+    return date;
 }
 
 /**
@@ -111,85 +111,86 @@ double Set::dReadLastModif(QString _sChild, int _iLevel)
  * @param string _sChild
  * @param int _iLevel
  */
-void Set::vPopulateFiles(QString _sChild, int _iLevel)
+void Set::populateFiles(QString _child, int _level)
 {
-    if (_sChild.isEmpty())
+    if (_child.isEmpty())
     {
-        double dNewDate = dReadLastModif();
-        if (dNewDate <= m_dLastModif)
+        double date = getLastModif();
+        if (date <= m_lastModif)
         {
             return;
         }
 
-        m_dLastModif = dNewDate;
-        m_vFiles.clear();
+        m_lastModif = date;
+        m_aFiles.clear();
     }
 
-    if (_iLevel < 2)
+    if (_level < APP_MAX_TRAVERSAL)
     {
-        QString sPath = m_sPath+_sChild;
-        DIR* poDir = opendir(sPath.toStdString().c_str());
+        QString path = m_path+_child;
 
-        struct dirent* poEntry = readdir(poDir);
-        QString sFilename = QString(poEntry->d_name);
+        DIR* pDir = opendir(path.toStdString().c_str());
+        struct dirent* pEntry = readdir(pDir);
 
-        while (poEntry != NULL)
+        QString filename = QString(pEntry->d_name);
+
+        while (pEntry != NULL)
         {
-            if (poEntry->d_type==DT_DIR && sFilename.compare(".")!=0 && sFilename.compare("..")!=0)
+            if (pEntry->d_type==DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
             {
-                vPopulateFiles(sFilename+"\\", _iLevel+1);
+                populateFiles(_child+filename+"\\", _level+1);
             }
-            else if (poEntry->d_type == DT_REG && bIsImageFile(sFilename))
+            else if (pEntry->d_type == DT_REG && isImageFile(filename))
             {
-                m_vFiles.push_back(sPath+sFilename);
+                m_aFiles.push_back(path+filename);
             }
 
-            poEntry = readdir(poDir);
-            sFilename = QString(poEntry->d_name);
+            pEntry = readdir(pDir);
+            filename = QString(pEntry->d_name);
         }
 
-        closedir(poDir);
+        closedir(pDir);
     }
 
-    if (_sChild.isEmpty())
+    if (_child.isEmpty())
     {
-        vWriteCache();
+        writeCache();
     }
 }
 
 /**
  * @brief Read cached data
  */
-void Set::vReadCache()
+void Set::readCache()
 {
-    QFile oFile(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
-    if (oFile.exists())
+    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+    if (file.exists())
     {
-        oFile.open(QIODevice::ReadOnly);
-        QDataStream in(&oFile);
-        in>>m_dLastModif;
-        in>>m_vFiles;
-        oFile.close();
+        file.open(QIODevice::ReadOnly);
+        QDataStream in(&file);
+        in>>m_lastModif;
+        in>>m_aFiles;
+        file.close();
     }
 }
 
 /**
  * @brief Write cache data
  */
-void Set::vWriteCache()
+void Set::writeCache()
 {
-    QFile oFile(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
-    oFile.open(QIODevice::WriteOnly);
-    QDataStream out(&oFile);
-    out<<m_dLastModif;
-    out<<m_vFiles;
-    oFile.close();
+    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);
+    out<<m_lastModif;
+    out<<m_aFiles;
+    file.close();
 }
 
 /**
  * @brief Delete cache file
  */
-void Set::vDeleteCache()
+void Set::deleteCache()
 {
-    QFile::remove(QString::fromAscii(APP_CACHE_DIR)+m_sUID);
+    QFile::remove(QString::fromAscii(APP_CACHE_DIR)+m_UID);
 }

@@ -10,42 +10,42 @@
 class Set
 {
 private :
-    QString             m_sPath;
-    QString             m_sName;
-    UM::WALLPAPER       m_iType;
-    UM::IMAGE           m_iStyle;
-    QString             m_sUID;
-    bool                m_bActive;
-    QVector<QString>    m_vFiles;
-    double              m_dLastModif;
-    int                 m_iHotkey;
+    QString             m_path;
+    QString             m_name;
+    UM::WALLPAPER       m_type;
+    UM::IMAGE           m_style;
+    QString             m_UID;
+    bool                m_active;
+    QVector<QString>    m_aFiles;
+    double              m_lastModif;
+    int                 m_hotkey;
 
 public:
-    Set(const QString &_path, const QString &_name, const bool _active);
+    Set(const QString &_path, const QString &_name);
 
-    const QString       &path() const { return m_sPath; }
-    const QString       &name() const { return m_sName; }
-    const UM::WALLPAPER type() const  { return m_iType; }
-    const UM::IMAGE     style() const { return m_iStyle; }
-    const int           count() const { return m_vFiles.size(); }
-    const bool          isActive() const { return m_bActive; }
-    const int           hotkey() const { return m_iHotkey; }
+    const QString       &path() const { return m_path; }
+    const QString       &name() const { return m_name; }
+    const UM::WALLPAPER type() const  { return m_type; }
+    const UM::IMAGE     style() const { return m_style; }
+    const int           count() const { return m_aFiles.size(); }
+    const bool          isActive() const { return m_active; }
+    const int           hotkey() const { return m_hotkey; }
 
-    void    vSetActive(const bool _a)           { m_bActive=_a; }
-    void    vSetName(const QString &_name)      { m_sName=_name; }
-    void    vSetType(const UM::WALLPAPER _type) { m_iType=_type; }
-    void    vSetStyle(const UM::IMAGE _style)   { m_iStyle=_style; }
-    void    vSetHotkey(const int _hotkey)       { m_iHotkey=_hotkey; }
+    void setActive(const bool _a)           { m_active=_a; }
+    void setName(const QString &_name)      { m_name=_name; }
+    void setType(const UM::WALLPAPER _type) { m_type=_type; }
+    void setStyle(const UM::IMAGE _style)   { m_style=_style; }
+    void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
 
-    double  dReadLastModif(QString _sChild="", int _iLevel=0);
-    void    vPopulateFiles(QString _sChild="", int _iLevel=0);
+    double getLastModif(QString _child="", int _level=0);
+    void populateFiles(QString _child="", int _level=0);
 
-    void    vReadCache();
-    void    vWriteCache();
-    void    vDeleteCache();
+    void  readCache();
+    void  writeCache();
+    void  deleteCache();
 
     const QString fullName() const;
-    const QString sGetFile(int _i) const;
+    const QString getFile(int _i) const;
 };
 
 #endif // SET_H

@@ -16,6 +16,7 @@
 #define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
 #define APP_VERSION_URL L"http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
+#define APP_MAX_TRAVERSAL 3
 
 
 // state values
@@ -59,14 +60,14 @@ namespace UM {
 
 
 // common functions
-bool bFileExists(const QString &_sPath, bool _bCheckWrite=true);
-bool bDirectoryExists(const QString &_sPath);
-QString sGetDirName(const QString &_sPath);
-QString sAddTrailingSlash(const QString &_sPath);
-bool bIsImageFile(const QString &_sFilename);
+bool fileExists(const QString &_path, bool _checkWrite=true);
+bool directoryExists(const QString &_path);
+QString getDirectoryName(const QString &_path);
+QString addTrailingSlash(const QString &_path);
+bool isImageFile(const QString &_filename);
 
-void setDomNodeValue(QDomDocument* _poDoc, QDomNode* _poNode, const QString &_sValue);
-void addSimpleTextNode(QDomDocument* _poDoc, QDomNode* _poParent, const QString &_sName, const QString &_sValue);
+void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, const QString &_value);
+void addSimpleTextNode(QDomDocument* _pDoc, QDomNode* _pParent, const QString &_name, const QString &_value);
 
 #define MAIN_H
 #endif // MAIN_H

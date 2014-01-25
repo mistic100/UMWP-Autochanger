@@ -9,33 +9,33 @@
  * @param QWidget* _parent
  * @param Set* _poSet
  */
-SetEditDialog::SetEditDialog(QWidget* _parent, Set* _poSet, Settings* _poSettings) : QDialog(_parent),
+SetEditDialog::SetEditDialog(QWidget* _parent, Set* _pSet, Settings* _pSettings) : QDialog(_parent),
     ui(new Ui::SetEditDialog)
 {
     ui->setupUi(this);
 
-    m_poSettings = _poSettings;
+    m_pSettings = _pSettings;
 
     setFixedSize(size());
 
-    ui->m_poTypeSelect->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      1);
-    ui->m_poTypeSelect->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), 0);
+    ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      1);
+    ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), 0);
 
-    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_center"),         tr("Center"),               0);
-    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_tile"),           tr("Tile"),                 1);
-    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_stretch"),        tr("Stretch"),              2);
-    ui->m_poStyleSelect->addItem(QIcon(":/icon/im_stretch_prop"),   tr("Strecth proportional"), 3);
+    ui->selectStyle->addItem(QIcon(":/icon/im_center"),         tr("Center"),               0);
+    ui->selectStyle->addItem(QIcon(":/icon/im_tile"),           tr("Tile"),                 1);
+    ui->selectStyle->addItem(QIcon(":/icon/im_stretch"),        tr("Stretch"),              2);
+    ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"),   tr("Strecth proportional"), 3);
 
-    ui->m_poNameInput->setText(_poSet->name());
+    ui->inputName->setText(_pSet->name());
 
-    int iIndex = ui->m_poTypeSelect->findData(_poSet->type());
-    ui->m_poTypeSelect->setCurrentIndex(iIndex);
+    int index = ui->selectType->findData(_pSet->type());
+    ui->selectType->setCurrentIndex(index);
 
-    iIndex = ui->m_poStyleSelect->findData(_poSet->style());
-    ui->m_poStyleSelect->setCurrentIndex(iIndex);
+    index = ui->selectStyle->findData(_pSet->style());
+    ui->selectStyle->setCurrentIndex(index);
 
-    ui->m_poHotkeyInput->vSetHotkey(_poSet->hotkey());
-    ui->m_poHotkeyInput->setDisabled(!m_poSettings->bParam("use_hotkeys"));
+    ui->inputHotkey->setHotkey(_pSet->hotkey());
+    ui->inputHotkey->setDisabled(!m_pSettings->bParam("use_hotkeys"));
 }
 
 /**
@@ -54,20 +54,20 @@ void SetEditDialog::done(int result)
 {
     if (result == QDialog::Accepted)
     {
-        int hotkey = ui->m_poHotkeyInput->hotkey();
+        int hotkey = ui->inputHotkey->hotkey();
         QString error;
 
         if (hotkey)
         {
-            if (hotkey == m_poSettings->iHotkey("refresh"))
+            if (hotkey == m_pSettings->hotkey("refresh"))
             {
                 error = tr("Refresh");
             }
-            else if (hotkey == m_poSettings->iHotkey("startpause"))
+            else if (hotkey == m_pSettings->hotkey("startpause"))
             {
                 error = tr("Start/Pause");
             }
-            else if (hotkey == m_poSettings->iHotkey("showhide"))
+            else if (hotkey == m_pSettings->hotkey("showhide"))
             {
                 error = tr("Show/Hide");
             }
@@ -79,7 +79,7 @@ void SetEditDialog::done(int result)
                                   tr("Hotkey already used for \"%1\"").arg(error),
                                   QMessageBox::Ok, QMessageBox::Ok);
         }
-        else if (ui->m_poNameInput->text().isEmpty())
+        else if (ui->inputName->text().isEmpty())
         {
             error = "name";
             QMessageBox::critical(this, tr("Error"),
@@ -104,7 +104,7 @@ void SetEditDialog::done(int result)
  */
 const QString SetEditDialog::name() const
 {
-    return ui->m_poNameInput->text();
+    return ui->inputName->text();
 }
 
 /**
@@ -113,8 +113,8 @@ const QString SetEditDialog::name() const
  */
 const UM::WALLPAPER SetEditDialog::type() const
 {
-    int iIndex = ui->m_poTypeSelect->currentIndex();
-    return static_cast<UM::WALLPAPER>(ui->m_poTypeSelect->itemData(iIndex).toInt());
+    int index = ui->selectType->currentIndex();
+    return static_cast<UM::WALLPAPER>(ui->selectType->itemData(index).toInt());
 }
 
 /**
@@ -123,8 +123,8 @@ const UM::WALLPAPER SetEditDialog::type() const
  */
 const UM::IMAGE SetEditDialog::style() const
 {
-    int iIndex = ui->m_poStyleSelect->currentIndex();
-    return static_cast<UM::IMAGE>(ui->m_poStyleSelect->itemData(iIndex).toInt());
+    int index = ui->selectStyle->currentIndex();
+    return static_cast<UM::IMAGE>(ui->selectStyle->itemData(index).toInt());
 }
 
 /**
@@ -133,5 +133,5 @@ const UM::IMAGE SetEditDialog::style() const
  */
 const int SetEditDialog::hotkey() const
 {
-    return ui->m_poHotkeyInput->hotkey();
+    return ui->inputHotkey->hotkey();
 }

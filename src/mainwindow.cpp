@@ -19,10 +19,9 @@
  */
 MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 {
-    m_poCtrl = _poCtrl;
-    connect(m_poCtrl, SIGNAL(newVersionAvailable(const QString)),
-            this, SLOT(slotDisplayNewVersion(const QString)));
-    connect(m_poCtrl, SIGNAL(listChanged(bool)), this, SLOT(vUpdateTrayQuickMenu()));
+    m_pCtrl = _poCtrl;
+    connect(m_pCtrl, SIGNAL(newVersionAvailable(const QString)), this, SLOT(slotDisplayNewVersion(const QString)));
+    connect(m_pCtrl, SIGNAL(listChanged(bool)), this, SLOT(updateTrayQuickMenu()));
 
 
     // WINDOW PROPERTIES
@@ -32,76 +31,76 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
 
 
     // STATUS BAR
-    m_poStatusBar = new QStatusBar(this);
+    m_pStatusBar = new QStatusBar(this);
 
-    QString sCopyright = "<a href='" + QString::fromAscii(APP_HOMEPAGE) + "'>";
-    sCopyright+= QString::fromAscii(APP_NAME) + "</a>";
-    sCopyright+= " " + QString::fromAscii(APP_VERSION);
-    sCopyright+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a>";
-    sCopyright+= " " + m_poCtrl->settings()->sEnv("umversion");
+    QString copyright = "<a href='" + QString::fromAscii(APP_HOMEPAGE) + "'>";
+    copyright+= QString::fromAscii(APP_NAME) + "</a>";
+    copyright+= " " + QString::fromAscii(APP_VERSION);
+    copyright+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a>";
+    copyright+= " " + m_pCtrl->pSettings()->sEnv("umversion");
 
-    QLabel* poStatusLabel = new QLabel(sCopyright);
-    poStatusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    poStatusLabel->setOpenExternalLinks(true);
+    QLabel* pStatusLabel = new QLabel(copyright);
+    pStatusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    pStatusLabel->setOpenExternalLinks(true);
 
-    m_poStatusBar->addPermanentWidget(poStatusLabel);
-    setStatusBar(m_poStatusBar);
+    m_pStatusBar->addPermanentWidget(pStatusLabel);
+    setStatusBar(m_pStatusBar);
 
 
     // MENUBAR
-    m_poMenuBar = new QToolBarExt(this);
-    m_poMenuBar->setMovable(false);
-    m_poMenuBar->setIconSize(QSize(20, 20));
+    m_pMenuBar = new QToolBarExt(this);
+    m_pMenuBar->setMovable(false);
+    m_pMenuBar->setIconSize(QSize(20, 20));
 
-    QMenu* poMenuConfig = new QMenu();
-    QAction* poActionOptions = poMenuConfig->addAction(QIcon(":/icon/settings"), tr("Options"));
-                               poMenuConfig->addSeparator();
-    QAction* poActionImport =  poMenuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
-    QAction* poActionExport =  poMenuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
+    QMenu* pMenuConfig = new QMenu();
+    QAction* pActionOptions = pMenuConfig->addAction(QIcon(":/icon/settings"), tr("Options"));
+                              pMenuConfig->addSeparator();
+    QAction* pActionImport =  pMenuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
+    QAction* pActionExport =  pMenuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
 
-    QToolButton* poActionQuit1 = m_poMenuBar->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextBesideIcon);
-    m_poActionPause1 =           m_poMenuBar->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextBesideIcon);
-    QToolButton* poActionRefresh1 = m_poMenuBar->addButton(QIcon(":/icon/refresh"), tr("Refresh"), Qt::ToolButtonTextBesideIcon);
-    m_poActionHide1 =            m_poMenuBar->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextBesideIcon);
-    m_poActionConfig =           m_poMenuBar->addButton(QIcon(":/icon/config"), tr("Configuration"), poMenuConfig, Qt::ToolButtonTextBesideIcon);
-    QToolButton* poActionHelp =  m_poMenuBar->addButton(QIcon(":/icon/help"), tr("?"));
+    QToolButton* pActionQuit1 =    m_pMenuBar->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextBesideIcon);
+    m_pActionPause1 =              m_pMenuBar->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextBesideIcon);
+    QToolButton* pActionRefresh1 = m_pMenuBar->addButton(QIcon(":/icon/refresh"), tr("Refresh"), Qt::ToolButtonTextBesideIcon);
+    m_pActionHide1 =               m_pMenuBar->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextBesideIcon);
+    m_pActionConfig =              m_pMenuBar->addButton(QIcon(":/icon/config"), tr("Configuration"), pMenuConfig, Qt::ToolButtonTextBesideIcon);
+    QToolButton* pActionHelp =     m_pMenuBar->addButton(QIcon(":/icon/help"), tr("?"));
 
-    connect(poActionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
-    connect(m_poActionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
-    connect(poActionRefresh1, SIGNAL(clicked()), this, SLOT(slotApply()));
-    connect(m_poActionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
-    connect(poActionHelp,     SIGNAL(clicked()), this, SLOT(slotShowHelp()));
+    connect(pActionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
+    connect(m_pActionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
+    connect(pActionRefresh1, SIGNAL(clicked()), this, SLOT(slotApply()));
+    connect(m_pActionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
+    connect(pActionHelp,     SIGNAL(clicked()), this, SLOT(slotShowHelp()));
 
-    connect(poActionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
-    connect(poActionImport,   SIGNAL(triggered()), this, SLOT(slotImport()));
-    connect(poActionExport,   SIGNAL(triggered()), this, SLOT(slotExport()));
+    connect(pActionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
+    connect(pActionImport,   SIGNAL(triggered()), this, SLOT(slotImport()));
+    connect(pActionExport,   SIGNAL(triggered()), this, SLOT(slotExport()));
 
-    addToolBar(m_poMenuBar);
+    addToolBar(m_pMenuBar);
 
 
     // TRAY ICON
-    m_poTrayIcon = new QSystemTrayIcon(QIcon(":/img/icon"), this);
+    m_pTrayIcon = new QSystemTrayIcon(QIcon(":/img/icon"), this);
 
-    connect(m_poTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+    connect(m_pTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(slotTrayAction(QSystemTrayIcon::ActivationReason)));
 
-    QMenu* poTrayMenu = new QMenu();
-    m_poActionPause2 =           poTrayMenu->addAction(QIcon(":/icon/playpause"), tr("Pause"));
-    QAction* poActionRefresh2 =  poTrayMenu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
-    m_poActionHide2 =            poTrayMenu->addAction(QIcon(":/icon/hide"), tr("Hide"));
-    m_poTrayQuickMenu =          poTrayMenu->addMenu(QIcon(":/icon/quick"), tr("Quick switch"));
-                                 poTrayMenu->addSeparator();
-    QAction* poActionQuit2 =     poTrayMenu->addAction(QIcon(":/icon/quit"), tr("Quit"));
+    QMenu* pTrayMenu = new QMenu();
+    m_pActionPause2 =           pTrayMenu->addAction(QIcon(":/icon/playpause"), tr("Pause"));
+    QAction* pActionRefresh2 =  pTrayMenu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
+    m_pActionHide2 =            pTrayMenu->addAction(QIcon(":/icon/hide"), tr("Hide"));
+    m_pTrayQuickMenu =          pTrayMenu->addMenu(QIcon(":/icon/quick"), tr("Quick switch"));
+                                pTrayMenu->addSeparator();
+    QAction* pActionQuit2 =     pTrayMenu->addAction(QIcon(":/icon/quit"), tr("Quit"));
 
-    vUpdateTrayQuickMenu();
+    updateTrayQuickMenu();
 
-    connect(poActionQuit2,      SIGNAL(triggered()), this, SLOT(slotQuit()));
-    connect(m_poActionHide2,    SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
-    connect(m_poActionPause2,   SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(poActionRefresh2,   SIGNAL(triggered()), this, SLOT(slotApply()));
+    connect(pActionQuit2,      SIGNAL(triggered()), this, SLOT(slotQuit()));
+    connect(m_pActionHide2,    SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
+    connect(m_pActionPause2,   SIGNAL(triggered()), this, SLOT(slotStartPause()));
+    connect(pActionRefresh2,   SIGNAL(triggered()), this, SLOT(slotApply()));
 
-    m_poTrayIcon->setToolTip(APP_NAME);
-    m_poTrayIcon->setContextMenu(poTrayMenu);
+    m_pTrayIcon->setToolTip(APP_NAME);
+    m_pTrayIcon->setContextMenu(pTrayMenu);
 }
 
 /**
@@ -109,39 +108,40 @@ MainWindow::MainWindow(Controller* _poCtrl) : QMainWindow(0)
  */
 MainWindow::~MainWindow()
 {
-    vClearHotkeys();
+    clearHotkeys();
 }
 
 /**
  * @brief Display error on main widget depending on app state
  */
-void MainWindow::vInit()
+void MainWindow::init()
 {
-    if (m_poCtrl->settings()->iState() == UM_OK)
+    if (m_pCtrl->pSettings()->state() == UM_OK)
     {
-        vShowMain();
-        vUpdateHotkeys();
+        showMain();
+        defineHotkeys();
     }
     else
     {
-        vShowError();
+        showError();
     }
 }
 
 /**
  * @brief Display error widget
  */
-void MainWindow::vShowError()
+void MainWindow::showError()
 {
-    m_poTrayIcon->hide();
-    m_poActionHide1->defaultAction()->setVisible(false);
-    m_poActionPause1->defaultAction()->setVisible(false);
-    m_poActionConfig->defaultAction()->setVisible(false);
+    m_pTrayIcon->hide();
+    m_pActionHide1->defaultAction()->setVisible(false);
+    m_pActionPause1->defaultAction()->setVisible(false);
+    m_pActionConfig->defaultAction()->setVisible(false);
 
-    ErrorWidget* widget = new ErrorWidget(this, m_poCtrl);
-    connect(widget, SIGNAL(pathSaved()), this, SLOT(vInit()));
-
+    ErrorWidget* widget = new ErrorWidget(this, m_pCtrl);
     setCentralWidget(widget);
+
+    connect(widget, SIGNAL(pathSaved()), this, SLOT(init()));
+
     setMinimumSize(400, 200);
     setMaximumSize(400, 200);
 
@@ -151,27 +151,27 @@ void MainWindow::vShowError()
 /**
  * @brief Display main widget
  */
-void MainWindow::vShowMain()
+void MainWindow::showMain()
 {
-    m_poTrayIcon->show();
-    m_poActionHide1->defaultAction()->setVisible(true);
-    m_poActionPause1->defaultAction()->setVisible(true);
-    m_poActionConfig->defaultAction()->setVisible(true);
+    m_pTrayIcon->show();
+    m_pActionHide1->defaultAction()->setVisible(true);
+    m_pActionPause1->defaultAction()->setVisible(true);
+    m_pActionConfig->defaultAction()->setVisible(true);
 
-    MainWidget* widget = new MainWidget(this, m_poCtrl);
-
+    MainWidget* widget = new MainWidget(this, m_pCtrl);
     setCentralWidget(widget);
+
     setMinimumSize(440, 240);
     setMaximumSize(9999, 9999); // no maximum size
-    resize(m_poCtrl->settings()->oWindowSize());
+    resize(m_pCtrl->pSettings()->windowSize());
 
-    m_poCtrl->vCheckVersion();
-    m_poCtrl->vStartTimer();
+    m_pCtrl->checkVersion();
+    m_pCtrl->startTimer();
 
     // window is hidden by default if the config is not empty
     if (
-            m_poCtrl->settings()->iNbSets()>0
-         && m_poCtrl->settings()->bParam("minimize")
+            m_pCtrl->pSettings()->nbSets()>0
+         && m_pCtrl->pSettings()->bParam("minimize")
     ) {
         slotToggleWindow(true);
     }
@@ -184,71 +184,58 @@ void MainWindow::vShowMain()
 /**
  * @brief Remove all hotkeys
  */
-void MainWindow::vClearHotkeys()
+void MainWindow::clearHotkeys()
 {
-    qDeleteAll(m_apoShortcuts);
-    m_apoShortcuts.clear();
+    qDeleteAll(m_apShortcuts);
+    m_apShortcuts.clear();
 }
 
 /**
  * @brief Update hotkeys
  */
-void MainWindow::vUpdateHotkeys()
+void MainWindow::defineHotkeys()
 {
-    vClearHotkeys();
+    clearHotkeys();
 
-    if (m_poCtrl->settings()->bParam("use_hotkeys"))
+    if (m_pCtrl->pSettings()->bParam("use_hotkeys"))
     {
-        QHash<int, QList<int>> mergedHotkeys;
-        GlobalShortcut* sh;
+        QHash<int, QList<int>> aMergedHotkeys;
+        GlobalShortcut* pShortcut;
 
-        for (int i=0, l=m_poCtrl->settings()->iNbSets(); i<l; i++)
+        for (int i=0, l=m_pCtrl->pSettings()->nbSets(); i<l; i++)
         {
-            Set* poSet = m_poCtrl->settings()->poGetSet(i);
+            Set* pSet = m_pCtrl->pSettings()->pGetSet(i);
 
-            if (poSet->hotkey())
+            if (pSet->hotkey())
             {
-                mergedHotkeys[poSet->hotkey()].push_back(i);
+                aMergedHotkeys[pSet->hotkey()].push_back(i);
             }
         }
 
-        for (QHash<int, QList<int>>::Iterator it=mergedHotkeys.begin(); it!=mergedHotkeys.end(); ++it)
+        for (QHash<int, QList<int>>::Iterator it=aMergedHotkeys.begin(); it!=aMergedHotkeys.end(); ++it)
         {
-            sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(it.key()));
-            sh->vSetSets(it.value());
-            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-            m_apoShortcuts.push_back(sh);
+            pShortcut = new GlobalShortcut();
+            pShortcut->setShortcut(QKeySequence(it.key()));
+            pShortcut->vSetSets(it.value());
+            connect(pShortcut, SIGNAL(activated()), this, SLOT(slotHotkey()));
+            m_apShortcuts.push_back(pShortcut);
         }
 
-        int hkRefresh = m_poCtrl->settings()->iHotkey("refresh");
-        if (hkRefresh)
-        {
-            sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(hkRefresh));
-            sh->vSetRefresh();
-            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-            m_apoShortcuts.push_back(sh);
-        }
+        QHash<GlobalShortcut::Type, int> aOtherHotkeys;
+        aOtherHotkeys.insert(GlobalShortcut::REFRESH, m_pCtrl->pSettings()->hotkey("refresh"));
+        aOtherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_pCtrl->pSettings()->hotkey("startpause"));
+        aOtherHotkeys.insert(GlobalShortcut::SHOWHIDE, m_pCtrl->pSettings()->hotkey("showhide"));
 
-        int hkStartPause = m_poCtrl->settings()->iHotkey("startpause");
-        if (hkStartPause)
+        for (QHash<GlobalShortcut::Type, int>::Iterator it=aOtherHotkeys.begin(); it!=aOtherHotkeys.end(); ++it)
         {
-            sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(hkStartPause));
-            sh->vSetStartPause();
-            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-            m_apoShortcuts.push_back(sh);
-        }
-
-        int hkShowHide = m_poCtrl->settings()->iHotkey("showhide");
-        if (hkShowHide)
-        {
-            sh = new GlobalShortcut();
-            sh->setShortcut(QKeySequence(hkShowHide));
-            sh->vSetShowHide();
-            connect(sh, SIGNAL(activated()), this, SLOT(slotHotkey()));
-            m_apoShortcuts.push_back(sh);
+            if (it.value()>0)
+            {
+                pShortcut = new GlobalShortcut();
+                pShortcut->setShortcut(QKeySequence(it.value()));
+                pShortcut->vSetType(it.key());
+                connect(pShortcut, SIGNAL(activated()), this, SLOT(slotHotkey()));
+                m_apShortcuts.push_back(pShortcut);
+            }
         }
     }
 }
@@ -256,26 +243,27 @@ void MainWindow::vUpdateHotkeys()
 /**
  * @brief Update quick switch in tray menu
  */
-void MainWindow::vUpdateTrayQuickMenu()
+void MainWindow::updateTrayQuickMenu()
 {
-    m_poTrayQuickMenu->clear();
+    m_pTrayQuickMenu->clear();
 
-    for (int i=0, l=m_poCtrl->settings()->iNbSets(); i<l; i++)
+    for (int i=0, l=m_pCtrl->pSettings()->nbSets(); i<l; i++)
     {
-        Set* poSet = m_poCtrl->settings()->poGetSet(i);
+        Set* pSet = m_pCtrl->pSettings()->pGetSet(i);
 
-        QAction* poAction;
-        if (poSet->isActive())
+        QAction* pAction = m_pTrayQuickMenu->addAction(pSet->name());
+        pAction->setData(i);
+
+        if (pSet->isActive())
         {
-            poAction = m_poTrayQuickMenu->addAction(QIcon(":/icon/bullet_green"), poSet->name());
+            pAction->setIcon(QIcon(":/icon/bullet_green"));
         }
         else
         {
-            poAction = m_poTrayQuickMenu->addAction(QIcon(":/icon/bullet_red"), poSet->name());
+            pAction->setIcon(QIcon(":/icon/bullet_red"));
         }
-        poAction->setData(i);
 
-        connect(poAction, SIGNAL(triggered()), this, SLOT(slotTrayQuickClicked()));
+        connect(pAction, SIGNAL(triggered()), this, SLOT(slotTrayQuickClicked()));
     }
 }
 
@@ -284,10 +272,10 @@ void MainWindow::vUpdateTrayQuickMenu()
  */
 void MainWindow::slotTrayQuickClicked()
 {
-    QAction* poAction = (QAction*)(QObject::sender());
-    int idx = poAction->data().toInt();
+    QAction* pAction = (QAction*)(QObject::sender());
+    int idx = pAction->data().toInt();
 
-    m_poCtrl->vSetOneActiveSet(idx);
+    m_pCtrl->setOneActiveSet(idx);
     slotApply();
 }
 
@@ -308,28 +296,28 @@ void MainWindow::slotTrayAction(QSystemTrayIcon::ActivationReason _reason)
  * Configuration is saved when minimizing if _bForceHide is false
  * @param bool _bForceHide
  */
-void MainWindow::slotToggleWindow(bool _bForceHide)
+void MainWindow::slotToggleWindow(bool _forceHide)
 {
-    if (_bForceHide || isVisible())
+    if (_forceHide || isVisible())
     {
         hide();
 
-        if (m_poCtrl->settings()->iParam("msgcount") < 3)
+        if (m_pCtrl->pSettings()->iParam("msgcount") < 3)
         {
-            if (m_poCtrl->settings()->bParam("show_notifications"))
+            if (m_pCtrl->pSettings()->bParam("show_notifications"))
             {
-                m_poTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+                m_pTrayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
             }
-            m_poCtrl->settings()->vAddMsgCount();
+            m_pCtrl->pSettings()->addMsgCount();
         }
 
-        if (!_bForceHide)
+        if (!_forceHide)
         {
-            m_poCtrl->settings()->vSetWindowSize(size());
-            m_poCtrl->settings()->vWriteXML();
+            m_pCtrl->pSettings()->setWindowSize(size());
+            m_pCtrl->pSettings()->writeXML();
         }
 
-        m_poActionHide2->setText(tr("Show"));
+        m_pActionHide2->setText(tr("Show"));
     }
     else
     {
@@ -338,7 +326,7 @@ void MainWindow::slotToggleWindow(bool _bForceHide)
         setFocus();
         activateWindow();
 
-        m_poActionHide2->setText(tr("Hide"));
+        m_pActionHide2->setText(tr("Hide"));
     }
 }
 
@@ -347,9 +335,9 @@ void MainWindow::slotToggleWindow(bool _bForceHide)
  */
 void MainWindow::slotApply()
 {
-    m_poCtrl->settings()->vSetWindowSize(size());
+    m_pCtrl->pSettings()->setWindowSize(size());
 
-    m_poCtrl->vStartTimer(true);
+    m_pCtrl->startTimer(true);
 }
 
 /**
@@ -357,15 +345,15 @@ void MainWindow::slotApply()
  */
 void MainWindow::slotStartPause()
 {
-    if (m_poCtrl->bStartPause())
+    if (m_pCtrl->startPause())
     {
-        m_poActionPause1->setText(tr("Pause"));
-        m_poActionPause2->setText(tr("Pause"));
+        m_pActionPause1->setText(tr("Pause"));
+        m_pActionPause2->setText(tr("Pause"));
     }
     else
     {
-        m_poActionPause1->setText(tr("Start"));
-        m_poActionPause2->setText(tr("Start"));
+        m_pActionPause1->setText(tr("Start"));
+        m_pActionPause2->setText(tr("Start"));
     }
 }
 
@@ -374,18 +362,18 @@ void MainWindow::slotStartPause()
  */
 void MainWindow::slotConfigDialog()
 {
-    ConfigDialog oDialog(this, m_poCtrl->settings());
+    ConfigDialog dialog(this, m_pCtrl->pSettings());
 
-    vClearHotkeys();
-    if (oDialog.exec())
+    clearHotkeys();
+    if (dialog.exec())
     {
-        oDialog.vSave();
-        if (oDialog.bDelayChanged())
+        dialog.save();
+        if (dialog.delayChanged())
         {
-            m_poCtrl->vStartTimer();
+            m_pCtrl->startTimer();
         }
     }
-    vUpdateHotkeys();
+    defineHotkeys();
 }
 
 /**
@@ -393,11 +381,11 @@ void MainWindow::slotConfigDialog()
  */
 void MainWindow::slotExport()
 {
-    QString sFilename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
+    QString filename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
                                                      QDir::homePath() + QDir::separator() + "umwp_settings.xml",
                                                      tr("XML files (*.xml)"));
 
-    m_poCtrl->settings()->vWriteXML(sFilename);
+    m_pCtrl->pSettings()->writeXML(filename);
 }
 
 /**
@@ -405,19 +393,19 @@ void MainWindow::slotExport()
  */
 void MainWindow::slotImport()
 {
-    QString sFilename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
+    QString filename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
                                                      QDir::homePath(),
                                                      tr("XML files (*.xml)"));
 
     // preserve UM path
-    QString sUMPath = m_poCtrl->settings()->sParam("umpath");
+    QString UMPath = m_pCtrl->pSettings()->sParam("umpath");
 
-    if (m_poCtrl->settings()->bReadXML(sFilename))
+    if (m_pCtrl->pSettings()->readXML(filename))
     {
-        m_poCtrl->settings()->vSetParam("umpath", sUMPath);
+        m_pCtrl->pSettings()->setParam("umpath", UMPath);
 
-        m_poCtrl->emitListChanged(true);
-        m_poCtrl->slotUpdate();
+        m_pCtrl->emitListChanged(true);
+        m_pCtrl->slotUpdate();
     }
     else
     {
@@ -431,41 +419,41 @@ void MainWindow::slotImport()
 void MainWindow::slotShowHelp()
 {
     // title
-    QString sMainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
+    QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
 
     // help
-    QFile oFile;
-    QString sLang = QLocale::system().name().section('_', 0, 0);
-    if (sLang.compare("fr")==0)
+    QFile helpFile;
+    QString lang = QLocale::system().name().section('_', 0, 0);
+    if (lang.compare("fr")==0)
     {
-        oFile.setFileName(":/lang/help_fr");
+        helpFile.setFileName(":/lang/help_fr");
     }
     else
     {
-        oFile.setFileName(":/lang/help_en");
+        helpFile.setFileName(":/lang/help_en");
     }
 
-    oFile.open(QIODevice::ReadOnly);
-    QTextStream content(&oFile);
-    sMainText.append(content.readAll());
-    oFile.close();
+    helpFile.open(QIODevice::ReadOnly);
+    QTextStream content(&helpFile);
+    mainText.append(content.readAll());
+    helpFile.close();
 
     // files list
-    if (m_poCtrl->files().size() > 0)
+    if (m_pCtrl->aFiles().size() > 0)
     {
-        sMainText.append("<hr><h3>" + tr("Current files") + "</h3><ul>");
-        for (QVector<QString>::const_iterator it=m_poCtrl->files().begin(); it!=m_poCtrl->files().end(); ++it)
+        mainText.append("<hr><h3>" + tr("Current files") + "</h3><ul>");
+        for (QVector<QString>::const_iterator it=m_pCtrl->aFiles().begin(); it!=m_pCtrl->aFiles().end(); ++it)
         {
-            sMainText.append("<li>" + (*it) + "</li>");
+            mainText.append("<li>" + (*it) + "</li>");
         }
-        sMainText.append("</ul>");
+        mainText.append("</ul>");
     }
 
-    QMessageBox oDialog(this);
-    oDialog.setIcon(QMessageBox::Information);
-    oDialog.setText(sMainText);
-    oDialog.setWindowTitle(tr("About %1").arg(APP_NAME));
-    oDialog.exec();
+    QMessageBox dialog(this);
+    dialog.setIcon(QMessageBox::Information);
+    dialog.setText(mainText);
+    dialog.setWindowTitle(tr("About %1").arg(APP_NAME));
+    dialog.exec();
 }
 
 /**
@@ -473,50 +461,52 @@ void MainWindow::slotShowHelp()
  */
 void MainWindow::slotHotkey()
 {
-    GlobalShortcut* sender = (GlobalShortcut*)QObject::sender();
+    GlobalShortcut* pShortcut = (GlobalShortcut*)QObject::sender();
 
-    if (sender->refresh())
+    switch (pShortcut->type())
     {
+    case GlobalShortcut::REFRESH:
         slotApply();
-    }
-    else if (sender->startPause())
-    {
+        break;
+
+    case GlobalShortcut::STARTPAUSE:
         slotStartPause();
 
-        if (!isVisible() && m_poCtrl->settings()->bParam("show_notifications"))
+        if (!isVisible() && m_pCtrl->pSettings()->bParam("show_notifications"))
         {
-            if (!m_poCtrl->bIsPaused())
+            if (!m_pCtrl->isPaused())
             {
-                m_poTrayIcon->showMessage(APP_NAME, tr("Paused"));
+                m_pTrayIcon->showMessage(APP_NAME, tr("Paused"));
             }
             else
             {
-                m_poTrayIcon->showMessage(APP_NAME, tr("Running"));
+                m_pTrayIcon->showMessage(APP_NAME, tr("Running"));
             }
         }
-    }
-    else if (sender->showHide())
-    {
+        break;
+
+    case GlobalShortcut::SHOWHIDE:
         slotToggleWindow();
-    }
-    else if (!sender->sets().empty())
-    {
-        m_poCtrl->vSetActiveSets(sender->sets());
+        break;
+
+    case GlobalShortcut::SETS:
+        m_pCtrl->setActiveSets(pShortcut->sets());
         slotApply();
 
-        if (!isVisible() && m_poCtrl->settings()->bParam("show_notifications"))
+        if (!isVisible() && m_pCtrl->pSettings()->bParam("show_notifications"))
         {
             QString setsName;
-            for (int i=0, l=m_poCtrl->settings()->iNbActiveSets(false); i<l; i++)
+            for (int i=0, l=m_pCtrl->pSettings()->nbActiveSets(false); i<l; i++)
             {
-                Set* poSet = m_poCtrl->settings()->poGetActiveSet(i);
+                Set* pSet = m_pCtrl->pSettings()->pGetActiveSet(i);
 
                 if (i>0) setsName.append(", ");
-                setsName.append(poSet->name());
+                setsName.append(pSet->name());
             }
 
-            m_poTrayIcon->showMessage(APP_NAME, tr("Current sets : %1").arg(setsName));
+            m_pTrayIcon->showMessage(APP_NAME, tr("Current sets : %1").arg(setsName));
         }
+        break;
     }
 }
 
@@ -524,28 +514,28 @@ void MainWindow::slotHotkey()
  * @brief Display a message when a new version is available
  * @param string _sVersion
  */
-void MainWindow::slotDisplayNewVersion(const QString &_sVersion)
+void MainWindow::slotDisplayNewVersion(const QString &_version)
 {
     // message in status bar
-    QLabel* poVersionLabel = new QLabel(tr("A new version is available : %1").arg(_sVersion));
-    poVersionLabel->setStyleSheet("QLabel { color : red; }");
-    m_poStatusBar->insertPermanentWidget(0, poVersionLabel);
+    QLabel* pLabel = new QLabel(tr("A new version is available : %1").arg(_version));
+    pLabel->setStyleSheet("QLabel { color : red; }");
+    m_pStatusBar->insertPermanentWidget(0, pLabel);
 
     if (!isVisible())
     {
         // tray tootlip
-        m_poTrayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(_sVersion));
+        m_pTrayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(_version));
     }
     else
     {
         // popup alert
-        QMessageBox oDialog(this);
-        oDialog.setWindowTitle(tr("New version"));
-        oDialog.setText("<b>" + tr("A new version is available : %1").arg(_sVersion) + "</b>");
-        oDialog.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.")
-                                   .arg(APP_HOMEPAGE));
-        oDialog.setStandardButtons(QMessageBox::Close);
-        oDialog.exec();
+        QMessageBox dialog(this);
+        dialog.setWindowTitle(tr("New version"));
+        dialog.setText("<b>" + tr("A new version is available : %1").arg(_version) + "</b>");
+        dialog.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.")
+                                  .arg(APP_HOMEPAGE));
+        dialog.setStandardButtons(QMessageBox::Close);
+        dialog.exec();
     }
 }
 
@@ -555,22 +545,22 @@ void MainWindow::slotDisplayNewVersion(const QString &_sVersion)
  */
 void MainWindow::slotQuit()
 {
-    if (m_poCtrl->settings()->iState()!=UM_OK)
+    if (m_pCtrl->pSettings()->state()!=UM_OK)
     {
         qApp->quit();
         return;
     }
 
-    int iRet = QMessageBox::warning(this, tr("Quit"), tr("If you quit the application now,<br>the wallpaper will not change anymore."),
+    int ret = QMessageBox::warning(this, tr("Quit"), tr("If you quit the application now,<br>the wallpaper will not change anymore."),
                                    QMessageBox::Cancel | QMessageBox::Close, QMessageBox::Close);
 
-    if (iRet == QMessageBox::Cancel)
+    if (ret == QMessageBox::Cancel)
     {
         return;
     }
 
-    m_poCtrl->settings()->vSetWindowSize(size());
-    m_poCtrl->settings()->vWriteXML();
+    m_pCtrl->pSettings()->setWindowSize(size());
+    m_pCtrl->pSettings()->writeXML();
 
     qApp->quit();
 }
@@ -580,7 +570,7 @@ void MainWindow::slotQuit()
  */
 void MainWindow::showEvent(QShowEvent*)
 {
-    resize(m_poCtrl->settings()->oWindowSize());
+    resize(m_pCtrl->pSettings()->windowSize());
 }
 
 /**
@@ -589,7 +579,7 @@ void MainWindow::showEvent(QShowEvent*)
  */
 void MainWindow::resizeEvent(QResizeEvent* _event)
 {
-    m_poCtrl->settings()->vSetWindowSize(_event->size());
+    m_pCtrl->pSettings()->setWindowSize(_event->size());
 }
 
 /**
@@ -598,7 +588,7 @@ void MainWindow::resizeEvent(QResizeEvent* _event)
  */
 void MainWindow::closeEvent(QCloseEvent* _event)
 {
-    if (m_poCtrl->settings()->iState()==UM_OK && _event)
+    if (m_pCtrl->pSettings()->state()==UM_OK && _event)
     {
         _event->ignore();
         slotToggleWindow();

@@ -20,15 +20,15 @@ class ConfigDialog : public QDialog
 
 private:
     Ui::ConfigDialog*   ui;
-    Settings*           m_poSettings;
-    bool                m_bDelayChanged;
+    Settings*           m_pSettings;
+    bool                m_delayChanged;
     
 public:
-    ConfigDialog(QWidget* _parent, Settings* _poSettings);
+    ConfigDialog(QWidget* _parent, Settings* _pSettings);
     ~ConfigDialog();
 
-    void vSave();
-    const bool bDelayChanged() const { return m_bDelayChanged; }
+    void save();
+    const bool delayChanged() const { return m_delayChanged; }
 
 protected:
     void done(int result);

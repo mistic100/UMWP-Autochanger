@@ -15,8 +15,8 @@
 Settings::Settings()
 {
     // default configuration
-    m_iState = UM_OK;
-    m_bUnsaved = false;
+    m_state = UM_OK;
+    m_unsaved = false;
 
     m_options["umpath"] = QVariant();
     m_options["window_width"] = 440;
@@ -40,16 +40,16 @@ Settings::Settings()
     m_env["startlinkpath"] = QVariant();
     m_env["nb_monitors"] = 1;
 
-    bReadXML();
-    vInit();
+    readXML();
+    init();
 
     //qDebug()<<m_options;
     //qDebug()<<m_env;
 
-    QDir oDirHelper;
-    if (!oDirHelper.exists(APP_CACHE_DIR))
+    QDir dirHelper;
+    if (!dirHelper.exists(APP_CACHE_DIR))
     {
-        oDirHelper.mkdir(APP_CACHE_DIR);
+        dirHelper.mkdir(APP_CACHE_DIR);
     }
 }
 
@@ -58,7 +58,7 @@ Settings::Settings()
  */
 Settings::~Settings()
 {
-    vClearSets(); // clear memory but do not save changes !
+    clearSets(); // clear memory but do not save changes !
 }
 
 
@@ -95,22 +95,22 @@ const QString Settings::sEnv(QString const &_key) const
     return m_env.value(_key, "").toString();
 }
 
-const QSize Settings::oWindowSize() const
+const QSize Settings::windowSize() const
 {
     return QSize(m_options["window_width"].toInt(), m_options["window_height"].toInt());
 }
 
-const bool Settings::bCanAddShortcut()
+const bool Settings::canAddShortcut() const
 {
     return !m_env["startlinkpath"].isNull();
 }
 
-const bool Settings::bIsAutostart() const
+const bool Settings::isAutostart() const
 {
-    return bFileExists(m_env["startlinkpath"].toString());
+    return fileExists(m_env["startlinkpath"].toString());
 }
 
-const int Settings::iHotkey(const QString &_key) const
+const int Settings::hotkey(const QString &_key) const
 {
     return m_hotkeys.value(_key, 0);
 }
@@ -119,25 +119,25 @@ const int Settings::iHotkey(const QString &_key) const
 /*
  * setters
  */
-void Settings::vSetParam(const QString &_key, const QVariant &_val)
+void Settings::setParam(const QString &_key, const QVariant &_val)
 {
     m_options[_key] = _val;
-    m_bUnsaved = true;
+    m_unsaved = true;
 }
 
-void Settings::vSetHotkey(const QString &_key, const int &_val)
+void Settings::setHotkey(const QString &_key, const int &_val)
 {
     m_hotkeys[_key] = _val;
-    m_bUnsaved = true;
+    m_unsaved = true;
 }
 
-void Settings::vSetWindowSize(const QSize &_size)
+void Settings::setWindowSize(const QSize &_size)
 {
     m_options["window_width"] = _size.width();
     m_options["window_height"] = _size.height();
 }
 
-void Settings::vAddMsgCount()
+void Settings::addMsgCount()
 {
     m_options["msgcount"] = m_options["msgcount"].toInt()+1;
 }
@@ -146,176 +146,176 @@ void Settings::vAddMsgCount()
 /**
  * @brief Init environnement variables
  */
-void Settings::vInit()
+void Settings::init()
 {
-    CRegKey oReg;
-    int iResult;
-    DWORD dwLen;
-    wchar_t* wsValue1;
-    wchar_t* wsValue2;
+    CRegKey regKey;
+    int result;
+    DWORD wordLen;
+    wchar_t* value1;
+    wchar_t* value2;
 
 
     // SEARCH ULTRAMON EXE
     if (m_options["umpath"].isNull())
     {
-        wsValue1 = (wchar_t*) malloc(256);
-        dwLen = 256;
+        value1 = (wchar_t*) malloc(256);
+        wordLen = 256;
 
-        iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{ED7FE81C-378C-411D-B5B4-509B978BA204}"), KEY_READ | KEY_WOW64_64KEY);
-        if (iResult == ERROR_SUCCESS)
+        result = regKey.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{ED7FE81C-378C-411D-B5B4-509B978BA204}"), KEY_READ | KEY_WOW64_64KEY);
+        if (result == ERROR_SUCCESS)
         {
-            iResult = oReg.QueryStringValue(_T("InstallLocation"), wsValue1, &dwLen);
-            if (iResult == ERROR_SUCCESS)
+            result = regKey.QueryStringValue(_T("InstallLocation"), value1, &wordLen);
+            if (result == ERROR_SUCCESS)
             {
-                 QString sExePath = QString::fromWCharArray(wsValue1, dwLen-1); // remove the \0 termination
-                 sExePath.append("UltraMonDesktop.exe");
-                 m_options["umpath"] = sExePath;
+                 QString exePath = QString::fromWCharArray(value1, wordLen-1); // remove the \0 termination
+                 exePath.append("UltraMonDesktop.exe");
+                 m_options["umpath"] = exePath;
             }
         }
-        oReg.Close();
+        regKey.Close();
 
-        free(wsValue1);
+        free(value1);
     }
 
     if (m_options["umpath"].isNull())
     {
-        wsValue1 = (wchar_t*) malloc(256);
-        dwLen = 256;
+        value1 = (wchar_t*) malloc(256);
+        wordLen = 256;
 
-        iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"), KEY_READ | KEY_WOW64_64KEY);
-        if (iResult == ERROR_SUCCESS)
+        result = regKey.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"), KEY_READ | KEY_WOW64_64KEY);
+        if (result == ERROR_SUCCESS)
         {
-            iResult = oReg.QueryStringValue(_T("ProgramFilesDir"), wsValue1, &dwLen);
-            if (iResult == ERROR_SUCCESS)
+            result = regKey.QueryStringValue(_T("ProgramFilesDir"), value1, &wordLen);
+            if (result == ERROR_SUCCESS)
             {
-                 QString sExePath = QString::fromWCharArray(wsValue1, dwLen-1); // remove the \0 termination
-                 sExePath.append("\\Realtime Soft\\UltraMon\\UltraMonDesktop.exe");
-                 m_options["umpath"] = sExePath;
+                 QString exePath = QString::fromWCharArray(value1, wordLen-1); // remove the \0 termination
+                 exePath.append("\\Realtime Soft\\UltraMon\\UltraMonDesktop.exe");
+                 m_options["umpath"] = exePath;
             }
         }
-        oReg.Close();
+        regKey.Close();
 
-        free(wsValue1);
+        free(value1);
     }
 
-    if (m_options["umpath"].isNull() || !bFileExists(m_options["umpath"].toString(), false))
+    if (m_options["umpath"].isNull() || !fileExists(m_options["umpath"].toString(), false))
     {
-        m_iState|= UM_NOT_INSTALLED;
+        m_state|= UM_NOT_INSTALLED;
     }
 
 
     // SEARCH ULTRAMON VERSION
-    wsValue1 = (wchar_t*) malloc(16);
-    dwLen = 16;
+    value1 = (wchar_t*) malloc(16);
+    wordLen = 16;
 
-    iResult = oReg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Realtime Soft\\UltraMon"), KEY_READ | KEY_WOW64_64KEY);
-    if (iResult == ERROR_SUCCESS)
+    result = regKey.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Realtime Soft\\UltraMon"), KEY_READ | KEY_WOW64_64KEY);
+    if (result == ERROR_SUCCESS)
     {
-        iResult = oReg.QueryStringValue(_T("CurrentVersion"), wsValue1, &dwLen);
-        if (iResult == ERROR_SUCCESS)
+        result = regKey.QueryStringValue(_T("CurrentVersion"), value1, &wordLen);
+        if (result == ERROR_SUCCESS)
         {
-            m_env["umversion"] = QString::fromWCharArray(wsValue1, dwLen-1); // remove the \0 termination
+            m_env["umversion"] = QString::fromWCharArray(value1, wordLen-1); // remove the \0 termination
         }
     }
-    oReg.Close();
+    regKey.Close();
 
-    free(wsValue1);
+    free(value1);
 
     if (m_env["umversion"] == "unknown")
     {
-        m_iState|= UM_BAD_VERSION;
+        m_state|= UM_BAD_VERSION;
     }
     else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
     {
-        m_iState|= UM_BAD_VERSION;
+        m_state|= UM_BAD_VERSION;
     }
 
 
     // SEARCH BMP PATH
-    wsValue2 = (wchar_t*) malloc(256);
+    value2 = (wchar_t*) malloc(256);
 
-    iResult = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &wsValue2);
-    if (iResult == S_OK)
+    result = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &value2);
+    if (result == S_OK)
     {
-        QString sBMPPath = QString::fromWCharArray(wsValue2);
-        sBMPPath.append("\\Realtime Soft\\UltraMon\\UltraMon Wallpaper.bmp");
-        m_env["bmppath"] = sBMPPath;
+        QString bmpPath = QString::fromWCharArray(value2);
+        bmpPath.append("\\Realtime Soft\\UltraMon\\UltraMon Wallpaper.bmp");
+        m_env["bmppath"] = bmpPath;
     }
     else
     {
-        m_iState|= UM_UNKNOWN_ERROR;
+        m_state|= UM_UNKNOWN_ERROR;
     }
 
-    CoTaskMemFree(wsValue2);
+    CoTaskMemFree(value2);
 
 
     // SEARCH WALLPAPER FOLDER
-    if (!(m_iState & UM_BAD_VERSION))
+    if (!(m_state & UM_BAD_VERSION))
     {
-        wsValue2 = (wchar_t*) malloc(256);
+        value2 = (wchar_t*) malloc(256);
 
-        int iResult = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &wsValue2);
+        int iResult = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &value2);
         if (iResult == S_OK)
         {
-            QString sWallPath = QString::fromWCharArray(wsValue2);
-            sWallPath.append("\\Realtime Soft\\UltraMon\\" + m_env["umversion"].toString() + "\\Wallpapers\\");
-            m_env["wallpath"] = sWallPath;
+            QString wallPath = QString::fromWCharArray(value2);
+            wallPath.append("\\Realtime Soft\\UltraMon\\" + m_env["umversion"].toString() + "\\Wallpapers\\");
+            m_env["wallpath"] = wallPath;
         }
         else
         {
-            m_iState|= UM_UNKNOWN_ERROR;
+            m_state|= UM_UNKNOWN_ERROR;
         }
 
-        CoTaskMemFree(wsValue2);
+        CoTaskMemFree(value2);
     }
 
     // CHECK WALLPAPER FILE
     if (m_env["wallpath"].isNull())
     {
-        m_iState|= UM_FILE_NOT_FOUND;
+        m_state|= UM_FILE_NOT_FOUND;
     }
     else
     {
-        QString sFilename = m_env["wallpath"].toString().append("default.wallpaper");
+        QString filename = m_env["wallpath"].toString().append("default.wallpaper");
 
-        if (!bFileExists(sFilename))
+        if (!fileExists(filename))
         {
-            m_iState|= UM_FILE_NOT_FOUND;
+            m_state|= UM_FILE_NOT_FOUND;
         }
         else
         {
-            vReadNbMonitors();
+            readNbMonitors();
         }
     }
 
 
     // SEARCH SHORTCUT FILE
-    wsValue2 = (wchar_t*) malloc(256);
+    value2 = (wchar_t*) malloc(256);
 
-    iResult = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &wsValue2);
-    if (iResult == S_OK)
+    result = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &value2);
+    if (result == S_OK)
     {
-        QString sStartLnkPath = QString::fromWCharArray(wsValue2);
-        sStartLnkPath.append("\\UMWP Autochanger.lnk");
-        m_env["startlinkpath"] = sStartLnkPath;
+        QString startLinkPath = QString::fromWCharArray(value2);
+        startLinkPath.append("\\UMWP Autochanger.lnk");
+        m_env["startlinkpath"] = startLinkPath;
     }
 
-    CoTaskMemFree(wsValue2);
+    CoTaskMemFree(value2);
 }
 
 /**
  * @brief Read the number of monitors from .wallpaper file
  */
-void Settings::vReadNbMonitors()
+void Settings::readNbMonitors()
 {
-    QString sFilename = m_env["wallpath"].toString().append("default.wallpaper");
-    std::ifstream ifs(sFilename.toStdString(), std::ios::in | std::ios::binary);
+    QString filename = m_env["wallpath"].toString().append("default.wallpaper");
+    std::ifstream ifs(filename.toStdString(), std::ios::in | std::ios::binary);
 
     ifs.ignore(7); // "UMWP",  version, activedesktop
 
-    int iNbMonitors;
-    ifs.read((char*)&iNbMonitors, sizeof(DWORD)); // number of monitors
-    m_env["nb_monitors"] = iNbMonitors;
+    int nbMonitors;
+    ifs.read((char*)&nbMonitors, sizeof(DWORD)); // number of monitors
+    m_env["nb_monitors"] = nbMonitors;
 
     ifs.close();
 }
@@ -324,140 +324,136 @@ void Settings::vReadNbMonitors()
 /**
  * @brief Load contents of the settings file
  */
-bool Settings::bReadXML(QString _sFilename)
+bool Settings::readXML(QString _filename)
 {
-    if (_sFilename.isEmpty())
+    if (_filename.isEmpty())
     {
-        _sFilename = QString::fromAscii(APP_CONFIG_FILE);
+        _filename = QString::fromAscii(APP_CONFIG_FILE);
     }
 
     // open xml file
-    QFile oXML(_sFilename);
+    QFile file(_filename);
 
-    if (!oXML.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
     {
         return false;
     }
 
     // initialize domdocument
-    QDomDocument oDom;
-    if (!oDom.setContent(oXML.readAll()))
+    QDomDocument dom;
+    if (!dom.setContent(file.readAll()))
     {
         return false;
     }
 
-    oXML.close();
+    file.close();
 
-    // read settings (main) node
-    QDomElement main_node = oDom.documentElement();
-    QDomElement setting_node = main_node.firstChild().toElement();
+    // read settings node
+    QDomElement settingsNode = dom.documentElement().firstChild().toElement();
 
-    vClearSets();
+    clearSets();
 
-    int iNewHotkey = 0;
+    int newHotkey = 0;
 
-    while (!setting_node.isNull())
+    while (!settingsNode.isNull())
     {
         // config node
-        if (setting_node.tagName() == "config")
+        if (settingsNode.tagName() == "config")
         {
-            QDomElement config_node = setting_node.firstChild().toElement();
+            QDomElement configNode = settingsNode.firstChild().toElement();
 
-            while (!config_node.isNull())
+            while (!configNode.isNull())
             {
                 // migration from 1.3
-                if (config_node.tagName() == "hotkey")
+                if (configNode.tagName() == "hotkey")
                 {
-                    iNewHotkey = config_node.text().toInt();
+                    newHotkey = configNode.text().toInt();
                 }
                 else
                 {
-                    m_options[ config_node.tagName() ] = config_node.text();
+                    m_options[ configNode.tagName() ] = configNode.text();
                 }
 
-                config_node = config_node.nextSibling().toElement();
+                configNode = configNode.nextSibling().toElement();
             }
         }
-        else if (setting_node.tagName() == "hotkeys")
+        else if (settingsNode.tagName() == "hotkeys")
         {
-            QDomElement hotkey_node = setting_node.firstChild().toElement();
+            QDomElement hotkeyNode = settingsNode.firstChild().toElement();
 
-            while (!hotkey_node.isNull())
+            while (!hotkeyNode.isNull())
             {
                 // 1.3 format
-                if (hotkey_node.hasAttribute("key"))
+                if (hotkeyNode.hasAttribute("key"))
                 {
-                    m_hotkeys[ hotkey_node.tagName() ] =
-                                hotkey_node.attribute("key").toInt() +
-                                hotkey_node.attribute("mod").toInt();
+                    m_hotkeys[ hotkeyNode.tagName() ] =
+                                hotkeyNode.attribute("key").toInt() +
+                                hotkeyNode.attribute("mod").toInt();
                 }
                 // 1.4 format
                 else
                 {
-                    m_hotkeys[ hotkey_node.tagName() ] = hotkey_node.text().toInt();
+                    m_hotkeys[ hotkeyNode.tagName() ] = hotkeyNode.text().toInt();
                 }
 
-                hotkey_node = hotkey_node.nextSibling().toElement();
+                hotkeyNode = hotkeyNode.nextSibling().toElement();
             }
         }
         // sets node
-        else if (setting_node.tagName() == "sets")
+        else if (settingsNode.tagName() == "sets")
         {
-            QDomElement set_node = setting_node.firstChild().toElement();
+            QDomElement setNode = settingsNode.firstChild().toElement();
 
-            while (!set_node.isNull())
+            while (!setNode.isNull())
             {
                 // set node
-                if (set_node.tagName() == "set")
+                if (setNode.tagName() == "set")
                 {
-                    QString sPath = set_node.text().trimmed();
-                    if (bDirectoryExists(sPath))
+                    QString path = setNode.text().trimmed();
+                    if (directoryExists(path))
                     {
-                        Set* poNewSet = poAddSet(
-                            sPath,
-                            set_node.attribute("name"),
-                            set_node.attribute("active").toInt()
-                            );
+                        Set* pNewSet = pAddSet(path, setNode.attribute("name"));
+                        pNewSet->setActive(setNode.attribute("active").toInt());
 
                         // added in 1.3
-                        if (set_node.hasAttribute("type"))
+                        if (setNode.hasAttribute("type"))
                         {
-                            UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(set_node.attribute("type").toInt());
-                            UM::IMAGE im_style = static_cast<UM::IMAGE>(set_node.attribute("style").toInt());
-                            poNewSet->vSetType(wp_type);
-                            poNewSet->vSetStyle(im_style);
+                            UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(setNode.attribute("type").toInt());
+                            UM::IMAGE im_style = static_cast<UM::IMAGE>(setNode.attribute("style").toInt());
+                            pNewSet->setType(wp_type);
+                            pNewSet->setStyle(im_style);
                         }
 
                         // added in 1.4
-                        if (set_node.hasAttribute("hotkey_mod"))
+                        if (setNode.hasAttribute("hotkey_mod"))
                         {
-                            poNewSet->vSetHotkey(
-                                        set_node.attribute("hotkey").toInt() +
-                                        set_node.attribute("hotkey_mod").toInt()
+                            pNewSet->setHotkey(
+                                        setNode.attribute("hotkey").toInt() +
+                                        setNode.attribute("hotkey_mod").toInt()
                                         );
                         }
-                        else if (set_node.hasAttribute("hotkey"))
+                        else if (setNode.hasAttribute("hotkey"))
                         {
-                            poNewSet->vSetHotkey(set_node.attribute("hotkey").toInt());
+                            pNewSet->setHotkey(setNode.attribute("hotkey").toInt());
                         }
                     }
                 }
 
-                set_node = set_node.nextSibling().toElement();
+                setNode = setNode.nextSibling().toElement();
             }
         }
 
-        setting_node = setting_node.nextSibling().toElement();
+        settingsNode = settingsNode.nextSibling().toElement();
     }
 
     // migration from 1.3
-    if (iNewHotkey > 0)
+    if (newHotkey > 0)
     {
-        vUpgradeHotkeys(iNewHotkey);
-        vWriteXML();
+        upgradeHotkeys(newHotkey);
+        writeXML();
     }
 
-    m_bUnsaved = false;
+    m_unsaved = false;
 
     return true;
 }
@@ -465,74 +461,74 @@ bool Settings::bReadXML(QString _sFilename)
 /**
  * @brief Write parameters into the settings file
  */
-void Settings::vWriteXML(QString _sFilename)
+void Settings::writeXML(QString _filename)
 {
-    if (_sFilename.isEmpty())
+    if (_filename.isEmpty())
     {
-        _sFilename = QString::fromAscii(APP_CONFIG_FILE);
+        _filename = QString::fromAscii(APP_CONFIG_FILE);
     }
 
     // initialize domdocument
-    QDomDocument oDom;
-    QDomProcessingInstruction header = oDom.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-    oDom.appendChild(header);
+    QDomDocument dom;
+    QDomProcessingInstruction header = dom.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
+    dom.appendChild(header);
 
-    // settings (main) node
-    QDomElement main_node = oDom.createElement("settings");
+    // settings node
+    QDomElement mainNode = dom.createElement("settings");
 
     // config node
-    QDomElement config_node = oDom.createElement("config");
+    QDomElement configNode = dom.createElement("config");
 
     for (QHash<QString, QVariant>::iterator it = m_options.begin(); it != m_options.end(); ++it)
     {
-        addSimpleTextNode(&oDom, &config_node, it.key(), it.value().toString());
+        addSimpleTextNode(&dom, &configNode, it.key(), it.value().toString());
     }
 
-    main_node.appendChild(config_node);
+    mainNode.appendChild(configNode);
 
     // hotkeys node
-    QDomElement hotkeys_node = oDom.createElement("hotkeys");
+    QDomElement hotkeysNode = dom.createElement("hotkeys");
 
     for (QHash<QString, int>::iterator it = m_hotkeys.begin(); it != m_hotkeys.end(); ++it)
     {
-        addSimpleTextNode(&oDom, &hotkeys_node, it.key(), QString::number(it.value()));
+        addSimpleTextNode(&dom, &hotkeysNode, it.key(), QString::number(it.value()));
     }
 
-    main_node.appendChild(hotkeys_node);
+    mainNode.appendChild(hotkeysNode);
 
     // sets node
-    QDomElement sets_node = oDom.createElement("sets");
+    QDomElement setsNode = dom.createElement("sets");
 
-    for (QVector<Set*>::iterator it = m_oSets.begin(); it != m_oSets.end(); ++it)
+    for (QVector<Set*>::iterator it = m_apSets.begin(); it != m_apSets.end(); ++it)
     {
-        Set* poSet = *it;
+        Set* pSet = *it;
 
         // set node
-        QDomElement set = oDom.createElement("set");
-        set.setAttribute("name", poSet->name());
-        set.setAttribute("type", poSet->type());
-        set.setAttribute("style", poSet->style());
-        set.setAttribute("active", poSet->isActive());
-        set.setAttribute("hotkey", poSet->hotkey());
-        setDomNodeValue(&oDom, &set, poSet->path());
+        QDomElement setNode = dom.createElement("set");
+        setNode.setAttribute("name", pSet->name());
+        setNode.setAttribute("type", pSet->type());
+        setNode.setAttribute("style", pSet->style());
+        setNode.setAttribute("active", pSet->isActive());
+        setNode.setAttribute("hotkey", pSet->hotkey());
+        setDomNodeValue(&dom, &setNode, pSet->path());
 
-        sets_node.appendChild(set);
+        setsNode.appendChild(setNode);
     }
 
-    main_node.appendChild(sets_node);
+    mainNode.appendChild(setsNode);
 
-    oDom.appendChild(main_node);
+    dom.appendChild(mainNode);
 
     // save file
-    QFile oXML(_sFilename);
-    oXML.open(QIODevice::WriteOnly);
+    QFile file(_filename);
+    file.open(QIODevice::WriteOnly);
 
-    QTextStream stream(&oXML);
-    oDom.save(stream, 2);
+    QTextStream stream(&file);
+    dom.save(stream, 2);
 
-    oXML.close();
+    file.close();
 
-    m_bUnsaved = false;
+    m_unsaved = false;
 }
 
 
@@ -541,17 +537,17 @@ void Settings::vWriteXML(QString _sFilename)
  * @param string _sPath
  * @return bool - true if the path is valid
  */
-bool Settings::bSetExePath(const QString &_sPath)
+bool Settings::setExePath(const QString &_path)
 {
-    if (bFileExists(_sPath))
+    if (fileExists(_path))
     {
-        QString sFilename = _sPath.section('\\', -1);
-        if (sFilename.compare("UltraMonDesktop.exe")==0)
+        QString filename = _path.section('\\', -1);
+        if (filename.compare("UltraMonDesktop.exe")==0)
         {
-            vSetParam("umpath", _sPath);
-            vWriteXML();
+            setParam("umpath", _path);
+            writeXML();
 
-            m_iState&= ~UM_NOT_INSTALLED;
+            m_state&= ~UM_NOT_INSTALLED;
             return true;
         }
     }
@@ -565,9 +561,9 @@ bool Settings::bSetExePath(const QString &_sPath)
  * @param string _sPath
  * @return Set*
  */
-Set* Settings::poAddSet(const QString &_sPath)
+Set* Settings::pAddSet(const QString &_path)
 {
-    return poAddSet(_sPath, sGetDirName(_sPath), true);
+    return pAddSet(_path, getDirectoryName(_path));
 }
 
 /**
@@ -577,36 +573,36 @@ Set* Settings::poAddSet(const QString &_sPath)
  * @param bool _bActive
  * @return Set*
  */
-Set* Settings::poAddSet(const QString &_sPath, QString &_sName, bool _bActive)
+Set* Settings::pAddSet(const QString &_path, QString &_name)
 {
-    QString sPath = sAddTrailingSlash(_sPath);
+    QString path = addTrailingSlash(_path);
 
-    if (!bDirectoryExists(sPath))
+    if (!directoryExists(path))
     {
         return NULL;
     }
 
-    m_bUnsaved = true;
+    m_unsaved = true;
 
-    Set* poSet = new Set(sPath, _sName, _bActive);
-    m_oSets.push_back(poSet);
+    Set* pSet = new Set(path, _name);
+    m_apSets.push_back(pSet);
 
-    return poSet;
+    return pSet;
 }
 
 /**
  * @brief Delete a set
  * @param int _i - position in vector
  */
-void Settings::vDeleteSet(int _i)
+void Settings::deleteSet(int _i)
 {
-    if ( _i < m_oSets.size())
+    if ( _i < m_apSets.size())
     {
-        m_bUnsaved = true;
+        m_unsaved = true;
 
-        m_oSets.at(_i)->vDeleteCache();
-        delete m_oSets.at(_i);
-        m_oSets.remove(_i);
+        m_apSets.at(_i)->deleteCache();
+        delete m_apSets.at(_i);
+        m_apSets.remove(_i);
     }
 }
 
@@ -614,14 +610,14 @@ void Settings::vDeleteSet(int _i)
  * @brief Unload all sets
  * Sets are only onloaded from memory, they are not deleted
  */
-void Settings::vClearSets()
+void Settings::clearSets()
 {
-    if (!m_oSets.empty())
+    if (!m_apSets.empty())
     {
-        m_bUnsaved = true;
+        m_unsaved = true;
 
-        qDeleteAll(m_oSets);
-        m_oSets.clear();
+        qDeleteAll(m_apSets);
+        m_apSets.clear();
     }
 }
 
@@ -632,17 +628,17 @@ void Settings::vClearSets()
  * @param int _iType
  * @param int _iStyle
  */
-void Settings::vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey)
+void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey)
 {
-    if ( _i < m_oSets.size())
+    if ( _i < m_apSets.size())
     {
-        m_bUnsaved = true;
+        m_unsaved = true;
 
-        Set* poSet = m_oSets.at(_i);
-        poSet->vSetName(_sName);
-        poSet->vSetType(_iType);
-        poSet->vSetStyle(_iStyle);
-        poSet->vSetHotkey(_iHotkey);
+        Set* pSet = m_apSets.at(_i);
+        pSet->setName(_name);
+        pSet->setType(_type);
+        pSet->setStyle(_style);
+        pSet->setHotkey(_hotkey);
     }
 }
 
@@ -651,10 +647,10 @@ void Settings::vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iTyp
  * @param int _i - positon in vector
  * @param bool _bState
  */
-void Settings::vSetState(int _i, bool _bState)
+void Settings::setState(int _i, bool _state)
 {
-    m_bUnsaved = true;
-    m_oSets.at(_i)->vSetActive(_bState);
+    m_unsaved = true;
+    m_apSets.at(_i)->setActive(_state);
 }
 
 /**
@@ -662,38 +658,38 @@ void Settings::vSetState(int _i, bool _bState)
  * @param int _from - positon in vector
  * @param int _to - new position in vector
  */
-void Settings::vMoveSet(int _from, int _to)
+void Settings::moveSet(int _from, int _to)
 {
-    Set* poSet = m_oSets.at(_from);
-    m_oSets.insert(_to, poSet);
+    Set* pSet = m_apSets.at(_from);
+    m_apSets.insert(_to, pSet);
 
     if (_from<_to)
     {
-        m_oSets.remove(_from);
+        m_apSets.remove(_from);
     }
     else
     {
-        m_oSets.remove(_from+1);
+        m_apSets.remove(_from+1);
     }
 
-    m_bUnsaved = true;
+    m_unsaved = true;
 }
 
 /**
  * @brief Remove unexisting sets and update file lists
  */
-void Settings::vUpdateSets()
+void Settings::updateSets()
 {
-    for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); )
+    for (QVector<Set*>::iterator it=m_apSets.begin(); it!=m_apSets.end(); )
     {
-        if (!bDirectoryExists((*it)->path()))
+        if (!directoryExists((*it)->path()))
         {
-            m_bUnsaved = true;
-            m_oSets.erase(it);
+            m_unsaved = true;
+            m_apSets.erase(it);
         }
         else
         {
-            (*it)->vPopulateFiles();
+            (*it)->populateFiles();
             it++;
         }
     }
@@ -704,17 +700,17 @@ void Settings::vUpdateSets()
  * @param int _i - position in the sub-vector of active sets
  * @return Set*
  */
-Set* Settings::poGetActiveSet(int _i) const
+Set* Settings::pGetActiveSet(int _i) const
 {
-    QVector<Set*> poActiveSets;
-    for (QVector<Set*>::const_iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
+    QVector<Set*> apActiveSets;
+    for (QVector<Set*>::const_iterator it=m_apSets.begin(); it!=m_apSets.end(); ++it)
     {
         if ((*it)->isActive())
         {
-            poActiveSets.push_back((*it));
+            apActiveSets.push_back((*it));
         }
     }
-    return poActiveSets.at(_i);
+    return apActiveSets.at(_i);
 }
 
 /**
@@ -722,64 +718,46 @@ Set* Settings::poGetActiveSet(int _i) const
  * @param bool _bWithFiles - if true, only non-empty sets are counted
  * @return  int
  */
-int const Settings::iNbActiveSets(bool _bWithFiles) const
+int const Settings::nbActiveSets(bool _withFiles) const
 {
-    int iTotalSets = 0;
-    for (QVector<Set*>::const_iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
+    int totalSets = 0;
+    for (QVector<Set*>::const_iterator it=m_apSets.begin(); it!=m_apSets.end(); ++it)
     {
-        if ((*it)->isActive() && (!_bWithFiles || (*it)->count()>0))
+        if ((*it)->isActive() && (!_withFiles || (*it)->count()>0))
         {
-            iTotalSets++;
+            totalSets++;
         }
     }
-    return iTotalSets;
+    return totalSets;
 }
-
-/**
- * @brief Get total files among active sets
- * @return int
- */
-int const Settings::iNbActiveFiles()
-{
-    int iTotalFiles = 0;
-    for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
-    {
-        if ((*it)->isActive())
-        {
-            iTotalFiles+= (*it)->count();
-        }
-    }
-    return iTotalFiles;
-}
-
 
 /**
  * @brief Create the startup shortcut
  */
-void Settings::vCreateShortcut()
+void Settings::createShortcut()
 {
     if (!m_env["startlinkpath"].isNull())
     {
-        wchar_t* sPath = (wchar_t*) malloc(256);
-        wchar_t* sPathE = (wchar_t*) malloc(256);
+        wchar_t* path1 = (wchar_t*) malloc(256);
+        wchar_t* path2 = (wchar_t*) malloc(256);
 
-        GetModuleFileName(NULL, sPath, 256);
-        wcscpy(sPathE, sPath);
-        PathRemoveFileSpec(sPathE);
+        GetModuleFileName(NULL, path1, 256);
+        wcscpy(path2, path1);
+        PathRemoveFileSpec(path2);
 
-        CreateShortcut(sPath, sPathE, (LPCWSTR)m_env["startlinkpath"].toString().utf16());
+        CreateShortcut(path1, path2, (LPCWSTR)m_env["startlinkpath"].toString().utf16());
 
-        free(sPath);
-        free(sPathE);
+        free(path1);
+        free(path2);
     }
 }
 
 /**
  * @brief Delete the startup shortcut
  */
-void Settings::vDeleteShortcut()
+void Settings::deleteShortcut()
 {
-    if (bIsAutostart())
+    if (isAutostart())
     {
         QFile::remove(m_env["startlinkpath"].toString());
     }
@@ -788,32 +766,32 @@ void Settings::vDeleteShortcut()
 /**
  * @brief Build sets hotkeys when migrating from version 1.3
  */
-void Settings::vUpgradeHotkeys(int iWinMod)
+void Settings::upgradeHotkeys(int WinMod)
 {
-    int iQtMod = 0;
-    if (iWinMod & MOD_SHIFT)
+    int QtMod = 0;
+    if (WinMod & MOD_SHIFT)
     {
-        iQtMod+= Qt::SHIFT;
+        QtMod+= Qt::SHIFT;
     }
-    if (iWinMod & MOD_CONTROL)
+    if (WinMod & MOD_CONTROL)
     {
-        iQtMod+= Qt::CTRL;
+        QtMod+= Qt::CTRL;
     }
-    if (iWinMod & MOD_ALT)
+    if (WinMod & MOD_ALT)
     {
-        iQtMod+= Qt::ALT;
+        QtMod+= Qt::ALT;
     }
-    if (iWinMod & MOD_WIN)
+    if (WinMod & MOD_WIN)
     {
-        iQtMod+= Qt::META;
+        QtMod+= Qt::META;
     }
 
-    int iKey = Qt::Key_1;
-    for (QVector<Set*>::iterator it=m_oSets.begin(); it!=m_oSets.end(); ++it)
+    int key = Qt::Key_1;
+    for (QVector<Set*>::iterator it=m_apSets.begin(); it!=m_apSets.end(); ++it)
     {
-        (*it)->vSetHotkey(iKey + iQtMod);
-        iKey++;
-        if (iKey > Qt::Key_9)
+        (*it)->setHotkey(key + QtMod);
+        key++;
+        if (key > Qt::Key_9)
         {
             break;
         }

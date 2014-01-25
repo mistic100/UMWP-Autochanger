@@ -13,27 +13,30 @@ class GlobalShortcut : public QxtGlobalShortcut
 {
     Q_OBJECT
 
+public:
+    enum Type {
+        NOOP,
+        SETS,
+        STARTPAUSE,
+        REFRESH,
+        SHOWHIDE
+    };
+
 private:
     QList<int>  m_aiSets;
-    bool        m_bStartPause;
-    bool        m_bRefresh;
-    bool        m_bShowHide;
+    GlobalShortcut::Type m_type;
 
 public:
     GlobalShortcut(QObject* _parent=0) : QxtGlobalShortcut(_parent)
     {
-        m_bStartPause = m_bRefresh = m_bShowHide = false;
+        m_type = NOOP;
     }
 
-    void vSetSets(const QList<int> _ai) { m_aiSets =_ai; }
-    void vSetStartPause()               { m_bStartPause=true; }
-    void vSetRefresh()                  { m_bRefresh=true; }
-    void vSetShowHide()                 { m_bShowHide=true; }
+    void vSetSets(const QList<int> _ai) { m_aiSets =_ai; m_type = SETS; }
+    void vSetType(GlobalShortcut::Type _type) { m_type = _type; }
 
     const QList<int> sets() const { return m_aiSets; }
-    const bool startPause() const { return m_bStartPause; }
-    const bool refresh() const    { return m_bRefresh; }
-    const bool showHide() const   { return m_bShowHide; }
+    const GlobalShortcut::Type type() const { return m_type; }
 };
 
 #endif // QTGLOBALSHORTCUT_H

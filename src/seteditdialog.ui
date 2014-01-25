@@ -18,10 +18,10 @@
   </property>
   <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0,1">
    <item row="1" column="1" colspan="3">
-    <widget class="QLineEdit" name="m_poNameInput"/>
+    <widget class="QLineEdit" name="inputName"/>
    </item>
    <item row="3" column="1" colspan="3">
-    <widget class="QComboBox" name="m_poTypeSelect"/>
+    <widget class="QComboBox" name="selectType"/>
    </item>
    <item row="9" column="0" colspan="4">
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -64,13 +64,13 @@
     </widget>
    </item>
    <item row="7" column="0" colspan="2">
-    <widget class="QComboBox" name="m_poStyleSelect"/>
+    <widget class="QComboBox" name="selectStyle"/>
    </item>
    <item row="7" column="2" colspan="2">
-    <widget class="QLineEditHotkey" name="m_poHotkeyInput"/>
+    <widget class="QLineEditHotkey" name="inputHotkey"/>
    </item>
    <item row="6" column="1">
-    <spacer name="horizontalSpacer">
+    <spacer name="horizontalSpacer_1">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>

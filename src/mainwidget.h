@@ -20,24 +20,25 @@ class MainWidget : public QWidget
 
 private:
     Ui::MainWidget* ui;
-    Controller*     m_poCtrl;
+    Controller*     m_pCtrl;
     
 public:
-    MainWidget(QWidget* _parent, Controller* _poCtrl);
+    MainWidget(QWidget* _parent, Controller* _pCtrl);
     ~MainWidget();
 
-    QList<int> aiGetSelectedIndexes();
+    QList<int> aGetSelectedIndexes();
 
 public slots:
-    void slotUpdateList(bool _bResetSel);
-    void slotMoveItem(const QModelIndex &, int from, int, const QModelIndex &, int to);
+    void slotUpdateList(bool _resetSel);
+    void slotMoveItem(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
 
-    void on_m_poButtonAdd_clicked();
-    void on_m_poButtonActivate_clicked();
-    void on_m_poButtonDeactivate_clicked();
-    void on_m_poButtonDelete_clicked();
-    void on_m_poList_itemSelectionChanged();
-    void on_m_poList_itemDoubleClicked(QListWidgetItem*);
+    void on_buttonAdd_clicked();
+    void on_buttonActivate_clicked();
+    void on_buttonDeactivate_clicked();
+    void on_buttonDelete_clicked();
+
+    void on_mainList_itemSelectionChanged();
+    void on_mainList_itemDoubleClicked(QListWidgetItem*);
 };
 
 #endif // MAINWIDGET_H

@@ -23,7 +23,6 @@ SOURCES += \
     settings.cpp \
     errorwidget.cpp \
     versionchecker.cpp \
-    listproxystyle.cpp \
     mainwidget.cpp \
     seteditdialog.cpp \
     configdialog.cpp \

@@ -17,26 +17,26 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
     // default translations
     QTranslator qtTranslator;
     qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    a.installTranslator(&qtTranslator);
+    app.installTranslator(&qtTranslator);
 
     // app translations
-    QTranslator myappTranslator;
-    myappTranslator.load(":/lang/" + QLocale::system().name());
-    a.installTranslator(&myappTranslator);
+    QTranslator appTranslator;
+    appTranslator.load(":/lang/" + QLocale::system().name());
+    app.installTranslator(&appTranslator);
 
 
-    Settings oData;
-    Controller oCtrl(&oData);
-    MainWindow oWindow(&oCtrl);
+    Settings settings;
+    Controller ctrl(&settings);
+    MainWindow window(&ctrl);
 
-    oWindow.vInit();
+    window.init();
 
-    int ret = a.exec();
+    int ret = app.exec();
 
     ReleaseMutex(hMutexHandle);
     CloseHandle(hMutexHandle);
@@ -48,67 +48,67 @@ int main(int argc, char *argv[])
 /*
  * check if a file exists
  */
-bool bFileExists(QString const &_sPath, bool _bCheckWrite)
+bool fileExists(QString const &_path, bool _checkWrite)
 {
-    DWORD dAtt = GetFileAttributesA(_sPath.toStdString().c_str());
+    DWORD dAtt = GetFileAttributesA(_path.toStdString().c_str());
 
     return dAtt!=INVALID_FILE_ATTRIBUTES
            && !(dAtt&FILE_ATTRIBUTE_DIRECTORY)
-           && (!(dAtt&FILE_ATTRIBUTE_READONLY) || !_bCheckWrite);
+           && (!(dAtt&FILE_ATTRIBUTE_READONLY) || !_checkWrite);
 }
 
 /*
  * check if a directory exists
  */
-bool bDirectoryExists(const QString &_sPath)
+bool directoryExists(const QString &_path)
 {
-    DWORD dAtt = GetFileAttributesA(_sPath.toStdString().c_str());
+    DWORD dAtt = GetFileAttributesA(_path.toStdString().c_str());
     return dAtt!=INVALID_FILE_ATTRIBUTES && (dAtt&FILE_ATTRIBUTE_DIRECTORY);
 }
 
 /*
  * helpers for simple XML text nodes
  */
-void setDomNodeValue(QDomDocument* _poDoc, QDomNode* _poNode, const QString &_sValue)
+void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, const QString &_value)
 {
-    _poNode->appendChild(_poDoc->createTextNode(_sValue));
+    _pNode->appendChild(_pDoc->createTextNode(_value));
 }
 
-void addSimpleTextNode(QDomDocument* _poDoc, QDomNode* _poParent, const QString &_sName, const QString &_sValue)
+void addSimpleTextNode(QDomDocument* _poDoc, QDomNode* _poParent, const QString &_name, const QString &_value)
 {
-    QDomElement element = _poDoc->createElement(_sName);
-    setDomNodeValue(_poDoc, &element, _sValue);
+    QDomElement element = _poDoc->createElement(_name);
+    setDomNodeValue(_poDoc, &element, _value);
     _poParent->appendChild(element);
 }
 
 /*
  * add trailling slash to a path if not present
  */
-QString sAddTrailingSlash(const QString &_sPath)
+QString addTrailingSlash(const QString &_path)
 {
-    if (!_sPath.isEmpty() && !_sPath.endsWith('\\'))
+    if (!_path.isEmpty() && !_path.endsWith('\\'))
     {
-        return _sPath+"\\";
+        return _path+"\\";
     }
-    return _sPath;
+    return _path;
 }
 
 /*
  * get dir name from path
  */
-QString sGetDirName(QString const &_sPath)
+QString getDirectoryName(QString const &_path)
 {
-    return _sPath.section('\\', -1, -1, QString::SectionSkipEmpty);
+    return _path.section('\\', -1, -1, QString::SectionSkipEmpty);
 }
 
 /*
  * determine is a filename corresponds to an image (jpg, bmp, png, gif)
  */
-bool bIsImageFile(QString const &_sFilename)
+bool isImageFile(QString const &_filename)
 {
-    return _sFilename.endsWith(".jpg", Qt::CaseInsensitive)
-        || _sFilename.endsWith(".jpeg", Qt::CaseInsensitive)
-        || _sFilename.endsWith(".bmp", Qt::CaseInsensitive)
-        || _sFilename.endsWith(".png", Qt::CaseInsensitive)
-        || _sFilename.endsWith(".gif", Qt::CaseInsensitive);
+    return _filename.endsWith(".jpg", Qt::CaseInsensitive)
+        || _filename.endsWith(".jpeg", Qt::CaseInsensitive)
+        || _filename.endsWith(".bmp", Qt::CaseInsensitive)
+        || _filename.endsWith(".png", Qt::CaseInsensitive)
+        || _filename.endsWith(".gif", Qt::CaseInsensitive);
 }

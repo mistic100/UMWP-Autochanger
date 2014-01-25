@@ -14,10 +14,10 @@
 class ListDelegate : public QAbstractItemDelegate
 {
 private:
-    Controller* m_poCtrl;
+    Controller* m_pCtrl;
 
 public:
-    ListDelegate(QObject* _parent, Controller* _poCtrl);
+    ListDelegate(QObject* _parent, Controller* _pCtrl);
 
     void    paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize   sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;

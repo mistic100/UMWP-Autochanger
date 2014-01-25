@@ -21,31 +21,31 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    Controller*         m_poCtrl;
+    Controller*         m_pCtrl;
 
-    QSystemTrayIcon*    m_poTrayIcon;
-    QStatusBar*         m_poStatusBar;
-    QToolBarExt*        m_poMenuBar;
-    QMenu*              m_poTrayQuickMenu;
+    QStatusBar*         m_pStatusBar;
+    QToolBarExt*        m_pMenuBar;
+    QSystemTrayIcon*    m_pTrayIcon;
+    QMenu*              m_pTrayQuickMenu;
 
     // reference to some QAction modified after initilization
-    QToolButton*        m_poActionConfig;
-    QToolButton*        m_poActionHide1; // menu
-    QAction*            m_poActionHide2; // tray
-    QToolButton*        m_poActionPause1; // menu
-    QAction*            m_poActionPause2; // tray
+    QToolButton*        m_pActionConfig;
+    QToolButton*        m_pActionHide1; // menu
+    QAction*            m_pActionHide2; // tray
+    QToolButton*        m_pActionPause1; // menu
+    QAction*            m_pActionPause2; // tray
 
-    QList<GlobalShortcut*> m_apoShortcuts;
+    QList<GlobalShortcut*> m_apShortcuts;
 
 public:
-    MainWindow(Controller* _poCtrl);
+    MainWindow(Controller* _pCtrl);
     ~MainWindow();
 
-    void vUpdateHotkeys();
-    void vClearHotkeys();
+    void defineHotkeys();
+    void clearHotkeys();
 
-    void vShowMain();
-    void vShowError();
+    void showMain();
+    void showError();
 
 protected:
     void showEvent(QShowEvent*);
@@ -53,9 +53,9 @@ protected:
     void closeEvent(QCloseEvent* _event);
 
 public slots:
-    void vInit();
+    void init();
 
-    void vUpdateTrayQuickMenu();
+    void updateTrayQuickMenu();
 
     void slotQuit();
     void slotApply();
@@ -70,8 +70,8 @@ public slots:
     void slotTrayAction(QSystemTrayIcon::ActivationReason _reason);
     void slotTrayQuickClicked();
 
-    void slotToggleWindow(bool _bForceHide=false);
-    void slotDisplayNewVersion(const QString &_sVersion);
+    void slotToggleWindow(bool _forceHide=false);
+    void slotDisplayNewVersion(const QString &_version);
 };
 
 #endif // MAINWINDOW_H

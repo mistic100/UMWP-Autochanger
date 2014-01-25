@@ -15,14 +15,14 @@ class QLineEditHotkey : public QLineEdit
     Q_OBJECT
 
 private:
-    int m_iHotkey;
+    int m_hotkey;
 
 public:
-    QLineEditHotkey(QWidget* parent = 0);
+    QLineEditHotkey(QWidget* _parent = 0);
 
-    const int hotkey() const { return m_iHotkey; }
+    const int hotkey() const { return m_hotkey; }
 
-    void vSetHotkey(const int &_iHotkey);
+    void setHotkey(const int &_hotkey);
 
 protected:
     void keyPressEvent(QKeyEvent* _event);

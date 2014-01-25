@@ -19,28 +19,28 @@ private:
     QHash<QString, QVariant> m_env;     // environnement variables
     QHash<QString, int>      m_hotkeys;
 
-    short           m_iState;   // state of the installation
-    bool            m_bUnsaved; // true if there are unsaved data
+    short           m_state;   // state of the installation
+    bool            m_unsaved; // true if there are unsaved data
 
-    QVector<Set*>   m_oSets;    // list of wallpaper sets
+    QVector<Set*>   m_apSets;    // list of wallpaper sets
 
 public:
     Settings();
     ~Settings();
 
     // main methods
-    void vInit();
-    void vReadNbMonitors();
+    void init();
+    void readNbMonitors();
 
-    void vWriteXML(QString _sFilename = "");
-    bool bReadXML(QString _sFilename = "");
+    void writeXML(QString _filename = "");
+    bool readXML(QString _filename = "");
 
-    void vUpdateSets();
-    void vUpgradeHotkeys(int iWinMod);
+    void updateSets();
+    void upgradeHotkeys(int WinMod);
 
     // getters
-    const short     iState() const     { return m_iState; }
-    const bool      bIsUnsaved() const { return m_bUnsaved; }
+    const short     state() const     { return m_state; }
+    const bool      isUnsaved() const { return m_unsaved; }
 
     const QString   sParam(const QString &_key) const;
     const bool      bParam(const QString &_key) const;
@@ -50,41 +50,40 @@ public:
     const bool      bEnv(const QString &_key) const;
     const int       iEnv(const QString &_key) const;
 
-    const int       iHotkey(const QString &_key) const;
+    const int       hotkey(const QString &_key) const;
 
-    Set*            poGetSet(int _i) const  { return m_oSets.at(_i); }
-    Set*            poGetActiveSet(int _i) const;
-    const int       iNbSets() const         { return m_oSets.size(); }
-    const int       iNbActiveSets(bool _bWithFiles) const;
-    const int       iNbActiveFiles();
+    Set*            pGetSet(int _i) const  { return m_apSets.at(_i); }
+    Set*            pGetActiveSet(int _i) const;
+    const int       nbSets() const         { return m_apSets.size(); }
+    const int       nbActiveSets(bool _withFiles=false) const;
 
-    const bool      bIsAutostart() const;
-    const QSize     oWindowSize() const;
+    const QSize     windowSize() const;
 
     // setters
-    void vSetParam(const QString &_key, const QVariant &_val);
-    void vSetHotkey(const QString &_key, const int &_val);
+    void setParam(const QString &_key, const QVariant &_val);
+    void setHotkey(const QString &_key, const int &_val);
 
-    void vSetWindowSize(const QSize &_size);
-    void vAddMsgCount();
-    bool bSetExePath(const QString &_sPath);
+    void setWindowSize(const QSize &_size);
+    void addMsgCount();
+    bool setExePath(const QString &_sPath);
 
     // sets management
-    Set* poAddSet(const QString &_sPath);
-    Set* poAddSet(const QString &_sPath, QString &_sName, bool _bActive);
+    Set* pAddSet(const QString &_path);
+    Set* pAddSet(const QString &_path, QString &_name);
 
-    void vDeleteSet(int _i);
-    void vClearSets();
+    void deleteSet(int _i);
+    void clearSets();
 
-    void vEditSet(int _i, const QString &_sName, const UM::WALLPAPER _iType, const UM::IMAGE _iStyle, const int _iHotkey);
-    void vSetState(int _i, bool _bState);
+    void editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey);
+    void setState(int _i, bool _state);
 
-    void vMoveSet(int _from, int _to);
+    void moveSet(int _from, int _to);
 
     // shortcut
-    const bool bCanAddShortcut();
-    void vCreateShortcut();
-    void vDeleteShortcut();
+    const bool isAutostart() const;
+    const bool canAddShortcut() const;
+    void createShortcut();
+    void deleteShortcut();
 };
 
 #endif // SETTINGS_H
