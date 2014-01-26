@@ -7,7 +7,7 @@
 /**
  * @brief ConfigDialog::ConfigDialog
  * @param QWidget* _parent
- * @param Settings* _poSettings
+ * @param Settings* _settings
  */
 ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _settings) : QDialog(_parent),
     ui(new Ui::ConfigDialog)

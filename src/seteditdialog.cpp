@@ -7,24 +7,25 @@
 /**
  * @brief SetEditDialog::SetEditDialog
  * @param QWidget* _parent
- * @param Set* _poSet
+ * @param Set* _set
+ * @param Settings* _settings
  */
 SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) : QDialog(_parent),
     ui(new Ui::SetEditDialog)
 {
     ui->setupUi(this);
 
-    m_settings = _settings;
-
     setFixedSize(size());
 
-    ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      1);
-    ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), 0);
+    m_settings = _settings;
 
-    ui->selectStyle->addItem(QIcon(":/icon/im_center"),         tr("Center"),               0);
-    ui->selectStyle->addItem(QIcon(":/icon/im_tile"),           tr("Tile"),                 1);
-    ui->selectStyle->addItem(QIcon(":/icon/im_stretch"),        tr("Stretch"),              2);
-    ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"),   tr("Strecth proportional"), 3);
+    ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
+    ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
+
+    ui->selectStyle->addItem(QIcon(":/icon/im_center"),       tr("Center"),               UM::IM_CENTER);
+    ui->selectStyle->addItem(QIcon(":/icon/im_tile"),         tr("Tile"),                 UM::IM_TILE);
+    ui->selectStyle->addItem(QIcon(":/icon/im_stretch"),      tr("Stretch"),              UM::IM_STRETCH);
+    ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
 
     ui->inputName->setText(_set->name());
 
@@ -99,39 +100,15 @@ void SetEditDialog::done(int result)
 }
 
 /**
- * @brief SetEditDialog::name
- * @return string
+ * @brief Save changes in Settings object
+ * @param int index
  */
-const QString SetEditDialog::name() const
+void SetEditDialog::save(int index)
 {
-    return ui->inputName->text();
-}
-
-/**
- * @brief SetEditDialog::type
- * @return int
- */
-const UM::WALLPAPER SetEditDialog::type() const
-{
-    int index = ui->selectType->currentIndex();
-    return static_cast<UM::WALLPAPER>(ui->selectType->itemData(index).toInt());
-}
-
-/**
- * @brief SetEditDialog::style
- * @return int
- */
-const UM::IMAGE SetEditDialog::style() const
-{
-    int index = ui->selectStyle->currentIndex();
-    return static_cast<UM::IMAGE>(ui->selectStyle->itemData(index).toInt());
-}
-
-/**
- * @brief SetEditDialog::hotkey
- * @return Hotkey
- */
-const int SetEditDialog::hotkey() const
-{
-    return ui->inputHotkey->hotkey();
+    m_settings->editSet(index,
+                        ui->inputName->text(),
+                        ui->selectType->itemData(ui->selectType->currentIndex()).value<UM::WALLPAPER>(),
+                        ui->selectStyle->itemData(ui->selectStyle->currentIndex()).value<UM::IMAGE>(),
+                        ui->inputHotkey->hotkey()
+                        );
 }

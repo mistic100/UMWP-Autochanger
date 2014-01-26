@@ -6,12 +6,17 @@
  * @brief Set::Set
  * @param string _path
  * @param string _name
- * @param bool _active
  */
 Set::Set(const QString &_path, const QString &_name)
 {
     m_path = _path;
     m_name = _name;
+
+    if (!m_path.endsWith('\\'))
+    {
+        m_path.append('\\');
+    }
+
     m_type = UM::W_MONITOR;
     m_style = UM::IM_CENTER;
     m_active = true;
@@ -51,8 +56,8 @@ const QString Set::getFile(int _i) const
 /**
  * @brief Recursively read the last modification date of a folder
  * must not be directly called with parameters
- * @param string _sChild
- * @param int _iLevel
+ * @param string _child
+ * @param int _level
  * @return double
  */
 double Set::getLastModif(QString _child, int _level)
@@ -108,8 +113,8 @@ double Set::getLastModif(QString _child, int _level)
 /**
  * @brief Recursively construct the list of files (if changed)
  * must not be directly called with parameters
- * @param string _sChild
- * @param int _iLevel
+ * @param string _child
+ * @param int _level
  */
 void Set::populateFiles(QString _child, int _level)
 {
@@ -164,9 +169,8 @@ void Set::populateFiles(QString _child, int _level)
 void Set::readCache()
 {
     QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
-    if (file.exists())
+    if (file.exists() && file.open(QIODevice::ReadOnly))
     {
-        file.open(QIODevice::ReadOnly);
         QDataStream in(&file);
         in>>m_lastModif;
         in>>m_files;
@@ -180,11 +184,13 @@ void Set::readCache()
 void Set::writeCache()
 {
     QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
-    file.open(QIODevice::WriteOnly);
-    QDataStream out(&file);
-    out<<m_lastModif;
-    out<<m_files;
-    file.close();
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QDataStream out(&file);
+        out<<m_lastModif;
+        out<<m_files;
+        file.close();
+    }
 }
 
 /**

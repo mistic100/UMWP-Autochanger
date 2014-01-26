@@ -8,42 +8,42 @@
 #include "mainwindow.h"
 #include "errorwidget.h"
 
+extern short UMWP_STATE;
+
 
 /**
  * @brief ErrorWidget::ErrorWidget
  * @param QWidget* _parent
- * @param Controller* _poCtrl
+ * @param Controller* _ctrl
  */
 ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent)
 {
     m_ctrl = _ctrl;
     m_inputPath = NULL;
 
-    QGridLayout* pMainLayout = new QGridLayout(); // 6 columns
+    QGridLayout* mainLayout = new QGridLayout(); // 6 columns
 
     // error icon
     QLabel* icon = new QLabel();
     icon->setPixmap(QPixmap(":/img/error"));
-    pMainLayout->addWidget(icon, 0, 0, 2, 1);
+    mainLayout->addWidget(icon, 0, 0, 2, 1);
 
     // oups !
     QLabel* title = new QLabel(tr("Oops !"));
     title->setFont(QFont("Calibri", 16));
-    pMainLayout->addWidget(title, 0, 1, 1, 5);
+    mainLayout->addWidget(title, 0, 1, 1, 5);
 
     // error description
     QLabel* description = new QLabel();
     description->setWordWrap(true);
-    pMainLayout->addWidget(description, 1, 1, 1, 5);
+    mainLayout->addWidget(description, 1, 1, 1, 5);
 
     // spacer
     QSpacerItem* spacer = new QSpacerItem(100, 100, QSizePolicy::Ignored, QSizePolicy::Ignored);
-    pMainLayout->addItem(spacer, 2, 0, 1, 6);
-
-    int state = m_ctrl->settings()->state();
+    mainLayout->addItem(spacer, 2, 0, 1, 6);
 
     // ASK ULTRAMON.EXE PATH
-    if (state & UM_NOT_INSTALLED)
+    if (UMWP_STATE & UMWP::NOT_INSTALLED)
     {
          description->setText(tr("Unable to locate UltraMon install directory.<br>Please indicate the location of <b>UltraMonDesktop.exe</b>"));
 
@@ -51,16 +51,16 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent)
         QPushButton* pButtonSubmit = new QPushButton(tr("Continue"));
         m_inputPath = new QLineEdit(m_ctrl->settings()->sParam("umpath"));
 
-        pMainLayout->addWidget(m_inputPath, 3, 0, 1, 5);
-        pMainLayout->addWidget(pButtonBrowse, 3, 5, 1, 1);
-        pMainLayout->addWidget(pButtonSubmit, 4, 5, 1, 1);
+        mainLayout->addWidget(m_inputPath, 3, 0, 1, 5);
+        mainLayout->addWidget(pButtonBrowse, 3, 5, 1, 1);
+        mainLayout->addWidget(pButtonSubmit, 4, 5, 1, 1);
 
         connect(m_inputPath,   SIGNAL(returnPressed()), this, SLOT(slotSubmit()));
         connect(pButtonBrowse, SIGNAL(clicked()), this, SLOT(slotBrowse()));
         connect(pButtonSubmit, SIGNAL(clicked()), this, SLOT(slotSubmit()));
     }
     // OTHER ERRORS
-    else if (state & UM_BAD_VERSION)
+    else if (UMWP_STATE & UMWP::BAD_VERSION)
     {
          description->setText(tr("%1 is incompatible with the current version of UltraMon (%2).<br>Minimum version: %3")
                              .arg(QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION))
@@ -68,18 +68,18 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent)
                              .arg(QString::fromAscii(APP_MIN_UM_VERSION))
                              );
     }
-    else if (state & UM_FILE_NOT_FOUND)
+    else if (UMWP_STATE & UMWP::FILE_NOT_FOUND)
     {
          description->setText(tr("<b>default.wallpaper</b> file not found, impossible to continue.<br><br>Sould be at: %1")
                              .arg("<i>" + m_ctrl->settings()->sEnv("wallpath") + "</i>")
                              );
     }
-    else if (state & UM_UNKNOWN_ERROR)
+    else if (UMWP_STATE & UMWP::UNKNOWN_ERROR)
     {
          description->setText(tr("An unknown error append!"));
     }
 
-    setLayout(pMainLayout);
+    setLayout(mainLayout);
 }
 
 /**

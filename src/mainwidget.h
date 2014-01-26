@@ -26,7 +26,7 @@ public:
     MainWidget(QWidget* _parent, Controller* _ctrl);
     ~MainWidget();
 
-    QList<int> aGetSelectedIndexes();
+    QList<int> getSelectedIndexes();
 
 public slots:
     void slotUpdateList(bool _resetSel);

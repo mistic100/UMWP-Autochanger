@@ -10,13 +10,13 @@
 
 /**
  * @brief Controller::Controller
- * @param Settings* _data
+ * @param Settings* _settings
  */
-Controller::Controller(Settings* _pSettings) : QObject(0)
+Controller::Controller(Settings* _settings) : QObject(0)
 {
     m_randomEngine.seed((unsigned int)time(NULL));
 
-    m_settings = _pSettings;
+    m_settings = _settings;
 
     m_mainTimer = new QTimer(this);
     connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
@@ -46,7 +46,7 @@ void Controller::checkVersion()
 
 /**
  * @brief Stop the timer, update the wallpaper and restart the timer
- * @param bool _bKeepPause - prevent timer to restart
+ * @param bool _keepPause - prevent timer to restart
  */
 void Controller::startTimer(bool _keepPause)
 {
@@ -83,7 +83,7 @@ bool Controller::startPause()
 
 /**
  * @brief Update the wallpaper
- * @param bool _bCheckFiles - if true, depends on configuration
+ * @param bool _checkFiles - if true, depends on configuration
  */
 void Controller::slotUpdate(bool _checkFiles)
 {
@@ -103,32 +103,29 @@ void Controller::slotUpdate(bool _checkFiles)
     }
 
     // get random files
-    Set* pSet = getRandomSet(totalSets);
+    Set* set = getRandomSet(totalSets);
 
     m_files.clear();
 
-    if (pSet->type() == 1)
+    if (set->type() == 1)
     {
         for (int i=0, l=m_settings->iEnv("nb_monitors"); i<l; i++)
         {
-            m_files.push_back(getRandomFile(pSet));
+            m_files.push_back(getRandomFile(set));
         }
     }
     else
     {
-        m_files.push_back(getRandomFile(pSet));
+        m_files.push_back(getRandomFile(set));
     }
 
     QString filename = m_settings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
-    generateFile(filename, pSet);
+    generateFile(filename, set);
 
     // remove old BMP file
-    if (fileExists(m_settings->sEnv("bmppath")))
-    {
-        QFile::remove(m_settings->sEnv("bmppath"));
-    }
+    QFile::remove(m_settings->sEnv("bmppath"));
 
     // execute UltraMonDesktop
     QString cmd = "\"" + m_settings->sParam("umpath") + "\" /load \"" + filename + "\"";
@@ -137,7 +134,7 @@ void Controller::slotUpdate(bool _checkFiles)
 
 /**
  * @brief Get a random Set among all active sets
- * @param int _iTotal - total number of Sets
+ * @param int _total - total number of Sets
  * @return Set*
  */
 Set* Controller::getRandomSet(int _total)
@@ -155,17 +152,17 @@ Set* Controller::getRandomSet(int _total)
 
 /**
  * @brief Get a random file within a Set
- * @param Set* _poSet
+ * @param Set* _set
  * @return string
  */
-QString Controller::getRandomFile(Set* _poSet)
+QString Controller::getRandomFile(Set* _set)
 {
-    int total = _poSet->count();
+    int total = _set->count();
 
     // only one file in the set ?!
     if (total == 1)
     {
-        return _poSet->getFile(0);
+        return _set->getFile(0);
     }
 
     // rare case for small sets
@@ -184,7 +181,7 @@ QString Controller::getRandomFile(Set* _poSet)
     while (loop > 0)
     {
         int counter = unif(m_randomEngine);
-        file = _poSet->getFile(counter);
+        file = _set->getFile(counter);
 
         if (!m_files.contains(file))
         {
@@ -199,10 +196,10 @@ QString Controller::getRandomFile(Set* _poSet)
 
 /**
  * @brief Generate AutoChanger.wallpaper file
- * @param string _sFilename
- * @param Set* _poSet
+ * @param string _filename
+ * @param Set* _set
  */
-void Controller::generateFile(const QString &_filename, const Set* _pSet)
+void Controller::generateFile(const QString &_filename, const Set* _set)
 {
     // open default file
     QString defaultFilename = m_settings->sEnv("wallpath") + "default.wallpaper";
@@ -215,7 +212,7 @@ void Controller::generateFile(const QString &_filename, const Set* _pSet)
     buffer.truncate(m_settings->iEnv("header_size"));
 
     // write wallpaper type
-    UM::WALLPAPER wp_type = _pSet->type();
+    UM::WALLPAPER wp_type = _set->type();
     buffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
 
     // write number of wallpapers
@@ -229,7 +226,7 @@ void Controller::generateFile(const QString &_filename, const Set* _pSet)
         wall.bgType = UM::BG_SOLID;
         wall.color1 = 0x00000000;
         wall.color2 = 0x00000000;
-        wall.imgStyle = _pSet->style();
+        wall.imgStyle = _set->style();
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
         m_files.at(i).toWCharArray((wchar_t*)wall.imgFile);
 

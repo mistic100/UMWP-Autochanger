@@ -28,10 +28,7 @@ public:
     SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings);
     ~SetEditDialog();
 
-    const QString       name() const;
-    const UM::WALLPAPER type() const;
-    const UM::IMAGE     style() const;
-    const int           hotkey() const;
+    void save(int index);
 
 protected:
     void done(int result);

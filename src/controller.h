@@ -26,7 +26,7 @@ private:
     QVector<QString> m_files;
 
 public:
-    Controller(Settings* _pSettings);
+    Controller(Settings* _settings);
 
     void checkVersion();
 
@@ -34,8 +34,8 @@ public:
     const QVector<QString> &files() const { return m_files; }
 
     Set*    getRandomSet(int _total);
-    QString getRandomFile(Set* _pSet);
-    void    generateFile(const QString &_filename, const Set* _pSet);
+    QString getRandomFile(Set* _set);
+    void    generateFile(const QString &_filename, const Set* _set);
 
     void startTimer(bool _keepPause=false);
     bool startPause();

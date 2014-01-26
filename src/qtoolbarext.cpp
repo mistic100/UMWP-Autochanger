@@ -1,11 +1,15 @@
 #include "qtoolbarext.h"
 
 
+/**
+ * @brief QToolBarExt::QToolBarExt
+ * @param QWidget* _parent
+ */
 QToolBarExt::QToolBarExt(QWidget* _parent) : QToolBar(_parent) {}
 
 /**
  * @brief QToolBarExt::addButton
- * @param QString
+ * @param string text
  * @return QToolButton*
  */
 QToolButton* QToolBarExt::addButton(const QString &text)
@@ -20,9 +24,9 @@ QToolButton* QToolBarExt::addButton(const QString &text)
 
 /**
  * @brief QToolBarExt::addButton
- * @param QIcon
- * @param QString
- * @param Qt::ToolButtonStyle
+ * @param QIcon icon
+ * @param string text
+ * @param Qt::ToolButtonStyle style
  * @return QToolButton*
  */
 QToolButton* QToolBarExt::addButton(const QIcon &icon, const QString &text, Qt::ToolButtonStyle style)
@@ -35,9 +39,10 @@ QToolButton* QToolBarExt::addButton(const QIcon &icon, const QString &text, Qt::
 
 /**
  * @brief QToolBarExt::addButton
- * @param QIcon
- * @param QString
- * @param Qt::ToolButtonStyle
+ * @param QIcon icon
+ * @param string text
+ * @param QMenu* menu
+ * @param Qt::ToolButtonStyle style
  * @return QToolButton*
  */
 QToolButton* QToolBarExt::addButton(const QIcon &icon, const QString &text, QMenu* menu, Qt::ToolButtonStyle style)

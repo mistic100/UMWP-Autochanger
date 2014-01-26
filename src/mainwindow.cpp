@@ -12,10 +12,12 @@
 #include "mainwidget.h"
 #include "configdialog.h"
 
+extern short UMWP_STATE;
+
 
 /**
  * @brief MainWindow::MainWindow
- * @param Controller* _poCtrl
+ * @param Controller* _ctrl
  */
 MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
 {
@@ -94,10 +96,10 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
 
     updateTrayQuickMenu();
 
-    connect(actionQuit2,      SIGNAL(triggered()), this, SLOT(slotQuit()));
-    connect(m_actionHide2,    SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
-    connect(m_actionPause2,   SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(actionRefresh2,   SIGNAL(triggered()), this, SLOT(slotApply()));
+    connect(actionQuit2,    SIGNAL(triggered()), this, SLOT(slotQuit()));
+    connect(m_actionHide2,  SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
+    connect(m_actionPause2, SIGNAL(triggered()), this, SLOT(slotStartPause()));
+    connect(actionRefresh2, SIGNAL(triggered()), this, SLOT(slotApply()));
 
     m_trayIcon->setToolTip(APP_NAME);
     m_trayIcon->setContextMenu(trayMenu);
@@ -116,7 +118,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::init()
 {
-    if (m_ctrl->settings()->state() == UM_OK)
+    if (UMWP_STATE == UMWP::OK)
     {
         showMain();
         defineHotkeys();
@@ -294,8 +296,7 @@ void MainWindow::slotTrayAction(QSystemTrayIcon::ActivationReason _reason)
 
 /**
  * @brief Minimize to tray or open from tray
- * Configuration is saved when minimizing if _bForceHide is false
- * @param bool _bForceHide
+ * @param bool _forceHide
  */
 void MainWindow::slotToggleWindow(bool _forceHide)
 {
@@ -315,7 +316,6 @@ void MainWindow::slotToggleWindow(bool _forceHide)
         if (!_forceHide)
         {
             m_ctrl->settings()->setWindowSize(size());
-            m_ctrl->settings()->save();
         }
 
         m_actionHide2->setText(tr("Show"));
@@ -511,7 +511,7 @@ void MainWindow::slotHotkey()
 
 /**
  * @brief Display a message when a new version is available
- * @param string _sVersion
+ * @param string _version
  */
 void MainWindow::slotDisplayNewVersion(const QString &_version)
 {
@@ -544,7 +544,7 @@ void MainWindow::slotDisplayNewVersion(const QString &_version)
  */
 void MainWindow::slotQuit()
 {
-    if (m_ctrl->settings()->state()!= UM_OK)
+    if (UMWP_STATE != UMWP::OK)
     {
         qApp->quit();
         return;
@@ -558,7 +558,10 @@ void MainWindow::slotQuit()
         return;
     }
 
-    m_ctrl->settings()->setWindowSize(size());
+    if (isVisible())
+    {
+        m_ctrl->settings()->setWindowSize(size());
+    }
     m_ctrl->settings()->save();
 
     qApp->quit();
@@ -587,7 +590,7 @@ void MainWindow::resizeEvent(QResizeEvent* _event)
  */
 void MainWindow::closeEvent(QCloseEvent* _event)
 {
-    if (m_ctrl->settings()->state() == UM_OK && _event)
+    if (UMWP_STATE == UMWP::OK && _event)
     {
         _event->ignore();
         slotToggleWindow();

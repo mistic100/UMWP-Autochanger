@@ -13,7 +13,7 @@
 /**
  * @brief MainWidget::MainWidget
  * @param QWidget* _parent
- * @param Controller* _poCtrl
+ * @param Controller* _ctrl
  */
 MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent),
     ui(new Ui::MainWidget)
@@ -25,7 +25,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent),
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
 
     // main list
-    ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_ctrl));
+    ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_ctrl->settings()));
     ui->mainList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->mainList->setDragDropMode(QAbstractItemView::InternalMove);
     ui->mainList->setStyle(new ListProxyStyle);
@@ -46,7 +46,7 @@ MainWidget::~MainWidget()
 
 /**
  * @brief Update list widget contents
- * @param bool _bResetSel - force reset of user selection
+ * @param bool _resetSel - force reset of user selection
  */
 void MainWidget::slotUpdateList(bool _resetSel)
 {
@@ -54,7 +54,7 @@ void MainWidget::slotUpdateList(bool _resetSel)
 
     if (!_resetSel)
     {
-        aIndexes = aGetSelectedIndexes();
+        aIndexes = getSelectedIndexes();
     }
     else
     {
@@ -65,13 +65,13 @@ void MainWidget::slotUpdateList(bool _resetSel)
 
     ui->mainList->clear();
 
-    for (int i=0; i<m_ctrl->settings()->nbSets(); i++)
+    for (int i=0, l=m_ctrl->settings()->nbSets(); i<l; i++)
     {
-        QListWidgetItem* pItem = new QListWidgetItem();
-        pItem->setData(Qt::UserRole, i);
+        QListWidgetItem* item = new QListWidgetItem();
+        item->setData(Qt::UserRole, i);
 
-        ui->mainList->addItem(pItem);
-        pItem->setSelected(aIndexes.contains(i));
+        ui->mainList->addItem(item);
+        item->setSelected(aIndexes.contains(i));
     }
 }
 
@@ -79,18 +79,18 @@ void MainWidget::slotUpdateList(bool _resetSel)
  * @brief Get numerical indexes of selected items
  * @return int[]
  */
-QList<int> MainWidget::aGetSelectedIndexes()
+QList<int> MainWidget::getSelectedIndexes()
 {
-    QList<QListWidgetItem*> apItems = ui->mainList->selectedItems();
-    QList<int> aIndexes;
+    QList<QListWidgetItem*> items = ui->mainList->selectedItems();
+    QList<int> indexes;
 
-    for (QList<QListWidgetItem*>::iterator it=apItems.begin(); it!=apItems.end(); it++)
+    for (QList<QListWidgetItem*>::iterator it=items.begin(); it!=items.end(); it++)
     {
-        aIndexes.push_back((*it)->data(Qt::UserRole).toInt());
+        indexes.push_back((*it)->data(Qt::UserRole).toInt());
     }
 
-    qSort(aIndexes);
-    return aIndexes;
+    qSort(indexes);
+    return indexes;
 }
 
 /**
@@ -123,7 +123,7 @@ void MainWidget::on_buttonDelete_clicked()
 
     if (ret == QMessageBox::Ok)
     {
-        m_ctrl->settings()->deleteSets(aGetSelectedIndexes());
+        m_ctrl->settings()->deleteSets(getSelectedIndexes());
         m_ctrl->emitListChanged();
     }
 }
@@ -133,7 +133,7 @@ void MainWidget::on_buttonDelete_clicked()
  */
 void MainWidget::on_buttonActivate_clicked()
 {
-    m_ctrl->settings()->activateSets(aGetSelectedIndexes());
+    m_ctrl->settings()->activateSets(getSelectedIndexes());
     m_ctrl->emitListChanged();
 }
 
@@ -142,7 +142,7 @@ void MainWidget::on_buttonActivate_clicked()
  */
 void MainWidget::on_buttonDeactivate_clicked()
 {
-    m_ctrl->settings()->unactivateSets(aGetSelectedIndexes());
+    m_ctrl->settings()->unactivateSets(getSelectedIndexes());
     m_ctrl->emitListChanged();
 }
 
@@ -151,15 +151,15 @@ void MainWidget::on_buttonDeactivate_clicked()
  */
 void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
 {
-    int index = aGetSelectedIndexes().at(0);
-    Set* pSet = m_ctrl->settings()->getSet(index);
+    int index = getSelectedIndexes().at(0);
+    Set* set = m_ctrl->settings()->getSet(index);
 
-    SetEditDialog dialog(this, pSet, m_ctrl->settings());
+    SetEditDialog dialog(this, set, m_ctrl->settings());
 
     ((MainWindow*)parent())->clearHotkeys();
     if (dialog.exec())
     {
-        m_ctrl->settings()->editSet(index, dialog.name(), dialog.type(), dialog.style(), dialog.hotkey());
+        dialog.save(index);
         m_ctrl->emitListChanged();
     }
     ((MainWindow*)parent())->defineHotkeys();
@@ -170,9 +170,9 @@ void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
  */
 void MainWidget::on_mainList_itemSelectionChanged()
 {
-    QList<int> aIndexes = aGetSelectedIndexes();
+    QList<int> indexes = getSelectedIndexes();
 
-    if (aIndexes.size() == 0)
+    if (indexes.size() == 0)
     {
         ui->buttonActivate->setVisible(false);
         ui->buttonDeactivate->setVisible(false);
@@ -182,7 +182,7 @@ void MainWidget::on_mainList_itemSelectionChanged()
     {
         int nbActive = 0, nbInactive=0;
 
-        for (QList<int>::iterator i=aIndexes.begin(); i!=aIndexes.end(); i++)
+        for (QList<int>::iterator i=indexes.begin(); i!=indexes.end(); i++)
         {
             if (m_ctrl->settings()->getSet(*i)->isActive())
             {

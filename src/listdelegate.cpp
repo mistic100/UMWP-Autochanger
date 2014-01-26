@@ -5,11 +5,11 @@
 /**
  * @brief ListDelegate::ListDelegate
  * @param QWidget* _parent
- * @param Controller* _poCtrl
+ * @param Controller* _ctrl
  */
-ListDelegate::ListDelegate(QObject* _parent, Controller* _ctrl) : QAbstractItemDelegate(_parent)
+ListDelegate::ListDelegate(QObject* _parent, Settings* _settings) : QAbstractItemDelegate(_parent)
 {
-    m_ctrl = _ctrl;
+    m_settings = _settings;
 }
 
 /**
@@ -27,7 +27,7 @@ QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) 
 void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     // get configuration
-    Set* set = m_ctrl->settings()->getSet(index.data(Qt::UserRole).toInt());
+    Set* set = m_settings->getSet(index.data(Qt::UserRole).toInt());
     bool selected = option.state & QStyle::State_Selected;
     QRect rect;
 

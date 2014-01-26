@@ -19,8 +19,6 @@ private:
     QHash<QString, QVariant> m_env;     // environnement variables
     QHash<QString, int>      m_hotkeys;
 
-    short           m_state;  // state of the installation
-
     QVector<Set*>   m_sets; // list of wallpaper sets
 
 public:
@@ -31,15 +29,13 @@ public:
     void init();
     void readNbMonitors();
 
-    void save(QString _filename = "");
+    bool save(QString _filename = "");
     bool load(QString _filename = "");
 
     void updateSets();
     void upgradeHotkeys(int WinMod);
 
     // getters
-    const short   state() const     { return m_state; }
-
     const QString sParam(const QString &_key) const;
     const bool    bParam(const QString &_key) const;
     const int     iParam(const QString &_key) const;
@@ -67,14 +63,14 @@ public:
 
     // sets management
     Set* addSet(const QString &_path);
-    Set* addSet(const QString &_path, QString &_name);
+    Set* addSet(const QString &_path, const QString &_name);
 
-    void deleteSets(const QList<int> _aSets);
+    void deleteSets(const QList<int> _sets);
     void clearSets();
 
-    void activateSets(const QList<int> _aSets);
-    void unactivateSets(const QList<int> _aSets);
-    void setActiveSets(const QList<int> _aSets);
+    void activateSets(const QList<int> _sets);
+    void unactivateSets(const QList<int> _sets);
+    void setActiveSets(const QList<int> _sets);
     void editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey);
 
     void moveSet(int _from, int _to);

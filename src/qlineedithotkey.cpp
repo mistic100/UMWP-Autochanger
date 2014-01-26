@@ -3,7 +3,7 @@
 
 /**
  * @brief QLineEditHotkey::QLineEditHotkey
- * @param QWidget* parent
+ * @param QWidget* _parent
  */
 QLineEditHotkey::QLineEditHotkey(QWidget* _parent) : QLineEdit(_parent) {}
 
@@ -60,7 +60,7 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
 
 /**
  * @brief QLineEditHotkey::vSetHotkey
- * @param Hotkey _hotkey
+ * @param int _hotkey
  */
 void QLineEditHotkey::setHotkey(const int &_hotkey)
 {

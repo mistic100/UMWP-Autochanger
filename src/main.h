@@ -20,12 +20,14 @@
 
 
 // state values
-#define UM_OK 0
-#define UM_NOT_INSTALLED 1
-#define UM_BAD_VERSION 2
-#define UM_FILE_NOT_FOUND 4
-#define UM_SETTINGS_FILE_ERROR 8
-#define UM_UNKNOWN_ERROR 256
+namespace UMWP {
+    const short OK = 0;
+    const short NOT_INSTALLED = 1;
+    const short BAD_VERSION = 2;
+    const short FILE_NOT_FOUND = 4;
+    const short SETTINGS_FILE_ERROR = 8;
+    const short UNKNOWN_ERROR = 256;
+}
 
 
 // types for wallpaper file
@@ -58,12 +60,12 @@ namespace UM {
     };
 }
 
+Q_DECLARE_METATYPE(UM::WALLPAPER)
+Q_DECLARE_METATYPE(UM::IMAGE)
+
 
 // common functions
-bool fileExists(const QString &_path, bool _checkWrite=true);
 bool directoryExists(const QString &_path);
-QString getDirectoryName(const QString &_path);
-QString addTrailingSlash(const QString &_path);
 bool isImageFile(const QString &_filename);
 
 void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value);

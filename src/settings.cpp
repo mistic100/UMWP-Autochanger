@@ -8,6 +8,8 @@
 #include "settings.h"
 #include "createshortcut.h"
 
+extern short UMWP_STATE;
+
 
 /**
  * @brief Settings::Settings
@@ -15,8 +17,6 @@
 Settings::Settings()
 {
     // default configuration
-    m_state = UM_OK;
-
     m_options["umpath"] = QVariant();
     m_options["window_width"] = 440;
     m_options["window_height"] = 240;
@@ -101,7 +101,7 @@ const bool Settings::canAddShortcut() const
 
 const bool Settings::isAutostart() const
 {
-    return fileExists(m_env["startlinkpath"].toString());
+    return QFile::exists(m_env["startlinkpath"].toString());
 }
 
 const int Settings::hotkey(const QString &_key) const
@@ -190,9 +190,9 @@ void Settings::init()
         free(value1);
     }
 
-    if (m_options["umpath"].isNull() || !fileExists(m_options["umpath"].toString(), false))
+    if (m_options["umpath"].isNull() || !QFile::exists(m_options["umpath"].toString()))
     {
-        m_state|= UM_NOT_INSTALLED;
+        UMWP_STATE|= UMWP::NOT_INSTALLED;
     }
 
 
@@ -215,11 +215,11 @@ void Settings::init()
 
     if (m_env["umversion"] == "unknown")
     {
-        m_state|= UM_BAD_VERSION;
+        UMWP_STATE|= UMWP::BAD_VERSION;
     }
     else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
     {
-        m_state|= UM_BAD_VERSION;
+        UMWP_STATE|= UMWP::BAD_VERSION;
     }
 
 
@@ -235,14 +235,14 @@ void Settings::init()
     }
     else
     {
-        m_state|= UM_UNKNOWN_ERROR;
+        UMWP_STATE|= UMWP::UNKNOWN_ERROR;
     }
 
     CoTaskMemFree(value2);
 
 
     // SEARCH WALLPAPER FOLDER
-    if (!(m_state & UM_BAD_VERSION))
+    if (!(UMWP_STATE & UMWP::BAD_VERSION))
     {
         value2 = (wchar_t*) malloc(256);
 
@@ -255,7 +255,7 @@ void Settings::init()
         }
         else
         {
-            m_state|= UM_UNKNOWN_ERROR;
+            UMWP_STATE|= UMWP::UNKNOWN_ERROR;
         }
 
         CoTaskMemFree(value2);
@@ -264,15 +264,15 @@ void Settings::init()
     // CHECK WALLPAPER FILE
     if (m_env["wallpath"].isNull())
     {
-        m_state|= UM_FILE_NOT_FOUND;
+        UMWP_STATE|= UMWP::FILE_NOT_FOUND;
     }
     else
     {
         QString filename = m_env["wallpath"].toString().append("default.wallpaper");
 
-        if (!fileExists(filename))
+        if (!QFile::exists(filename))
         {
-            m_state|= UM_FILE_NOT_FOUND;
+            UMWP_STATE|= UMWP::FILE_NOT_FOUND;
         }
         else
         {
@@ -317,6 +317,8 @@ void Settings::readNbMonitors()
 
 /**
  * @brief Load contents of the settings file
+ * @param string _filename
+ * @return bool
  */
 bool Settings::load(QString _filename)
 {
@@ -452,8 +454,10 @@ bool Settings::load(QString _filename)
 
 /**
  * @brief Write parameters into the settings file
+ * @param string _filename
+ * @return bool
  */
-void Settings::save(QString _filename)
+bool Settings::save(QString _filename)
 {
     if (_filename.isEmpty())
     {
@@ -513,23 +517,28 @@ void Settings::save(QString _filename)
 
     // save file
     QFile file(_filename);
-    file.open(QIODevice::WriteOnly);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QTextStream stream(&file);
+        dom.save(stream, 2);
 
-    QTextStream stream(&file);
-    dom.save(stream, 2);
+        file.close();
 
-    file.close();
+        return true;
+    }
+
+    return false;
 }
 
 
 /**
  * @brief Change the path of UltraMonDesktop.exe
- * @param string _sPath
+ * @param string _path
  * @return bool - true if the path is valid
  */
 bool Settings::setExePath(const QString &_path)
 {
-    if (fileExists(_path))
+    if (QFile::exists(_path))
     {
         QString filename = _path.section('\\', -1);
         if (filename.compare("UltraMonDesktop.exe")==0)
@@ -537,7 +546,7 @@ bool Settings::setExePath(const QString &_path)
             setParam("umpath", _path);
             save();
 
-            m_state&= ~UM_NOT_INSTALLED;
+            UMWP_STATE&= ~UMWP::NOT_INSTALLED;
             return true;
         }
     }
@@ -548,49 +557,53 @@ bool Settings::setExePath(const QString &_path)
 
 /**
  * @brief Add a new set from path
- * @param string _sPath
+ * @param string _path
  * @return Set*
  */
 Set* Settings::addSet(const QString &_path)
 {
-    return addSet(_path, getDirectoryName(_path));
+    return addSet(_path, "");
 }
 
 /**
  * @brief Add a new set
- * @param string _sPath
- * @param string _sName
- * @param bool _bActive
+ * @param string _path
+ * @param string _name
  * @return Set*
  */
-Set* Settings::addSet(const QString &_path, QString &_name)
+Set* Settings::addSet(const QString &_path, const QString &_name)
 {
-    QString path = addTrailingSlash(_path);
-
-    if (!directoryExists(path))
+    QDir dir = QDir(_path);
+    if (!dir.exists())
     {
         return NULL;
     }
 
-    Set* pSet = new Set(path, _name);
-    m_sets.push_back(pSet);
+    Set* set = new Set(_path, _name);
+    if (_name.isEmpty())
+    {
+        set->setName(dir.dirName());
+    }
+
+    m_sets.push_back(set);
     save();
 
-    return pSet;
+    return set;
 }
 
 /**
  * @brief Delete sets
- * @param int[] _ai
+ * @param int[] _sets
  */
-void Settings::deleteSets(const QList<int> _aSets)
+void Settings::deleteSets(const QList<int> _sets)
 {
     int offset = 0;
-    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
+    for (QList<int>::const_iterator i=_sets.begin(); i!=_sets.end(); i++)
     {
-        m_sets.at(*i-offset)->deleteCache();
-        delete m_sets.at(*i-offset);
-        m_sets.remove(*i-offset);
+        int pos = *i-offset;
+        m_sets.at(pos)->deleteCache();
+        delete m_sets.at(pos);
+        m_sets.remove(pos);
         offset++;
     }
 
@@ -612,11 +625,11 @@ void Settings::clearSets()
 
 /**
  * @brief Activate sets
- * @param int[] _ai
+ * @param int[] _sets
  */
-void Settings::activateSets(const QList<int> _aSets)
+void Settings::activateSets(const QList<int> _sets)
 {
-    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
+    for (QList<int>::const_iterator i=_sets.begin(); i!=_sets.end(); i++)
     {
         m_sets.at(*i)->setActive(true);
     }
@@ -626,11 +639,11 @@ void Settings::activateSets(const QList<int> _aSets)
 
 /**
  * @brief Unactivate sets
- * @param int[] _ai
+ * @param int[] _sets
  */
-void Settings::unactivateSets(const QList<int> _aSets)
+void Settings::unactivateSets(const QList<int> _sets)
 {
-    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
+    for (QList<int>::const_iterator i=_sets.begin(); i!=_sets.end(); i++)
     {
         m_sets.at(*i)->setActive(false);
     }
@@ -640,13 +653,13 @@ void Settings::unactivateSets(const QList<int> _aSets)
 
 /**
  * @brief Activate only some sets
- * @param int[] _ai
+ * @param int[] _sets
  */
-void Settings::setActiveSets(const QList<int> _aSets)
+void Settings::setActiveSets(const QList<int> _sets)
 {
     for (int i=0, l=nbSets(); i<l; i++)
     {
-        m_sets.at(i)->setActive(_aSets.contains(i));
+        m_sets.at(i)->setActive(_sets.contains(i));
     }
 
     save();
@@ -654,20 +667,21 @@ void Settings::setActiveSets(const QList<int> _aSets)
 
 /**
  * @brief Edit a set
- * @param int _i - position in vecto
- * @param stirng _sName
- * @param int _iType
- * @param int _iStyle
+ * @param int _i - position in vector
+ * @param string _name
+ * @param UM::WALLPAPER _type
+ * @param UM::IMAGE _style
+ * @param int _hotkey
  */
 void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey)
 {
     if ( _i < m_sets.size())
     {
-        Set* pSet = m_sets.at(_i);
-        pSet->setName(_name);
-        pSet->setType(_type);
-        pSet->setStyle(_style);
-        pSet->setHotkey(_hotkey);
+        Set* set = m_sets.at(_i);
+        set->setName(_name);
+        set->setType(_type);
+        set->setStyle(_style);
+        set->setHotkey(_hotkey);
     }
 }
 
@@ -678,8 +692,8 @@ void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, 
  */
 void Settings::moveSet(int _from, int _to)
 {
-    Set* pSet = m_sets.at(_from);
-    m_sets.insert(_to, pSet);
+    Set* set = m_sets.at(_from);
+    m_sets.insert(_to, set);
 
     if (_from<_to)
     {
@@ -730,8 +744,8 @@ Set* Settings::getActiveSet(int _i) const
 
 /**
  * @brief Get the number of active sets
- * @param bool _bWithFiles - if true, only non-empty sets are counted
- * @return  int
+ * @param bool _withFiles - if true, only non-empty sets are counted
+ * @return int
  */
 int const Settings::nbActiveSets(bool _withFiles) const
 {
@@ -780,6 +794,7 @@ void Settings::deleteShortcut()
 
 /**
  * @brief Build sets hotkeys when migrating from version 1.3
+ * @param int WinMod
  */
 void Settings::upgradeHotkeys(int WinMod)
 {
