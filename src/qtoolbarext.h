@@ -5,8 +5,6 @@
 #include <QMenu>
 #include <QToolButton>
 
-#include "main.h"
-
 
 /**
  * @brief Custom QToolBar with addButton method

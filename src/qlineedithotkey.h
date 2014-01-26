@@ -4,8 +4,6 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 
-#include "main.h"
-
 
 /**
  * @brief Custom QLineEdit to handle hotkeys inputs

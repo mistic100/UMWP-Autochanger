@@ -37,14 +37,14 @@ public:
     QString getRandomFile(Set* _set);
     void    generateFile(const QString &_filename, const Set* _set);
 
-    void startTimer(bool _keepPause=false);
+    void startTimer();
     bool startPause();
     bool isPaused() const { return !m_mainTimer->isActive(); }
 
     void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
 
 public slots:
-    void slotUpdate(bool _checkFiles=true);
+    void slotUpdate();
 
 signals:
     void listChanged(bool); // true to reset QListWidget selection

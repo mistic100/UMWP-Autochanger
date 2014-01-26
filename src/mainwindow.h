@@ -58,7 +58,7 @@ public slots:
     void updateTrayQuickMenu();
 
     void slotQuit();
-    void slotApply();
+    void slotRefresh();
     void slotStartPause();
     void slotConfigDialog();
     void slotShowHelp();

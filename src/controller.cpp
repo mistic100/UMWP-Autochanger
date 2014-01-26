@@ -46,21 +46,12 @@ void Controller::checkVersion()
 
 /**
  * @brief Stop the timer, update the wallpaper and restart the timer
- * @param bool _keepPause - prevent timer to restart
  */
-void Controller::startTimer(bool _keepPause)
+void Controller::startTimer()
 {
-    bool wasPaused = !m_mainTimer->isActive();
-
     m_mainTimer->stop();
     m_mainTimer->setInterval(m_settings->iParam("delay")*1000);
-
-    slotUpdate();
-
-    if (!wasPaused || !_keepPause)
-    {
-        m_mainTimer->start();
-    }
+    m_mainTimer->start();
 }
 
 /**
@@ -83,12 +74,18 @@ bool Controller::startPause()
 
 /**
  * @brief Update the wallpaper
- * @param bool _checkFiles - if true, depends on configuration
  */
-void Controller::slotUpdate(bool _checkFiles)
+void Controller::slotUpdate()
 {
+    // update delay if needed
+    int delay = m_settings->iParam("delay")*1000;
+    if (delay != m_mainTimer->interval())
+    {
+        m_mainTimer->setInterval(delay);
+    }
+
     // update config
-    if (_checkFiles && m_settings->bParam("check"))
+    if (m_settings->bParam("check"))
     {
         m_settings->updateSets();
         m_settings->readNbMonitors();

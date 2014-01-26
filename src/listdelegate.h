@@ -4,7 +4,6 @@
 #include <QPainter>
 #include <QAbstractItemDelegate>
 
-#include "main.h"
 #include "settings.h"
 
 

@@ -69,7 +69,7 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
 
     connect(actionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
     connect(m_actionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
-    connect(actionRefresh1, SIGNAL(clicked()), this, SLOT(slotApply()));
+    connect(actionRefresh1, SIGNAL(clicked()), this, SLOT(slotRefresh()));
     connect(m_actionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
     connect(actionHelp,     SIGNAL(clicked()), this, SLOT(slotShowHelp()));
 
@@ -99,7 +99,7 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
     connect(actionQuit2,    SIGNAL(triggered()), this, SLOT(slotQuit()));
     connect(m_actionHide2,  SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
     connect(m_actionPause2, SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(actionRefresh2, SIGNAL(triggered()), this, SLOT(slotApply()));
+    connect(actionRefresh2, SIGNAL(triggered()), this, SLOT(slotRefresh()));
 
     m_trayIcon->setToolTip(APP_NAME);
     m_trayIcon->setContextMenu(trayMenu);
@@ -279,7 +279,7 @@ void MainWindow::slotTrayQuickClicked()
 
     m_ctrl->settings()->setActiveSets(QList<int>()<<idx);
     m_ctrl->emitListChanged();
-    slotApply();
+    m_ctrl->slotUpdate();
 }
 
 /**
@@ -334,11 +334,9 @@ void MainWindow::slotToggleWindow(bool _forceHide)
 /**
  * @brief Save configuration and start the timer
  */
-void MainWindow::slotApply()
+void MainWindow::slotRefresh()
 {
-    m_ctrl->settings()->setWindowSize(size());
-
-    m_ctrl->startTimer(true);
+    m_ctrl->slotUpdate();
 }
 
 /**
@@ -369,7 +367,6 @@ void MainWindow::slotConfigDialog()
     if (dialog.exec())
     {
         dialog.save();
-        m_ctrl->startTimer();
     }
     defineHotkeys();
 }
@@ -380,8 +377,8 @@ void MainWindow::slotConfigDialog()
 void MainWindow::slotExport()
 {
     QString filename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
-                                                     QDir::homePath() + QDir::separator() + "umwp_settings.xml",
-                                                     tr("XML files (*.xml)"));
+                                                    QDir::homePath() + QDir::separator() + "umwp_settings.xml",
+                                                    tr("XML files (*.xml)"));
 
     m_ctrl->settings()->save(filename);
 }
@@ -464,7 +461,7 @@ void MainWindow::slotHotkey()
     switch (pShortcut->type())
     {
     case GlobalShortcut::REFRESH:
-        slotApply();
+        m_ctrl->slotUpdate();
         break;
 
     case GlobalShortcut::STARTPAUSE:
@@ -490,7 +487,7 @@ void MainWindow::slotHotkey()
     case GlobalShortcut::SETS:
         m_ctrl->settings()->setActiveSets(pShortcut->sets());
         m_ctrl->emitListChanged();
-        slotApply();
+        m_ctrl->slotUpdate();
 
         if (!isVisible() && m_ctrl->settings()->bParam("show_notifications"))
         {

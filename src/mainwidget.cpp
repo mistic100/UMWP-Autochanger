@@ -109,7 +109,7 @@ void MainWidget::on_buttonAdd_clicked()
 
         dirname.replace('/', '\\');
         m_ctrl->settings()->addSet(dirname);
-        m_ctrl->emitListChanged();
+        m_ctrl->emitListChanged(true);
     }
 }
 
@@ -124,7 +124,7 @@ void MainWidget::on_buttonDelete_clicked()
     if (ret == QMessageBox::Ok)
     {
         m_ctrl->settings()->deleteSets(getSelectedIndexes());
-        m_ctrl->emitListChanged();
+        m_ctrl->emitListChanged(true);
     }
 }
 
@@ -216,5 +216,5 @@ void MainWidget::on_mainList_itemSelectionChanged()
 void MainWidget::slotMoveItem(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
     m_ctrl->settings()->moveSet(from, to);
-    m_ctrl->emitListChanged();
+    m_ctrl->emitListChanged(true);
 }

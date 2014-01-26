@@ -76,7 +76,7 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent)
     }
     else if (UMWP_STATE & UMWP::UNKNOWN_ERROR)
     {
-         description->setText(tr("An unknown error append!"));
+         description->setText(tr("An unknown error appened!"));
     }
 
     setLayout(mainLayout);

@@ -53,7 +53,7 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
 
     m_hotkey = key + mod;
 
-    setText(QKeySequence(key + mod).toString(QKeySequence::NativeText));
+    setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
 
     emit textChanged(text());
 }

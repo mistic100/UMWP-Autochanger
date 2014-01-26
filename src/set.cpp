@@ -21,6 +21,7 @@ Set::Set(const QString &_path, const QString &_name)
     m_style = UM::IM_CENTER;
     m_active = true;
     m_lastModif = 0;
+    m_hotkey = 0;
     m_UID = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
     readCache();

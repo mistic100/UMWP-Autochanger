@@ -5,8 +5,6 @@
 #include <QProxyStyle>
 #include <QStyleOption>
 
-#include "main.h"
-
 
 /**
  * @brief A custom display of QListWidget drop indicator

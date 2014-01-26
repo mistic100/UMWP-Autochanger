@@ -682,6 +682,8 @@ void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, 
         set->setType(_type);
         set->setStyle(_style);
         set->setHotkey(_hotkey);
+
+        save();
     }
 }
 
@@ -703,6 +705,8 @@ void Settings::moveSet(int _from, int _to)
     {
         m_sets.remove(_from+1);
     }
+
+    save();
 }
 
 /**
