@@ -23,19 +23,16 @@ public:
     };
 
 private:
-    QList<int>  m_aiSets;
+    QList<int>  m_sets;
     GlobalShortcut::Type m_type;
 
 public:
-    GlobalShortcut(QObject* _parent=0) : QxtGlobalShortcut(_parent)
-    {
-        m_type = NOOP;
-    }
+    GlobalShortcut(QObject* _parent=0) : QxtGlobalShortcut(_parent) { m_type = NOOP; }
 
-    void vSetSets(const QList<int> _ai) { m_aiSets =_ai; m_type = SETS; }
-    void vSetType(GlobalShortcut::Type _type) { m_type = _type; }
+    void setSets(const QList<int> _ai) { m_sets =_ai; m_type = SETS; }
+    void setType(GlobalShortcut::Type _type) { m_type = _type; }
 
-    const QList<int> sets() const { return m_aiSets; }
+    const QList<int> sets() const { return m_sets; }
     const GlobalShortcut::Type type() const { return m_type; }
 };
 

@@ -10,15 +10,15 @@
 class Set
 {
 private :
-    QString             m_path;
-    QString             m_name;
-    UM::WALLPAPER       m_type;
-    UM::IMAGE           m_style;
-    QString             m_UID;
-    bool                m_active;
-    QVector<QString>    m_aFiles;
-    double              m_lastModif;
-    int                 m_hotkey;
+    QString          m_path;
+    QString          m_name;
+    UM::WALLPAPER    m_type;
+    UM::IMAGE        m_style;
+    QString          m_UID;
+    bool             m_active;
+    QVector<QString> m_files;
+    double           m_lastModif;
+    int              m_hotkey;
 
 public:
     Set(const QString &_path, const QString &_name);
@@ -27,7 +27,7 @@ public:
     const QString       &name() const { return m_name; }
     const UM::WALLPAPER type() const  { return m_type; }
     const UM::IMAGE     style() const { return m_style; }
-    const int           count() const { return m_aFiles.size(); }
+    const int           count() const { return m_files.size(); }
     const bool          isActive() const { return m_active; }
     const int           hotkey() const { return m_hotkey; }
 

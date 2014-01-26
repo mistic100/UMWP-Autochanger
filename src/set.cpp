@@ -38,13 +38,13 @@ const QString Set::fullName() const
  */
 const QString Set::getFile(int _i) const
 {
-    if (_i < m_aFiles.size())
+    if (_i < m_files.size())
     {
-        return m_aFiles.at(_i);
+        return m_files.at(_i);
     }
     else
     {
-        return m_aFiles.back();
+        return m_files.back();
     }
 }
 
@@ -122,7 +122,7 @@ void Set::populateFiles(QString _child, int _level)
         }
 
         m_lastModif = date;
-        m_aFiles.clear();
+        m_files.clear();
     }
 
     if (_level < APP_MAX_TRAVERSAL)
@@ -142,7 +142,7 @@ void Set::populateFiles(QString _child, int _level)
             }
             else if (pEntry->d_type == DT_REG && isImageFile(filename))
             {
-                m_aFiles.push_back(path+filename);
+                m_files.push_back(path+filename);
             }
 
             pEntry = readdir(pDir);
@@ -169,7 +169,7 @@ void Set::readCache()
         file.open(QIODevice::ReadOnly);
         QDataStream in(&file);
         in>>m_lastModif;
-        in>>m_aFiles;
+        in>>m_files;
         file.close();
     }
 }
@@ -183,7 +183,7 @@ void Set::writeCache()
     file.open(QIODevice::WriteOnly);
     QDataStream out(&file);
     out<<m_lastModif;
-    out<<m_aFiles;
+    out<<m_files;
     file.close();
 }
 

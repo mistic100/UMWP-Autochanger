@@ -19,22 +19,19 @@ class ConfigDialog : public QDialog
     Q_OBJECT
 
 private:
-    Ui::ConfigDialog*   ui;
-    Settings*           m_pSettings;
-    bool                m_delayChanged;
+    Ui::ConfigDialog* ui;
+    Settings*         m_settings;
     
 public:
-    ConfigDialog(QWidget* _parent, Settings* _pSettings);
+    ConfigDialog(QWidget* _parent, Settings* _settings);
     ~ConfigDialog();
 
     void save();
-    const bool delayChanged() const { return m_delayChanged; }
 
 protected:
     void done(int result);
 
 private slots:
-    void on_optionDelay_valueChanged();
     void on_optionUseHotkeys_toggled(bool checked);
 };
 

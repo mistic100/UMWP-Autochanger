@@ -22,10 +22,10 @@ class SetEditDialog : public QDialog
 private:
     Ui::SetEditDialog *ui;
 
-    Settings* m_pSettings;
+    Settings* m_settings;
 
 public:
-    SetEditDialog(QWidget* _parent, Set* _pSet, Settings* _pSettings);
+    SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings);
     ~SetEditDialog();
 
     const QString       name() const;

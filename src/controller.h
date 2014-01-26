@@ -20,38 +20,28 @@ class Controller : public QObject
     Q_OBJECT
 
 private:
-    Settings*           m_pSettings;
-    QTimer*             m_pMainTimer;
-    mt19937             m_randomEngine; // mersenne_twister
-    int                 m_headerSize;
-    QVector<QString>    m_aFiles;
+    Settings*        m_settings;
+    QTimer*          m_mainTimer;
+    mt19937          m_randomEngine; // mersenne_twister
+    QVector<QString> m_files;
 
 public:
     Controller(Settings* _pSettings);
 
     void checkVersion();
 
-    Settings* pSettings() const { return m_pSettings; }
-    const QVector<QString> &aFiles() const { return m_aFiles; }
+    Settings* settings() const { return m_settings; }
+    const QVector<QString> &files() const { return m_files; }
 
-    Set*    pGetRandomSet(int _total);
+    Set*    getRandomSet(int _total);
     QString getRandomFile(Set* _pSet);
     void    generateFile(const QString &_filename, const Set* _pSet);
 
     void startTimer(bool _keepPause=false);
     bool startPause();
-    bool isPaused() const { return !m_pMainTimer->isActive(); }
+    bool isPaused() const { return !m_mainTimer->isActive(); }
 
-    void addSet(const QString _dirname);
-    void deleteSets(const QList<int> _aSets);
-    void activateSets(const QList<int> _aSets);
-    void unactivateSets(const QList<int> _aSets);
-    void setActiveSets(const QList<int> _aSets);
-    void setOneActiveSet(int _set);
-    void editSet(int _set, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey);
-    void moveSet(int _from, int _to);
-
-    void emitListChanged(bool _resetSel) { emit listChanged(_resetSel); }
+    void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
 
 public slots:
     void slotUpdate(bool _checkFiles=true);

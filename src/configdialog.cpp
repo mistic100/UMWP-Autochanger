@@ -9,35 +9,33 @@
  * @param QWidget* _parent
  * @param Settings* _poSettings
  */
-ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _pSettings) : QDialog(_parent),
+ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _settings) : QDialog(_parent),
     ui(new Ui::ConfigDialog)
 {
     ui->setupUi(this);
 
     setFixedSize(size());
 
-    m_pSettings = _pSettings;
+    m_settings = _settings;
 
-    ui->optionMinimize->setChecked(m_pSettings->bParam("minimize"));
-    ui->optionCheckFiles->setChecked(m_pSettings->bParam("check"));
-    ui->optionCheckUpdates->setChecked(m_pSettings->bParam("check_updates"));
-    ui->optionAutostart->setChecked(m_pSettings->isAutostart());
-    ui->optionUseHotkeys->setChecked(m_pSettings->bParam("use_hotkeys"));
-    ui->optionShowNotifications->setChecked(m_pSettings->bParam("show_notifications"));
+    ui->optionMinimize->setChecked(m_settings->bParam("minimize"));
+    ui->optionCheckFiles->setChecked(m_settings->bParam("check"));
+    ui->optionCheckUpdates->setChecked(m_settings->bParam("check_updates"));
+    ui->optionAutostart->setChecked(m_settings->isAutostart());
+    ui->optionUseHotkeys->setChecked(m_settings->bParam("use_hotkeys"));
+    ui->optionShowNotifications->setChecked(m_settings->bParam("show_notifications"));
 
-    ui->optionAutostart->setDisabled(!m_pSettings->canAddShortcut());
+    ui->optionAutostart->setDisabled(!m_settings->canAddShortcut());
 
-    ui->hotkeyRefresh->setDisabled(!m_pSettings->bParam("use_hotkeys"));
-    ui->hotkeyShowHide->setDisabled(!m_pSettings->bParam("use_hotkeys"));
-    ui->hotkeyStartPause->setDisabled(!m_pSettings->bParam("use_hotkeys"));
+    ui->hotkeyRefresh->setDisabled(!m_settings->bParam("use_hotkeys"));
+    ui->hotkeyShowHide->setDisabled(!m_settings->bParam("use_hotkeys"));
+    ui->hotkeyStartPause->setDisabled(!m_settings->bParam("use_hotkeys"));
 
-    ui->hotkeyRefresh->setHotkey(m_pSettings->hotkey("refresh"));
-    ui->hotkeyShowHide->setHotkey(m_pSettings->hotkey("showhide"));
-    ui->hotkeyStartPause->setHotkey(m_pSettings->hotkey("startpause"));
+    ui->hotkeyRefresh->setHotkey(m_settings->hotkey("refresh"));
+    ui->hotkeyShowHide->setHotkey(m_settings->hotkey("showhide"));
+    ui->hotkeyStartPause->setHotkey(m_settings->hotkey("startpause"));
 
-    ui->optionDelay->setValue(m_pSettings->iParam("delay"));
-
-    m_delayChanged = false;
+    ui->optionDelay->setValue(m_settings->iParam("delay"));
 }
 
 /**
@@ -93,9 +91,9 @@ void ConfigDialog::done(int result)
             }
 
             // check against sets hotkeys
-            for (int i=0, l=m_pSettings->nbSets(); i<l; i++)
+            for (int i=0, l=m_settings->nbSets(); i<l; i++)
             {
-                Set* poSet = m_pSettings->pGetSet(i);
+                Set* poSet = m_settings->getSet(i);
 
                 if (!poSet->hotkey())
                 {
@@ -133,35 +131,27 @@ void ConfigDialog::done(int result)
  */
 void ConfigDialog::save()
 {
-    m_pSettings->setParam("delay", ui->optionDelay->value());
-    m_pSettings->setParam("minimize", ui->optionMinimize->isChecked());
-    m_pSettings->setParam("check", ui->optionCheckFiles->isChecked());
-    m_pSettings->setParam("check_updates", ui->optionCheckUpdates->isChecked());
-    m_pSettings->setParam("use_hotkeys", ui->optionUseHotkeys->isChecked());
-    m_pSettings->setParam("show_notifications", ui->optionShowNotifications->isChecked());
+    m_settings->setParam("delay", ui->optionDelay->value());
+    m_settings->setParam("minimize", ui->optionMinimize->isChecked());
+    m_settings->setParam("check", ui->optionCheckFiles->isChecked());
+    m_settings->setParam("check_updates", ui->optionCheckUpdates->isChecked());
+    m_settings->setParam("use_hotkeys", ui->optionUseHotkeys->isChecked());
+    m_settings->setParam("show_notifications", ui->optionShowNotifications->isChecked());
 
-    m_pSettings->setHotkey("refresh", ui->hotkeyRefresh->hotkey());
-    m_pSettings->setHotkey("showhide", ui->hotkeyShowHide->hotkey());
-    m_pSettings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
+    m_settings->setHotkey("refresh", ui->hotkeyRefresh->hotkey());
+    m_settings->setHotkey("showhide", ui->hotkeyShowHide->hotkey());
+    m_settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {
-        m_pSettings->createShortcut();
+        m_settings->createShortcut();
     }
     else
     {
-        m_pSettings->deleteShortcut();
+        m_settings->deleteShortcut();
     }
 
-    m_pSettings->writeXML();
-}
-
-/**
- * @brief Track delay changes
- */
-void ConfigDialog::on_optionDelay_valueChanged()
-{
-    m_delayChanged = true;
+    m_settings->save();
 }
 
 /**

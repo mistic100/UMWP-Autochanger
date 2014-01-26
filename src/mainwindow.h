@@ -21,24 +21,24 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    Controller*         m_pCtrl;
+    Controller* m_ctrl;
 
-    QStatusBar*         m_pStatusBar;
-    QToolBarExt*        m_pMenuBar;
-    QSystemTrayIcon*    m_pTrayIcon;
-    QMenu*              m_pTrayQuickMenu;
+    QStatusBar*      m_statusBar;
+    QToolBarExt*     m_menuBar;
+    QSystemTrayIcon* m_trayIcon;
+    QMenu*           m_trayQuickMenu;
 
     // reference to some QAction modified after initilization
-    QToolButton*        m_pActionConfig;
-    QToolButton*        m_pActionHide1; // menu
-    QAction*            m_pActionHide2; // tray
-    QToolButton*        m_pActionPause1; // menu
-    QAction*            m_pActionPause2; // tray
+    QToolButton* m_actionConfig;
+    QToolButton* m_actionHide1; // menu
+    QAction*     m_actionHide2; // tray
+    QToolButton* m_actionPause1; // menu
+    QAction*     m_actionPause2; // tray
 
-    QList<GlobalShortcut*> m_apShortcuts;
+    QList<GlobalShortcut*> m_shortcuts;
 
 public:
-    MainWindow(Controller* _pCtrl);
+    MainWindow(Controller* _ctrl);
     ~MainWindow();
 
     void defineHotkeys();

@@ -15,17 +15,17 @@
  * @param QWidget* _parent
  * @param Controller* _poCtrl
  */
-MainWidget::MainWidget(QWidget* _parent, Controller* _pCtrl) : QWidget(_parent),
+MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent),
     ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
 
-    m_pCtrl = _pCtrl;
+    m_ctrl = _ctrl;
 
-    connect(m_pCtrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
+    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
 
     // main list
-    ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_pCtrl));
+    ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_ctrl));
     ui->mainList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->mainList->setDragDropMode(QAbstractItemView::InternalMove);
     ui->mainList->setStyle(new ListProxyStyle);
@@ -65,7 +65,7 @@ void MainWidget::slotUpdateList(bool _resetSel)
 
     ui->mainList->clear();
 
-    for (int i=0; i<m_pCtrl->pSettings()->nbSets(); i++)
+    for (int i=0; i<m_ctrl->settings()->nbSets(); i++)
     {
         QListWidgetItem* pItem = new QListWidgetItem();
         pItem->setData(Qt::UserRole, i);
@@ -99,16 +99,17 @@ QList<int> MainWidget::aGetSelectedIndexes()
 void MainWidget::on_buttonAdd_clicked()
 {
     QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"),
-                                                        m_pCtrl->pSettings()->sParam("last_dir"));
+                                                        m_ctrl->settings()->sParam("last_dir"));
 
     if (!dirname.isEmpty())
     {
         QDir dir(dirname);
         dir.cdUp();
-        m_pCtrl->pSettings()->setParam("last_dir", dir.absolutePath());
+        m_ctrl->settings()->setParam("last_dir", dir.absolutePath());
 
         dirname.replace('/', '\\');
-        m_pCtrl->addSet(dirname);
+        m_ctrl->settings()->addSet(dirname);
+        m_ctrl->emitListChanged();
     }
 }
 
@@ -122,7 +123,8 @@ void MainWidget::on_buttonDelete_clicked()
 
     if (ret == QMessageBox::Ok)
     {
-        m_pCtrl->deleteSets(aGetSelectedIndexes());
+        m_ctrl->settings()->deleteSets(aGetSelectedIndexes());
+        m_ctrl->emitListChanged();
     }
 }
 
@@ -131,7 +133,8 @@ void MainWidget::on_buttonDelete_clicked()
  */
 void MainWidget::on_buttonActivate_clicked()
 {
-    m_pCtrl->activateSets(aGetSelectedIndexes());
+    m_ctrl->settings()->activateSets(aGetSelectedIndexes());
+    m_ctrl->emitListChanged();
 }
 
 /**
@@ -139,7 +142,8 @@ void MainWidget::on_buttonActivate_clicked()
  */
 void MainWidget::on_buttonDeactivate_clicked()
 {
-    m_pCtrl->unactivateSets(aGetSelectedIndexes());
+    m_ctrl->settings()->unactivateSets(aGetSelectedIndexes());
+    m_ctrl->emitListChanged();
 }
 
 /**
@@ -148,14 +152,15 @@ void MainWidget::on_buttonDeactivate_clicked()
 void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
 {
     int index = aGetSelectedIndexes().at(0);
-    Set* pSet = m_pCtrl->pSettings()->pGetSet(index);
+    Set* pSet = m_ctrl->settings()->getSet(index);
 
-    SetEditDialog dialog(this, pSet, m_pCtrl->pSettings());
+    SetEditDialog dialog(this, pSet, m_ctrl->settings());
 
     ((MainWindow*)parent())->clearHotkeys();
     if (dialog.exec())
     {
-        m_pCtrl->editSet(index, dialog.name(), dialog.type(), dialog.style(), dialog.hotkey());
+        m_ctrl->settings()->editSet(index, dialog.name(), dialog.type(), dialog.style(), dialog.hotkey());
+        m_ctrl->emitListChanged();
     }
     ((MainWindow*)parent())->defineHotkeys();
 }
@@ -179,7 +184,7 @@ void MainWidget::on_mainList_itemSelectionChanged()
 
         for (QList<int>::iterator i=aIndexes.begin(); i!=aIndexes.end(); i++)
         {
-            if (m_pCtrl->pSettings()->pGetSet(*i)->isActive())
+            if (m_ctrl->settings()->getSet(*i)->isActive())
             {
                 nbActive++;
             }
@@ -210,5 +215,6 @@ void MainWidget::on_mainList_itemSelectionChanged()
  */
 void MainWidget::slotMoveItem(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
-    m_pCtrl->moveSet(from, to);
+    m_ctrl->settings()->moveSet(from, to);
+    m_ctrl->emitListChanged();
 }

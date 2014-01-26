@@ -29,6 +29,11 @@ int main(int argc, char *argv[])
     appTranslator.load(":/lang/" + QLocale::system().name());
     app.installTranslator(&appTranslator);
 
+    QDir dirHelper;
+    if (!dirHelper.exists(APP_CACHE_DIR))
+    {
+        dirHelper.mkdir(APP_CACHE_DIR);
+    }
 
     Settings settings;
     Controller ctrl(&settings);
@@ -50,11 +55,11 @@ int main(int argc, char *argv[])
  */
 bool fileExists(QString const &_path, bool _checkWrite)
 {
-    DWORD dAtt = GetFileAttributesA(_path.toStdString().c_str());
+    DWORD att = GetFileAttributesA(_path.toStdString().c_str());
 
-    return dAtt!=INVALID_FILE_ATTRIBUTES
-           && !(dAtt&FILE_ATTRIBUTE_DIRECTORY)
-           && (!(dAtt&FILE_ATTRIBUTE_READONLY) || !_checkWrite);
+    return att!=INVALID_FILE_ATTRIBUTES
+           && !(att&FILE_ATTRIBUTE_DIRECTORY)
+           && (!(att&FILE_ATTRIBUTE_READONLY) || !_checkWrite);
 }
 
 /*
@@ -69,16 +74,16 @@ bool directoryExists(const QString &_path)
 /*
  * helpers for simple XML text nodes
  */
-void setDomNodeValue(QDomDocument* _pDoc, QDomNode* _pNode, const QString &_value)
+void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value)
 {
-    _pNode->appendChild(_pDoc->createTextNode(_value));
+    _node->appendChild(_dom->createTextNode(_value));
 }
 
-void addSimpleTextNode(QDomDocument* _poDoc, QDomNode* _poParent, const QString &_name, const QString &_value)
+void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value)
 {
-    QDomElement element = _poDoc->createElement(_name);
-    setDomNodeValue(_poDoc, &element, _value);
-    _poParent->appendChild(element);
+    QDomElement element = _dom->createElement(_name);
+    setDomNodeValue(_dom, &element, _value);
+    _parent->appendChild(element);
 }
 
 /*
@@ -106,8 +111,8 @@ QString getDirectoryName(QString const &_path)
  */
 bool isImageFile(QString const &_filename)
 {
-    return _filename.endsWith(".jpg", Qt::CaseInsensitive)
-        || _filename.endsWith(".jpeg", Qt::CaseInsensitive)
+    return _filename.endsWith(".jpeg", Qt::CaseInsensitive)
+        || _filename.endsWith(".jpg", Qt::CaseInsensitive)
         || _filename.endsWith(".bmp", Qt::CaseInsensitive)
         || _filename.endsWith(".png", Qt::CaseInsensitive)
         || _filename.endsWith(".gif", Qt::CaseInsensitive);

@@ -20,10 +20,10 @@ class MainWidget : public QWidget
 
 private:
     Ui::MainWidget* ui;
-    Controller*     m_pCtrl;
+    Controller*     m_ctrl;
     
 public:
-    MainWidget(QWidget* _parent, Controller* _pCtrl);
+    MainWidget(QWidget* _parent, Controller* _ctrl);
     ~MainWidget();
 
     QList<int> aGetSelectedIndexes();

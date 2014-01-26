@@ -16,7 +16,6 @@ Settings::Settings()
 {
     // default configuration
     m_state = UM_OK;
-    m_unsaved = false;
 
     m_options["umpath"] = QVariant();
     m_options["window_width"] = 440;
@@ -39,18 +38,13 @@ Settings::Settings()
     m_env["umversion"] = "unknown";
     m_env["startlinkpath"] = QVariant();
     m_env["nb_monitors"] = 1;
+    m_env["header_size"] = 7 + sizeof(DWORD) + sizeof(RECT);
 
-    readXML();
+    load();
     init();
 
     //qDebug()<<m_options;
     //qDebug()<<m_env;
-
-    QDir dirHelper;
-    if (!dirHelper.exists(APP_CACHE_DIR))
-    {
-        dirHelper.mkdir(APP_CACHE_DIR);
-    }
 }
 
 /**
@@ -122,13 +116,11 @@ const int Settings::hotkey(const QString &_key) const
 void Settings::setParam(const QString &_key, const QVariant &_val)
 {
     m_options[_key] = _val;
-    m_unsaved = true;
 }
 
 void Settings::setHotkey(const QString &_key, const int &_val)
 {
     m_hotkeys[_key] = _val;
-    m_unsaved = true;
 }
 
 void Settings::setWindowSize(const QSize &_size)
@@ -315,7 +307,9 @@ void Settings::readNbMonitors()
 
     int nbMonitors;
     ifs.read((char*)&nbMonitors, sizeof(DWORD)); // number of monitors
+
     m_env["nb_monitors"] = nbMonitors;
+    m_env["header_size"] = 7 + sizeof(DWORD) + nbMonitors*sizeof(RECT);
 
     ifs.close();
 }
@@ -324,7 +318,7 @@ void Settings::readNbMonitors()
 /**
  * @brief Load contents of the settings file
  */
-bool Settings::readXML(QString _filename)
+bool Settings::load(QString _filename)
 {
     if (_filename.isEmpty())
     {
@@ -412,7 +406,7 @@ bool Settings::readXML(QString _filename)
                     QString path = setNode.text().trimmed();
                     if (directoryExists(path))
                     {
-                        Set* pNewSet = pAddSet(path, setNode.attribute("name"));
+                        Set* pNewSet = addSet(path, setNode.attribute("name"));
                         pNewSet->setActive(setNode.attribute("active").toInt());
 
                         // added in 1.3
@@ -450,10 +444,8 @@ bool Settings::readXML(QString _filename)
     if (newHotkey > 0)
     {
         upgradeHotkeys(newHotkey);
-        writeXML();
+        save();
     }
-
-    m_unsaved = false;
 
     return true;
 }
@@ -461,7 +453,7 @@ bool Settings::readXML(QString _filename)
 /**
  * @brief Write parameters into the settings file
  */
-void Settings::writeXML(QString _filename)
+void Settings::save(QString _filename)
 {
     if (_filename.isEmpty())
     {
@@ -499,7 +491,7 @@ void Settings::writeXML(QString _filename)
     // sets node
     QDomElement setsNode = dom.createElement("sets");
 
-    for (QVector<Set*>::iterator it = m_apSets.begin(); it != m_apSets.end(); ++it)
+    for (QVector<Set*>::iterator it = m_sets.begin(); it != m_sets.end(); ++it)
     {
         Set* pSet = *it;
 
@@ -527,8 +519,6 @@ void Settings::writeXML(QString _filename)
     dom.save(stream, 2);
 
     file.close();
-
-    m_unsaved = false;
 }
 
 
@@ -545,7 +535,7 @@ bool Settings::setExePath(const QString &_path)
         if (filename.compare("UltraMonDesktop.exe")==0)
         {
             setParam("umpath", _path);
-            writeXML();
+            save();
 
             m_state&= ~UM_NOT_INSTALLED;
             return true;
@@ -561,9 +551,9 @@ bool Settings::setExePath(const QString &_path)
  * @param string _sPath
  * @return Set*
  */
-Set* Settings::pAddSet(const QString &_path)
+Set* Settings::addSet(const QString &_path)
 {
-    return pAddSet(_path, getDirectoryName(_path));
+    return addSet(_path, getDirectoryName(_path));
 }
 
 /**
@@ -573,7 +563,7 @@ Set* Settings::pAddSet(const QString &_path)
  * @param bool _bActive
  * @return Set*
  */
-Set* Settings::pAddSet(const QString &_path, QString &_name)
+Set* Settings::addSet(const QString &_path, QString &_name)
 {
     QString path = addTrailingSlash(_path);
 
@@ -582,43 +572,84 @@ Set* Settings::pAddSet(const QString &_path, QString &_name)
         return NULL;
     }
 
-    m_unsaved = true;
-
     Set* pSet = new Set(path, _name);
-    m_apSets.push_back(pSet);
+    m_sets.push_back(pSet);
+    save();
 
     return pSet;
 }
 
 /**
- * @brief Delete a set
- * @param int _i - position in vector
+ * @brief Delete sets
+ * @param int[] _ai
  */
-void Settings::deleteSet(int _i)
+void Settings::deleteSets(const QList<int> _aSets)
 {
-    if ( _i < m_apSets.size())
+    int offset = 0;
+    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
     {
-        m_unsaved = true;
-
-        m_apSets.at(_i)->deleteCache();
-        delete m_apSets.at(_i);
-        m_apSets.remove(_i);
+        m_sets.at(*i-offset)->deleteCache();
+        delete m_sets.at(*i-offset);
+        m_sets.remove(*i-offset);
+        offset++;
     }
+
+    save();
 }
 
 /**
  * @brief Unload all sets
- * Sets are only onloaded from memory, they are not deleted
+ * Sets are only unloaded from memory, they are not deleted
  */
 void Settings::clearSets()
 {
-    if (!m_apSets.empty())
+    if (!m_sets.empty())
     {
-        m_unsaved = true;
-
-        qDeleteAll(m_apSets);
-        m_apSets.clear();
+        qDeleteAll(m_sets);
+        m_sets.clear();
     }
+}
+
+/**
+ * @brief Activate sets
+ * @param int[] _ai
+ */
+void Settings::activateSets(const QList<int> _aSets)
+{
+    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
+    {
+        m_sets.at(*i)->setActive(true);
+    }
+
+    save();
+}
+
+/**
+ * @brief Unactivate sets
+ * @param int[] _ai
+ */
+void Settings::unactivateSets(const QList<int> _aSets)
+{
+    for (QList<int>::const_iterator i=_aSets.begin(); i!=_aSets.end(); i++)
+    {
+        m_sets.at(*i)->setActive(false);
+    }
+
+    save();
+}
+
+/**
+ * @brief Activate only some sets
+ * @param int[] _ai
+ */
+void Settings::setActiveSets(const QList<int> _aSets)
+{
+    for (int i=0, l=nbSets(); i<l; i++)
+    {
+        m_sets.at(i)->setActive(_aSets.contains(i));
+    }
+
+    save();
 }
 
 /**
@@ -630,27 +661,14 @@ void Settings::clearSets()
  */
 void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey)
 {
-    if ( _i < m_apSets.size())
+    if ( _i < m_sets.size())
     {
-        m_unsaved = true;
-
-        Set* pSet = m_apSets.at(_i);
+        Set* pSet = m_sets.at(_i);
         pSet->setName(_name);
         pSet->setType(_type);
         pSet->setStyle(_style);
         pSet->setHotkey(_hotkey);
     }
-}
-
-/**
- * @brief Set the state of a set
- * @param int _i - positon in vector
- * @param bool _bState
- */
-void Settings::setState(int _i, bool _state)
-{
-    m_unsaved = true;
-    m_apSets.at(_i)->setActive(_state);
 }
 
 /**
@@ -660,19 +678,17 @@ void Settings::setState(int _i, bool _state)
  */
 void Settings::moveSet(int _from, int _to)
 {
-    Set* pSet = m_apSets.at(_from);
-    m_apSets.insert(_to, pSet);
+    Set* pSet = m_sets.at(_from);
+    m_sets.insert(_to, pSet);
 
     if (_from<_to)
     {
-        m_apSets.remove(_from);
+        m_sets.remove(_from);
     }
     else
     {
-        m_apSets.remove(_from+1);
+        m_sets.remove(_from+1);
     }
-
-    m_unsaved = true;
 }
 
 /**
@@ -680,12 +696,11 @@ void Settings::moveSet(int _from, int _to)
  */
 void Settings::updateSets()
 {
-    for (QVector<Set*>::iterator it=m_apSets.begin(); it!=m_apSets.end(); )
+    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); )
     {
         if (!directoryExists((*it)->path()))
         {
-            m_unsaved = true;
-            m_apSets.erase(it);
+            m_sets.erase(it);
         }
         else
         {
@@ -700,10 +715,10 @@ void Settings::updateSets()
  * @param int _i - position in the sub-vector of active sets
  * @return Set*
  */
-Set* Settings::pGetActiveSet(int _i) const
+Set* Settings::getActiveSet(int _i) const
 {
     QVector<Set*> apActiveSets;
-    for (QVector<Set*>::const_iterator it=m_apSets.begin(); it!=m_apSets.end(); ++it)
+    for (QVector<Set*>::const_iterator it=m_sets.begin(); it!=m_sets.end(); ++it)
     {
         if ((*it)->isActive())
         {
@@ -721,7 +736,7 @@ Set* Settings::pGetActiveSet(int _i) const
 int const Settings::nbActiveSets(bool _withFiles) const
 {
     int totalSets = 0;
-    for (QVector<Set*>::const_iterator it=m_apSets.begin(); it!=m_apSets.end(); ++it)
+    for (QVector<Set*>::const_iterator it=m_sets.begin(); it!=m_sets.end(); ++it)
     {
         if ((*it)->isActive() && (!_withFiles || (*it)->count()>0))
         {
@@ -787,7 +802,7 @@ void Settings::upgradeHotkeys(int WinMod)
     }
 
     int key = Qt::Key_1;
-    for (QVector<Set*>::iterator it=m_apSets.begin(); it!=m_apSets.end(); ++it)
+    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); ++it)
     {
         (*it)->setHotkey(key + QtMod);
         key++;

@@ -7,9 +7,9 @@
  * @param QWidget* _parent
  * @param Controller* _poCtrl
  */
-ListDelegate::ListDelegate(QObject* _parent, Controller* _pCtrl) : QAbstractItemDelegate(_parent)
+ListDelegate::ListDelegate(QObject* _parent, Controller* _ctrl) : QAbstractItemDelegate(_parent)
 {
-    m_pCtrl = _pCtrl;
+    m_ctrl = _ctrl;
 }
 
 /**
@@ -27,11 +27,11 @@ QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) 
 void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     // get configuration
-    Set* pSet = m_pCtrl->pSettings()->pGetSet(index.data(Qt::UserRole).toInt());
+    Set* set = m_ctrl->settings()->getSet(index.data(Qt::UserRole).toInt());
     bool selected = option.state & QStyle::State_Selected;
     QRect rect;
 
-    painter->setOpacity(!pSet->isActive() ? 0.7 : 1.0);
+    painter->setOpacity(!set->isActive() ? 0.7 : 1.0);
 
 
     // BACKGROUND
@@ -59,7 +59,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     QIcon a_icon, w_icon, im_icon;
     rect = option.rect.adjusted(3, 3, -3, -1);
 
-    switch (pSet->isActive())
+    switch (set->isActive())
     {
     case true:
         a_icon = QIcon(":/icon/bullet_green"); break;
@@ -68,7 +68,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     }
     a_icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
 
-    switch (pSet->type())
+    switch (set->type())
     {
     case 0:
         w_icon = QIcon(":/icon/w_desktop"); break;
@@ -77,7 +77,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     }
     w_icon.paint(painter, rect, Qt::AlignTop|Qt::AlignRight);
 
-    switch (pSet->style())
+    switch (set->style())
     {
     case 0:
         im_icon = QIcon(":/icon/im_center"); break;
@@ -103,7 +103,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         painter->setPen(QColor(51,51,51));
     }
 
-    QString title = QFontMetrics(painter->font()).elidedText(pSet->fullName(), Qt::ElideMiddle, rect.width());
+    QString title = QFontMetrics(painter->font()).elidedText(set->fullName(), Qt::ElideMiddle, rect.width());
     painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title, &rect);
 
     // PATH
@@ -118,6 +118,6 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         painter->setPen(Qt::darkGray);
     }
 
-    QString path = QFontMetrics(painter->font()).elidedText(pSet->path(), Qt::ElideMiddle, rect.width());
+    QString path = QFontMetrics(painter->font()).elidedText(set->path(), Qt::ElideMiddle, rect.width());
     painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, path, &rect);
 }

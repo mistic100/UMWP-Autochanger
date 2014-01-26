@@ -14,12 +14,10 @@
  * @param QWidget* _parent
  * @param Controller* _poCtrl
  */
-ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _pCtrl) : QWidget(_parent)
+ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent)
 {
-    m_pCtrl = _pCtrl;
-
-    m_pEditPath = NULL;
-
+    m_ctrl = _ctrl;
+    m_inputPath = NULL;
 
     QGridLayout* pMainLayout = new QGridLayout(); // 6 columns
 
@@ -42,41 +40,41 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _pCtrl) : QWidget(_parent
     QSpacerItem* spacer = new QSpacerItem(100, 100, QSizePolicy::Ignored, QSizePolicy::Ignored);
     pMainLayout->addItem(spacer, 2, 0, 1, 6);
 
-    int iState = m_pCtrl->pSettings()->state();
+    int state = m_ctrl->settings()->state();
 
     // ASK ULTRAMON.EXE PATH
-    if (iState & UM_NOT_INSTALLED)
+    if (state & UM_NOT_INSTALLED)
     {
          description->setText(tr("Unable to locate UltraMon install directory.<br>Please indicate the location of <b>UltraMonDesktop.exe</b>"));
 
         QPushButton* pButtonBrowse = new QPushButton(tr("Browse"));
         QPushButton* pButtonSubmit = new QPushButton(tr("Continue"));
-        m_pEditPath = new QLineEdit(m_pCtrl->pSettings()->sParam("umpath"));
+        m_inputPath = new QLineEdit(m_ctrl->settings()->sParam("umpath"));
 
-        pMainLayout->addWidget(m_pEditPath, 3, 0, 1, 5);
+        pMainLayout->addWidget(m_inputPath, 3, 0, 1, 5);
         pMainLayout->addWidget(pButtonBrowse, 3, 5, 1, 1);
         pMainLayout->addWidget(pButtonSubmit, 4, 5, 1, 1);
 
-        connect(m_pEditPath,   SIGNAL(returnPressed()), this, SLOT(slotSubmit()));
+        connect(m_inputPath,   SIGNAL(returnPressed()), this, SLOT(slotSubmit()));
         connect(pButtonBrowse, SIGNAL(clicked()), this, SLOT(slotBrowse()));
         connect(pButtonSubmit, SIGNAL(clicked()), this, SLOT(slotSubmit()));
     }
     // OTHER ERRORS
-    else if (iState & UM_BAD_VERSION)
+    else if (state & UM_BAD_VERSION)
     {
          description->setText(tr("%1 is incompatible with the current version of UltraMon (%2).<br>Minimum version: %3")
                              .arg(QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION))
-                             .arg(m_pCtrl->pSettings()->sEnv("umversion"))
+                             .arg(m_ctrl->settings()->sEnv("umversion"))
                              .arg(QString::fromAscii(APP_MIN_UM_VERSION))
                              );
     }
-    else if (iState & UM_FILE_NOT_FOUND)
+    else if (state & UM_FILE_NOT_FOUND)
     {
          description->setText(tr("<b>default.wallpaper</b> file not found, impossible to continue.<br><br>Sould be at: %1")
-                             .arg("<i>" + m_pCtrl->pSettings()->sEnv("wallpath") + "</i>")
+                             .arg("<i>" + m_ctrl->settings()->sEnv("wallpath") + "</i>")
                              );
     }
-    else if (iState & UM_UNKNOWN_ERROR)
+    else if (state & UM_UNKNOWN_ERROR)
     {
          description->setText(tr("An unknown error append!"));
     }
@@ -95,7 +93,7 @@ void ErrorWidget::slotBrowse()
     if (!filename.isEmpty())
     {
         filename.replace('/', '\\');
-        m_pEditPath->setText(filename);
+        m_inputPath->setText(filename);
     }
 }
 
@@ -105,9 +103,9 @@ void ErrorWidget::slotBrowse()
  */
 void ErrorWidget::slotSubmit()
 {
-    QString filename = m_pEditPath->text();
+    QString filename = m_inputPath->text();
 
-    if (m_pCtrl->pSettings()->setExePath(filename))
+    if (m_ctrl->settings()->setExePath(filename))
     {
         emit pathSaved();
     }

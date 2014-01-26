@@ -16,7 +16,7 @@ class QToolBarExt : public QToolBar
     Q_OBJECT
 
 public:
-    QToolBarExt(QWidget *_parent = 0);
+    QToolBarExt(QWidget* _parent = 0);
 
     QToolButton* addButton(const QString &text);
     QToolButton* addButton(const QIcon &icon, const QString &text, Qt::ToolButtonStyle style=Qt::ToolButtonIconOnly);

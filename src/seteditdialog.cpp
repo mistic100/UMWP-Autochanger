@@ -9,12 +9,12 @@
  * @param QWidget* _parent
  * @param Set* _poSet
  */
-SetEditDialog::SetEditDialog(QWidget* _parent, Set* _pSet, Settings* _pSettings) : QDialog(_parent),
+SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) : QDialog(_parent),
     ui(new Ui::SetEditDialog)
 {
     ui->setupUi(this);
 
-    m_pSettings = _pSettings;
+    m_settings = _settings;
 
     setFixedSize(size());
 
@@ -26,16 +26,16 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Set* _pSet, Settings* _pSettings)
     ui->selectStyle->addItem(QIcon(":/icon/im_stretch"),        tr("Stretch"),              2);
     ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"),   tr("Strecth proportional"), 3);
 
-    ui->inputName->setText(_pSet->name());
+    ui->inputName->setText(_set->name());
 
-    int index = ui->selectType->findData(_pSet->type());
+    int index = ui->selectType->findData(_set->type());
     ui->selectType->setCurrentIndex(index);
 
-    index = ui->selectStyle->findData(_pSet->style());
+    index = ui->selectStyle->findData(_set->style());
     ui->selectStyle->setCurrentIndex(index);
 
-    ui->inputHotkey->setHotkey(_pSet->hotkey());
-    ui->inputHotkey->setDisabled(!m_pSettings->bParam("use_hotkeys"));
+    ui->inputHotkey->setHotkey(_set->hotkey());
+    ui->inputHotkey->setDisabled(!m_settings->bParam("use_hotkeys"));
 }
 
 /**
@@ -59,15 +59,15 @@ void SetEditDialog::done(int result)
 
         if (hotkey)
         {
-            if (hotkey == m_pSettings->hotkey("refresh"))
+            if (hotkey == m_settings->hotkey("refresh"))
             {
                 error = tr("Refresh");
             }
-            else if (hotkey == m_pSettings->hotkey("startpause"))
+            else if (hotkey == m_settings->hotkey("startpause"))
             {
                 error = tr("Start/Pause");
             }
-            else if (hotkey == m_pSettings->hotkey("showhide"))
+            else if (hotkey == m_settings->hotkey("showhide"))
             {
                 error = tr("Show/Hide");
             }
