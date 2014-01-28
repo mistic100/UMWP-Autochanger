@@ -105,10 +105,13 @@ void SetEditDialog::done(int result)
  */
 void SetEditDialog::save(int index)
 {
+    QVariant selectedType = ui->selectType->itemData(ui->selectType->currentIndex());
+    QVariant selectedStyle = ui->selectStyle->itemData(ui->selectStyle->currentIndex());
+
     m_settings->editSet(index,
                         ui->inputName->text(),
-                        ui->selectType->itemData(ui->selectType->currentIndex()).value<UM::WALLPAPER>(),
-                        ui->selectStyle->itemData(ui->selectStyle->currentIndex()).value<UM::IMAGE>(),
+                        static_cast<UM::WALLPAPER>(selectedType.toInt()),
+                        static_cast<UM::IMAGE>(selectedStyle.toInt()),
                         ui->inputHotkey->hotkey()
                         );
 }
