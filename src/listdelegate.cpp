@@ -63,7 +63,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     {
     case true:
         a_icon = QIcon(":/icon/bullet_green"); break;
-    default:
+    case false:
         a_icon = QIcon(":/icon/bullet_red"); break;
     }
     a_icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
@@ -72,7 +72,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     {
     case 0:
         w_icon = QIcon(":/icon/w_desktop"); break;
-    default:
+    case 1:
         w_icon = QIcon(":/icon/w_monitor"); break;
     }
     w_icon.paint(painter, rect, Qt::AlignTop|Qt::AlignRight);
@@ -85,8 +85,10 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         im_icon = QIcon(":/icon/im_tile"); break;
     case 2:
         im_icon = QIcon(":/icon/im_stretch"); break;
-    default:
+    case 3:
         im_icon = QIcon(":/icon/im_stretch_prop"); break;
+//    case 4:
+//        im_icon = QIcon(":/icon/im_fill"); break;
     }
     im_icon.paint(painter, rect, Qt::AlignBottom|Qt::AlignRight);
 

@@ -49,6 +49,7 @@ namespace UM {
         IM_TILE = 1,
         IM_STRETCH = 2,
         IM_STRETCH_PROP = 3
+//        IM_FILL = 4
     };
     struct WP_MONITOR_FILE
     {

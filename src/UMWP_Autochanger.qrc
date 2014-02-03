@@ -14,6 +14,7 @@
         <file alias="im_stretch">images/icons/im_stretch.png</file>
         <file alias="im_stretch_prop">images/icons/im_stretch_prop.png</file>
         <file alias="im_tile">images/icons/im_tile.png</file>
+        <file alias="im_fill">images/icons/im_fill.png</file>
         <file alias="w_desktop">images/icons/w_desktop.png</file>
         <file alias="w_monitor">images/icons/w_monitor.png</file>
         <file alias="export">images/icons/export.png</file>
