@@ -4,8 +4,7 @@
 #include <QtXml>
 #include <QString>
 #include <QVector>
-
-#include <QDebug>
+#include <QxtLogger>
 
 
 #define APP_NAME "UMWP Autochanger"
@@ -71,6 +70,9 @@ bool isImageFile(const QString &_filename);
 
 void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value);
 void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value);
+
+const QList<QVariant> hashToList(const QHash<QString, QVariant> &hash);
+const QList<QVariant> hashToList(const QHash<QString, int> &hash);
 
 #define MAIN_H
 #endif // MAIN_H

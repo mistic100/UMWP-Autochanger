@@ -2,6 +2,7 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QLocale>
+#include <QxtBasicFileLoggerEngine>
 
 #include "main.h"
 #include "mainwindow.h"
@@ -20,6 +21,20 @@ int main(int argc, char *argv[])
     }
 
     QApplication app(argc, argv);
+
+    // logger
+    if (argc > 1 && std::string(argv[1]) == "--log")
+    {
+        QxtBasicFileLoggerEngine* debug = new QxtBasicFileLoggerEngine("debug.log");
+        qxtLog->addLoggerEngine("debug", debug);
+        qxtLog->enableAllLogLevels();
+    }
+    else
+    {
+        qxtLog->disableAllLogLevels();
+    }
+
+    qxtLog->info("Starting =================================================");
 
     // default translations
     QTranslator qtTranslator;
@@ -44,6 +59,8 @@ int main(int argc, char *argv[])
     window.init();
 
     int ret = app.exec();
+
+    qxtLog->info("Finished");
 
     ReleaseMutex(hMutexHandle);
     CloseHandle(hMutexHandle);
@@ -91,4 +108,31 @@ void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_na
     QDomElement element = _dom->createElement(_name);
     setDomNodeValue(_dom, &element, _value);
     _parent->appendChild(element);
+}
+
+/*
+ * helpers for logger
+ */
+const QList<QVariant> hashToList(const QHash<QString, QVariant> &hash)
+{
+    QList<QVariant> list;
+
+    for (QHash<QString, QVariant>::const_iterator it=hash.begin(); it!=hash.end(); ++it)
+    {
+        list.push_back(it.key() +": "+ it.value().toString());
+    }
+
+    return list;
+}
+
+const QList<QVariant> hashToList(const QHash<QString, int> &hash)
+{
+    QList<QVariant> list;
+
+    for (QHash<QString, int>::const_iterator it=hash.begin(); it!=hash.end(); ++it)
+    {
+        list.push_back(it.key() +": "+ QString::number(it.value()));
+    }
+
+    return list;
 }

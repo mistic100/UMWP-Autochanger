@@ -43,8 +43,12 @@ Settings::Settings()
     load();
     init();
 
-    //qDebug()<<m_options;
-    //qDebug()<<m_env;
+    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
+    {
+        qxtLog->debug(hashToList(m_options));
+        qxtLog->debug(hashToList(m_hotkeys));
+        qxtLog->debug(hashToList(m_env));
+    }
 }
 
 /**
