@@ -134,6 +134,8 @@ void MainWindow::init()
  */
 void MainWindow::showError()
 {
+    qxtLog->trace("Init error widget");
+
     m_trayIcon->hide();
     m_actionHide1->defaultAction()->setVisible(false);
     m_actionPause1->defaultAction()->setVisible(false);
@@ -155,6 +157,8 @@ void MainWindow::showError()
  */
 void MainWindow::showMain()
 {
+    qxtLog->trace("Init main widget");
+
     m_trayIcon->show();
     m_actionHide1->defaultAction()->setVisible(true);
     m_actionPause1->defaultAction()->setVisible(true);
@@ -457,6 +461,8 @@ void MainWindow::slotShowHelp()
 void MainWindow::slotHotkey()
 {
     GlobalShortcut* pShortcut = (GlobalShortcut*)QObject::sender();
+
+    qxtLog->debug("Hotkey: "+pShortcut->type());
 
     switch (pShortcut->type())
     {

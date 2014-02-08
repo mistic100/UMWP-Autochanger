@@ -40,6 +40,7 @@ void Controller::checkVersion()
         connect(pVersionChecker, SIGNAL(finished()), pVCThread, SLOT(quit()));
         connect(pVersionChecker, SIGNAL(finished()), pVersionChecker, SLOT(deleteLater()));
 
+        qxtLog->trace("Start version checker thread");
         QTimer::singleShot(1000, pVCThread, SLOT(start()));
     }
 }
@@ -49,6 +50,7 @@ void Controller::checkVersion()
  */
 void Controller::startTimer()
 {
+    qxtLog->info("Start timer");
     m_mainTimer->stop();
     m_mainTimer->setInterval(m_settings->iParam("delay")*1000);
     m_mainTimer->start();
@@ -62,10 +64,12 @@ bool Controller::startPause()
 {
     if (m_mainTimer->isActive())
     {
+        qxtLog->info("Pause timer");
         m_mainTimer->stop();
     }
     else
     {
+        qxtLog->info("Restart timer");
         m_mainTimer->start();
     }
 
@@ -77,10 +81,13 @@ bool Controller::startPause()
  */
 void Controller::slotUpdate()
 {
+    qxtLog->info("Update !");
+
     // update delay if needed
     int delay = m_settings->iParam("delay")*1000;
     if (delay != m_mainTimer->interval())
     {
+        qxtLog->debug("Timer delay changed to: "+delay);
         m_mainTimer->setInterval(delay);
     }
 
@@ -96,11 +103,13 @@ void Controller::slotUpdate()
 
     if (totalSets == 0)
     {
+        qxtLog->warning("No active set");
         return;
     }
 
     // get random files
     Set* set = getRandomSet(totalSets);
+    qxtLog->debug("Current set: "+set->name());
 
     m_files.clear();
 
@@ -126,7 +135,9 @@ void Controller::slotUpdate()
 
     // execute UltraMonDesktop
     QString cmd = "\"" + m_settings->sParam("umpath") + "\" /load \"" + filename + "\"";
-    QProcess::execute(cmd);
+    QProcess::startDetached(cmd);
+
+    qxtLog->trace("Launch UltraMonDesktop");
 }
 
 /**
@@ -188,6 +199,7 @@ QString Controller::getRandomFile(Set* _set)
         loop--;
     }
 
+    qxtLog->debug("Current file: "+file);
     return file;
 }
 

@@ -30,6 +30,7 @@ void VersionChecker::run()
 
             if (ver.compare(QString::fromAscii(APP_VERSION)) > 0)
             {
+                qxtLog->debug("New version detected: "+ver);
                 emit newVersionAvailable(ver);
             }
         }

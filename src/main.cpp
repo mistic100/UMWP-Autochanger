@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         qxtLog->disableAllLogLevels();
     }
 
-    qxtLog->info("Starting =================================================");
+    qxtLog->trace("Starting =================================================");
 
     // default translations
     QTranslator qtTranslator;
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     int ret = app.exec();
 
-    qxtLog->info("Finished");
+    qxtLog->trace("Finished");
 
     ReleaseMutex(hMutexHandle);
     CloseHandle(hMutexHandle);

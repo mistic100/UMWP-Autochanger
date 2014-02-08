@@ -53,10 +53,6 @@ Q: Can I reorder sets ?
 A: Yes. Simply drag & drop them.
 
 
-## Known bugs
-* When changing the wallpaper, with file check activated, the software freezes for some seconds, that's because I don't use multi-threading.
-
-
 ## Compiling
 You can compile the application yourself with Qt Designer.  
 You will need Qt 4.8.4 and libqxt 0.6.2
@@ -67,6 +63,8 @@ You will need Qt 4.8.4 and libqxt 0.6.2
     * new: export and import XML configuration file
     * new: check UltraMon version
     * fixed: better detection of UltraMon executable
+    * fixed: no more freeze when updating wallpaper
+    * new: add logger for debuging purposes
 
 * [1.4 (06/01/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.4)
     * new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide
