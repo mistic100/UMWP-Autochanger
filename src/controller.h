@@ -24,6 +24,7 @@ private:
     QTimer*          m_mainTimer;
     mt19937          m_randomEngine; // mersenne_twister
     QVector<QString> m_files;
+    Set*             m_set;
 
 public:
     Controller(Settings* _settings);
@@ -32,10 +33,11 @@ public:
 
     Settings* settings() const { return m_settings; }
     const QVector<QString> &files() const { return m_files; }
+    Set* set() const { return m_set; }
 
     Set*    getRandomSet(int _total);
     QString getRandomFile(Set* _set);
-    void    generateFile(const QString &_filename, const Set* _set);
+    void    generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
 
     void startTimer();
     bool startPause();

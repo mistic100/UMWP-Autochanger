@@ -11,6 +11,7 @@
 #include "errorwidget.h"
 #include "mainwidget.h"
 #include "configdialog.h"
+#include "previewdialog.h"
 
 extern short UMWP_STATE;
 
@@ -60,22 +61,31 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
     QAction* actionImport =  menuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
     QAction* actionExport =  menuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
 
+    QMenu* menuHelp = new QMenu();
+    QAction* actionHelp =  menuHelp->addAction(QIcon(":/icon/help-color"), tr("Help"));
+    QAction* actionFiles = menuHelp->addAction(QIcon(":/icon/images"), tr("Active files"));
+                           menuHelp->addSeparator();
+    QAction* actionAbout = menuHelp->addAction(QIcon(":/icon/about"), tr("About"));
+
     QToolButton* actionQuit1 =    m_menuBar->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextBesideIcon);
     m_actionPause1 =              m_menuBar->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextBesideIcon);
     QToolButton* actionRefresh1 = m_menuBar->addButton(QIcon(":/icon/refresh"), tr("Refresh"), Qt::ToolButtonTextBesideIcon);
     m_actionHide1 =               m_menuBar->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextBesideIcon);
     m_actionConfig =              m_menuBar->addButton(QIcon(":/icon/config"), tr("Configuration"), menuConfig, Qt::ToolButtonTextBesideIcon);
-    QToolButton* actionHelp =     m_menuBar->addButton(QIcon(":/icon/help"), tr("?"));
+                                  m_menuBar->addButton(QIcon(":/icon/help"), tr("?"), menuHelp);
 
     connect(actionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
     connect(m_actionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
     connect(actionRefresh1, SIGNAL(clicked()), this, SLOT(slotRefresh()));
     connect(m_actionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
-    connect(actionHelp,     SIGNAL(clicked()), this, SLOT(slotShowHelp()));
 
     connect(actionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
     connect(actionImport,   SIGNAL(triggered()), this, SLOT(slotImport()));
     connect(actionExport,   SIGNAL(triggered()), this, SLOT(slotExport()));
+
+    connect(actionHelp,     SIGNAL(triggered()), this, SLOT(slotShowHelp()));
+    connect(actionAbout,    SIGNAL(triggered()), this, SLOT(slotShowAbout()));
+    connect(actionFiles,    SIGNAL(triggered()), this, SLOT(slotShowPreview()));
 
     addToolBar(m_menuBar);
 
@@ -173,6 +183,7 @@ void MainWindow::showMain()
 
     m_ctrl->checkVersion();
     m_ctrl->startTimer();
+    m_ctrl->slotUpdate();
 
     // window is hidden by default if the config is not empty
     if (
@@ -417,10 +428,6 @@ void MainWindow::slotImport()
  */
 void MainWindow::slotShowHelp()
 {
-    // title
-    QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
-
-    // help
     QFile helpFile;
     QString lang = QLocale::system().name().section('_', 0, 0);
     if (lang.compare("fr")==0)
@@ -434,25 +441,41 @@ void MainWindow::slotShowHelp()
 
     helpFile.open(QIODevice::ReadOnly);
     QTextStream content(&helpFile);
-    mainText.append(content.readAll());
+    QString mainText = content.readAll();
     helpFile.close();
-
-    // files list
-    if (m_ctrl->files().size() > 0)
-    {
-        mainText.append("<hr><h3>" + tr("Current files") + "</h3><ul>");
-        for (QVector<QString>::const_iterator it=m_ctrl->files().begin(); it!=m_ctrl->files().end(); ++it)
-        {
-            mainText.append("<li>" + (*it) + "</li>");
-        }
-        mainText.append("</ul>");
-    }
 
     QMessageBox dialog(this);
     dialog.setIcon(QMessageBox::Information);
     dialog.setText(mainText);
-    dialog.setWindowTitle(tr("About %1").arg(APP_NAME));
+    dialog.setWindowTitle(tr("Help"));
     dialog.exec();
+}
+
+/**
+ * @brief Open about dialog
+ */
+void MainWindow::slotShowAbout()
+{
+    QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
+    mainText+= "Created by Damien \"Mistic\" Sorel.<br>";
+    mainText+= "&copy; 2013 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    mainText+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
+
+    QMessageBox dialog(this);
+    dialog.setIcon(QMessageBox::Information);
+    dialog.setText(mainText);
+    dialog.setWindowTitle(tr("About"));
+    dialog.exec();
+}
+
+/**
+ * @brief Display "Active files" dialog
+ */
+void MainWindow::slotShowPreview()
+{
+    PreviewDialog* dialog = new PreviewDialog(this, m_ctrl);
+    dialog->move(geometry().left()+geometry().width()+15, geometry().top());
+    dialog->show();
 }
 
 /**
@@ -460,11 +483,11 @@ void MainWindow::slotShowHelp()
  */
 void MainWindow::slotHotkey()
 {
-    GlobalShortcut* pShortcut = (GlobalShortcut*)QObject::sender();
+    GlobalShortcut* shortcut = (GlobalShortcut*)QObject::sender();
 
-    qxtLog->debug("Hotkey: "+pShortcut->type());
+    qxtLog->debug("Hotkey: "+shortcut->type());
 
-    switch (pShortcut->type())
+    switch (shortcut->type())
     {
     case GlobalShortcut::REFRESH:
         m_ctrl->slotUpdate();
@@ -491,7 +514,7 @@ void MainWindow::slotHotkey()
         break;
 
     case GlobalShortcut::SETS:
-        m_ctrl->settings()->setActiveSets(pShortcut->sets());
+        m_ctrl->settings()->setActiveSets(shortcut->sets());
         m_ctrl->emitListChanged();
         m_ctrl->slotUpdate();
 

@@ -108,27 +108,27 @@ void Controller::slotUpdate()
     }
 
     // get random files
-    Set* set = getRandomSet(totalSets);
-    qxtLog->debug("Current set: "+set->name());
+    m_set = getRandomSet(totalSets);
+    qxtLog->debug("Current set: "+m_set->name());
 
     m_files.clear();
 
-    if (set->type() == 1)
+    if (m_set->type() == UM::W_MONITOR)
     {
         for (int i=0, l=m_settings->iEnv("nb_monitors"); i<l; i++)
         {
-            m_files.push_back(getRandomFile(set));
+            m_files.push_back(getRandomFile(m_set));
         }
     }
     else
     {
-        m_files.push_back(getRandomFile(set));
+        m_files.push_back(getRandomFile(m_set));
     }
 
     QString filename = m_settings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
-    generateFile(filename, set);
+    generateFile(filename, m_files, m_set);
 
     // remove old BMP file
     QFile::remove(m_settings->sEnv("bmppath"));
@@ -208,7 +208,7 @@ QString Controller::getRandomFile(Set* _set)
  * @param string _filename
  * @param Set* _set
  */
-void Controller::generateFile(const QString &_filename, const Set* _set)
+void Controller::generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set)
 {
     // open default file
     QString defaultFilename = m_settings->sEnv("wallpath") + "default.wallpaper";
@@ -225,7 +225,7 @@ void Controller::generateFile(const QString &_filename, const Set* _set)
     buffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
 
     // write number of wallpapers
-    DWORD nb_walls = m_files.size();
+    DWORD nb_walls = _files.size();
     buffer.append((char*)&nb_walls, sizeof(DWORD));
 
     // write wallpapers
@@ -237,7 +237,7 @@ void Controller::generateFile(const QString &_filename, const Set* _set)
         wall.color2 = 0x00000000;
         wall.imgStyle = _set->style();
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
-        m_files.at(i).toWCharArray((wchar_t*)wall.imgFile);
+        _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
 
         buffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
     }

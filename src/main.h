@@ -8,7 +8,7 @@
 
 
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "1.4.1"
+#define APP_VERSION "1.5"
 #define APP_MIN_UM_VERSION "3.2.0"
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_CACHE_DIR "cache/"

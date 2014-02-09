@@ -23,6 +23,9 @@
         <file alias="quit">images/icons/quit.png</file>
         <file alias="config">images/icons/config.png</file>
         <file alias="help">images/icons/help.png</file>
+        <file alias="about">images/icons/about.png</file>
+        <file alias="images">images/icons/images.png</file>
+        <file alias="help-color">images/icons/help_color.png</file>
     </qresource>
     <qresource prefix="/button">
         <file alias="activate">images/buttons/button_activate.png</file>

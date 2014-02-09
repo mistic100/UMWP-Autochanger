@@ -165,143 +165,166 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.cpp" line="63"/>
-        <location filename="../mainwindow.cpp" line="95"/>
-        <location filename="../mainwindow.cpp" line="550"/>
+        <location filename="../mainwindow.cpp" line="70"/>
+        <location filename="../mainwindow.cpp" line="105"/>
+        <location filename="../mainwindow.cpp" line="579"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="66"/>
-        <location filename="../mainwindow.cpp" line="92"/>
-        <location filename="../mainwindow.cpp" line="330"/>
+        <location filename="../mainwindow.cpp" line="73"/>
+        <location filename="../mainwindow.cpp" line="102"/>
+        <location filename="../mainwindow.cpp" line="345"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="64"/>
-        <location filename="../mainwindow.cpp" line="90"/>
-        <location filename="../mainwindow.cpp" line="349"/>
-        <location filename="../mainwindow.cpp" line="350"/>
+        <location filename="../mainwindow.cpp" line="71"/>
+        <location filename="../mainwindow.cpp" line="100"/>
+        <location filename="../mainwindow.cpp" line="364"/>
+        <location filename="../mainwindow.cpp" line="365"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="65"/>
-        <location filename="../mainwindow.cpp" line="91"/>
+        <location filename="../mainwindow.cpp" line="72"/>
+        <location filename="../mainwindow.cpp" line="101"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="68"/>
+        <location filename="../mainwindow.cpp" line="75"/>
         <source>?</source>
         <translation>?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="67"/>
+        <location filename="../mainwindow.cpp" line="74"/>
         <source>Configuration</source>
         <translation>Configuration</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="58"/>
+        <location filename="../mainwindow.cpp" line="59"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="60"/>
-        <location filename="../mainwindow.cpp" line="391"/>
+        <location filename="../mainwindow.cpp" line="61"/>
+        <location filename="../mainwindow.cpp" line="406"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="61"/>
-        <location filename="../mainwindow.cpp" line="379"/>
+        <location filename="../mainwindow.cpp" line="62"/>
+        <location filename="../mainwindow.cpp" line="394"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="93"/>
+        <location filename="../mainwindow.cpp" line="65"/>
+        <location filename="../mainwindow.cpp" line="450"/>
+        <source>Help</source>
+        <translation>Aide</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="66"/>
+        <source>Active files</source>
+        <translation>Fichiers courant</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="68"/>
+        <location filename="../mainwindow.cpp" line="467"/>
+        <source>About</source>
+        <translation>À propos</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="103"/>
         <source>Quick switch</source>
         <translation>Changement rapide</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="321"/>
+        <location filename="../mainwindow.cpp" line="336"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="381"/>
-        <location filename="../mainwindow.cpp" line="393"/>
+        <location filename="../mainwindow.cpp" line="396"/>
+        <location filename="../mainwindow.cpp" line="408"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="407"/>
+        <location filename="../mainwindow.cpp" line="422"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="407"/>
+        <location filename="../mainwindow.cpp" line="422"/>
         <source>Invalid settings file</source>
         <translation>Fichier de configuration invalide</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="439"/>
         <source>Current files</source>
-        <translation>Fichiers actuels</translation>
+        <translation type="obsolete">Fichiers actuels</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="474"/>
+        <location filename="../mainwindow.cpp" line="503"/>
         <source>Paused</source>
         <translation>Mis en pause</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="478"/>
+        <location filename="../mainwindow.cpp" line="507"/>
         <source>Running</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="503"/>
+        <location filename="../mainwindow.cpp" line="532"/>
         <source>Current sets : %1</source>
         <translation>Sets actuels : %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="516"/>
-        <location filename="../mainwindow.cpp" line="523"/>
-        <location filename="../mainwindow.cpp" line="530"/>
+        <location filename="../mainwindow.cpp" line="545"/>
+        <location filename="../mainwindow.cpp" line="552"/>
+        <location filename="../mainwindow.cpp" line="559"/>
         <source>A new version is available : %1</source>
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="529"/>
+        <location filename="../mainwindow.cpp" line="558"/>
         <source>New version</source>
         <translation>Nouvelle version</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="531"/>
+        <location filename="../mainwindow.cpp" line="560"/>
         <source>Visit the &lt;a href=&apos;%1&apos;&gt;project homepage&lt;/a&gt; to download the latest version.</source>
         <translation>Visitez la &lt;a href=&apos;%1&apos;&gt;page du projet&lt;/a&gt; pour télécharger la dernière version.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="311"/>
+        <location filename="../mainwindow.cpp" line="326"/>
         <source>%1 is still running</source>
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="354"/>
-        <location filename="../mainwindow.cpp" line="355"/>
+        <location filename="../mainwindow.cpp" line="369"/>
+        <location filename="../mainwindow.cpp" line="370"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="450"/>
         <source>About %1</source>
-        <translation>À propos de %1</translation>
+        <translation type="obsolete">À propos de %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="550"/>
+        <location filename="../mainwindow.cpp" line="579"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
+    </message>
+</context>
+<context>
+    <name>PreviewDialog</name>
+    <message>
+        <location filename="../previewdialog.ui" line="14"/>
+        <source>Active files</source>
+        <translation>Fichiers courant</translation>
     </message>
 </context>
 <context>
@@ -327,7 +350,7 @@
         <translation>Type :</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.ui" line="101"/>
+        <location filename="../seteditdialog.ui" line="108"/>
         <source>Style :</source>
         <translation>Style :</translation>
     </message>
@@ -362,33 +385,33 @@
         <translation>Ajuster</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="65"/>
+        <location filename="../seteditdialog.cpp" line="66"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="69"/>
+        <location filename="../seteditdialog.cpp" line="70"/>
         <source>Start/Pause</source>
         <translation>Démarrer/Pause</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="73"/>
+        <location filename="../seteditdialog.cpp" line="74"/>
         <source>Show/Hide</source>
         <translation>Afficher/Masquer</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="79"/>
-        <location filename="../seteditdialog.cpp" line="86"/>
+        <location filename="../seteditdialog.cpp" line="80"/>
+        <location filename="../seteditdialog.cpp" line="87"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="80"/>
+        <location filename="../seteditdialog.cpp" line="81"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation>Raccourci déjà utilisé pour &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="87"/>
+        <location filename="../seteditdialog.cpp" line="88"/>
         <source>Name can not be empty</source>
         <translation>Le nom ne peut être vide</translation>
     </message>

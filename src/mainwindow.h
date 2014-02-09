@@ -61,8 +61,11 @@ public slots:
     void slotRefresh();
     void slotStartPause();
     void slotConfigDialog();
-    void slotShowHelp();
     void slotHotkey();
+
+    void slotShowHelp();
+    void slotShowAbout();
+    void slotShowPreview();
 
     void slotExport();
     void slotImport();
