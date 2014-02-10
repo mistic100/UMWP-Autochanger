@@ -38,6 +38,8 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
 
     ui->inputHotkey->setHotkey(_set->hotkey());
     ui->inputHotkey->setDisabled(!m_settings->bParam("use_hotkeys"));
+
+    qxtLog->trace("SetEdutDialog openned");
 }
 
 /**
@@ -49,47 +51,44 @@ SetEditDialog::~SetEditDialog()
 }
 
 /**
- * @brief Validate hotkey before save
+ * @brief Validate config before save
  * @param int result
  */
 void SetEditDialog::done(int result)
 {
     if (result == QDialog::Accepted)
     {
-        int hotkey = ui->inputHotkey->hotkey();
         QString error;
+
+        int hotkey = ui->inputHotkey->hotkey();
 
         if (hotkey)
         {
             if (hotkey == m_settings->hotkey("refresh"))
             {
-                error = tr("Refresh");
+                error = tr("Hotkey already used for \"%1\"").arg(tr("Refresh"));
             }
             else if (hotkey == m_settings->hotkey("startpause"))
             {
-                error = tr("Start/Pause");
+                error = tr("Hotkey already used for \"%1\"").arg(tr("Start/Pause"));
             }
             else if (hotkey == m_settings->hotkey("showhide"))
             {
-                error = tr("Show/Hide");
+                error = tr("Hotkey already used for \"%1\"").arg(tr("Show/Hide"));
             }
+        }
+
+        if (ui->inputName->text().isEmpty())
+        {
+            error = tr("Name can not be empty");
         }
 
         if (!error.isEmpty())
         {
-            QMessageBox::critical(this, tr("Error"),
-                                  tr("Hotkey already used for \"%1\"").arg(error),
-                                  QMessageBox::Ok, QMessageBox::Ok);
+            qxtLog->error(error);
+            QMessageBox::critical(this, tr("Error"), error, QMessageBox::Ok, QMessageBox::Ok);
         }
-        else if (ui->inputName->text().isEmpty())
-        {
-            error = "name";
-            QMessageBox::critical(this, tr("Error"),
-                                  tr("Name can not be empty"),
-                                  QMessageBox::Ok, QMessageBox::Ok);
-        }
-
-        if (error.isEmpty())
+        else
         {
             QDialog::done(result);
         }
@@ -115,4 +114,6 @@ void SetEditDialog::save(int index)
                         static_cast<UM::IMAGE>(selectedStyle.toInt()),
                         ui->inputHotkey->hotkey()
                         );
+
+    qxtLog->trace("Set \""+ ui->inputName->text() +"\" updated");
 }

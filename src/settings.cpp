@@ -48,6 +48,7 @@ Settings::Settings()
         qxtLog->debug(hashToList(m_options));
         qxtLog->debug(hashToList(m_hotkeys));
         qxtLog->debug(hashToList(m_env));
+        qxtLog->debug("State: "+ QString::number(UMWP_STATE));
     }
 }
 

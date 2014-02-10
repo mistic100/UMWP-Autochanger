@@ -59,6 +59,8 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) : QDialog(_par
     }
 
     setFixedSize(QSize(i*width+22+(i-1)*6, height+70));
+
+    qxtLog->trace("PreviewDialog openned");
 }
 
 /**
@@ -77,4 +79,6 @@ void PreviewDialog::slotImageClicked()
     QWidget* image = (QWidget*)QObject::sender();
 
     QDesktopServices::openUrl(QUrl("file:///"+ image->property("path").toString()));
+
+    qxtLog->trace("Open "+ image->property("path").toString());
 }

@@ -35,7 +35,10 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _settings) : QDialog(_par
     ui->hotkeyShowHide->setHotkey(m_settings->hotkey("showhide"));
     ui->hotkeyStartPause->setHotkey(m_settings->hotkey("startpause"));
 
-    ui->optionDelay->setValue(m_settings->iParam("delay"));
+    QTime time = QTime(0, 0, 0).addSecs(m_settings->iParam("delay"));
+    ui->optionDelay->setTime(time);
+
+    qxtLog->trace("ConfigDialog openned");
 }
 
 /**
@@ -47,21 +50,22 @@ ConfigDialog::~ConfigDialog()
 }
 
 /**
- * @brief Validate hotkeys before save
+ * @brief Validate config before save
  * @param int result
  */
 void ConfigDialog::done(int result)
 {
     if (result == QDialog::Accepted)
     {
-        QHash<char*, QLineEditHotkey*> requestHotkeys;
-        requestHotkeys.insert("Refresh", ui->hotkeyRefresh);
-        requestHotkeys.insert("Show/Hide", ui->hotkeyShowHide);
-        requestHotkeys.insert("Start/Pause", ui->hotkeyStartPause);
-
         QString error;
 
-        for (QHash<char*, QLineEditHotkey*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
+        // validate hotkeys
+        QHash<QString, QLineEditHotkey*> requestHotkeys;
+        requestHotkeys.insert(tr("Refresh"), ui->hotkeyRefresh);
+        requestHotkeys.insert(tr("Show/Hide"), ui->hotkeyShowHide);
+        requestHotkeys.insert(tr("Start/Pause"), ui->hotkeyStartPause);
+
+        for (QHash<QString, QLineEditHotkey*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
         {
             if (!it.value()->hotkey())
             {
@@ -69,7 +73,7 @@ void ConfigDialog::done(int result)
             }
 
             // check against other main hotkeys
-            for (QHash<char*, QLineEditHotkey*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
+            for (QHash<QString, QLineEditHotkey*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
             {
                 if (!it2.value()->hotkey())
                 {
@@ -77,17 +81,11 @@ void ConfigDialog::done(int result)
                 }
                 if (it.value()->hotkey() == it2.value()->hotkey())
                 {
-                    error = tr(it2.key());
-                    break;
-                }
-            }
+                    error = tr("Hotkey for \"%1\" already used for \"%2\"")
+                            .arg(it.key()).arg(it2.key());
 
-            if (!error.isEmpty())
-            {
-                QMessageBox::critical(this, tr(it.key()),
-                                      tr("Hotkey already used for \"%1\"").arg(error),
-                                      QMessageBox::Ok, QMessageBox::Ok);
-                break;
+                    goto afterCheck;
+                }
             }
 
             // check against sets hotkeys
@@ -101,21 +99,29 @@ void ConfigDialog::done(int result)
                 }
                 if (poSet->hotkey() == it.value()->hotkey())
                 {
-                    error = poSet->name();
-                    break;
+                    error = tr("Hotkey for \"%1\" already used for set \"%2\"")
+                            .arg(it.key()).arg(poSet->name());
+
+                    goto afterCheck;
                 }
             }
+        }
+        afterCheck:
 
-            if (!error.isEmpty())
-            {
-                QMessageBox::critical(this, tr(it.key()),
-                                      tr("Hotkey already used for set \"%1\"").arg(error),
-                                      QMessageBox::Ok, QMessageBox::Ok);
-                break;
-            }
+        // validate delay
+        QTime time = ui->optionDelay->time();
+        if (time < QTime(0, 0, 10))
+        {
+            error = tr("Delay can not be lower than 10 seconds");
+            ui->optionDelay->setTime(QTime(0, 0, 10));
         }
 
-        if (error.isEmpty())
+        if (!error.isEmpty())
+        {
+            qxtLog->error(error);
+            QMessageBox::critical(this, tr("Error"),  error, QMessageBox::Ok, QMessageBox::Ok);
+        }
+        else
         {
             QDialog::done(result);
         }
@@ -131,7 +137,9 @@ void ConfigDialog::done(int result)
  */
 void ConfigDialog::save()
 {
-    m_settings->setParam("delay", ui->optionDelay->value());
+    QTime time = ui->optionDelay->time();
+    m_settings->setParam("delay", time.hour()*3600 + time.minute()*60 + time.second());
+
     m_settings->setParam("minimize", ui->optionMinimize->isChecked());
     m_settings->setParam("check", ui->optionCheckFiles->isChecked());
     m_settings->setParam("check_updates", ui->optionCheckUpdates->isChecked());
@@ -152,6 +160,8 @@ void ConfigDialog::save()
     }
 
     m_settings->save();
+
+    qxtLog->trace("Configuration updated");
 }
 
 /**

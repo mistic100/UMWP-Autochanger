@@ -15,67 +15,92 @@
     </message>
     <message>
         <location filename="../configdialog.ui" line="28"/>
-        <source>Delay (seconds) :</source>
+        <source>Delay :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="63"/>
+        <location filename="../configdialog.ui" line="53"/>
         <source>Minimize on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="70"/>
+        <location filename="../configdialog.ui" line="60"/>
         <source>Check files periodically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="77"/>
+        <location filename="../configdialog.ui" line="67"/>
         <source>Check updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="84"/>
+        <location filename="../configdialog.ui" line="74"/>
         <source>Start with Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="91"/>
+        <location filename="../configdialog.ui" line="81"/>
         <source>Show notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="111"/>
+        <location filename="../configdialog.ui" line="101"/>
         <source>Hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="117"/>
+        <location filename="../configdialog.ui" line="107"/>
         <source>Show/Hide :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="130"/>
+        <location filename="../configdialog.ui" line="120"/>
         <source>Refresh :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="140"/>
+        <location filename="../configdialog.ui" line="130"/>
         <source>Start/Pause :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.ui" line="156"/>
+        <location filename="../configdialog.ui" line="146"/>
         <source>Use hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.cpp" line="88"/>
-        <source>Hotkey already used for &quot;%1&quot;</source>
+        <location filename="../configdialog.cpp" line="64"/>
+        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../configdialog.cpp" line="112"/>
-        <source>Hotkey already used for set &quot;%1&quot;</source>
+        <location filename="../configdialog.cpp" line="65"/>
+        <source>Show/Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="66"/>
+        <source>Start/Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="84"/>
+        <source>Hotkey for &quot;%1&quot; already used for &quot;%2&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="102"/>
+        <source>Hotkey for &quot;%1&quot; already used for set &quot;%2&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="115"/>
+        <source>Delay can not be lower than 10 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../configdialog.cpp" line="122"/>
+        <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -167,7 +192,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="70"/>
         <location filename="../mainwindow.cpp" line="105"/>
-        <location filename="../mainwindow.cpp" line="579"/>
+        <location filename="../mainwindow.cpp" line="584"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,7 +234,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="61"/>
-        <location filename="../mainwindow.cpp" line="406"/>
+        <location filename="../mainwindow.cpp" line="408"/>
         <source>Import configuration file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -221,7 +246,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="65"/>
-        <location filename="../mainwindow.cpp" line="450"/>
+        <location filename="../mainwindow.cpp" line="455"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -232,7 +257,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="68"/>
-        <location filename="../mainwindow.cpp" line="467"/>
+        <location filename="../mainwindow.cpp" line="472"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -248,49 +273,49 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="396"/>
-        <location filename="../mainwindow.cpp" line="408"/>
+        <location filename="../mainwindow.cpp" line="410"/>
         <source>XML files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="422"/>
+        <location filename="../mainwindow.cpp" line="427"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="422"/>
+        <location filename="../mainwindow.cpp" line="427"/>
         <source>Invalid settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="503"/>
+        <location filename="../mainwindow.cpp" line="508"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="507"/>
+        <location filename="../mainwindow.cpp" line="512"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="532"/>
+        <location filename="../mainwindow.cpp" line="537"/>
         <source>Current sets : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="545"/>
-        <location filename="../mainwindow.cpp" line="552"/>
-        <location filename="../mainwindow.cpp" line="559"/>
+        <location filename="../mainwindow.cpp" line="550"/>
+        <location filename="../mainwindow.cpp" line="557"/>
+        <location filename="../mainwindow.cpp" line="564"/>
         <source>A new version is available : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="558"/>
+        <location filename="../mainwindow.cpp" line="563"/>
         <source>New version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="560"/>
+        <location filename="../mainwindow.cpp" line="565"/>
         <source>Visit the &lt;a href=&apos;%1&apos;&gt;project homepage&lt;/a&gt; to download the latest version.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -306,7 +331,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="579"/>
+        <location filename="../mainwindow.cpp" line="584"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -377,33 +402,34 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="66"/>
+        <location filename="../seteditdialog.cpp" line="69"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="70"/>
+        <location filename="../seteditdialog.cpp" line="73"/>
         <source>Start/Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="74"/>
+        <location filename="../seteditdialog.cpp" line="77"/>
         <source>Show/Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="80"/>
-        <location filename="../seteditdialog.cpp" line="87"/>
+        <location filename="../seteditdialog.cpp" line="89"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="81"/>
+        <location filename="../seteditdialog.cpp" line="69"/>
+        <location filename="../seteditdialog.cpp" line="73"/>
+        <location filename="../seteditdialog.cpp" line="77"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../seteditdialog.cpp" line="88"/>
+        <location filename="../seteditdialog.cpp" line="83"/>
         <source>Name can not be empty</source>
         <translation type="unfinished"></translation>
     </message>

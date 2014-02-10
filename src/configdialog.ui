@@ -25,22 +25,12 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Delay (seconds) :</string>
+           <string>Delay :</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="optionDelay">
-          <property name="minimum">
-           <number>10</number>
-          </property>
-          <property name="maximum">
-           <number>3600</number>
-          </property>
-          <property name="singleStep">
-           <number>10</number>
-          </property>
-         </widget>
+         <widget class="QTimeEdit" name="optionDelay"/>
         </item>
         <item>
          <spacer name="horizontalSpacer">

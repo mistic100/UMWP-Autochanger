@@ -396,6 +396,8 @@ void MainWindow::slotExport()
                                                     tr("XML files (*.xml)"));
 
     m_ctrl->settings()->save(filename);
+
+    qxtLog->trace("Export config to \""+ filename +"\"");
 }
 
 /**
@@ -410,6 +412,8 @@ void MainWindow::slotImport()
     // preserve UM path
     QString UMPath = m_ctrl->settings()->sParam("umpath");
 
+    qxtLog->trace("Import config from \""+ filename +"\"");
+
     if (m_ctrl->settings()->load(filename))
     {
         m_ctrl->settings()->setParam("umpath", UMPath);
@@ -419,6 +423,7 @@ void MainWindow::slotImport()
     }
     else
     {
+        qxtLog->error("Invalid settings file");
         QMessageBox::critical(this, tr("Error"), tr("Invalid settings file"), QMessageBox::Ok);
     }
 }
