@@ -5,8 +5,8 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.4  
-Release date  : 06/01/2014  
+Version       : 1.5  
+Release date  : 12/02/2014  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -59,13 +59,13 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
-* 1.5
+* [1.5 (12/02/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.5)
     * new: export and import XML configuration file
     * new: check UltraMon version
-    * fixed: better detection of UltraMon executable
-    * fixed: no more freeze when updating wallpaper
     * new: add logger for debuging purposes
     * new: "Active files" dialog with cliquable thumbnails for direct access to files
+    * fixed: better detection of UltraMon executable
+    * fixed: no more freeze when updating wallpaper
 
 * [1.4 (06/01/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.4)
     * new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide

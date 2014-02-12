@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 
-Version       : 1.4
-Release date  : 06/01/2013
+Version       : 1.5
+Release date  : 12/02/2013
 Author        : Damien "Mistic" Sorel
 Website       : http://www.strangeplanet.fr
 License       : GNU General Public License Version 3
@@ -83,6 +83,14 @@ Known bugs
 
 Changelog
 =========
+
+--- 1.5 (12/02/2014)
+  - new: export and import XML configuration file
+  - new: check UltraMon version
+  - new: add logger for debuging purposes
+  - new: "Active files" dialog with cliquable thumbnails for direct access to files
+  - fixed: better detection of UltraMon executable
+  - fixed: no more freeze when updating wallpaper
 
 --- 1.4 (06/01/2013)
   - new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide
