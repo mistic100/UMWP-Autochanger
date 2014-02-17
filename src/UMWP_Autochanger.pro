@@ -48,7 +48,8 @@ HEADERS += \
     qlineedithotkey.h \
     globalshortcut.h \
     qtoolbarext.h \
-    previewdialog.h
+    previewdialog.h \
+    constants.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc

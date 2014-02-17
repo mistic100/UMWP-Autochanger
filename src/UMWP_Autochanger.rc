@@ -1,2 +1,29 @@
 1     ICON    DISCARDABLE     "images/icon.ico"
 2     ICON    DISCARDABLE     "images/icon-uninst.ico"
+
+#include <windows.h>
+#include "constants.h"
+
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION     APP_VERSION_DW
+    PRODUCTVERSION  APP_VERSION_DW
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",        APP_COMPANYNAME
+            VALUE "FileDescription",    APP_FILEDESCRIPTION
+            VALUE "FileVersion",        APP_VERSION
+            VALUE "LegalCopyright",     APP_LEGALCOPYRIGHT
+            VALUE "OriginalFilename",   APP_ORIGINALFILENAME
+            VALUE "ProductName",        APP_NAME
+            VALUE "ProductVersion",     APP_VERSION
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END

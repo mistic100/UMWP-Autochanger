@@ -1,21 +1,12 @@
 #ifndef MAIN_H
 
-#include <Windows.h>
+#include <windows.h>
 #include <QtXml>
 #include <QString>
 #include <QVector>
 #include <QxtLogger>
 
-
-#define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "1.5"
-#define APP_MIN_UM_VERSION "3.2.0"
-#define APP_CONFIG_FILE "settings.xml"
-#define APP_CACHE_DIR "cache/"
-#define APP_WALLPAPER_FILE "AutoChanger.wallpaper"
-#define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
-#define APP_VERSION_URL L"http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
-#define APP_MAX_TRAVERSAL 3
+#include "constants.h"
 
 
 // state values
