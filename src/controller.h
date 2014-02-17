@@ -50,6 +50,7 @@ public slots:
 
 signals:
     void listChanged(bool); // true to reset QListWidget selection
+    void wallpaperChanged();
     void newVersionAvailable(const QString);
 };
 

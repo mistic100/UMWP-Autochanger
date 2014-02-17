@@ -138,6 +138,8 @@ void Controller::slotUpdate()
     QProcess::startDetached(cmd);
 
     qxtLog->trace("Launch UltraMonDesktop");
+
+    emit wallpaperChanged();
 }
 
 /**

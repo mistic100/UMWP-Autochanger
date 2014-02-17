@@ -17,10 +17,31 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) : QDialog(_par
 {
     ui->setupUi(this);
 
-    int width = 150;
-    if (_ctrl->set()->type() == UM::W_DESKTOP)
+    m_ctrl = _ctrl;
+
+    connect(m_ctrl, SIGNAL(wallpaperChanged()), this, SLOT(draw()));
+
+    draw();
+
+    qxtLog->trace("PreviewDialog openned");
+}
+
+/**
+ * @brief Update dialog content
+ */
+void PreviewDialog::draw()
+{
+    while (ui->gridLayout->count() > 0)
     {
-        width*= _ctrl->settings()->iEnv("nb_monitors");
+        QLayoutItem* item = ui->gridLayout->takeAt(0);
+        delete item->widget();
+        delete item;
+    }
+
+    int width = 150;
+    if (m_ctrl->set()->type() == UM::W_DESKTOP)
+    {
+        width*= m_ctrl->settings()->iEnv("nb_monitors");
     }
 
     QPen pen(Qt::SolidLine);
@@ -28,7 +49,7 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) : QDialog(_par
     pen.setColor(QColor(0, 160, 255));
 
     int i = 0, height = 0;
-    for (QVector<QString>::const_iterator it=_ctrl->files().begin(); it!=_ctrl->files().end(); ++it)
+    for (QVector<QString>::const_iterator it=m_ctrl->files().begin(); it!=m_ctrl->files().end(); ++it)
     {
         // resize image and add blue border
         QPixmap image = QPixmap(*it).scaledToWidth(width, Qt::SmoothTransformation);
@@ -59,8 +80,6 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) : QDialog(_par
     }
 
     setFixedSize(QSize(i*width+22+(i-1)*6, height+70));
-
-    qxtLog->trace("PreviewDialog openned");
 }
 
 /**

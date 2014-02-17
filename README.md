@@ -59,6 +59,9 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
+* 1.6
+    * fixed: application closes when closing dialog window while main window is hidden
+
 * [1.5 (12/02/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.5)
     * new: export and import XML configuration file
     * new: check UltraMon version

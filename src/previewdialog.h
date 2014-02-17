@@ -20,12 +20,16 @@ class PreviewDialog : public QDialog
 
 private:
     Ui::PreviewDialog *ui;
+
+    Controller* m_ctrl;
     
 public:
     PreviewDialog(QWidget* _parent, Controller* _ctrl);
     ~PreviewDialog();
 
 public slots:
+    void draw();
+
     void slotImageClicked();
 };
 

@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    app.setQuitOnLastWindowClosed(false);
+
     // logger
     if (argc > 1 && std::string(argv[1]) == "--log")
     {

@@ -395,6 +395,11 @@ void MainWindow::slotExport()
                                                     QDir::homePath() + QDir::separator() + "umwp_settings.xml",
                                                     tr("XML files (*.xml)"));
 
+    if (filename.isEmpty())
+    {
+        return;
+    }
+
     m_ctrl->settings()->save(filename);
 
     qxtLog->trace("Export config to \""+ filename +"\"");
@@ -408,6 +413,11 @@ void MainWindow::slotImport()
     QString filename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
                                                      QDir::homePath(),
                                                      tr("XML files (*.xml)"));
+
+    if (filename.isEmpty())
+    {
+        return;
+    }
 
     // preserve UM path
     QString UMPath = m_ctrl->settings()->sParam("umpath");
