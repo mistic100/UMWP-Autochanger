@@ -500,7 +500,7 @@ void MainWindow::slotHotkey()
 {
     GlobalShortcut* shortcut = (GlobalShortcut*)QObject::sender();
 
-    qxtLog->debug("Hotkey: "+shortcut->type());
+    qxtLog->debug("Hotkey: "+QString::number(shortcut->type()));
 
     switch (shortcut->type())
     {

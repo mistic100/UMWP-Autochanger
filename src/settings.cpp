@@ -49,6 +49,14 @@ Settings::Settings()
         qxtLog->debug(hashToList(m_hotkeys));
         qxtLog->debug(hashToList(m_env));
         qxtLog->debug("State: "+ QString::number(UMWP_STATE));
+
+        QList<QVariant> sets;
+        for (QVector<Set*>::iterator it = m_sets.begin(); it != m_sets.end(); ++it)
+        {
+            Set* pSet = *it;
+            sets.push_back(pSet->name()+", "+(pSet->isActive()?"active":"inactive"));
+        }
+        qxtLog->debug(sets);
     }
 }
 
@@ -410,32 +418,32 @@ bool Settings::load(QString _filename)
                 // set node
                 if (setNode.tagName() == "set")
                 {
-                    QString path = setNode.text().trimmed();
-                    if (directoryExists(path))
+                    Set* set = addSet(setNode.text().trimmed(), setNode.attribute("name"));
+
+                    if (set != NULL)
                     {
-                        Set* pNewSet = addSet(path, setNode.attribute("name"));
-                        pNewSet->setActive(setNode.attribute("active").toInt());
+                        set->setActive(setNode.attribute("active").toInt());
 
                         // added in 1.3
                         if (setNode.hasAttribute("type"))
                         {
                             UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(setNode.attribute("type").toInt());
                             UM::IMAGE im_style = static_cast<UM::IMAGE>(setNode.attribute("style").toInt());
-                            pNewSet->setType(wp_type);
-                            pNewSet->setStyle(im_style);
+                            set->setType(wp_type);
+                            set->setStyle(im_style);
                         }
 
                         // added in 1.4
                         if (setNode.hasAttribute("hotkey_mod"))
                         {
-                            pNewSet->setHotkey(
+                            set->setHotkey(
                                         setNode.attribute("hotkey").toInt() +
                                         setNode.attribute("hotkey_mod").toInt()
                                         );
                         }
                         else if (setNode.hasAttribute("hotkey"))
                         {
-                            pNewSet->setHotkey(setNode.attribute("hotkey").toInt());
+                            set->setHotkey(setNode.attribute("hotkey").toInt());
                         }
                     }
                 }
@@ -567,6 +575,8 @@ bool Settings::setExePath(const QString &_path)
  */
 Set* Settings::addSet(const QString &_path)
 {
+    qxtLog->debug("New set: "+_path);
+
     return addSet(_path, "");
 }
 
@@ -606,9 +616,13 @@ void Settings::deleteSets(const QList<int> _sets)
     for (QList<int>::const_iterator i=_sets.begin(); i!=_sets.end(); i++)
     {
         int pos = *i-offset;
+
+        qxtLog->debug("Delete set: "+m_sets.at(pos)->name());
+
         m_sets.at(pos)->deleteCache();
         delete m_sets.at(pos);
         m_sets.remove(pos);
+
         offset++;
     }
 
@@ -637,6 +651,8 @@ void Settings::activateSets(const QList<int> _sets)
     for (QList<int>::const_iterator i=_sets.begin(); i!=_sets.end(); i++)
     {
         m_sets.at(*i)->setActive(true);
+
+        qxtLog->debug("Activate set: "+m_sets.at(*i)->name());
     }
 
     save();
@@ -651,6 +667,8 @@ void Settings::unactivateSets(const QList<int> _sets)
     for (QList<int>::const_iterator i=_sets.begin(); i!=_sets.end(); i++)
     {
         m_sets.at(*i)->setActive(false);
+
+        qxtLog->debug("Unactive set: "+m_sets.at(*i)->name());
     }
 
     save();
@@ -665,6 +683,8 @@ void Settings::setActiveSets(const QList<int> _sets)
     for (int i=0, l=nbSets(); i<l; i++)
     {
         m_sets.at(i)->setActive(_sets.contains(i));
+
+        qxtLog->debug("Change set state: "+m_sets.at(i)->name()+", "+(_sets.contains(i)?"active":"inactive"));
     }
 
     save();
@@ -688,6 +708,8 @@ void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, 
         set->setStyle(_style);
         set->setHotkey(_hotkey);
 
+        qxtLog->debug("Edit set: "+set->name());
+
         save();
     }
 }
@@ -710,6 +732,8 @@ void Settings::moveSet(int _from, int _to)
     {
         m_sets.remove(_from+1);
     }
+
+    qxtLog->debug("Move set: "+set->name()+", "+_from+"->"+_to);
 
     save();
 }

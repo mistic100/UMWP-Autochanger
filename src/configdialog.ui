@@ -30,7 +30,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QTimeEdit" name="optionDelay"/>
+         <widget class="QTimeEdit" name="optionDelay">
+          <property name="displayFormat">
+           <string notr="true">hh:mm:ss</string>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer">
