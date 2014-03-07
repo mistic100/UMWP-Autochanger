@@ -48,7 +48,7 @@ public:
     void showError();
 
 protected:
-    void showEvent(QShowEvent*);
+    void showEvent(QShowEvent* _event);
     void resizeEvent(QResizeEvent* _event);
     void closeEvent(QCloseEvent* _event);
 

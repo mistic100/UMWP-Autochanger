@@ -611,9 +611,11 @@ void MainWindow::slotQuit()
 /**
  * @brief Resize the window when showed
  */
-void MainWindow::showEvent(QShowEvent*)
+void MainWindow::showEvent(QShowEvent* _event)
 {
     resize(m_ctrl->settings()->windowSize());
+
+    QMainWindow::showEvent(_event);
 }
 
 /**
@@ -623,6 +625,8 @@ void MainWindow::showEvent(QShowEvent*)
 void MainWindow::resizeEvent(QResizeEvent* _event)
 {
     m_ctrl->settings()->setWindowSize(_event->size());
+
+    QMainWindow::resizeEvent(_event);
 }
 
 /**
@@ -636,4 +640,6 @@ void MainWindow::closeEvent(QCloseEvent* _event)
         _event->ignore();
         slotToggleWindow();
     }
+
+    QMainWindow::closeEvent(_event);
 }

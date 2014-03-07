@@ -28,6 +28,7 @@ Settings::Settings()
     m_options["use_hotkeys"] = false;
     m_options["show_notifications"] = true;
     m_options["last_dir"] = QDir::homePath();
+    // m_options["hotkey"] PROHIBITED
 
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;
@@ -48,9 +49,11 @@ Settings::Settings()
         qxtLog->debug(hashToList(m_options));
         qxtLog->debug(hashToList(m_hotkeys));
         qxtLog->debug(hashToList(m_env));
-        qxtLog->debug("State: "+ QString::number(UMWP_STATE));
+        qxtLog->debug("App state: "+ QString::number(UMWP_STATE));
+        qxtLog->debug("Autostart: "+ QString::number(isAutostart()));
 
         QList<QVariant> sets;
+        sets.push_back("Sets state:");
         for (QVector<Set*>::iterator it = m_sets.begin(); it != m_sets.end(); ++it)
         {
             Set* pSet = *it;
@@ -175,6 +178,8 @@ void Settings::init()
                  QString exePath = QString::fromWCharArray(value1, wordLen-1); // remove the \0 termination
                  exePath.append("UltraMonDesktop.exe");
                  m_options["umpath"] = exePath;
+
+                 qxtLog->info("UM path found in registry: "+ m_options["umpath"].toString());
             }
         }
         regKey.Close();
@@ -196,6 +201,8 @@ void Settings::init()
                  QString exePath = QString::fromWCharArray(value1, wordLen-1); // remove the \0 termination
                  exePath.append("\\Realtime Soft\\UltraMon\\UltraMonDesktop.exe");
                  m_options["umpath"] = exePath;
+
+                 qxtLog->info("UM path guessed: "+ m_options["umpath"].toString());
             }
         }
         regKey.Close();
@@ -205,6 +212,8 @@ void Settings::init()
 
     if (m_options["umpath"].isNull() || !QFile::exists(m_options["umpath"].toString()))
     {
+        qxtLog->error("UM path empty or invalid");
+
         UMWP_STATE|= UMWP::NOT_INSTALLED;
     }
 
@@ -226,12 +235,11 @@ void Settings::init()
 
     free(value1);
 
-    if (m_env["umversion"] == "unknown")
+    if (m_env["umversion"] == QVariant("unknown") ||
+        m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
     {
-        UMWP_STATE|= UMWP::BAD_VERSION;
-    }
-    else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
-    {
+        qxtLog->error("UM version unknown or invalid");
+
         UMWP_STATE|= UMWP::BAD_VERSION;
     }
 
@@ -248,6 +256,8 @@ void Settings::init()
     }
     else
     {
+        qxtLog->fatal("Something went really wrong ! (unable to query registry)");
+
         UMWP_STATE|= UMWP::UNKNOWN_ERROR;
     }
 
@@ -268,28 +278,28 @@ void Settings::init()
         }
         else
         {
+            qxtLog->fatal("Something went really wrong ! (unable to query registry)");
+
             UMWP_STATE|= UMWP::UNKNOWN_ERROR;
         }
 
         CoTaskMemFree(value2);
-    }
 
-    // CHECK WALLPAPER FILE
-    if (m_env["wallpath"].isNull())
-    {
-        UMWP_STATE|= UMWP::FILE_NOT_FOUND;
-    }
-    else
-    {
-        QString filename = m_env["wallpath"].toString().append("default.wallpaper");
+        // CHECK WALLPAPER FILE
+        if (!m_env["wallpath"].isNull())
+        {
+            QString filename = m_env["wallpath"].toString().append("default.wallpaper");
 
-        if (!QFile::exists(filename))
-        {
-            UMWP_STATE|= UMWP::FILE_NOT_FOUND;
-        }
-        else
-        {
-            readNbMonitors();
+            if (!QFile::exists(filename))
+            {
+                qxtLog->error("Wallpaper folder invalid");
+
+                UMWP_STATE|= UMWP::FILE_NOT_FOUND;
+            }
+            else
+            {
+                readNbMonitors();
+            }
         }
     }
 
@@ -303,6 +313,10 @@ void Settings::init()
         QString startLinkPath = QString::fromWCharArray(value2);
         startLinkPath.append("\\UMWP Autochanger.lnk");
         m_env["startlinkpath"] = startLinkPath;
+    }
+    else
+    {
+        qxtLog->error("Shortcut path can't be guessed");
     }
 
     CoTaskMemFree(value2);
@@ -345,6 +359,7 @@ bool Settings::load(QString _filename)
 
     if (!file.open(QIODevice::ReadOnly))
     {
+        qxtLog->error("Unable to load config file");
         return false;
     }
 
@@ -352,6 +367,7 @@ bool Settings::load(QString _filename)
     QDomDocument dom;
     if (!dom.setContent(file.readAll()))
     {
+        qxtLog->error("Unable to load config file");
         return false;
     }
 
@@ -458,9 +474,12 @@ bool Settings::load(QString _filename)
     // migration from 1.3
     if (newHotkey > 0)
     {
+        qxtLog->info("Need to update hotkeys");
         upgradeHotkeys(newHotkey);
         save();
     }
+
+    qxtLog->trace("Config loaded from file");
 
     return true;
 }
@@ -537,8 +556,12 @@ bool Settings::save(QString _filename)
 
         file.close();
 
+        qxtLog->trace("Config file saved");
+
         return true;
     }
+
+    qxtLog->error("Unable to save config file");
 
     return false;
 }
@@ -683,8 +706,18 @@ void Settings::setActiveSets(const QList<int> _sets)
     for (int i=0, l=nbSets(); i<l; i++)
     {
         m_sets.at(i)->setActive(_sets.contains(i));
+    }
 
-        qxtLog->debug("Change set state: "+m_sets.at(i)->name()+", "+(_sets.contains(i)?"active":"inactive"));
+    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
+    {
+        QList<QVariant> sets;
+        sets.push_back("Change sets state:");
+        for (QVector<Set*>::iterator it = m_sets.begin(); it != m_sets.end(); ++it)
+        {
+            Set* pSet = *it;
+            sets.push_back(pSet->name()+", "+(pSet->isActive()?"active":"inactive"));
+        }
+        qxtLog->debug(sets);
     }
 
     save();
@@ -798,8 +831,10 @@ int const Settings::nbActiveSets(bool _withFiles) const
  */
 void Settings::createShortcut()
 {
-    if (!m_env["startlinkpath"].isNull())
+    if (canAddShortcut())
     {
+        qxtLog->trace("Attempt to create shortcut");
+
         wchar_t* path1 = (wchar_t*) malloc(256);
         wchar_t* path2 = (wchar_t*) malloc(256);
 
@@ -821,6 +856,8 @@ void Settings::deleteShortcut()
 {
     if (isAutostart())
     {
+        qxtLog->trace("Remove shortcut");
+
         QFile::remove(m_env["startlinkpath"].toString());
     }
 }
