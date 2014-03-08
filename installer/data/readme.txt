@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 
-Version       : 1.5
-Release date  : 12/02/2013
+Version       : 1.6
+Release date  : 08/03/2014
 Author        : Damien "Mistic" Sorel
 Website       : http://www.strangeplanet.fr
 License       : GNU General Public License Version 3
@@ -35,8 +35,8 @@ Installation
     containing JPEG/PNG/BMP files. UMWP Autochanger will browse this directory 
     recursively up to 3 levels searching for image files.
 
- 5. Once you have added your sets, click on the disk button, the wallpaper will 
-    randomly change every 60 seconds (default delay).
+ 5. Once you have added your sets, the wallpaper will randomly change
+    every 60 seconds (default delay).
 
 
 Configuration
@@ -47,9 +47,8 @@ Configuration
 
  * On the "Options" dialog you can choose the delay, change the behavior of 
     the tool and configure the hotkeys.  
-    Hotkeys are a way to change the current set without opppening the application 
-    window : in default configuration, press Ctrl+Shift+1 for the first set, 
-    and up to Ctrl+Shift+9 for the ninth set.
+    Hotkeys are a way to interact with the application while it is hidden
+    in the system bar. Hotkeys can also be defined for each individual sets.
 
 
 Troubleshouting
@@ -75,14 +74,14 @@ Troubleshouting
   A: Yes. Simply drag & drop them.
 
 
-Known bugs
-==========
- - When changing the wallpaper, with file check activated, the software freezes 
-  for some seconds, that's because I don't use multi-threading.
-
-
 Changelog
 =========
+
+--- 1.6 (08/03/2014)
+  - change: Alt-F4 effectively closes application without prompt
+  - fixed: application closes when closing dialog window while main window is hidden
+  - fixed: delay input with wrong display format
+  - fixed: set parameters randomly resetted
 
 --- 1.5 (12/02/2014)
   - new: export and import XML configuration file
@@ -92,7 +91,7 @@ Changelog
   - fixed: better detection of UltraMon executable
   - fixed: no more freeze when updating wallpaper
 
---- 1.4 (06/01/2013)
+--- 1.4 (06/01/2014)
   - new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide
   - new: permanently save last used directory
 

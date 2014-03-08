@@ -5,8 +5,8 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.5  
-Release date  : 12/02/2014  
+Version       : 1.6  
+Release date  : 08/03/2014  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -27,14 +27,14 @@ License       : GNU General Public License Version 3
 
 4. Click on the plus button to add a new set. A set is basically a directory containing JPEG/PNG/BMP files. UMWP Autochanger will browse this directory recursively up to 3 levels searching for image files.
 
-5. Once you have added your sets, click on the disk button, the wallpaper will randomly change every 60 seconds (default delay).
+5. Once you have added your sets, the wallpaper will randomly change every 60 seconds (default delay).
 
 
 ## Configuration
 * Double-click on a set to edit it. You can change its name, its style (one image for each monitor or one image for the whole desktop) and the transformation style for images (center, tile or stretch).
 
 * On the "Options" dialog you can choose the delay, change the behavior of the tool and configure the hotkeys.  
-Hotkeys are a way to interact with the application while it is hidden in the the system bar. Hotkeys can also be defined for each individual sets.
+Hotkeys are a way to interact with the application while it is hidden in the system bar. Hotkeys can also be defined for each individual sets.
 
 
 ## Troubleshouting
@@ -59,8 +59,8 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
-* 1.6
-    * change: Alt-F4 effectively close application without prompt
+* [1.6 (08/03/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.6)
+    * change: Alt-F4 effectively closes application without prompt
     * fixed: application closes when closing dialog window while main window is hidden
     * fixed: delay input with wrong display format
     * fixed: set parameters randomly resetted
