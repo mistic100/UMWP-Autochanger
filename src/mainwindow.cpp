@@ -22,6 +22,9 @@ extern short UMWP_STATE;
  */
 MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
 {
+    m_altPressed = false;
+    installEventFilter(this);
+
     m_ctrl = _ctrl;
     connect(m_ctrl, SIGNAL(newVersionAvailable(const QString)), this, SLOT(slotDisplayNewVersion(const QString)));
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(updateTrayQuickMenu()));
@@ -635,11 +638,40 @@ void MainWindow::resizeEvent(QResizeEvent* _event)
  */
 void MainWindow::closeEvent(QCloseEvent* _event)
 {
-    if (UMWP_STATE == UMWP::OK && _event)
+    if (UMWP_STATE == UMWP::OK && _event && !m_altPressed)
     {
         _event->ignore();
         slotToggleWindow();
+
+        QMainWindow::closeEvent(_event);
+    }
+    else
+    {
+        qApp->quit();
+    }
+}
+
+/**
+ * @brief catch Alt press to allow Alt-F4
+ * @param QEvent* _event
+ * @return bool
+ */
+bool MainWindow::eventFilter(QObject*, QEvent* _event)
+{
+    if (_event->type() == QEvent::ShortcutOverride)
+    {
+        if (((QKeyEvent*) _event)->modifiers() == Qt::AltModifier)
+        {
+            m_altPressed = true;
+            QTimer::singleShot(300, this, SLOT(slotAltPressed()));
+            return false;
+        }
     }
 
-    QMainWindow::closeEvent(_event);
+    return QMainWindow::event(_event);
+}
+
+void MainWindow::slotAltPressed()
+{
+    m_altPressed = false;
 }

@@ -37,6 +37,8 @@ private:
 
     QList<GlobalShortcut*> m_shortcuts;
 
+    bool m_altPressed;
+
 public:
     MainWindow(Controller* _ctrl);
     ~MainWindow();
@@ -51,6 +53,7 @@ protected:
     void showEvent(QShowEvent* _event);
     void resizeEvent(QResizeEvent* _event);
     void closeEvent(QCloseEvent* _event);
+    bool eventFilter(QObject*, QEvent* _event);
 
 public slots:
     void init();
@@ -75,6 +78,8 @@ public slots:
 
     void slotToggleWindow(bool _forceHide=false);
     void slotDisplayNewVersion(const QString &_version);
+
+    void slotAltPressed();
 };
 
 #endif // MAINWINDOW_H
