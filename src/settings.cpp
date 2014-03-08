@@ -434,10 +434,11 @@ bool Settings::load(QString _filename)
                 // set node
                 if (setNode.tagName() == "set")
                 {
-                    Set* set = addSet(setNode.text().trimmed(), setNode.attribute("name"));
+                    QString path = setNode.text().trimmed();
 
-                    if (set != NULL)
+                    if (QDir(path).exists())
                     {
+                        Set* set = new Set(path, setNode.attribute("name"));
                         set->setActive(setNode.attribute("active").toInt());
 
                         // added in 1.3
@@ -461,6 +462,8 @@ bool Settings::load(QString _filename)
                         {
                             set->setHotkey(setNode.attribute("hotkey").toInt());
                         }
+
+                        m_sets.push_back(set);
                     }
                 }
 
@@ -598,8 +601,6 @@ bool Settings::setExePath(const QString &_path)
  */
 Set* Settings::addSet(const QString &_path)
 {
-    qxtLog->debug("New set: "+_path);
-
     return addSet(_path, "");
 }
 
@@ -611,9 +612,12 @@ Set* Settings::addSet(const QString &_path)
  */
 Set* Settings::addSet(const QString &_path, const QString &_name)
 {
+    qxtLog->debug("New set: "+_path);
+
     QDir dir = QDir(_path);
     if (!dir.exists())
     {
+        qxtLog->error("Invalid set path");
         return NULL;
     }
 
