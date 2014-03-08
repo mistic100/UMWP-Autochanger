@@ -476,7 +476,7 @@ void MainWindow::slotShowAbout()
 {
     QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
     mainText+= "Created by Damien \"Mistic\" Sorel.<br>";
-    mainText+= "&copy; 2013 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    mainText+= "&copy; 2013-2014 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     mainText+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
 
     QMessageBox dialog(this);
