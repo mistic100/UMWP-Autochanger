@@ -77,6 +77,8 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
     m_actionConfig =              m_menuBar->addButton(QIcon(":/icon/config"), tr("Configuration"), menuConfig, Qt::ToolButtonTextBesideIcon);
                                   m_menuBar->addButton(QIcon(":/icon/help"), tr("?"), menuHelp);
 
+    m_pauseBlinker = new WidgetBlinker(m_actionPause1);
+
     connect(actionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
     connect(m_actionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
     connect(actionRefresh1, SIGNAL(clicked()), this, SLOT(slotRefresh()));
@@ -364,11 +366,13 @@ void MainWindow::slotStartPause()
 {
     if (m_ctrl->startPause())
     {
+        m_pauseBlinker->stop();
         m_actionPause1->setText(tr("Pause"));
         m_actionPause2->setText(tr("Pause"));
     }
     else
     {
+        m_pauseBlinker->start();
         m_actionPause1->setText(tr("Start"));
         m_actionPause2->setText(tr("Start"));
     }

@@ -11,6 +11,7 @@
 #include "controller.h"
 #include "globalshortcut.h"
 #include "qtoolbarext.h"
+#include "widgetblinker.h"
 
 
 /**
@@ -34,6 +35,8 @@ private:
     QAction*     m_actionHide2; // tray
     QToolButton* m_actionPause1; // menu
     QAction*     m_actionPause2; // tray
+
+    WidgetBlinker* m_pauseBlinker;
 
     QList<GlobalShortcut*> m_shortcuts;
 

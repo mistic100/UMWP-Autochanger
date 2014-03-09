@@ -49,7 +49,8 @@ HEADERS += \
     globalshortcut.h \
     qtoolbarext.h \
     previewdialog.h \
-    constants.h
+    constants.h \
+    widgetblinker.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc
