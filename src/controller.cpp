@@ -125,15 +125,7 @@ void Controller::slotUpdate()
         m_files.push_back(getRandomFile(m_set));
     }
 
-    QVector<QString> files;
-    if (m_set->style() == UM::IM_FILL)
-    {
-        files = adaptFilesToFillMode(m_files);
-    }
-    else
-    {
-        files = m_files;
-    }
+    QVector<QString> files = adaptFilesToFillMode(m_files, m_set);
 
     QString filename = m_settings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
@@ -273,8 +265,13 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
  * @param string[] _files
  * @return string[] _files
  */
-QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files)
+QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set)
 {
+    if (_set->style() != UM::IM_FILL)
+    {
+        return _files;
+    }
+
     QVector<QString> newFiles;
 
     int nb_walls = _files.size();
@@ -283,7 +280,15 @@ QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files
 
     for (int i=0; i<nb_walls; i++)
     {
-        QSize size = m_settings->wpSize(i);
+        QSize size;
+        if (_set->type() == UM::W_DESKTOP)
+        {
+            size = m_settings->wpSize(-1);
+        }
+        else
+        {
+            size = m_settings->wpSize(i);
+        }
 
         if (!size.isEmpty())
         {

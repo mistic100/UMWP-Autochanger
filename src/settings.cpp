@@ -128,7 +128,7 @@ const int Settings::hotkey(const QString &_key) const
 
 const QSize Settings::wpSize(int _i) const
 {
-    return m_wpSizes.value(_i, QSize(0,0));
+    return m_wpSizes.value(_i, QSize());
 }
 
 
@@ -345,12 +345,20 @@ void Settings::readNbMonitors()
     m_env["header_size"] = 7 + sizeof(DWORD) + nbMonitors*sizeof(RECT);
 
     // rect monitors
+    int minX=0, maxX=0, minY=0, maxY=0;
     for (int i=0; i<nbMonitors; i++)
     {
         RECT monitor;
         ifs.read((char*)&monitor, sizeof(RECT));
-        m_wpSizes.insert(i, QSize(monitor.right, monitor.bottom));
+        m_wpSizes.insert(i, QSize((int)monitor.right, (int)monitor.bottom));
+
+        minX = qMin(minX, (int)monitor.left);
+        minY = qMin(minY, (int)monitor.top);
+        maxX = qMax(maxX, (int)monitor.left+(int)monitor.right);
+        maxY = qMax(maxY, (int)monitor.top+(int)monitor.bottom);
     }
+
+    m_wpSizes.insert(-1, QSize(maxX-minX, maxY-minY));
 
     ifs.close();
 }

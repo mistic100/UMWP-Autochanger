@@ -38,7 +38,7 @@ public:
     Set*    getRandomSet(int _total);
     QString getRandomFile(Set* _set);
     void    generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
-    QVector<QString> adaptFilesToFillMode(const QVector<QString> &_files);
+    QVector<QString> adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set);
 
     void startTimer();
     bool startPause();
