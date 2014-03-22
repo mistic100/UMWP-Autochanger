@@ -18,6 +18,7 @@ private:
     QHash<QString, QVariant> m_options; // configurable options
     QHash<QString, QVariant> m_env;     // environnement variables
     QHash<QString, int>      m_hotkeys;
+    QHash<int, QSize>        m_wpSizes;
 
     QVector<Set*>   m_sets; // list of wallpaper sets
 
@@ -45,6 +46,7 @@ public:
     const int     iEnv(const QString &_key) const;
 
     const int     hotkey(const QString &_key) const;
+    const QSize   wpSize(int _i) const;
 
     Set*          getSet(int _i) const { return m_sets.at(_i); }
     Set*          getActiveSet(int _i) const;

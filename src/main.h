@@ -38,8 +38,8 @@ namespace UM {
         IM_CENTER = 0,
         IM_TILE = 1,
         IM_STRETCH = 2,
-        IM_STRETCH_PROP = 3
-//        IM_FILL = 4
+        IM_STRETCH_PROP = 3,
+        IM_FILL = 4
     };
     struct WP_MONITOR_FILE
     {
@@ -64,6 +64,7 @@ void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_na
 
 const QList<QVariant> hashToList(const QHash<QString, QVariant> &hash);
 const QList<QVariant> hashToList(const QHash<QString, int> &hash);
+const QList<QVariant> hashToList(const QHash<int, QSize> &hash);
 
 #define MAIN_H
 #endif // MAIN_H

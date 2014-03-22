@@ -59,6 +59,9 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
+* 1.7
+    * new: add "Fill" mode
+
 * [1.6 (08/03/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.6)
     * change: Alt-F4 effectively closes application without prompt
     * fixed: application closes when closing dialog window while main window is hidden

@@ -2,8 +2,8 @@
 #define VERSION_H
 
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "1.6.0"
-#define APP_VERSION_DW 1,6,0
+#define APP_VERSION "1.7.0"
+#define APP_VERSION_DW 1,7,0
 #define APP_COMPANYNAME "StrangePlanet"
 #define APP_FILEDESCRIPTION "UltraMon Wallpaper Autochanger"
 #define APP_LEGALCOPYRIGHT "Copyright (c) 2013-2014 StrangePlanet"

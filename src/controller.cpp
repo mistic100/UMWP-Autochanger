@@ -125,10 +125,20 @@ void Controller::slotUpdate()
         m_files.push_back(getRandomFile(m_set));
     }
 
+    QVector<QString> files;
+    if (m_set->style() == UM::IM_FILL)
+    {
+        files = adaptFilesToFillMode(m_files);
+    }
+    else
+    {
+        files = m_files;
+    }
+
     QString filename = m_settings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
-    generateFile(filename, m_files, m_set);
+    generateFile(filename, files, m_set);
 
     // remove old BMP file
     QFile::remove(m_settings->sEnv("bmppath"));
@@ -208,6 +218,7 @@ QString Controller::getRandomFile(Set* _set)
 /**
  * @brief Generate AutoChanger.wallpaper file
  * @param string _filename
+ * @param string[] _files
  * @param Set* _set
  */
 void Controller::generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set)
@@ -230,6 +241,12 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
     DWORD nb_walls = _files.size();
     buffer.append((char*)&nb_walls, sizeof(DWORD));
 
+    UM::IMAGE wp_style = _set->style();
+    if (wp_style == UM::IM_FILL)
+    {
+        wp_style = UM::IM_STRETCH_PROP;
+    }
+
     // write wallpapers
     for (unsigned int i=0; i<nb_walls; i++)
     {
@@ -237,7 +254,7 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
         wall.bgType = UM::BG_SOLID;
         wall.color1 = 0x00000000;
         wall.color2 = 0x00000000;
-        wall.imgStyle = _set->style();
+        wall.imgStyle = wp_style;
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
         _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
 
@@ -249,4 +266,49 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
     file.write(buffer);
     file.close();
+}
+
+/**
+ * @brief Resize image files and return an array of new paths in cache folder
+ * @param string[] _files
+ * @return string[] _files
+ */
+QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files)
+{
+    QVector<QString> newFiles;
+
+    int nb_walls = _files.size();
+
+    QString tmpRoot = QDir::toNativeSeparators(QFileInfo(QString::fromAscii(APP_CACHE_DIR)).absoluteFilePath()+"/");
+
+    for (int i=0; i<nb_walls; i++)
+    {
+        QSize size = m_settings->wpSize(i);
+
+        if (!size.isEmpty())
+        {
+            QFileInfo file(_files.at(i));
+            QString tmpPath = tmpRoot+file.completeBaseName()+"-"+QString::number(size.width())+"x"+QString::number(size.height())+"."+file.suffix();
+
+            if (!QFile::exists(tmpPath))
+            {
+                QImage image(file.absoluteFilePath());
+
+                image = image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+                int diffW = image.width()-size.width();
+                int diffH = image.height()-size.height();
+                image = image.copy(diffW/2, diffH/2, size.width(), size.height());
+
+                image.save(tmpPath);
+            }
+
+            newFiles.push_back(tmpPath);
+        }
+        else
+        {
+            newFiles.push_back(_files.at(i));
+        }
+    }
+
+    return newFiles;
 }

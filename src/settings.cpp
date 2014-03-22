@@ -38,8 +38,8 @@ Settings::Settings()
     m_env["bmppath"] = QVariant();
     m_env["umversion"] = "unknown";
     m_env["startlinkpath"] = QVariant();
-    m_env["nb_monitors"] = 1;
-    m_env["header_size"] = 7 + sizeof(DWORD) + sizeof(RECT);
+    m_env["nb_monitors"] = 0;
+    m_env["header_size"] = 7 + sizeof(DWORD);
 
     load();
     init();
@@ -49,6 +49,7 @@ Settings::Settings()
         qxtLog->debug(hashToList(m_options));
         qxtLog->debug(hashToList(m_hotkeys));
         qxtLog->debug(hashToList(m_env));
+        qxtLog->debug(hashToList(m_wpSizes));
         qxtLog->debug("App state: "+ QString::number(UMWP_STATE));
         qxtLog->debug("Autostart: "+ QString::number(isAutostart()));
 
@@ -75,32 +76,32 @@ Settings::~Settings()
 /*
  * getters
  */
-const bool Settings::bParam(QString const &_key) const
+const bool Settings::bParam(const QString &_key) const
 {
     return m_options.value(_key, false).toBool();
 }
 
-const int Settings::iParam(QString const &_key) const
+const int Settings::iParam(const QString &_key) const
 {
     return m_options.value(_key, 0).toInt();
 }
 
-const QString Settings::sParam(QString const &_key) const
+const QString Settings::sParam(const QString &_key) const
 {
     return m_options.value(_key, "").toString();
 }
 
-const bool Settings::bEnv(QString const &_key) const
+const bool Settings::bEnv(const QString &_key) const
 {
     return m_env.value(_key, false).toBool();
 }
 
-const int Settings::iEnv(QString const &_key) const
+const int Settings::iEnv(const QString &_key) const
 {
     return m_env.value(_key, 0).toInt();
 }
 
-const QString Settings::sEnv(QString const &_key) const
+const QString Settings::sEnv(const QString &_key) const
 {
     return m_env.value(_key, "").toString();
 }
@@ -123,6 +124,11 @@ const bool Settings::isAutostart() const
 const int Settings::hotkey(const QString &_key) const
 {
     return m_hotkeys.value(_key, 0);
+}
+
+const QSize Settings::wpSize(int _i) const
+{
+    return m_wpSizes.value(_i, QSize(0,0));
 }
 
 
@@ -337,6 +343,14 @@ void Settings::readNbMonitors()
 
     m_env["nb_monitors"] = nbMonitors;
     m_env["header_size"] = 7 + sizeof(DWORD) + nbMonitors*sizeof(RECT);
+
+    // rect monitors
+    for (int i=0; i<nbMonitors; i++)
+    {
+        RECT monitor;
+        ifs.read((char*)&monitor, sizeof(RECT));
+        m_wpSizes.insert(i, QSize(monitor.right, monitor.bottom));
+    }
 
     ifs.close();
 }

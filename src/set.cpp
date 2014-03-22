@@ -18,7 +18,7 @@ Set::Set(const QString &_path, const QString &_name)
     }
 
     m_type = UM::W_MONITOR;
-    m_style = UM::IM_CENTER;
+    m_style = UM::IM_FILL;
     m_active = true;
     m_lastModif = 0;
     m_hotkey = 0;

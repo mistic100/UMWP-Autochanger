@@ -138,3 +138,15 @@ const QList<QVariant> hashToList(const QHash<QString, int> &hash)
 
     return list;
 }
+
+const QList<QVariant> hashToList(const QHash<int, QSize> &hash)
+{
+    QList<QVariant> list;
+
+    for (QHash<int, QSize>::const_iterator it=hash.begin(); it!=hash.end(); ++it)
+    {
+        list.push_back(QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height()));
+    }
+
+    return list;
+}

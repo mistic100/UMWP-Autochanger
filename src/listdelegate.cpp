@@ -87,8 +87,8 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         im_icon = QIcon(":/icon/im_stretch"); break;
     case 3:
         im_icon = QIcon(":/icon/im_stretch_prop"); break;
-//    case 4:
-//        im_icon = QIcon(":/icon/im_fill"); break;
+    case 4:
+        im_icon = QIcon(":/icon/im_fill"); break;
     }
     im_icon.paint(painter, rect, Qt::AlignBottom|Qt::AlignRight);
 
