@@ -299,6 +299,15 @@ QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files
             {
                 QImage image(file.absoluteFilePath());
 
+                // if image ratio is almost the same, do not waste time in image croppping
+                double curRatio = (double)image.size().width()/image.size().height();
+                double targetRatio = (double)size.width()/size.height();
+                if (qAbs(curRatio - targetRatio) < 0.02)
+                {
+                    newFiles.push_back(_files.at(i));
+                    continue;
+                }
+
                 image = image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
                 int diffW = image.width()-size.width();
                 int diffH = image.height()-size.height();
