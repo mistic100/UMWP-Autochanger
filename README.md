@@ -16,6 +16,9 @@ License       : GNU General Public License Version 3
 * UltraMon 3.2.1 or higher
 * Windows 7/8 32/64 bits
 
+## Translation
+The application is currently available in English and French. [A translation page](https://www.transifex.com/projects/p/umwp-autochanger) has been created on Transifex, feel free to register and contribute.
+
 
 ## Installation
 1. Install and configure UltraMon on your computer.
