@@ -56,8 +56,8 @@ RESOURCES += \
     UMWP_Autochanger.qrc
 
 TRANSLATIONS += \
-    lang/en.ts \
-    lang/fr.ts
+    lang/en_GB/main.ts \
+    lang/fr_FR/main.ts
 
 OTHER_FILES += \
     UMWP_Autochanger.rc

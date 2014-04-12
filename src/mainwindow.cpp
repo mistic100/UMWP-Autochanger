@@ -454,16 +454,22 @@ void MainWindow::slotShowHelp()
     QString lang = QLocale::system().name().section('_', 0, 0);
     if (lang.compare("fr")==0)
     {
-        helpFile.setFileName(":/lang/help_fr");
+        helpFile.setFileName(":/lang/fr_FR/help");
     }
     else
     {
-        helpFile.setFileName(":/lang/help_en");
+        helpFile.setFileName(":/lang/en_GB/help");
     }
+
+    QString mainText;
+    mainText.append("<style>");
+    mainText.append("dt { font-weight:bold; }");
+    mainText.append("dd { margin-bottom:1em; margin-left:1em; }");
+    mainText.append("</style>");
 
     helpFile.open(QIODevice::ReadOnly);
     QTextStream content(&helpFile);
-    QString mainText = content.readAll();
+    mainText.append(content.readAll());
     helpFile.close();
 
     QMessageBox dialog(this);

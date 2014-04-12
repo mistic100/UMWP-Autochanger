@@ -33,10 +33,12 @@
         <file alias="deactivate">images/buttons/button_deactivate.png</file>
         <file alias="delete">images/buttons/button_delete.png</file>
     </qresource>
-    <qresource prefix="/lang">
-        <file alias="en">lang/en.qm</file>
-        <file alias="fr">lang/fr.qm</file>
-        <file alias="help_en">lang/help_en.htm</file>
-        <file alias="help_fr">lang/help_fr.htm</file>
+    <qresource prefix="/lang/en_GB">
+        <file alias="help">lang/en_GB/help.htm</file>
+        <file alias="main">lang/en_GB/main.qm</file>
+    </qresource>
+    <qresource prefix="/lang/fr_FR">
+        <file alias="help">lang/fr_FR/help.htm</file>
+        <file alias="main">lang/fr_FR/main.qm</file>
     </qresource>
 </RCC>

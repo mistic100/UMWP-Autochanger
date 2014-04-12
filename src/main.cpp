@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     // app translations
     QTranslator appTranslator;
-    appTranslator.load(":/lang/" + QLocale::system().name());
+    appTranslator.load(":/lang/" + QLocale::system().name() + "/main");
     app.installTranslator(&appTranslator);
 
     QDir dirHelper;
