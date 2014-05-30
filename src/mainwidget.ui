@@ -11,17 +11,23 @@
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="margin">
+    <number>6</number>
+   </property>
    <item>
     <widget class="QListWidget" name="mainList"/>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
      <item>
       <widget class="QPushButton" name="buttonAdd">
        <property name="maximumSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="toolTip">
@@ -34,8 +40,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="flat">
@@ -47,8 +53,8 @@
       <widget class="QPushButton" name="buttonActivate">
        <property name="maximumSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="toolTip">
@@ -61,8 +67,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="flat">
@@ -74,8 +80,8 @@
       <widget class="QPushButton" name="buttonDeactivate">
        <property name="maximumSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="toolTip">
@@ -88,8 +94,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="flat">
@@ -101,8 +107,8 @@
       <widget class="QPushButton" name="buttonDelete">
        <property name="maximumSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="toolTip">
@@ -115,8 +121,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>62</width>
-         <height>40</height>
+         <width>58</width>
+         <height>36</height>
         </size>
        </property>
        <property name="flat">

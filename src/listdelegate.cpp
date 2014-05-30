@@ -29,35 +29,35 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     // get configuration
     Set* set = m_settings->getSet(index.data(Qt::UserRole).toInt());
     bool selected = option.state & QStyle::State_Selected;
+    QRect baseRect = option.rect.adjusted(0, 0, -1, 0);
     QRect rect;
 
     painter->setOpacity(!set->isActive() ? 0.7 : 1.0);
 
 
     // BACKGROUND
-    rect = option.rect.adjusted(0, 0, -1, 0);
+    rect = baseRect;
     if (selected)
     {
         QLinearGradient gradientSelected(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
-        gradientSelected.setColorAt(0.0, QColor(119,213,247));
-        gradientSelected.setColorAt(0.9, QColor(27,134,183));
-        gradientSelected.setColorAt(1.0, QColor(0,120,174));
+        gradientSelected.setColorAt(0.0, QColor(109, 191, 224));
+        gradientSelected.setColorAt(0.9, QColor(27, 134, 183));
+        gradientSelected.setColorAt(1.0, QColor(0, 120, 174));
 
-        painter->setPen(QColor(0,90,131));
+        painter->setPen(QColor(0, 90, 131));
         painter->setBrush(gradientSelected);
-        painter->drawRoundedRect(rect, 3, 3);
+        painter->drawRect(rect);
     }
     else
     {
-        painter->setPen(QColor(211,211,211));
-        painter->setBrush( index.row()%2 ? Qt::white : QColor(255,254,239) ); // alternating colors
-        painter->drawRoundedRect(rect, 2, 2);
+        painter->setPen(QColor(211, 211, 211));
+        painter->setBrush(index.row()%2 ? Qt::white : QColor(255, 254, 239)); // alternating colors
+        painter->drawRect(rect);
     }
 
 
     // ICONS
     QIcon a_icon, w_icon, im_icon;
-    rect = option.rect.adjusted(3, 3, -3, -1);
 
     switch (set->isActive())
     {
@@ -66,6 +66,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     case false:
         a_icon = QIcon(":/icon/bullet_red"); break;
     }
+    rect = baseRect.adjusted(2, 0, 0, 0);
     a_icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
 
     switch (set->type())
@@ -75,6 +76,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     case 1:
         w_icon = QIcon(":/icon/w_monitor"); break;
     }
+    rect = baseRect.adjusted(0, 3, -3, 0);
     w_icon.paint(painter, rect, Qt::AlignTop|Qt::AlignRight);
 
     switch (set->style())
@@ -90,11 +92,29 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     case 4:
         im_icon = QIcon(":/icon/im_fill"); break;
     }
+    rect = baseRect.adjusted(0, 0, -2, 0);
     im_icon.paint(painter, rect, Qt::AlignBottom|Qt::AlignRight);
 
+    // HOTKEY
+    rect = baseRect.adjusted(0, 3, -23, 0);
+    painter->setFont(QFont("Calibri", 9, -1, true));
+    if (selected)
+    {
+        painter->setPen(QColor(200, 200, 200));
+    }
+    else
+    {
+        painter->setPen(Qt::darkGray);
+    }
+
+    QString hotkey = QKeySequence(set->hotkey()).toString(QKeySequence::NativeText);
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
+
+    QFontMetrics metric(painter->font());
+    int hkWidth = metric.width(hotkey);
 
     // TITLE
-    rect = option.rect.adjusted(20, 1, -25, 0);
+    rect = baseRect.adjusted(19, 1, -hkWidth-26, 0);
     painter->setFont(QFont("Calibri", 11));
     if (selected)
     {
@@ -102,18 +122,18 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     }
     else
     {
-        painter->setPen(QColor(51,51,51));
+        painter->setPen(QColor(51, 51, 51));
     }
 
     QString title = QFontMetrics(painter->font()).elidedText(set->fullName(), Qt::ElideMiddle, rect.width());
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title, &rect);
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title);
 
     // PATH
-    rect = option.rect.adjusted(20, 19, -25, 0);
+    rect = baseRect.adjusted(19, 19, -25, 0);
     painter->setFont(QFont("Calibri", 9, -1, true));
     if (selected)
     {
-        painter->setPen(QColor(230,230,230));
+        painter->setPen(QColor(200, 200, 200));
     }
     else
     {
@@ -121,5 +141,5 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     }
 
     QString path = QFontMetrics(painter->font()).elidedText(set->path(), Qt::ElideMiddle, rect.width());
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, path, &rect);
+    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, path);
 }
