@@ -30,13 +30,9 @@ public:
         connect(m_timeLine, SIGNAL(frameChanged(int)), this, SLOT(frameChanged(int)));
     }
 
-    bool eventFilter(QObject*, QEvent* _event)
-    {
-        return _event->type() == QEvent::Paint;
-    }
-
     void start()
     {
+        hide();
         m_timeLine->start();
     }
 
@@ -56,6 +52,11 @@ public:
     {
         m_target->removeEventFilter(this);
         m_target->update();
+    }
+
+    bool eventFilter(QObject*, QEvent* _event)
+    {
+        return _event->type() == QEvent::Paint;
     }
 
 public slots:
