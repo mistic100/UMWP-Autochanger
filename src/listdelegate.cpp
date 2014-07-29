@@ -27,7 +27,7 @@ QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) 
 void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     // get configuration
-    Set* set = m_settings->getSet(index.data(Qt::UserRole).toInt());
+    Set* set = m_settings->set(index.data(Qt::UserRole).toInt());
     bool selected = option.state & QStyle::State_Selected;
     QRect baseRect = option.rect.adjusted(0, 0, -1, 0);
     QRect rect;

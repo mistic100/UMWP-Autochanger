@@ -37,7 +37,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
     ui->selectStyle->setCurrentIndex(index);
 
     ui->inputHotkey->setHotkey(_set->hotkey());
-    ui->inputHotkey->setDisabled(!m_settings->bParam("use_hotkeys"));
+    ui->inputHotkey->setDisabled(!m_settings->opt("use_hotkeys").toBool());
 
     qxtLog->trace("SetEditDialog openned");
 }

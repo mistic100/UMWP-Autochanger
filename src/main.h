@@ -62,9 +62,5 @@ bool isImageFile(const QString &_filename);
 void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value);
 void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value);
 
-const QList<QVariant> hashToList(const QHash<QString, QVariant> &hash);
-const QList<QVariant> hashToList(const QHash<QString, int> &hash);
-const QList<QVariant> hashToList(const QHash<int, QSize> &hash);
-
 #define MAIN_H
 #endif // MAIN_H

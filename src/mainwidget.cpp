@@ -86,7 +86,7 @@ QList<int> MainWidget::getSelectedIndexes()
 
     for (QList<QListWidgetItem*>::iterator it=items.begin(); it!=items.end(); it++)
     {
-        indexes.push_back((*it)->data(Qt::UserRole).toInt());
+        indexes.append((*it)->data(Qt::UserRole).toInt());
     }
 
     qSort(indexes);
@@ -99,13 +99,13 @@ QList<int> MainWidget::getSelectedIndexes()
 void MainWidget::on_buttonAdd_clicked()
 {
     QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"),
-                                                        m_ctrl->settings()->sParam("last_dir"));
+                                                        m_ctrl->settings()->opt("last_dir").toString());
 
     if (!dirname.isEmpty())
     {
         QDir dir(dirname);
         dir.cdUp();
-        m_ctrl->settings()->setParam("last_dir", dir.absolutePath());
+        m_ctrl->settings()->setOpt("last_dir", dir.absolutePath());
 
         dirname.replace('/', '\\');
         m_ctrl->settings()->addSet(dirname);
@@ -152,7 +152,7 @@ void MainWidget::on_buttonDeactivate_clicked()
 void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
 {
     int index = getSelectedIndexes().at(0);
-    Set* set = m_ctrl->settings()->getSet(index);
+    Set* set = m_ctrl->settings()->set(index);
 
     SetEditDialog dialog(this, set, m_ctrl->settings());
 
@@ -184,7 +184,7 @@ void MainWidget::on_mainList_itemSelectionChanged()
 
         for (QList<int>::iterator i=indexes.begin(); i!=indexes.end(); i++)
         {
-            if (m_ctrl->settings()->getSet(*i)->isActive())
+            if (m_ctrl->settings()->set(*i)->isActive())
             {
                 nbActive++;
             }

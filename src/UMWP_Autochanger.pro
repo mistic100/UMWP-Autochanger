@@ -22,24 +22,26 @@ SOURCES += \
     listdelegate.cpp \
     settings.cpp \
     errorwidget.cpp \
-    versionchecker.cpp \
     mainwidget.cpp \
     seteditdialog.cpp \
     configdialog.cpp \
     qlineedithotkey.cpp \
     qtoolbarext.cpp \
-    previewdialog.cpp
+    previewdialog.cpp \
+    sysreader.cpp \
+    reader.cpp
 
 HEADERS += \
+    lib/dirent.h \
+    lib/createshortcut.h \
+    lib/UltraMon.h \
     mainwindow.h \
     controller.h \
-    dirent.h \
     set.h \
     main.h \
     listdelegate.h \
     settings.h \
     errorwidget.h \
-    createshortcut.h \
     versionchecker.h \
     listproxystyle.h \
     mainwidget.h \
@@ -50,7 +52,9 @@ HEADERS += \
     qtoolbarext.h \
     previewdialog.h \
     constants.h \
-    widgetblinker.h
+    widgetblinker.h \
+    sysreader.h \
+    qscreen.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc

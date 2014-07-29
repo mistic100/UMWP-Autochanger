@@ -1,5 +1,5 @@
 #include "set.h"
-#include "dirent.h"
+#include "lib/dirent.h"
 
 
 /**
@@ -42,7 +42,7 @@ const QString Set::fullName() const
  * @param int _i
  * @return  string
  */
-const QString Set::getFile(int _i) const
+const QString Set::gile(int _i) const
 {
     if (_i < m_files.size())
     {
@@ -61,7 +61,7 @@ const QString Set::getFile(int _i) const
  * @param int _level
  * @return double
  */
-double Set::getLastModif(QString _child, int _level)
+double Set::lastChange(const QString &_child, int _level)
 {
     QString path = m_path+_child;
 
@@ -94,7 +94,7 @@ double Set::getLastModif(QString _child, int _level)
         {
             if (pEntry->d_type==DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
             {
-                double subDate = getLastModif(_child+filename+"\\", _level+1);
+                double subDate = lastChange(_child+filename+"\\", _level+1);
                 if (subDate > date)
                 {
                     date = subDate;
@@ -117,11 +117,11 @@ double Set::getLastModif(QString _child, int _level)
  * @param string _child
  * @param int _level
  */
-void Set::populateFiles(QString _child, int _level)
+void Set::populateFiles(const QString &_child, int _level)
 {
     if (_child.isEmpty())
     {
-        double date = getLastModif();
+        double date = lastChange();
         if (date <= m_lastModif)
         {
             return;
@@ -148,7 +148,7 @@ void Set::populateFiles(QString _child, int _level)
             }
             else if (pEntry->d_type == DT_REG && isImageFile(filename))
             {
-                m_files.push_back(path+filename);
+                m_files.append(path+filename);
             }
 
             pEntry = readdir(pDir);
@@ -170,6 +170,7 @@ void Set::populateFiles(QString _child, int _level)
 void Set::readCache()
 {
     QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+
     if (file.exists() && file.open(QIODevice::ReadOnly))
     {
         QDataStream in(&file);
@@ -185,6 +186,7 @@ void Set::readCache()
 void Set::writeCache()
 {
     QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+
     if (file.open(QIODevice::WriteOnly))
     {
         QDataStream out(&file);

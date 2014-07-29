@@ -55,9 +55,15 @@ int main(int argc, char *argv[])
     }
 
     Settings settings;
-    Controller ctrl(&settings);
-    MainWindow window(&ctrl);
+    settings.init();
+    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
+    {
+        settings.log();
+    }
 
+    Controller ctrl(&settings);
+
+    MainWindow window(&ctrl);
     window.init();
 
     int ret = app.exec();
@@ -110,43 +116,4 @@ void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_na
     QDomElement element = _dom->createElement(_name);
     setDomNodeValue(_dom, &element, _value);
     _parent->appendChild(element);
-}
-
-/*
- * helpers for logger
- */
-const QList<QVariant> hashToList(const QHash<QString, QVariant> &hash)
-{
-    QList<QVariant> list;
-
-    for (QHash<QString, QVariant>::const_iterator it=hash.begin(); it!=hash.end(); ++it)
-    {
-        list.push_back(it.key() +": "+ it.value().toString());
-    }
-
-    return list;
-}
-
-const QList<QVariant> hashToList(const QHash<QString, int> &hash)
-{
-    QList<QVariant> list;
-
-    for (QHash<QString, int>::const_iterator it=hash.begin(); it!=hash.end(); ++it)
-    {
-        list.push_back(it.key() +": "+ QString::number(it.value()));
-    }
-
-    return list;
-}
-
-const QList<QVariant> hashToList(const QHash<int, QSize> &hash)
-{
-    QList<QVariant> list;
-
-    for (QHash<int, QSize>::const_iterator it=hash.begin(); it!=hash.end(); ++it)
-    {
-        list.push_back(QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height()));
-    }
-
-    return list;
 }

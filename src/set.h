@@ -37,15 +37,15 @@ public:
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
 
-    double getLastModif(QString _child="", int _level=0);
-    void populateFiles(QString _child="", int _level=0);
+    double lastChange(const QString &_child="", int _level=0);
+    void populateFiles(const QString &_child="", int _level=0);
 
     void  readCache();
     void  writeCache();
     void  deleteCache();
 
     const QString fullName() const;
-    const QString getFile(int _i) const;
+    const QString gile(int _i) const;
 };
 
 #endif // SET_H

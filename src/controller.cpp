@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "dirent.h"
+#include "lib/dirent.h"
 #include "main.h"
 #include "controller.h"
 #include "mainwidget.h"
@@ -27,7 +27,7 @@ Controller::Controller(Settings* _settings) : QObject(0)
  */
 void Controller::checkVersion()
 {
-    if (m_settings->bParam("check_updates"))
+    if (m_settings->opt("check_updates").toBool())
     {
         VersionChecker* pVersionChecker = new VersionChecker(0);
         connect(pVersionChecker, SIGNAL(newVersionAvailable(const QString)),
@@ -46,13 +46,13 @@ void Controller::checkVersion()
 }
 
 /**
- * @brief Stop the timer, update the wallpaper and restart the timer
+ * @brief Stop the timer, update the delay and restart the timer
  */
 void Controller::startTimer()
 {
     qxtLog->info("Start timer");
     m_mainTimer->stop();
-    m_mainTimer->setInterval(m_settings->iParam("delay")*1000);
+    m_mainTimer->setInterval(m_settings->opt("delay").toInt()*1000);
     m_mainTimer->start();
 }
 
@@ -84,7 +84,7 @@ void Controller::slotUpdate()
     qxtLog->info("Update !");
 
     // update delay if needed
-    int delay = m_settings->iParam("delay")*1000;
+    int delay = m_settings->opt("delay").toInt()*1000;
     if (delay != m_mainTimer->interval())
     {
         qxtLog->debug("Timer delay changed to: "+delay);
@@ -92,10 +92,10 @@ void Controller::slotUpdate()
     }
 
     // update config
-    if (m_settings->bParam("check"))
+    if (m_settings->opt("check").toBool())
     {
         m_settings->updateSets();
-        m_settings->readNbMonitors();
+        m_settings->refreshMonitors();
         emit listChanged(false);
     }
 
@@ -115,28 +115,28 @@ void Controller::slotUpdate()
 
     if (m_set->type() == UM::W_MONITOR)
     {
-        for (int i=0, l=m_settings->iEnv("nb_monitors"); i<l; i++)
+        for (int i=0, l=m_settings->env("nb_monitors").toInt(); i<l; i++)
         {
-            m_files.push_back(getRandomFile(m_set));
+            m_files.append(getRandomFile(m_set));
         }
     }
     else
     {
-        m_files.push_back(getRandomFile(m_set));
+        m_files.append(getRandomFile(m_set));
     }
 
     QVector<QString> files = adaptFilesToFillMode(m_files, m_set);
 
-    QString filename = m_settings->sEnv("wallpath") + QString::fromAscii(APP_WALLPAPER_FILE);
+    QString filename = m_settings->env("wallpath").toString() + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
     generateFile(filename, files, m_set);
 
     // remove old BMP file
-    QFile::remove(m_settings->sEnv("bmppath"));
+    QFile::remove(m_settings->env("bmppath").toString());
 
     // execute UltraMonDesktop
-    QString cmd = "\"" + m_settings->sParam("umpath") + "\" /load \"" + filename + "\"";
+    QString cmd = "\"" + m_settings->opt("umpath").toString() + "\" /load \"" + filename + "\"";
     QProcess::startDetached(cmd);
 
     qxtLog->trace("Launch UltraMonDesktop");
@@ -153,13 +153,13 @@ Set* Controller::getRandomSet(int _total)
 {
     if (_total == 1)
     {
-        return m_settings->getActiveSet(0);
+        return m_settings->activeSet(0);
     }
 
     uniform_int<int> unif(0, _total-1);
     int counter = unif(m_randomEngine);
 
-    return m_settings->getActiveSet(counter);
+    return m_settings->activeSet(counter);
 }
 
 /**
@@ -174,10 +174,10 @@ QString Controller::getRandomFile(Set* _set)
     // only one file in the set ?!
     if (total == 1)
     {
-        return _set->getFile(0);
+        return _set->gile(0);
     }
 
-    // rare case for small sets
+    // rare case for very small sets
     if (total <= m_files.size())
     {
         uniform_int<int> unif(0, m_files.size()-1);
@@ -193,7 +193,7 @@ QString Controller::getRandomFile(Set* _set)
     while (loop > 0)
     {
         int counter = unif(m_randomEngine);
-        file = _set->getFile(counter);
+        file = _set->gile(counter);
 
         if (!m_files.contains(file))
         {
@@ -204,6 +204,7 @@ QString Controller::getRandomFile(Set* _set)
     }
 
     qxtLog->debug("Current file: "+file);
+
     return file;
 }
 
@@ -215,15 +216,8 @@ QString Controller::getRandomFile(Set* _set)
  */
 void Controller::generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set)
 {
-    // open default file
-    QString defaultFilename = m_settings->sEnv("wallpath") + "default.wallpaper";
-    QFile defaultFile(defaultFilename);
-    defaultFile.open(QIODevice::ReadOnly);
-
     // get header from default.wallpaper
-    QByteArray buffer = defaultFile.readAll();
-    defaultFile.close();
-    buffer.truncate(m_settings->iEnv("header_size"));
+    QByteArray buffer(m_settings->header());
 
     // write wallpaper type
     UM::WALLPAPER wp_type = _set->type();
@@ -273,13 +267,13 @@ QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files
     }
 
     QVector<QString> newFiles;
-
     int nb_walls = _files.size();
 
     QString tmpRoot = QDir::toNativeSeparators(QFileInfo(QString::fromAscii(APP_CACHE_DIR)).absoluteFilePath()+"/");
 
     for (int i=0; i<nb_walls; i++)
     {
+        // target size
         QSize size;
         if (_set->type() == UM::W_DESKTOP)
         {
@@ -302,13 +296,17 @@ QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files
                 // if image ratio is almost the same, do not waste time in image croppping
                 double curRatio = (double)image.size().width()/image.size().height();
                 double targetRatio = (double)size.width()/size.height();
+
                 if (qAbs(curRatio - targetRatio) < 0.02)
                 {
-                    newFiles.push_back(_files.at(i));
+                    newFiles.append(_files.at(i));
                     continue;
                 }
 
+                // scale
                 image = image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+
+                // crop
                 int diffW = image.width()-size.width();
                 int diffH = image.height()-size.height();
                 image = image.copy(diffW/2, diffH/2, size.width(), size.height());
@@ -316,11 +314,11 @@ QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files
                 image.save(tmpPath);
             }
 
-            newFiles.push_back(tmpPath);
+            newFiles.append(tmpPath);
         }
         else
         {
-            newFiles.push_back(_files.at(i));
+            newFiles.append(_files.at(i));
         }
     }
 

@@ -25,6 +25,8 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
     m_altPressed = false;
     installEventFilter(this);
 
+    setMinimumSize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
+
     m_ctrl = _ctrl;
     connect(m_ctrl, SIGNAL(newVersionAvailable(const QString)), this, SLOT(slotDisplayNewVersion(const QString)));
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(updateTrayQuickMenu()));
@@ -43,7 +45,7 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
     copyright+= QString::fromAscii(APP_NAME) + "</a>";
     copyright+= " " + QString::fromAscii(APP_VERSION);
     copyright+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a>";
-    copyright+= " " + m_ctrl->settings()->sEnv("umversion");
+    copyright+= " " + m_ctrl->settings()->env("umversion").toString();
 
     QLabel* statusLabel = new QLabel(copyright);
     statusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -161,8 +163,7 @@ void MainWindow::showError()
 
     connect(widget, SIGNAL(pathSaved()), this, SLOT(init()));
 
-    setMinimumSize(400, 200);
-    setMaximumSize(400, 200);
+    resize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
 
     show();
 }
@@ -182,8 +183,6 @@ void MainWindow::showMain()
     MainWidget* widget = new MainWidget(this, m_ctrl);
     setCentralWidget(widget);
 
-    setMinimumSize(440, 240);
-    setMaximumSize(9999, 9999); // no maximum size
     resize(m_ctrl->settings()->windowSize());
 
     m_ctrl->checkVersion();
@@ -193,7 +192,7 @@ void MainWindow::showMain()
     // window is hidden by default if the config is not empty
     if (
             m_ctrl->settings()->nbSets()>0
-         && m_ctrl->settings()->bParam("minimize")
+         && m_ctrl->settings()->opt("minimize").toBool()
     ) {
         slotToggleWindow(true);
     }
@@ -219,18 +218,19 @@ void MainWindow::defineHotkeys()
 {
     clearHotkeys();
 
-    if (m_ctrl->settings()->bParam("use_hotkeys"))
+    if (m_ctrl->settings()->opt("use_hotkeys").toBool())
     {
+        // sets hotkeys
         QHash<int, QList<int>> mergedHotkeys;
         GlobalShortcut* shortcut;
 
         for (int i=0, l=m_ctrl->settings()->nbSets(); i<l; i++)
         {
-            Set* pSet = m_ctrl->settings()->getSet(i);
+            Set* pSet = m_ctrl->settings()->set(i);
 
             if (pSet->hotkey())
             {
-                mergedHotkeys[pSet->hotkey()].push_back(i);
+                mergedHotkeys[pSet->hotkey()].append(i);
             }
         }
 
@@ -240,9 +240,10 @@ void MainWindow::defineHotkeys()
             shortcut->setShortcut(QKeySequence(it.key()));
             shortcut->setSets(it.value());
             connect(shortcut, SIGNAL(activated()), this, SLOT(slotHotkey()));
-            m_shortcuts.push_back(shortcut);
+            m_shortcuts.append(shortcut);
         }
 
+        // main hotkeys
         QHash<GlobalShortcut::Type, int> otherHotkeys;
         otherHotkeys.insert(GlobalShortcut::REFRESH, m_ctrl->settings()->hotkey("refresh"));
         otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_ctrl->settings()->hotkey("startpause"));
@@ -256,7 +257,7 @@ void MainWindow::defineHotkeys()
                 shortcut->setShortcut(QKeySequence(it.value()));
                 shortcut->setType(it.key());
                 connect(shortcut, SIGNAL(activated()), this, SLOT(slotHotkey()));
-                m_shortcuts.push_back(shortcut);
+                m_shortcuts.append(shortcut);
             }
         }
     }
@@ -271,7 +272,7 @@ void MainWindow::updateTrayQuickMenu()
 
     for (int i=0, l=m_ctrl->settings()->nbSets(); i<l; i++)
     {
-        Set* set = m_ctrl->settings()->getSet(i);
+        Set* set = m_ctrl->settings()->set(i);
 
         QAction* action = m_trayQuickMenu->addAction(set->name());
         action->setData(i);
@@ -308,7 +309,7 @@ void MainWindow::slotTrayQuickClicked()
  */
 void MainWindow::slotTrayAction(QSystemTrayIcon::ActivationReason _reason)
 {
-    if (_reason && _reason==QSystemTrayIcon::DoubleClick)
+    if (_reason && _reason == QSystemTrayIcon::DoubleClick)
     {
         slotToggleWindow();
     }
@@ -324,13 +325,11 @@ void MainWindow::slotToggleWindow(bool _forceHide)
     {
         hide();
 
-        if (m_ctrl->settings()->iParam("msgcount") < 3)
+        if (m_ctrl->settings()->opt("show_notifications").toBool() &&
+                m_ctrl->settings()->opt("msgcount").toInt() < 3)
         {
-            if (m_ctrl->settings()->bParam("show_notifications"))
-            {
-                m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
-            }
-            m_ctrl->settings()->addMsgCount();
+            m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+            m_ctrl->settings()->incrementMsgCount();
         }
 
         if (!_forceHide)
@@ -401,7 +400,6 @@ void MainWindow::slotExport()
     QString filename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
                                                     QDir::homePath() + QDir::separator() + "umwp_settings.xml",
                                                     tr("XML files (*.xml)"));
-
     if (filename.isEmpty())
     {
         return;
@@ -420,20 +418,19 @@ void MainWindow::slotImport()
     QString filename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
                                                      QDir::homePath(),
                                                      tr("XML files (*.xml)"));
-
     if (filename.isEmpty())
     {
         return;
     }
 
     // preserve UM path
-    QString UMPath = m_ctrl->settings()->sParam("umpath");
+    QString UMPath = m_ctrl->settings()->opt("umpath").toString();
 
     qxtLog->trace("Import config from \""+ filename +"\"");
 
     if (m_ctrl->settings()->load(filename))
     {
-        m_ctrl->settings()->setParam("umpath", UMPath);
+        m_ctrl->settings()->setOpt("umpath", UMPath);
 
         m_ctrl->emitListChanged(true);
         m_ctrl->slotUpdate();
@@ -524,7 +521,7 @@ void MainWindow::slotHotkey()
     case GlobalShortcut::STARTPAUSE:
         slotStartPause();
 
-        if (!isVisible() && m_ctrl->settings()->bParam("show_notifications"))
+        if (!isVisible() && m_ctrl->settings()->opt("show_notifications").toBool())
         {
             if (!m_ctrl->isPaused())
             {
@@ -546,12 +543,12 @@ void MainWindow::slotHotkey()
         m_ctrl->emitListChanged();
         m_ctrl->slotUpdate();
 
-        if (!isVisible() && m_ctrl->settings()->bParam("show_notifications"))
+        if (!isVisible() && m_ctrl->settings()->opt("show_notifications").toBool())
         {
             QString setsName;
-            for (int i=0, l=m_ctrl->settings()->nbActiveSets(false); i<l; i++)
+            for (int i=0, l=m_ctrl->settings()->nbActiveSets(); i<l; i++)
             {
-                Set* set = m_ctrl->settings()->getActiveSet(i);
+                Set* set = m_ctrl->settings()->activeSet(i);
 
                 if (i>0) setsName.append(", ");
                 setsName.append(set->name());

@@ -41,7 +41,7 @@ void PreviewDialog::draw()
     int width = 150;
     if (m_ctrl->set()->type() == UM::W_DESKTOP)
     {
-        width*= m_ctrl->settings()->iEnv("nb_monitors");
+        width*= m_ctrl->settings()->env("nb_monitors").toInt();
     }
 
     QPen pen(Qt::SolidLine);

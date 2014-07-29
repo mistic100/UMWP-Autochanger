@@ -18,24 +18,24 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _settings) : QDialog(_par
 
     m_settings = _settings;
 
-    ui->optionMinimize->setChecked(m_settings->bParam("minimize"));
-    ui->optionCheckFiles->setChecked(m_settings->bParam("check"));
-    ui->optionCheckUpdates->setChecked(m_settings->bParam("check_updates"));
-    ui->optionAutostart->setChecked(m_settings->isAutostart());
-    ui->optionUseHotkeys->setChecked(m_settings->bParam("use_hotkeys"));
-    ui->optionShowNotifications->setChecked(m_settings->bParam("show_notifications"));
+    ui->optionMinimize->setChecked(         m_settings->opt("minimize").toBool());
+    ui->optionCheckFiles->setChecked(       m_settings->opt("check").toBool());
+    ui->optionCheckUpdates->setChecked(     m_settings->opt("check_updates").toBool());
+    ui->optionAutostart->setChecked(        m_settings->isAutostart());
+    ui->optionUseHotkeys->setChecked(       m_settings->opt("use_hotkeys").toBool());
+    ui->optionShowNotifications->setChecked(m_settings->opt("show_notifications").toBool());
 
     ui->optionAutostart->setDisabled(!m_settings->canAddShortcut());
 
-    ui->hotkeyRefresh->setDisabled(!m_settings->bParam("use_hotkeys"));
-    ui->hotkeyShowHide->setDisabled(!m_settings->bParam("use_hotkeys"));
-    ui->hotkeyStartPause->setDisabled(!m_settings->bParam("use_hotkeys"));
+    ui->hotkeyRefresh->setDisabled(     !m_settings->opt("use_hotkeys").toBool());
+    ui->hotkeyShowHide->setDisabled(    !m_settings->opt("use_hotkeys").toBool());
+    ui->hotkeyStartPause->setDisabled(  !m_settings->opt("use_hotkeys").toBool());
 
-    ui->hotkeyRefresh->setHotkey(m_settings->hotkey("refresh"));
-    ui->hotkeyShowHide->setHotkey(m_settings->hotkey("showhide"));
+    ui->hotkeyRefresh->setHotkey(   m_settings->hotkey("refresh"));
+    ui->hotkeyShowHide->setHotkey(  m_settings->hotkey("showhide"));
     ui->hotkeyStartPause->setHotkey(m_settings->hotkey("startpause"));
 
-    QTime time = QTime(0, 0, 0).addSecs(m_settings->iParam("delay"));
+    QTime time = QTime(0, 0, 0).addSecs(m_settings->opt("delay").toInt());
     ui->optionDelay->setTime(time);
 
     qxtLog->trace("ConfigDialog openned");
@@ -91,7 +91,7 @@ void ConfigDialog::done(int result)
             // check against sets hotkeys
             for (int i=0, l=m_settings->nbSets(); i<l; i++)
             {
-                Set* poSet = m_settings->getSet(i);
+                Set* poSet = m_settings->set(i);
 
                 if (!poSet->hotkey())
                 {
@@ -138,16 +138,16 @@ void ConfigDialog::done(int result)
 void ConfigDialog::save()
 {
     QTime time = ui->optionDelay->time();
-    m_settings->setParam("delay", time.hour()*3600 + time.minute()*60 + time.second());
+    m_settings->setOpt("delay", time.hour()*3600 + time.minute()*60 + time.second());
 
-    m_settings->setParam("minimize", ui->optionMinimize->isChecked());
-    m_settings->setParam("check", ui->optionCheckFiles->isChecked());
-    m_settings->setParam("check_updates", ui->optionCheckUpdates->isChecked());
-    m_settings->setParam("use_hotkeys", ui->optionUseHotkeys->isChecked());
-    m_settings->setParam("show_notifications", ui->optionShowNotifications->isChecked());
+    m_settings->setOpt("minimize",              ui->optionMinimize->isChecked());
+    m_settings->setOpt("check",                 ui->optionCheckFiles->isChecked());
+    m_settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
+    m_settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
+    m_settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());
 
-    m_settings->setHotkey("refresh", ui->hotkeyRefresh->hotkey());
-    m_settings->setHotkey("showhide", ui->hotkeyShowHide->hotkey());
+    m_settings->setHotkey("refresh",    ui->hotkeyRefresh->hotkey());
+    m_settings->setHotkey("showhide",   ui->hotkeyShowHide->hotkey());
     m_settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
 
     if (ui->optionAutostart->isChecked())
