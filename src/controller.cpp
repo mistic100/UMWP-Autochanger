@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "lib/dirent.h"
 #include "main.h"
 #include "controller.h"
 #include "mainwidget.h"
@@ -174,7 +173,7 @@ QString Controller::getRandomFile(Set* _set)
     // only one file in the set ?!
     if (total == 1)
     {
-        return _set->gile(0);
+        return _set->file(0);
     }
 
     // rare case for very small sets
@@ -193,7 +192,7 @@ QString Controller::getRandomFile(Set* _set)
     while (loop > 0)
     {
         int counter = unif(m_randomEngine);
-        file = _set->gile(counter);
+        file = _set->file(counter);
 
         if (!m_files.contains(file))
         {

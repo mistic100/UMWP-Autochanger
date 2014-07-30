@@ -63,6 +63,7 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 * 1.7
     * new: add "Fill" mode
     * new: create default.wallpaper file if not present
+    * change: don't delete missing sets but highlight them
 
 * [1.6 (08/03/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.6)
     * change: Alt-F4 effectively closes application without prompt

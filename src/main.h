@@ -56,9 +56,6 @@ Q_DECLARE_METATYPE(UM::IMAGE)
 
 
 // common functions
-bool directoryExists(const QString &_path);
-bool isImageFile(const QString &_filename);
-
 void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value);
 void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value);
 

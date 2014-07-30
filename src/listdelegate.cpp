@@ -37,7 +37,18 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
 
     // BACKGROUND
     rect = baseRect;
-    if (selected)
+    if (!set->isValid())
+    {
+        QLinearGradient gradientSelected(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
+        gradientSelected.setColorAt(0.0, QColor(254, 187, 187));
+        gradientSelected.setColorAt(0.45, QColor(254, 144, 144));
+        gradientSelected.setColorAt(1.0, QColor(255, 92, 92));
+
+        painter->setPen(QColor(255, 15, 15));
+        painter->setBrush(gradientSelected);
+        painter->drawRect(rect);
+    }
+    else if (selected)
     {
         QLinearGradient gradientSelected(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
         gradientSelected.setColorAt(0.0, QColor(109, 191, 224));

@@ -32,7 +32,6 @@ SOURCES += \
     reader.cpp
 
 HEADERS += \
-    lib/dirent.h \
     lib/createshortcut.h \
     lib/UltraMon.h \
     mainwindow.h \

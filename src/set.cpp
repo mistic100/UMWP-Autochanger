@@ -1,5 +1,7 @@
 #include "set.h"
-#include "lib/dirent.h"
+
+
+static const QStringList FILES_FILTER = QStringList()<<"*.jpeg"<<"*.jpg"<<"*.bmp"<<"*.png"<<"*.gif";
 
 
 /**
@@ -20,12 +22,18 @@ Set::Set(const QString &_path, const QString &_name)
     m_type = UM::W_MONITOR;
     m_style = UM::IM_FILL;
     m_active = true;
+    m_valid = true;
     m_lastModif = 0;
     m_hotkey = 0;
     m_UID = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
     readCache();
-    populateFiles();
+    check();
+
+    if (m_valid)
+    {
+        populateFiles();
+    }
 }
 
 /**
@@ -42,7 +50,7 @@ const QString Set::fullName() const
  * @param int _i
  * @return  string
  */
-const QString Set::gile(int _i) const
+const QString Set::file(int _i) const
 {
     if (_i < m_files.size())
     {
@@ -55,57 +63,49 @@ const QString Set::gile(int _i) const
 }
 
 /**
+ * @brief Check is the directory still exists
+ * @return bool
+ */
+bool Set::check()
+{
+    m_valid = QDir(m_path).exists();
+    return m_valid;
+}
+
+/**
  * @brief Recursively read the last modification date of a folder
- * must not be directly called with parameters
+ * @return double
+ */
+double Set::lastChange()
+{
+    return lastChangeRecur(m_path);
+}
+
+/**
+ * @brief Internal recursive function for lastChange()
  * @param string _child
  * @param int _level
  * @return double
  */
-double Set::lastChange(const QString &_child, int _level)
+double Set::lastChangeRecur(const QString &_path, const int _level)
 {
-    QString path = m_path+_child;
-
-    double date;
-    FILETIME fileDate;
-    SYSTEMTIME systemDate;
-
-    HANDLE hDir = CreateFile(path.toStdWString().c_str(), GENERIC_READ,FILE_SHARE_READ,
-                            NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
-
-    if (!GetFileTime(hDir, NULL, NULL, &fileDate))
-    {
-        GetSystemTime(&systemDate);
-        SystemTimeToVariantTime(&systemDate, &date);
-        return date;
-    }
-    CloseHandle(hDir);
-
-    FileTimeToSystemTime(&fileDate, &systemDate);
-    SystemTimeToVariantTime(&systemDate, &date);
+    double date = QFileInfo(_path).lastModified().toTime_t();
 
     if (_level < APP_MAX_TRAVERSAL)
     {
-        DIR* pDir = opendir(path.toStdString().c_str());
-        struct dirent* pEntry = readdir(pDir);
+        QDirIterator dir(_path, QDir::AllDirs | QDir::NoDotAndDotDot);
 
-        QString filename = QString(pEntry->d_name);
-
-        while (pEntry != NULL)
+        while (dir.hasNext())
         {
-            if (pEntry->d_type==DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
+            QString path = dir.next();
+
+            double subDate = lastChangeRecur(path, _level+1);
+
+            if (subDate > date)
             {
-                double subDate = lastChange(_child+filename+"\\", _level+1);
-                if (subDate > date)
-                {
-                    date = subDate;
-                }
+                date = subDate;
             }
-
-            pEntry = readdir(pDir);
-            filename = QString(pEntry->d_name);
         }
-
-        closedir(pDir);
     }
 
     return date;
@@ -113,54 +113,47 @@ double Set::lastChange(const QString &_child, int _level)
 
 /**
  * @brief Recursively construct the list of files (if changed)
- * must not be directly called with parameters
+ */
+void Set::populateFiles()
+{
+    double date = lastChange();
+    if (date <= m_lastModif)
+    {
+        return;
+    }
+
+    m_lastModif = date;
+    m_files.clear();
+
+    populateFilesRecur(m_path);
+
+    writeCache();
+}
+
+/**
+ * @brief Internal recursive function for populateFiles()
  * @param string _child
  * @param int _level
  */
-void Set::populateFiles(const QString &_child, int _level)
+void Set::populateFilesRecur(const QString &_path, const int _level)
 {
-    if (_child.isEmpty())
+    QDirIterator dir(_path, FILES_FILTER, QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
+
+    while (dir.hasNext())
     {
-        double date = lastChange();
-        if (date <= m_lastModif)
+        QString path = dir.next();
+
+        if (dir.fileInfo().isDir())
         {
-            return;
+            if (_level+1 < APP_MAX_TRAVERSAL)
+            {
+                populateFilesRecur(path + "/", _level+1);
+            }
         }
-
-        m_lastModif = date;
-        m_files.clear();
-    }
-
-    if (_level < APP_MAX_TRAVERSAL)
-    {
-        QString path = m_path+_child;
-
-        DIR* pDir = opendir(path.toStdString().c_str());
-        struct dirent* pEntry = readdir(pDir);
-
-        QString filename = QString(pEntry->d_name);
-
-        while (pEntry != NULL)
+        else
         {
-            if (pEntry->d_type==DT_DIR && filename.compare(".")!=0 && filename.compare("..")!=0)
-            {
-                populateFiles(_child+filename+"\\", _level+1);
-            }
-            else if (pEntry->d_type == DT_REG && isImageFile(filename))
-            {
-                m_files.append(path+filename);
-            }
-
-            pEntry = readdir(pDir);
-            filename = QString(pEntry->d_name);
+            m_files.append(path);
         }
-
-        closedir(pDir);
-    }
-
-    if (_child.isEmpty())
-    {
-        writeCache();
     }
 }
 

@@ -77,32 +77,6 @@ int main(int argc, char *argv[])
 }
 
 
-/**
- * @brief check if a directory exists
- * @param string _path
- * @return bool
- */
-bool directoryExists(const QString &_path)
-{
-    DWORD att = GetFileAttributesA(_path.toStdString().c_str());
-    return att!=INVALID_FILE_ATTRIBUTES && (att&FILE_ATTRIBUTE_DIRECTORY);
-}
-
-/**
- * @brief determine is a filename corresponds to an image (jpg, bmp, png, gif)
- * @param string_filename
- * @return bool
- */
-bool isImageFile(QString const &_filename)
-{
-    return _filename.endsWith(".jpeg", Qt::CaseInsensitive)
-        || _filename.endsWith(".jpg", Qt::CaseInsensitive)
-        || _filename.endsWith(".bmp", Qt::CaseInsensitive)
-        || _filename.endsWith(".png", Qt::CaseInsensitive)
-        || _filename.endsWith(".gif", Qt::CaseInsensitive);
-}
-
-
 /*
  * helpers for simple XML text nodes
  */

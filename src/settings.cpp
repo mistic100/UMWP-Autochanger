@@ -324,37 +324,34 @@ bool Settings::load(QString _filename)
                 {
                     QString path = setNode.text().trimmed();
 
-                    if (QDir(path).exists())
+                    Set* set = new Set(path, setNode.attribute("name"));
+                    set->setActive(setNode.attribute("active").toInt());
+
+                    // added in 1.3
+                    if (setNode.hasAttribute("type"))
                     {
-                        Set* set = new Set(path, setNode.attribute("name"));
-                        set->setActive(setNode.attribute("active").toInt());
-
-                        // added in 1.3
-                        if (setNode.hasAttribute("type"))
-                        {
-                            UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(setNode.attribute("type").toInt());
-                            UM::IMAGE im_style = static_cast<UM::IMAGE>(setNode.attribute("style").toInt());
-                            set->setType(wp_type);
-                            set->setStyle(im_style);
-                        }
-
-                        // added in 1.3 - 1.3 format
-                        if (setNode.hasAttribute("hotkey_mod"))
-                        {
-                            set->setHotkey(
-                                        setNode.attribute("hotkey").toInt() +
-                                        setNode.attribute("hotkey_mod").toInt()
-                                        );
-                            updated = true;
-                        }
-                        // 1.4 format
-                        else if (setNode.hasAttribute("hotkey"))
-                        {
-                            set->setHotkey(setNode.attribute("hotkey").toInt());
-                        }
-
-                        m_sets.append(set);
+                        UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(setNode.attribute("type").toInt());
+                        UM::IMAGE im_style = static_cast<UM::IMAGE>(setNode.attribute("style").toInt());
+                        set->setType(wp_type);
+                        set->setStyle(im_style);
                     }
+
+                    // added in 1.3 - 1.3 format
+                    if (setNode.hasAttribute("hotkey_mod"))
+                    {
+                        set->setHotkey(
+                                    setNode.attribute("hotkey").toInt() +
+                                    setNode.attribute("hotkey_mod").toInt()
+                                    );
+                        updated = true;
+                    }
+                    // 1.4 format
+                    else if (setNode.hasAttribute("hotkey"))
+                    {
+                        set->setHotkey(setNode.attribute("hotkey").toInt());
+                    }
+
+                    m_sets.append(set);
                 }
 
                 setNode = setNode.nextSibling().toElement();
@@ -672,16 +669,12 @@ void Settings::moveSet(int _from, int _to)
  */
 void Settings::updateSets()
 {
-    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); /**/)
+    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); it++)
     {
-        if (!directoryExists((*it)->path()))
+        Set* set = *it;
+        if (set->check())
         {
-            m_sets.erase(it);
-        }
-        else
-        {
-            (*it)->populateFiles();
-            it++;
+            set->populateFiles();
         }
     }
 }
@@ -697,9 +690,10 @@ Set* Settings::activeSet(int _i, bool _withFiles) const
 
     for (QVector<Set*>::const_iterator it=m_sets.constBegin(); it!=m_sets.constEnd(); ++it)
     {
-        if ((*it)->isActive() && (!_withFiles || (*it)->count()>0))
+        Set* set = *it;
+        if (set->isActive() && set->isValid() && (!_withFiles || set->count()>0))
         {
-            activeSets.append((*it));
+            activeSets.append(set);
         }
     }
 
@@ -717,7 +711,8 @@ int const Settings::nbActiveSets(bool _withFiles) const
 
     for (QVector<Set*>::const_iterator it=m_sets.constBegin(); it!=m_sets.constEnd(); ++it)
     {
-        if ((*it)->isActive() && (!_withFiles || (*it)->count()>0))
+        Set* set = *it;
+        if (set->isActive() && set->isValid() && (!_withFiles || set->count()>0))
         {
             totalSets++;
         }
