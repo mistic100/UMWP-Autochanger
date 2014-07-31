@@ -669,7 +669,7 @@ void Settings::moveSet(int _from, int _to)
  */
 void Settings::updateSets()
 {
-    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); it++)
+    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); ++it)
     {
         Set* set = *it;
         if (set->check())

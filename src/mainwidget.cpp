@@ -72,6 +72,11 @@ void MainWidget::slotUpdateList(bool _resetSel)
 
         ui->mainList->addItem(item);
         item->setSelected(aIndexes.contains(i));
+
+        if (!m_ctrl->settings()->set(i)->isValid())
+        {
+            item->setToolTip(tr("This set doesn't exist on the disk anymore"));
+        }
     }
 }
 

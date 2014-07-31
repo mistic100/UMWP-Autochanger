@@ -39,32 +39,38 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
     rect = baseRect;
     if (!set->isValid())
     {
-        QLinearGradient gradientSelected(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
-        gradientSelected.setColorAt(0.0, QColor(254, 187, 187));
-        gradientSelected.setColorAt(0.45, QColor(254, 144, 144));
-        gradientSelected.setColorAt(1.0, QColor(255, 92, 92));
+        if (selected)
+        {
+            QLinearGradient gradient(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
+            gradient.setColorAt(0.0,  QColor(254, 187, 187));
+            gradient.setColorAt(0.45, QColor(254, 144, 144));
+            gradient.setColorAt(1.0,  QColor(255, 92, 92));
+            painter->setBrush(gradient);
+        }
+        else
+        {
+            painter->setBrush(QColor(254, 214, 214));
+        }
 
         painter->setPen(QColor(255, 15, 15));
-        painter->setBrush(gradientSelected);
-        painter->drawRect(rect);
     }
     else if (selected)
     {
-        QLinearGradient gradientSelected(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
-        gradientSelected.setColorAt(0.0, QColor(109, 191, 224));
-        gradientSelected.setColorAt(0.9, QColor(27, 134, 183));
-        gradientSelected.setColorAt(1.0, QColor(0, 120, 174));
+        QLinearGradient gradient(rect.left(), rect.top(), rect.left(), rect.height()+rect.top());
+        gradient.setColorAt(0.0, QColor(109, 191, 224));
+        gradient.setColorAt(0.9, QColor(27, 134, 183));
+        gradient.setColorAt(1.0, QColor(0, 120, 174));
+        painter->setBrush(gradient);
 
         painter->setPen(QColor(0, 90, 131));
-        painter->setBrush(gradientSelected);
-        painter->drawRect(rect);
     }
     else
     {
         painter->setPen(QColor(211, 211, 211));
-        painter->setBrush(index.row()%2 ? Qt::white : QColor(255, 254, 239)); // alternating colors
-        painter->drawRect(rect);
+        painter->setBrush(index.row()%2 ? Qt::white : QColor(255, 254, 239));
     }
+
+    painter->drawRect(rect);
 
 
     // STATE ICON
