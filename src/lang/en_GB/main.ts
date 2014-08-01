@@ -9,37 +9,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="20"/>
+        <location filename="../../configdialog.ui" line="30"/>
         <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="28"/>
+        <location filename="../../configdialog.ui" line="38"/>
         <source>Delay :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="57"/>
+        <location filename="../../configdialog.ui" line="67"/>
         <source>Minimize on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="64"/>
+        <location filename="../../configdialog.ui" line="74"/>
         <source>Check files periodically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="71"/>
+        <location filename="../../configdialog.ui" line="81"/>
         <source>Check updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="78"/>
+        <location filename="../../configdialog.ui" line="88"/>
         <source>Start with Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="85"/>
+        <location filename="../../configdialog.ui" line="95"/>
         <source>Show notifications</source>
         <translation type="unfinished"></translation>
     </message>
@@ -49,22 +49,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="111"/>
+        <location filename="../../configdialog.ui" line="124"/>
         <source>Show/Hide :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="124"/>
+        <location filename="../../configdialog.ui" line="114"/>
         <source>Refresh :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="134"/>
+        <location filename="../../configdialog.ui" line="141"/>
         <source>Start/Pause :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configdialog.ui" line="150"/>
+        <location filename="../../configdialog.ui" line="134"/>
         <source>Use hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
@@ -350,6 +350,14 @@
     </message>
 </context>
 <context>
+    <name>QHotKeyWidget</name>
+    <message>
+        <location filename="../../qhotkeywidget.ui" line="38"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SetEditDialog</name>
     <message>
         <location filename="../../seteditdialog.ui" line="17"/>
@@ -372,7 +380,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../seteditdialog.ui" line="108"/>
+        <location filename="../../seteditdialog.ui" line="105"/>
         <source>Style :</source>
         <translation type="unfinished"></translation>
     </message>

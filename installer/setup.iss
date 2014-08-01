@@ -1,6 +1,6 @@
 #define AppId "{401CCECB-FFCC-4AF3-846D-A535F59D0834}"
 #define AppName "UMWP Autochanger"
-#define AppVersion "1.6"
+#define AppVersion "1.7"
 #define AppPublisher "StrangePlanet"
 #define PublisherURL "http://www.strangeplanet.fr"
 #define ProjectURL "http://www.strangeplanet.fr/work/umwp-autochanger"
@@ -116,22 +116,3 @@ begin
       Result := True;
     end
 end;
-
-// handle options
-{*
-function NextButtonClick(CurPageID: Integer): Boolean;
-begin
-  Result := True;
-  if CurPageID = wpSelectTasks then
-    begin
-      if IsTaskSelected('autostart') then
-        begin
-          MsgBox('Task has been checked.', mbInformation, MB_OK);
-        end
-      else
-        begin
-          MsgBox('Ttask has NOT been checked.', mbInformation, MB_OK);
-        end
-    end;
-end;
-*}

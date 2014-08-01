@@ -60,12 +60,12 @@ void ConfigDialog::done(int result)
         QString error;
 
         // validate hotkeys
-        QHash<QString, QLineEditHotkey*> requestHotkeys;
+        QHash<QString, QHotKeyWidget*> requestHotkeys;
         requestHotkeys.insert(tr("Refresh"), ui->hotkeyRefresh);
         requestHotkeys.insert(tr("Show/Hide"), ui->hotkeyShowHide);
         requestHotkeys.insert(tr("Start/Pause"), ui->hotkeyStartPause);
 
-        for (QHash<QString, QLineEditHotkey*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
+        for (QHash<QString, QHotKeyWidget*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
         {
             if (!it.value()->hotkey())
             {
@@ -73,7 +73,7 @@ void ConfigDialog::done(int result)
             }
 
             // check against other main hotkeys
-            for (QHash<QString, QLineEditHotkey*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
+            for (QHash<QString, QHotKeyWidget*>::iterator it2=requestHotkeys.begin(); it2!=it; ++it2)
             {
                 if (!it2.value()->hotkey())
                 {

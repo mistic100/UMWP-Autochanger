@@ -12,15 +12,11 @@ class QLineEditHotkey : public QLineEdit
 {
     Q_OBJECT
 
-private:
-    int m_hotkey;
-
 public:
     QLineEditHotkey(QWidget* _parent = 0);
 
-    const int hotkey() const { return m_hotkey; }
-
-    void setHotkey(const int &_hotkey);
+signals:
+    void hotkeyChanged(int);
 
 protected:
     void keyPressEvent(QKeyEvent* _event);

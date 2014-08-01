@@ -32,6 +32,7 @@ public slots:
     void slotUpdateList(bool _resetSel);
     void slotMoveItem(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
 
+private slots:
     void on_buttonAdd_clicked();
     void on_buttonActivate_clicked();
     void on_buttonDeactivate_clicked();

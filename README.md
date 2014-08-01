@@ -5,8 +5,8 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.6  
-Release date  : 08/03/2014  
+Version       : 1.7  
+Release date  : 01/08/2014  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -48,7 +48,7 @@ A: Yes. Double-click on it's name, you can set the name, the type and the style 
 Q: How hotkeys work ?  
 A: There are two kind of hotkeys: the ones defined in the "Options" dialog allow to show/hide the application window, refresh the wallpaper and start/pause the timer.  
 The ones defined in the set edit dialog allow to change the current set. You can assign the same hotkey to multiple sets.  
-In both cases, click on the input box and press the desired keys combinination. You must at least use one modifier (Ctrl, Shift, Alt, Win) and some keys are not available (Esc, Tab, Backspace, ...). Press Esc or Backspace to clear the hotkey.
+In both cases, click on the input box and press the desired keys combinination. You must at least use one modifier (Ctrl, Shift, Alt, Win) and some keys are not available (Esc, Tab, Backspace, ...).
 
 Q: Can I reorder sets ?  
 A: Yes. Simply drag & drop them.
@@ -60,7 +60,7 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
-* 1.7
+* [1.7 (01/08/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.7)
     * new: add "Fill" mode
     * new: create default.wallpaper file if not present
     * change: don't delete missing sets but highlight them

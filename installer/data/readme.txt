@@ -1,7 +1,7 @@
 UltraMon Wallpaper Autochanger
 
-Version       : 1.6
-Release date  : 08/03/2014
+Version       : 1.7  
+Release date  : 01/08/2014  
 Author        : Damien "Mistic" Sorel
 Website       : http://www.strangeplanet.fr
 License       : GNU General Public License Version 3
@@ -24,18 +24,15 @@ Installation
 ============
  1. Install and configure UltraMon on your computer.
 
- 2. Go to the wallpaper configuration of UltraMon and ensure that the profile "default" exists, 
-    if not, create it. You don't need to configure anything else on this screen.
-
- 3. Launch "UMWP Autochanger.exe".
+ 2. Launch "UMWP Autochanger.exe".
  
- 3.1. Depending on your configuration, you might be asked to locate "UltraMonDesktop.exe".
+ 2.1. Depending on your configuration, you might be asked to locate "UltraMonDesktop.exe".
 
- 4. Click on the plus button to add a new set. A set is basically a directory 
+ 3. Click on the plus button to add a new set. A set is basically a directory 
     containing JPEG/PNG/BMP files. UMWP Autochanger will browse this directory 
     recursively up to 3 levels searching for image files.
 
- 5. Once you have added your sets, the wallpaper will randomly change
+ 4. Once you have added your sets, the wallpaper will randomly change
     every 60 seconds (default delay).
 
 
@@ -68,7 +65,7 @@ Troubleshouting
      You can assign the same hotkey to multiple sets.  
      In both cases, click on the input box and press the desired keys combinination.
      You must at least use one modifier (Ctrl, Shift, Alt, Win) and some keys are
-     not available (Esc, Tab, Backspace, ...). Press Esc or Backspace to clear the hotkey.
+     not available (Esc, Tab, Backspace, ...).
 
   Q: Can I reorder sets ?
   A: Yes. Simply drag & drop them.
@@ -76,6 +73,11 @@ Troubleshouting
 
 Changelog
 =========
+
+--- 1.7 (01/08/2014)
+  - new: add "Fill" mode
+  - new: create default.wallpaper file if not present
+  - change: don't delete missing sets but highlight them
 
 --- 1.6 (08/03/2014)
   - change: Alt-F4 effectively closes application without prompt

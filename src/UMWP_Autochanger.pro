@@ -28,8 +28,7 @@ SOURCES += \
     qlineedithotkey.cpp \
     qtoolbarext.cpp \
     previewdialog.cpp \
-    sysreader.cpp \
-    reader.cpp
+    sysreader.cpp
 
 HEADERS += \
     lib/createshortcut.h \
@@ -53,7 +52,8 @@ HEADERS += \
     constants.h \
     widgetblinker.h \
     sysreader.h \
-    qscreen.h
+    qscreen.h \
+    qhotkeywidget.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc
@@ -69,4 +69,5 @@ FORMS += \
     mainwidget.ui \
     seteditdialog.ui \
     configdialog.ui \
-    previewdialog.ui
+    previewdialog.ui \
+    qhotkeywidget.ui

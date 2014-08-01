@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
+    <width>430</width>
     <height>188</height>
    </rect>
   </property>
@@ -14,6 +14,16 @@
    <string>Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_1">
+   <item row="2" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" rowspan="3">
     <widget class="QGroupBox" name="groupBox_1">
      <property name="title">
@@ -89,22 +99,25 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Hotkeys</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Refresh :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -115,16 +128,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEditHotkey" name="hotkeyRefresh"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
+      <item row="0" column="0" colspan="3">
+       <widget class="QCheckBox" name="optionUseHotkeys">
         <property name="text">
-         <string>Refresh :</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <string>Use hotkeys</string>
         </property>
        </widget>
       </item>
@@ -138,18 +145,14 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEditHotkey" name="hotkeyShowHide"/>
+      <item row="1" column="1" colspan="2">
+       <widget class="QHotKeyWidget" name="hotkeyRefresh" native="true"/>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEditHotkey" name="hotkeyStartPause"/>
+      <item row="2" column="1" colspan="2">
+       <widget class="QHotKeyWidget" name="hotkeyShowHide" native="true"/>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QCheckBox" name="optionUseHotkeys">
-        <property name="text">
-         <string>Use hotkeys</string>
-        </property>
-       </widget>
+      <item row="3" column="1" colspan="2">
+       <widget class="QHotKeyWidget" name="hotkeyStartPause" native="true"/>
       </item>
      </layout>
     </widget>
@@ -158,9 +161,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QLineEditHotkey</class>
-   <extends>QLineEdit</extends>
-   <header>qlineedithotkey.h</header>
+   <class>QHotKeyWidget</class>
+   <extends>QWidget</extends>
+   <header>qhotkeywidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

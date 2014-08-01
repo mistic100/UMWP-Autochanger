@@ -19,8 +19,7 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
     // erase content if escape of return pressed
     if (key == Qt::Key_Escape || key == Qt::Key_Backspace)
     {
-        m_hotkey = 0;
-        setText(NULL);
+        emit hotkeyChanged(0);
         return;
     }
 
@@ -51,20 +50,5 @@ void QLineEditHotkey::keyPressEvent(QKeyEvent* _event)
         mod+= Qt::META;
     }
 
-    m_hotkey = key + mod;
-
-    setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
-
-    emit textChanged(text());
-}
-
-/**
- * @brief QLineEditHotkey::vSetHotkey
- * @param int _hotkey
- */
-void QLineEditHotkey::setHotkey(const int &_hotkey)
-{
-    m_hotkey = _hotkey;
-
-    setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
+    emit hotkeyChanged(key + mod);
 }
