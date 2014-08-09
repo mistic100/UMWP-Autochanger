@@ -195,150 +195,175 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../mainwindow.cpp" line="75"/>
-        <location filename="../../mainwindow.cpp" line="112"/>
-        <location filename="../../mainwindow.cpp" line="604"/>
+        <location filename="../../mainwindow.cpp" line="77"/>
+        <location filename="../../mainwindow.cpp" line="114"/>
+        <location filename="../../mainwindow.cpp" line="611"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="78"/>
-        <location filename="../../mainwindow.cpp" line="109"/>
-        <location filename="../../mainwindow.cpp" line="349"/>
+        <location filename="../../mainwindow.cpp" line="80"/>
+        <location filename="../../mainwindow.cpp" line="111"/>
+        <location filename="../../mainwindow.cpp" line="351"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="76"/>
-        <location filename="../../mainwindow.cpp" line="107"/>
-        <location filename="../../mainwindow.cpp" line="369"/>
-        <location filename="../../mainwindow.cpp" line="370"/>
+        <location filename="../../mainwindow.cpp" line="78"/>
+        <location filename="../../mainwindow.cpp" line="109"/>
+        <location filename="../../mainwindow.cpp" line="371"/>
+        <location filename="../../mainwindow.cpp" line="372"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="77"/>
-        <location filename="../../mainwindow.cpp" line="108"/>
+        <location filename="../../mainwindow.cpp" line="79"/>
+        <location filename="../../mainwindow.cpp" line="110"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="80"/>
+        <location filename="../../mainwindow.cpp" line="82"/>
         <source>?</source>
         <translation>?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="79"/>
+        <location filename="../../mainwindow.cpp" line="81"/>
         <source>Configuration</source>
         <translation>Configuration</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="64"/>
+        <location filename="../../mainwindow.cpp" line="66"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="66"/>
-        <location filename="../../mainwindow.cpp" line="418"/>
+        <location filename="../../mainwindow.cpp" line="68"/>
+        <location filename="../../mainwindow.cpp" line="420"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="67"/>
-        <location filename="../../mainwindow.cpp" line="400"/>
+        <location filename="../../mainwindow.cpp" line="69"/>
+        <location filename="../../mainwindow.cpp" line="402"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="70"/>
-        <location filename="../../mainwindow.cpp" line="475"/>
+        <location filename="../../mainwindow.cpp" line="72"/>
+        <location filename="../../mainwindow.cpp" line="477"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="71"/>
+        <location filename="../../mainwindow.cpp" line="73"/>
         <source>Active files</source>
         <translation>Fichiers courant</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="73"/>
-        <location filename="../../mainwindow.cpp" line="492"/>
+        <location filename="../../mainwindow.cpp" line="75"/>
+        <location filename="../../mainwindow.cpp" line="494"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="110"/>
+        <location filename="../../mainwindow.cpp" line="112"/>
         <source>Quick switch</source>
         <translation>Changement rapide</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="340"/>
+        <location filename="../../mainwindow.cpp" line="342"/>
         <source>Show</source>
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="402"/>
-        <location filename="../../mainwindow.cpp" line="420"/>
+        <location filename="../../mainwindow.cpp" line="404"/>
+        <location filename="../../mainwindow.cpp" line="422"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="441"/>
+        <location filename="../../mainwindow.cpp" line="443"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="441"/>
+        <location filename="../../mainwindow.cpp" line="443"/>
         <source>Invalid settings file</source>
         <translation>Fichier de configuration invalide</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="528"/>
+        <location filename="../../mainwindow.cpp" line="530"/>
         <source>Paused</source>
         <translation>Mis en pause</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="532"/>
+        <location filename="../../mainwindow.cpp" line="534"/>
         <source>Running</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="557"/>
+        <location filename="../../mainwindow.cpp" line="559"/>
         <source>Current sets : %1</source>
         <translation>Sets actuels : %1</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="570"/>
-        <location filename="../../mainwindow.cpp" line="577"/>
-        <location filename="../../mainwindow.cpp" line="584"/>
+        <location filename="../../mainwindow.cpp" line="574"/>
+        <location filename="../../mainwindow.cpp" line="585"/>
         <source>A new version is available : %1</source>
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="583"/>
         <source>New version</source>
-        <translation>Nouvelle version</translation>
+        <translation type="obsolete">Nouvelle version</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="585"/>
         <source>Visit the &lt;a href=&apos;%1&apos;&gt;project homepage&lt;/a&gt; to download the latest version.</source>
-        <translation>Visitez la &lt;a href=&apos;%1&apos;&gt;page du projet&lt;/a&gt; pour télécharger la dernière version.</translation>
+        <translation type="obsolete">Visitez la &lt;a href=&apos;%1&apos;&gt;page du projet&lt;/a&gt; pour télécharger la dernière version.</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="331"/>
+        <location filename="../../mainwindow.cpp" line="333"/>
         <source>%1 is still running</source>
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="375"/>
-        <location filename="../../mainwindow.cpp" line="376"/>
+        <location filename="../../mainwindow.cpp" line="377"/>
+        <location filename="../../mainwindow.cpp" line="378"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="604"/>
+        <location filename="../../mainwindow.cpp" line="611"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
+    </message>
+</context>
+<context>
+    <name>NewVersionDialog</name>
+    <message>
+        <location filename="../../newversiondialog.ui" line="14"/>
+        <source>New version</source>
+        <translation>Nouvelle version</translation>
+    </message>
+    <message>
+        <location filename="../../newversiondialog.ui" line="33"/>
+        <source>Update now</source>
+        <translation>Mettre à jour maintenant</translation>
+    </message>
+    <message>
+        <location filename="../../newversiondialog.cpp" line="18"/>
+        <source>A new version is available : %1</source>
+        <translation>Une nouvelle version est disponible : %1</translation>
+    </message>
+    <message>
+        <location filename="../../newversiondialog.cpp" line="41"/>
+        <source>Downloading UMWP_Autochanger_%1_Setup.exe ...</source>
+        <translation>Téléchargement de UMWP_Autochanger_%1_Setup.exe ...</translation>
+    </message>
+    <message>
+        <location filename="../../newversiondialog.cpp" line="55"/>
+        <source>Unable to download installer file.</source>
+        <translation>Impossible de télécharger le fichier.</translation>
     </message>
 </context>
 <context>

@@ -44,15 +44,19 @@ public:
     bool startPause();
     bool isPaused() const { return !m_mainTimer->isActive(); }
 
+    void launchInstaller();
+
     void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
 
 public slots:
     void slotUpdate();
 
+    void slotStoreNewVersion(const QString &_ver, const QString &_link);
+
 signals:
     void listChanged(bool); // true to reset QListWidget selection
     void wallpaperChanged();
-    void newVersionAvailable(const QString);
+    void newVersionAvailable();
 };
 
 #endif // CONTROLLER_H

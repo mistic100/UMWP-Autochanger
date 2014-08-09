@@ -80,7 +80,8 @@ public slots:
     void slotTrayQuickClicked();
 
     void slotToggleWindow(bool _forceHide=false);
-    void slotDisplayNewVersion(const QString &_version);
+    void slotDisplayNewVersion();
+    void slotNewVersionDialog();
 
     void slotAltPressed();
 };

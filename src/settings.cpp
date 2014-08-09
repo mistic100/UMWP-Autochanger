@@ -68,6 +68,12 @@ const bool Settings::isAutostart() const
 /*
  * setters
  */
+void Settings::setNewVersion(const QString &_ver, const QString &_link)
+{
+    m_newVersion.first = _ver;
+    m_newVersion.second = _link;
+}
+
 void Settings::setWindowSize(const QSize &_size)
 {
     m_options["window_width"] = _size.width();

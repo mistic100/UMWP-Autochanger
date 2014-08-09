@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui xml
+QT += core gui xml network
 CONFIG += qxt
 QXT += core gui
 
@@ -28,7 +28,8 @@ SOURCES += \
     qlineedithotkey.cpp \
     qtoolbarext.cpp \
     previewdialog.cpp \
-    sysreader.cpp
+    sysreader.cpp \
+    newversiondialog.cpp
 
 HEADERS += \
     lib/createshortcut.h \
@@ -53,7 +54,8 @@ HEADERS += \
     widgetblinker.h \
     sysreader.h \
     qscreen.h \
-    qhotkeywidget.h
+    qhotkeywidget.h \
+    newversiondialog.h
 
 RESOURCES += \
     UMWP_Autochanger.qrc
@@ -70,4 +72,5 @@ FORMS += \
     seteditdialog.ui \
     configdialog.ui \
     previewdialog.ui \
-    qhotkeywidget.ui
+    qhotkeywidget.ui \
+    newversiondialog.ui

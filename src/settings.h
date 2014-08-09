@@ -25,6 +25,8 @@ private:
 
     QVector<Set*>               m_sets; // list of wallpaper sets
 
+    QPair<QString, QString>     m_newVersion;
+
 public:
     Settings();
     ~Settings();
@@ -47,6 +49,7 @@ public:
 
     const QScreen   wpSize(int _i) const                { return m_wpSizes.value(_i); }
     const QByteArray &header() const                    { return m_header; }
+    const QPair<QString, QString> newVersion()          { return m_newVersion; }
     const QSize     windowSize() const;
 
     Set*            set(int _i) const                   { return m_sets.at(_i); }
@@ -58,6 +61,7 @@ public:
     void setOpt(const QString &_key, const QVariant &_val)  { m_options[_key] = _val; }
     void setHotkey(const QString &_key, const int &_val)    { m_hotkeys[_key] = _val; }
 
+    void setNewVersion(const QString &_ver, const QString &_link);
     void setWindowSize(const QSize &_size);
     void incrementMsgCount();
     bool setExePath(const QString &_sPath);

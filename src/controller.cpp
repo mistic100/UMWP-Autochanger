@@ -28,19 +28,42 @@ void Controller::checkVersion()
 {
     if (m_settings->opt("check_updates").toBool())
     {
-        VersionChecker* pVersionChecker = new VersionChecker(0);
-        connect(pVersionChecker, SIGNAL(newVersionAvailable(const QString)),
-                this, SIGNAL(newVersionAvailable(const QString)));
+        VersionChecker* versionChecker = new VersionChecker();
+        connect(versionChecker, SIGNAL(newVersionAvailable(const QString, const QString)),
+                this, SLOT(slotStoreNewVersion(const QString, const QString)));
 
-        QThread* pVCThread = new QThread(this);
-        pVersionChecker->moveToThread(pVCThread);
+        QThread* thread = new QThread(this);
+        versionChecker->moveToThread(thread);
 
-        connect(pVCThread, SIGNAL(started()), pVersionChecker, SLOT(run()));
-        connect(pVersionChecker, SIGNAL(finished()), pVCThread, SLOT(quit()));
-        connect(pVersionChecker, SIGNAL(finished()), pVersionChecker, SLOT(deleteLater()));
+        connect(thread, SIGNAL(started()), versionChecker, SLOT(run()));
+        connect(versionChecker, SIGNAL(finished()), thread, SLOT(quit()));
+        connect(versionChecker, SIGNAL(finished()), versionChecker, SLOT(deleteLater()));
 
         qxtLog->trace("Start version checker thread");
-        QTimer::singleShot(1000, pVCThread, SLOT(start()));
+        QTimer::singleShot(1000, thread, SLOT(start()));
+    }
+}
+
+/**
+ * @brief Called when a new version is available
+ * @param string _version
+ * @param string _link
+ */
+void Controller::slotStoreNewVersion(const QString &_version, const QString &_link)
+{
+    m_settings->setNewVersion(_version, _link);
+    emit newVersionAvailable();
+}
+
+/**
+ * @brief Launch installer.exe if existing and close the app
+ */
+void Controller::launchInstaller()
+{
+    if (QFile::exists("installer.exe"))
+    {
+        QProcess::startDetached("\""+ QDir::currentPath() +"/installer.exe\" -delete-installer");
+        qApp->quit();
     }
 }
 

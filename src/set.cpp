@@ -1,3 +1,4 @@
+#include <QKeySequence>
 #include "set.h"
 
 
@@ -43,6 +44,15 @@ Set::Set(const QString &_path, const QString &_name)
 const QString Set::fullName() const
 {
     return m_name+" ("+QString::number(count())+")";
+    }
+
+/**
+ * @brief Get the hotkey as readable string
+ * @return string
+ */
+const QString Set::hotkeyStr() const
+{
+    return QKeySequence(m_hotkey).toString(QKeySequence::NativeText);
 }
 
 /**

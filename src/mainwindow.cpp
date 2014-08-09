@@ -1,6 +1,7 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QToolButton>
+#include <QPushButton>
 #include <QMessageBox>
 #include <QLabel>
 #include <QFile>
@@ -12,6 +13,7 @@
 #include "mainwidget.h"
 #include "configdialog.h"
 #include "previewdialog.h"
+#include "newversiondialog.h"
 
 extern short UMWP_STATE;
 
@@ -28,7 +30,7 @@ MainWindow::MainWindow(Controller* _ctrl) : QMainWindow(0)
     setMinimumSize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
 
     m_ctrl = _ctrl;
-    connect(m_ctrl, SIGNAL(newVersionAvailable(const QString)), this, SLOT(slotDisplayNewVersion(const QString)));
+    connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(slotDisplayNewVersion()));
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(updateTrayQuickMenu()));
 
 
@@ -561,15 +563,20 @@ void MainWindow::slotHotkey()
 }
 
 /**
- * @brief Display a message when a new version is available
- * @param string _version
+ * @brief Called when a new version is available
  */
-void MainWindow::slotDisplayNewVersion(const QString &_version)
+void MainWindow::slotDisplayNewVersion()
 {
+    QString _version = m_ctrl->settings()->newVersion().first;
+
     // message in status bar
-    QLabel* statusLabel = new QLabel(tr("A new version is available : %1").arg(_version));
-    statusLabel->setStyleSheet("QLabel { color : red; }");
+    QPushButton* statusLabel = new QPushButton(tr("A new version is available : %1").arg(_version));
+    statusLabel->setFlat(true);
+    statusLabel->setStyleSheet("QPushButton { color : red; } QPushButton:flat:pressed { border: none; }");
+    statusLabel->setCursor(Qt::PointingHandCursor);
     m_statusBar->insertPermanentWidget(0, statusLabel);
+
+    connect(statusLabel, SIGNAL(clicked()), this, SLOT(slotNewVersionDialog()));
 
     if (!isVisible())
     {
@@ -578,15 +585,17 @@ void MainWindow::slotDisplayNewVersion(const QString &_version)
     }
     else
     {
-        // popup alert
-        QMessageBox dialog(this);
-        dialog.setWindowTitle(tr("New version"));
-        dialog.setText("<b>" + tr("A new version is available : %1").arg(_version) + "</b>");
-        dialog.setInformativeText(tr("Visit the <a href='%1'>project homepage</a> to download the latest version.")
-                                  .arg(APP_HOMEPAGE));
-        dialog.setStandardButtons(QMessageBox::Close);
-        dialog.exec();
+        slotNewVersionDialog();
     }
+}
+
+/**
+ * @brief Open update dialog
+ */
+void MainWindow::slotNewVersionDialog()
+{
+    NewVersionDialog dialog(m_ctrl, this);
+    dialog.exec();
 }
 
 /**

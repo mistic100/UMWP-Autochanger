@@ -133,7 +133,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         painter->setPen(QColor(150, 150, 150));
     }
 
-    QString hotkey = QKeySequence(set->hotkey()).toString(QKeySequence::NativeText);
+    QString hotkey = set->hotkeyStr();
     painter->drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
 
     QFontMetrics metric(painter->font());

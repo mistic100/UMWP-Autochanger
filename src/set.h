@@ -32,6 +32,7 @@ public:
     const bool          isActive() const    { return m_active; }
     const bool          isValid() const     { return m_valid; }
     const int           hotkey() const      { return m_hotkey; }
+    const QString       file(int _i) const;
 
     void setActive(const bool _a)           { m_active=_a; }
     void setName(const QString &_name)      { m_name=_name; }
@@ -48,7 +49,7 @@ public:
     void  deleteCache();
 
     const QString fullName() const;
-    const QString file(int _i) const;
+    const QString hotkeyStr() const;
 
 private:
     double lastChangeRecur(const QString &_child="", const int _level=0);

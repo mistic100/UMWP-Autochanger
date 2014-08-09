@@ -1,10 +1,9 @@
 #ifndef VERSIONCHECKER_H
 #define VERSIONCHECKER_H
 
-#pragma comment(lib, "urlmon.lib")
-
-#include <UrlMon.h>
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 #include "main.h"
 
@@ -17,36 +16,39 @@ class VersionChecker : public QObject
     Q_OBJECT
 
 public:
-    VersionChecker(QObject* _parent) : QObject(_parent) {}
+    VersionChecker(QObject* _parent = 0) : QObject(_parent) {}
 
 public slots:
     void run()
     {
-        HRESULT res = URLDownloadToFile(NULL, APP_VERSION_URL, L"version.txt", 0, NULL);
+        QNetworkAccessManager* manager = new QNetworkAccessManager();
+        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
+        manager->get(QNetworkRequest(QUrl(QString::fromAscii(APP_VERSION_URL))));
+    }
 
-        if (res == S_OK )
+private slots:
+    void downloadFinished(QNetworkReply* _reply)
+    {
+        if (_reply->error() == QNetworkReply::NoError)
         {
-            QFile file("version.txt");
-            if (file.open(QIODevice::ReadOnly))
+            QString version = _reply->readLine().trimmed();
+            QString link = _reply->readLine().trimmed();
+
+            if (version.compare(QString::fromAscii(APP_VERSION)) > 0)
             {
-                QString ver = file.readLine();
-                file.close();
-                file.remove();
-
-
-                if (ver.compare(QString::fromAscii(APP_VERSION)) > 0)
-                {
-                    qxtLog->debug("New version detected: "+ver);
-                    emit newVersionAvailable(ver);
-                }
+                qxtLog->debug("New version detected: "+version);
+                emit newVersionAvailable(version, link);
             }
         }
+
+        _reply->manager()->deleteLater();
+        _reply->deleteLater();
 
         emit finished();
     }
     
 signals:
-    void newVersionAvailable(const QString);
+    void newVersionAvailable(const QString, const QString);
     void finished();
     
 };
