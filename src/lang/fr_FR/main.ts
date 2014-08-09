@@ -314,14 +314,6 @@
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <source>New version</source>
-        <translation type="obsolete">Nouvelle version</translation>
-    </message>
-    <message>
-        <source>Visit the &lt;a href=&apos;%1&apos;&gt;project homepage&lt;/a&gt; to download the latest version.</source>
-        <translation type="obsolete">Visitez la &lt;a href=&apos;%1&apos;&gt;page du projet&lt;/a&gt; pour télécharger la dernière version.</translation>
-    </message>
-    <message>
         <location filename="../../mainwindow.cpp" line="333"/>
         <source>%1 is still running</source>
         <translation>%1 est toujours en cours d&apos;éxécution</translation>

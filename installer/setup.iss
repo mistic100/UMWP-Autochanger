@@ -40,28 +40,12 @@ Compression=lzma2
 SolidCompression=yes
 
 [Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
-Name: "french"; MessagesFile: "compiler:Languages\French.isl"
-
-[CustomMessages]
-english.DeleteSettings=Delete settings file?
-french.DeleteSettings=Supprimer le fichier de configuration ?
-
-english.NewerVersionExists=A newer version of {#AppName} is already installed.%n%nInstaller version: {#AppVersion}%nCurrent version: 
-french.NewerVersionExists=Une version plus récente de {#AppName} existe déjà.%n%nVersion de l'installeur : {#AppVersion}%nVersion actuelle :
-
-english.Options=Options:
-french.Options=Options :
-
-english.OptionAutostart=Launch {#AppName} with Windows
-french.OptionAutostart=Démarrer {#AppName} avec Windows
-
-english.Website=Website
-french.Website=Site web
+Name: "english"; MessagesFile: "compiler:Default.isl,lang\en_GB\custom.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl,lang\fr_FR\custom.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "autostart"; Description: "{cm:OptionAutostart}"; GroupDescription: "{cm:Options}"
+Name: "autostart"; Description: "{cm:OptionAutostart,{#AppName}}"; GroupDescription: "{cm:Options}"
 
 [Files]
 Source: "{#DataRoot}\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
@@ -106,7 +90,7 @@ begin
       RegQueryStringValue(HKEY_LOCAL_MACHINE,'Software\Microsoft\Windows\CurrentVersion\Uninstall\{#AppId}_is1', 'DisplayVersion', Version);
       if Version > '{#AppVersion}' then
         begin
-          MsgBox(ExpandConstant('{cm:NewerVersionExists} '+Version), mbInformation, MB_OK);
+          MsgBox(ExpandConstant('{cm:NewerVersionExists,{#AppName},{#AppVersion}} '+Version), mbInformation, MB_OK);
           Result := False;
         end
       else

@@ -468,6 +468,7 @@ void MainWindow::slotShowHelp()
 
     helpFile.open(QIODevice::ReadOnly);
     QTextStream content(&helpFile);
+    content.setCodec("UTF-8");
     mainText.append(content.readAll());
     helpFile.close();
 
