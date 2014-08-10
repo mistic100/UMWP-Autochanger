@@ -22,7 +22,9 @@ SOURCES += \
     gui/seteditdialog.cpp \
     gui/configdialog.cpp \
     gui/previewdialog.cpp \
-    gui/newversiondialog.cpp
+    gui/newversiondialog.cpp \
+    gui/menubar.cpp \
+    gui/trayicon.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -47,7 +49,9 @@ HEADERS += \
     gui/seteditdialog.h \
     gui/configdialog.h \
     gui/previewdialog.h \
-    gui/newversiondialog.h
+    gui/newversiondialog.h \
+    gui/menubar.h \
+    gui/trayicon.h
 
 FORMS += \
     ext/qhotkeywidget.ui \

@@ -46,7 +46,7 @@ public:
     void setOpt(const QString &_key, const QVariant &_val)  { m_options[_key] = _val; }
     void setHotkey(const QString &_key, const int &_val)    { m_hotkeys[_key] = _val; }
 
-    void setWindowSize(const QSize &_size);
+    void setWindowSize(const QSize &_size, bool _save=true);
     void incrementMsgCount();
     bool setExePath(const QString &_sPath);
 

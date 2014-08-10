@@ -2,16 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSystemTrayIcon>
 #include <QCloseEvent>
 #include <QStatusBar>
-#include <QMenuBar>
 
 #include "main.h"
 #include "controller.h"
 #include "globalshortcut.h"
-#include "ext/qtoolbarext.h"
-#include "ext/qwidgetblinker.h"
+#include "menubar.h"
+#include "trayicon.h"
 
 
 /**
@@ -24,19 +22,9 @@ class MainWindow : public QMainWindow
 private:
     Controller* m_ctrl;
 
-    QStatusBar*      m_statusBar;
-    QToolBarExt*     m_menuBar;
-    QSystemTrayIcon* m_trayIcon;
-    QMenu*           m_trayQuickMenu;
-
-    // reference to some QAction modified after initilization
-    QToolButton* m_actionConfig;
-    QToolButton* m_actionHide1; // menu
-    QAction*     m_actionHide2; // tray
-    QToolButton* m_actionPause1; // menu
-    QAction*     m_actionPause2; // tray
-
-    QWidgetBlinker* m_pauseBlinker;
+    QStatusBar* m_statusBar;
+    MenuBar*    m_menuBar;
+    TrayIcon*   m_trayIcon;
 
     QList<GlobalShortcut*> m_shortcuts;
 
@@ -60,28 +48,20 @@ protected:
 
 public slots:
     void init();
+    void quit();
+    void startPause();
+    void toggleWindow(bool _forceHide=false);
+    void onHotkey();
 
-    void updateTrayQuickMenu();
+    void openConfigDialog();
+    void openHelpDialog();
+    void openAboutDialog();
+    void openPreviewDialog();
+    void openExportDialog();
+    void openImportDialog();
 
-    void slotQuit();
-    void slotRefresh();
-    void slotStartPause();
-    void slotConfigDialog();
-    void slotHotkey();
-
-    void slotShowHelp();
-    void slotShowAbout();
-    void slotShowPreview();
-
-    void slotExport();
-    void slotImport();
-
-    void slotTrayAction(QSystemTrayIcon::ActivationReason _reason);
-    void slotTrayQuickClicked();
-
-    void slotToggleWindow(bool _forceHide=false);
-    void slotDisplayNewVersion();
-    void slotNewVersionDialog();
+    void onNewVersion();
+    void openNewVersionDialog();
 
     void slotAltPressed();
 };

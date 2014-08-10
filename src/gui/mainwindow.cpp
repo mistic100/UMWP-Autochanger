@@ -1,11 +1,7 @@
-#include <QMenu>
-#include <QToolBar>
-#include <QToolButton>
-#include <QPushButton>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QLabel>
 #include <QFile>
-#include <QProgressBar>
 #include <QFileDialog>
 
 #include "mainwindow.h"
@@ -31,8 +27,7 @@ MainWindow::MainWindow(Controller* _ctrl) :
 
     setMinimumSize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
 
-    connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(slotDisplayNewVersion()));
-    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(updateTrayQuickMenu()));
+    connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(onNewVersion()));
 
 
     // WINDOW PROPERTIES
@@ -59,70 +54,12 @@ MainWindow::MainWindow(Controller* _ctrl) :
 
 
     // MENUBAR
-    m_menuBar = new QToolBarExt(this);
-    m_menuBar->setMovable(false);
-    m_menuBar->setIconSize(QSize(20, 20));
-
-    QMenu* menuConfig = new QMenu();
-    QAction* actionOptions = menuConfig->addAction(QIcon(":/icon/settings"), tr("Options"));
-                             menuConfig->addSeparator();
-    QAction* actionImport =  menuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
-    QAction* actionExport =  menuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
-
-    QMenu* menuHelp = new QMenu();
-    QAction* actionHelp =  menuHelp->addAction(QIcon(":/icon/help-color"), tr("Help"));
-    QAction* actionFiles = menuHelp->addAction(QIcon(":/icon/images"), tr("Active files"));
-                           menuHelp->addSeparator();
-    QAction* actionAbout = menuHelp->addAction(QIcon(":/icon/about"), tr("About"));
-
-    QToolButton* actionQuit1 =    m_menuBar->addButton(QIcon(":/icon/quit"), tr("Quit"));
-    m_actionPause1 =              m_menuBar->addButton(QIcon(":/icon/playpause"), tr("Pause"));
-    QToolButton* actionRefresh1 = m_menuBar->addButton(QIcon(":/icon/refresh"), tr("Refresh"));
-    m_actionHide1 =               m_menuBar->addButton(QIcon(":/icon/hide"), tr("Hide"));
-    m_actionConfig =              m_menuBar->addMenu(QIcon(":/icon/config"), tr("Configuration"), menuConfig);
-                                  m_menuBar->addMenu(QIcon(":/icon/help"), tr("?"), menuHelp, Qt::ToolButtonIconOnly);
-
-    m_pauseBlinker = new QWidgetBlinker(m_actionPause1);
-
-    connect(actionQuit1,    SIGNAL(clicked()), this, SLOT(slotQuit()));
-    connect(m_actionHide1,  SIGNAL(clicked()), this, SLOT(slotToggleWindow()));
-    connect(actionRefresh1, SIGNAL(clicked()), this, SLOT(slotRefresh()));
-    connect(m_actionPause1, SIGNAL(clicked()), this, SLOT(slotStartPause()));
-
-    connect(actionOptions,  SIGNAL(triggered()), this, SLOT(slotConfigDialog()));
-    connect(actionImport,   SIGNAL(triggered()), this, SLOT(slotImport()));
-    connect(actionExport,   SIGNAL(triggered()), this, SLOT(slotExport()));
-
-    connect(actionHelp,     SIGNAL(triggered()), this, SLOT(slotShowHelp()));
-    connect(actionAbout,    SIGNAL(triggered()), this, SLOT(slotShowAbout()));
-    connect(actionFiles,    SIGNAL(triggered()), this, SLOT(slotShowPreview()));
-
+    m_menuBar = new MenuBar(this, m_ctrl);
     addToolBar(m_menuBar);
 
 
     // TRAY ICON
-    m_trayIcon = new QSystemTrayIcon(QIcon(":/img/icon"), this);
-
-    connect(m_trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(slotTrayAction(QSystemTrayIcon::ActivationReason)));
-
-    QMenu* trayMenu = new QMenu();
-    m_actionPause2 =           trayMenu->addAction(QIcon(":/icon/playpause"), tr("Pause"));
-    QAction* actionRefresh2 =  trayMenu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
-    m_actionHide2 =            trayMenu->addAction(QIcon(":/icon/hide"), tr("Hide"));
-    m_trayQuickMenu =          trayMenu->addMenu(QIcon(":/icon/quick"), tr("Quick switch"));
-                               trayMenu->addSeparator();
-    QAction* actionQuit2 =     trayMenu->addAction(QIcon(":/icon/quit"), tr("Quit"));
-
-    updateTrayQuickMenu();
-
-    connect(actionQuit2,    SIGNAL(triggered()), this, SLOT(slotQuit()));
-    connect(m_actionHide2,  SIGNAL(triggered()), this, SLOT(slotToggleWindow()));
-    connect(m_actionPause2, SIGNAL(triggered()), this, SLOT(slotStartPause()));
-    connect(actionRefresh2, SIGNAL(triggered()), this, SLOT(slotRefresh()));
-
-    m_trayIcon->setToolTip(APP_NAME);
-    m_trayIcon->setContextMenu(trayMenu);
+    m_trayIcon = new TrayIcon(this, m_ctrl);
 }
 
 /**
@@ -142,6 +79,10 @@ void MainWindow::init()
     {
         showMain();
         defineHotkeys();
+
+        m_ctrl->checkVersion();
+        m_ctrl->startTimer();
+        m_ctrl->onUpdate();
     }
     else
     {
@@ -157,9 +98,7 @@ void MainWindow::showError()
     qxtLog->trace("Init error widget");
 
     m_trayIcon->hide();
-    m_actionHide1->defaultAction()->setVisible(false);
-    m_actionPause1->defaultAction()->setVisible(false);
-    m_actionConfig->defaultAction()->setVisible(false);
+    m_menuBar->setMinimal(true);
 
     ErrorWidget* widget = new ErrorWidget(this, m_ctrl);
     setCentralWidget(widget);
@@ -179,25 +118,18 @@ void MainWindow::showMain()
     qxtLog->trace("Init main widget");
 
     m_trayIcon->show();
-    m_actionHide1->defaultAction()->setVisible(true);
-    m_actionPause1->defaultAction()->setVisible(true);
-    m_actionConfig->defaultAction()->setVisible(true);
+    m_menuBar->setMinimal(false);
 
     MainWidget* widget = new MainWidget(this, m_ctrl);
     setCentralWidget(widget);
 
     resize(m_ctrl->settings()->windowSize());
 
-    m_ctrl->checkVersion();
-    m_ctrl->startTimer();
-    m_ctrl->onUpdate();
-
     // window is hidden by default if the config is not empty
-    if (
-            m_ctrl->settings()->nbSets()>0
-         && m_ctrl->settings()->get("minimize").toBool()
+    if (m_ctrl->settings()->nbSets()>0 &&
+        m_ctrl->settings()->get("minimize").toBool()
     ) {
-        slotToggleWindow(true);
+        toggleWindow(true);
     }
     else
     {
@@ -242,7 +174,7 @@ void MainWindow::defineHotkeys()
             shortcut = new GlobalShortcut();
             shortcut->setShortcut(QKeySequence(it.key()));
             shortcut->setSets(it.value());
-            connect(shortcut, SIGNAL(activated()), this, SLOT(slotHotkey()));
+            connect(shortcut, SIGNAL(activated()), this, SLOT(onHotkey()));
             m_shortcuts.append(shortcut);
         }
 
@@ -259,7 +191,7 @@ void MainWindow::defineHotkeys()
                 shortcut = new GlobalShortcut();
                 shortcut->setShortcut(QKeySequence(it.value()));
                 shortcut->setType(it.key());
-                connect(shortcut, SIGNAL(activated()), this, SLOT(slotHotkey()));
+                connect(shortcut, SIGNAL(activated()), this, SLOT(onHotkey()));
                 m_shortcuts.append(shortcut);
             }
         }
@@ -267,69 +199,17 @@ void MainWindow::defineHotkeys()
 }
 
 /**
- * @brief Update quick switch in tray menu
- */
-void MainWindow::updateTrayQuickMenu()
-{
-    m_trayQuickMenu->clear();
-
-    for (int i=0, l=m_ctrl->settings()->nbSets(); i<l; i++)
-    {
-        Set* set = m_ctrl->settings()->set(i);
-
-        QAction* action = m_trayQuickMenu->addAction(set->name());
-        action->setData(i);
-
-        if (set->isActive())
-        {
-            action->setIcon(QIcon(":/icon/bullet_green"));
-        }
-        else
-        {
-            action->setIcon(QIcon(":/icon/bullet_red"));
-        }
-
-        connect(action, SIGNAL(triggered()), this, SLOT(slotTrayQuickClicked()));
-    }
-}
-
-/**
- * @brief Change active set on click in the quick switch menu
- */
-void MainWindow::slotTrayQuickClicked()
-{
-    QAction* action = (QAction*)(QObject::sender());
-    int idx = action->data().toInt();
-
-    m_ctrl->settings()->setActiveSets(QList<int>()<<idx);
-    m_ctrl->emitListChanged();
-    m_ctrl->onUpdate();
-}
-
-/**
- * @brief Toggle window on double click on the tray icon
- * @param QSystemTrayIcon::ActivationReason _reason
- */
-void MainWindow::slotTrayAction(QSystemTrayIcon::ActivationReason _reason)
-{
-    if (_reason && _reason == QSystemTrayIcon::DoubleClick)
-    {
-        slotToggleWindow();
-    }
-}
-
-/**
  * @brief Minimize to tray or open from tray
  * @param bool _forceHide
  */
-void MainWindow::slotToggleWindow(bool _forceHide)
+void MainWindow::toggleWindow(bool _forceHide)
 {
     if (_forceHide || isVisible())
     {
         hide();
 
         if (m_ctrl->settings()->get("show_notifications").toBool() &&
-                m_ctrl->settings()->get("msgcount").toInt() < 3)
+            m_ctrl->settings()->get("msgcount").toInt() < 3)
         {
             m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
             m_ctrl->settings()->incrementMsgCount();
@@ -340,7 +220,7 @@ void MainWindow::slotToggleWindow(bool _forceHide)
             m_ctrl->settings()->setWindowSize(size());
         }
 
-        m_actionHide2->setText(tr("Show"));
+        m_trayIcon->setHidden(true);
     }
     else
     {
@@ -349,44 +229,28 @@ void MainWindow::slotToggleWindow(bool _forceHide)
         setFocus();
         activateWindow();
 
-        m_actionHide2->setText(tr("Hide"));
+        m_trayIcon->setHidden(false);
     }
-}
-
-/**
- * @brief Save configuration and start the timer
- */
-void MainWindow::slotRefresh()
-{
-    m_ctrl->onUpdate();
 }
 
 /**
  * @brief start or pause the timer
  */
-void MainWindow::slotStartPause()
+void MainWindow::startPause()
 {
-    if (m_ctrl->startPause())
-    {
-        m_pauseBlinker->stop();
-        m_actionPause1->setText(tr("Pause"));
-        m_actionPause2->setText(tr("Pause"));
-    }
-    else
-    {
-        m_pauseBlinker->start();
-        m_actionPause1->setText(tr("Start"));
-        m_actionPause2->setText(tr("Start"));
-    }
+    bool run = m_ctrl->startPause();
+    m_menuBar->setPause(!run);
+    m_trayIcon->setPause(!run);
 }
 
 /**
  * @brief Open configuration dialog
  */
-void MainWindow::slotConfigDialog()
+void MainWindow::openConfigDialog()
 {
     ConfigDialog dialog(this, m_ctrl);
 
+    // need to unbind hotkeys to allow hotkeys input
     clearHotkeys();
     if (dialog.exec())
     {
@@ -398,7 +262,7 @@ void MainWindow::slotConfigDialog()
 /**
  * @brief Open dialog to export config file
  */
-void MainWindow::slotExport()
+void MainWindow::openExportDialog()
 {
     QString filename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
                                                     QDir::homePath() + QDir::separator() + "umwp_settings.xml",
@@ -416,11 +280,11 @@ void MainWindow::slotExport()
 /**
  * @brief Open dialog to import config file
  */
-void MainWindow::slotImport()
+void MainWindow::openImportDialog()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
-                                                     QDir::homePath(),
-                                                     tr("XML files (*.xml)"));
+                                                    QDir::homePath(),
+                                                    tr("XML files (*.xml)"));
     if (filename.isEmpty())
     {
         return;
@@ -448,7 +312,7 @@ void MainWindow::slotImport()
 /**
  * @brief Open help dialog
  */
-void MainWindow::slotShowHelp()
+void MainWindow::openHelpDialog()
 {
     QFile helpFile;
     QString lang = QLocale::system().name().section('_', 0, 0);
@@ -483,7 +347,7 @@ void MainWindow::slotShowHelp()
 /**
  * @brief Open about dialog
  */
-void MainWindow::slotShowAbout()
+void MainWindow::openAboutDialog()
 {
     QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
     mainText+= "Created by Damien \"Mistic\" Sorel.<br>";
@@ -500,7 +364,7 @@ void MainWindow::slotShowAbout()
 /**
  * @brief Display "Active files" dialog
  */
-void MainWindow::slotShowPreview()
+void MainWindow::openPreviewDialog()
 {
     PreviewDialog* dialog = new PreviewDialog(this, m_ctrl);
     dialog->move(geometry().left()+geometry().width()+15, geometry().top());
@@ -510,7 +374,7 @@ void MainWindow::slotShowPreview()
 /**
  * @brief Perform action on hotkey hit
  */
-void MainWindow::slotHotkey()
+void MainWindow::onHotkey()
 {
     GlobalShortcut* shortcut = (GlobalShortcut*)QObject::sender();
 
@@ -523,7 +387,7 @@ void MainWindow::slotHotkey()
         break;
 
     case GlobalShortcut::STARTPAUSE:
-        slotStartPause();
+        startPause();
 
         if (!isVisible() && m_ctrl->settings()->get("show_notifications").toBool())
         {
@@ -539,7 +403,7 @@ void MainWindow::slotHotkey()
         break;
 
     case GlobalShortcut::SHOWHIDE:
-        slotToggleWindow();
+        toggleWindow();
         break;
 
     case GlobalShortcut::SETS:
@@ -567,7 +431,7 @@ void MainWindow::slotHotkey()
 /**
  * @brief Called when a new version is available
  */
-void MainWindow::slotDisplayNewVersion()
+void MainWindow::onNewVersion()
 {
     QString _version = m_ctrl->enviro()->newVersion().first;
 
@@ -578,7 +442,7 @@ void MainWindow::slotDisplayNewVersion()
     statusLabel->setCursor(Qt::PointingHandCursor);
     m_statusBar->insertPermanentWidget(0, statusLabel);
 
-    connect(statusLabel, SIGNAL(clicked()), this, SLOT(slotNewVersionDialog()));
+    connect(statusLabel, SIGNAL(clicked()), this, SLOT(openNewVersionDialog()));
 
     if (!isVisible())
     {
@@ -587,14 +451,14 @@ void MainWindow::slotDisplayNewVersion()
     }
     else
     {
-        slotNewVersionDialog();
+        openNewVersionDialog();
     }
 }
 
 /**
  * @brief Open update dialog
  */
-void MainWindow::slotNewVersionDialog()
+void MainWindow::openNewVersionDialog()
 {
     NewVersionDialog dialog(this, m_ctrl);
     dialog.exec();
@@ -604,7 +468,7 @@ void MainWindow::slotNewVersionDialog()
  * @brief Close the application with a confirmation message
  * Configuration is saved before close
  */
-void MainWindow::slotQuit()
+void MainWindow::quit()
 {
     if (UMWP_STATE != UMWP::OK)
     {
@@ -624,7 +488,6 @@ void MainWindow::slotQuit()
     {
         m_ctrl->settings()->setWindowSize(size());
     }
-    m_ctrl->settings()->save();
 
     qApp->quit();
 }
@@ -645,7 +508,7 @@ void MainWindow::showEvent(QShowEvent* _event)
  */
 void MainWindow::resizeEvent(QResizeEvent* _event)
 {
-    m_ctrl->settings()->setWindowSize(_event->size());
+    m_ctrl->settings()->setWindowSize(_event->size(), false);
 
     QMainWindow::resizeEvent(_event);
 }
@@ -659,7 +522,7 @@ void MainWindow::closeEvent(QCloseEvent* _event)
     if (UMWP_STATE == UMWP::OK && _event && !m_altPressed)
     {
         _event->ignore();
-        slotToggleWindow();
+        toggleWindow();
 
         QMainWindow::closeEvent(_event);
     }

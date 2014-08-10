@@ -46,10 +46,15 @@ const QSize Settings::windowSize() const
 /**
  * @brief Save new window size
  */
-void Settings::setWindowSize(const QSize &_size)
+void Settings::setWindowSize(const QSize &_size, bool _save)
 {
     m_options["window_width"] = _size.width();
     m_options["window_height"] = _size.height();
+
+    if (_save)
+    {
+        save();
+    }
 }
 
 /**

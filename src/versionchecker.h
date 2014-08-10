@@ -16,7 +16,7 @@ class VersionChecker : public QObject
     Q_OBJECT
 
 public:
-    VersionChecker(QObject* _parent = 0) : QObject(_parent) {}
+    VersionChecker(QObject* _parent=0) : QObject(_parent) {}
 
 public slots:
     void run()
