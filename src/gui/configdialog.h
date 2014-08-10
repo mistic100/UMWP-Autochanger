@@ -4,7 +4,7 @@
 #include <QDialog>
 
 #include "main.h"
-#include "settings.h"
+#include "controller.h"
 
 namespace Ui {
     class ConfigDialog;
@@ -20,10 +20,10 @@ class ConfigDialog : public QDialog
 
 private:
     Ui::ConfigDialog* ui;
-    Settings*         m_settings;
+    Controller* m_ctrl;
     
 public:
-    ConfigDialog(QWidget* _parent, Settings* _settings);
+    ConfigDialog(QWidget* _parent, Controller* _ctrl);
     ~ConfigDialog();
 
     void save();

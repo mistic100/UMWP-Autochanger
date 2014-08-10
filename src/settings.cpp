@@ -1,9 +1,4 @@
-#include <Shlobj.h>
-#include <atlbase.h>
-#include "lib/createshortcut.h"
-
 #include "settings.h"
-#include "sysreader.h"
 
 extern short UMWP_STATE;
 
@@ -29,12 +24,6 @@ Settings::Settings()
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;
     m_hotkeys["showhide"] = 0;
-
-    m_env["wallpath"] = QVariant();
-    m_env["bmppath"] = QVariant();
-    m_env["umversion"] = "";
-    m_env["startlinkpath"] = QVariant();
-    m_env["nb_monitors"] = 0;
 }
 
 /**
@@ -46,40 +35,26 @@ Settings::~Settings()
 }
 
 
-/*
- * getters
+/**
+ * @brief Get saved window size
  */
 const QSize Settings::windowSize() const
 {
     return QSize(m_options["window_width"].toInt(), m_options["window_height"].toInt());
 }
 
-const bool Settings::canAddShortcut() const
-{
-    return !m_env["startlinkpath"].isNull();
-}
-
-const bool Settings::isAutostart() const
-{
-    return QFile::exists(m_env["startlinkpath"].toString());
-}
-
-
-/*
- * setters
+/**
+ * @brief Save new window size
  */
-void Settings::setNewVersion(const QString &_ver, const QString &_link)
-{
-    m_newVersion.first = _ver;
-    m_newVersion.second = _link;
-}
-
 void Settings::setWindowSize(const QSize &_size)
 {
     m_options["window_width"] = _size.width();
     m_options["window_height"] = _size.height();
 }
 
+/**
+ * @brief Increment tray tooltip count
+ */
 void Settings::incrementMsgCount()
 {
     m_options["msgcount"] = m_options["msgcount"].toInt()+1;
@@ -97,25 +72,11 @@ void Settings::log()
         options.append(it.key() +": "+ it.value().toString());
     }
 
-    QList<QVariant> env;
-    env.append("== ENVIRONEMENT");
-    for (QHash<QString, QVariant>::const_iterator it=m_env.begin(); it!=m_env.end(); ++it)
-    {
-        env.append(it.key() +": "+ it.value().toString());
-    }
-
     QList<QVariant> hotkeys;
     hotkeys.append("== HOTKEYS");
     for (QHash<QString, int>::const_iterator it=m_hotkeys.begin(); it!=m_hotkeys.end(); ++it)
     {
         hotkeys.append(it.key() +": "+ QString::number(it.value()));
-    }
-
-    QList<QVariant> sizes;
-    sizes.append("== MONITORS");
-    for (QHash<int, QScreen>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
-    {
-        sizes.append(QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height()));
     }
 
     QList<QVariant> sets;
@@ -125,112 +86,9 @@ void Settings::log()
         sets.append((*it)->name()+": "+((*it)->isActive()?"active":"inactive"));
     }
 
-    qxtLog->debug("App state: "+ QString::number(UMWP_STATE));
     qxtLog->debug(options);
-    qxtLog->debug(env);
     qxtLog->debug(hotkeys);
-    qxtLog->debug(sizes);
     qxtLog->debug(sets);
-}
-
-/**
- * @brief Init environnement variables
- */
-void Settings::init()
-{
-    // load from XML
-    load();
-
-    bool ok;
-
-    // SEARCH ULTRAMON EXE
-    if (m_options["umpath"].toString().isEmpty() || !QFile::exists(m_options["umpath"].toString()))
-    {
-        m_options["umpath"] = SysReader::searchUMDexe(ok);
-
-        if (!ok) {
-            qxtLog->error("UltraMonDesktop.exe not found");
-            UMWP_STATE|= UMWP::NOT_INSTALLED;
-        }
-    }
-
-    // SEARCH ULTRAMON VERSION
-    m_env["umversion"] = SysReader::getUMversion(ok);
-
-    if (!ok) {
-        qxtLog->error("Unknown UltraMon version");
-        UMWP_STATE|= UMWP::BAD_VERSION;
-    }
-    else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
-    {
-        qxtLog->error("Invalid UltraMon version");
-        UMWP_STATE|= UMWP::BAD_VERSION;
-    }
-
-    // SEARCH BMP PATH
-    m_env["bmppath"] = SysReader::buildBMPpath(ok);
-
-    if (!ok) {
-        UMWP_STATE|= UMWP::UNKNOWN_ERROR;
-    }
-
-    // SEARCH WALLPAPER FOLDER
-    if (!(UMWP_STATE & UMWP::BAD_VERSION))
-    {
-        m_env["wallpath"] = SysReader::buildUMwallpaperPath(m_env["umversion"].toString(), ok);
-
-        if (!ok) {
-            UMWP_STATE|= UMWP::UNKNOWN_ERROR;
-        }
-        else if (!refreshMonitors())
-        {
-            UMWP_STATE|= UMWP::FILE_NOT_FOUND;
-        }
-    }
-
-    // SEARCH SHORTCUT FILE
-    m_env["startlinkpath"] = SysReader::buildShortcutPath();
-}
-
-/**
- * @brief Read monitors config from default file or UltraMon API
- */
-bool Settings::refreshMonitors()
-{
-    bool ok;
-
-    if (!QFile::exists(m_env["wallpath"].toString() + "default.wallpaper"))
-    {
-        qxtLog->error("default.wallpaper not found");
-
-        QHash<int, QScreen> sizes = SysReader::queryMonitors(ok);
-
-        if (!ok || m_wpSizes.size() == 0)
-        {
-            qxtLog->error("Unable to query UltraMon API");
-            return false;
-        }
-        else
-        {
-            SysReader::createUMwallpaper(m_env["wallpath"].toString(), sizes, ok);
-
-            if (!ok) {
-                qxtLog->error("Unable create default.wallpaper");
-                return false;
-            }
-        }
-    }
-
-    SysReader::readMonitors(m_env["wallpath"].toString(), m_wpSizes, m_header, ok);
-
-    if (!ok || m_wpSizes.size() == 0) {
-        qxtLog->error("Unable read default.wallpaper");
-        return false;
-    }
-
-    m_env["nb_monitors"] = m_wpSizes.size() - 1; // an extra entry stores full available size
-
-    return true;
 }
 
 /**
@@ -725,42 +583,6 @@ int const Settings::nbActiveSets(bool _withFiles) const
     }
 
     return totalSets;
-}
-
-/**
- * @brief Create the startup shortcut
- */
-void Settings::createShortcut()
-{
-    if (canAddShortcut())
-    {
-        qxtLog->trace("Attempt to create shortcut");
-
-        wchar_t* path1 = (wchar_t*) malloc(256);
-        wchar_t* path2 = (wchar_t*) malloc(256);
-
-        GetModuleFileName(NULL, path1, 256);
-        wcscpy(path2, path1);
-        PathRemoveFileSpec(path2);
-
-        CreateShortcut(path1, path2, (LPCWSTR)m_env["startlinkpath"].toString().utf16());
-
-        free(path1);
-        free(path2);
-    }
-}
-
-/**
- * @brief Delete the startup shortcut
- */
-void Settings::deleteShortcut()
-{
-    if (isAutostart())
-    {
-        qxtLog->trace("Remove shortcut");
-
-        QFile::remove(m_env["startlinkpath"].toString());
-    }
 }
 
 /**

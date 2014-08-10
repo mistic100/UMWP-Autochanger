@@ -23,7 +23,9 @@ private:
     int m_hotkey;
     
 public:
-    QHotKeyWidget(QWidget* _parent = 0) : QWidget(_parent), ui(new Ui::QHotKeyWidget)
+    QHotKeyWidget(QWidget* _parent = 0) :
+        QWidget(_parent),
+        ui(new Ui::QHotKeyWidget)
     {
         ui->setupUi(this);
     }

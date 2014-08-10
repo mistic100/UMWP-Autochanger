@@ -2,9 +2,10 @@
 #include <QLabel>
 #include <QPainter>
 #include <QDesktopServices>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
 
 #include "previewdialog.h"
-#include "ui_previewdialog.h"
 
 
 /**
@@ -12,16 +13,24 @@
  * @param QWidget* _parent
  * @param Controller* _ctrl
  */
-PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) : QDialog(_parent),
-    ui(new Ui::PreviewDialog)
+PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
+    QDialog(_parent),
+    m_ctrl(_ctrl)
 {
-    ui->setupUi(this);
+    QVBoxLayout* mainLayout = new QVBoxLayout();
+    m_layout = new QGridLayout();
 
-    m_ctrl = _ctrl;
+    QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Close);
+    connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
+
+    mainLayout->addLayout(m_layout);
+    mainLayout->addWidget(buttons);
+    setLayout(mainLayout);
 
     connect(m_ctrl, SIGNAL(wallpaperChanged()), this, SLOT(draw()));
-
     draw();
+
+    setWindowTitle(tr("Active files"));
 
     qxtLog->trace("PreviewDialog openned");
 }
@@ -31,17 +40,25 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) : QDialog(_par
  */
 void PreviewDialog::draw()
 {
-    while (ui->gridLayout->count() > 0)
+    // remove old widgets if any
+    while (m_layout->count() > 0)
     {
-        QLayoutItem* item = ui->gridLayout->takeAt(0);
+        QLayoutItem* item = m_layout->takeAt(0);
         delete item->widget();
         delete item;
     }
 
-    int width = 150;
-    if (m_ctrl->set()->type() == UM::W_DESKTOP)
+    // rare case but generates segfault
+    if (m_ctrl->currentSet() == NULL)
     {
-        width*= m_ctrl->settings()->env("nb_monitors").toInt();
+        return;
+    }
+
+    // width of the thumbnail
+    int width = 150;
+    if (m_ctrl->currentSet()->type() == UM::W_DESKTOP)
+    {
+        width*= m_ctrl->enviro()->get("nb_monitors").toInt();
     }
 
     QPen pen(Qt::SolidLine);
@@ -49,10 +66,10 @@ void PreviewDialog::draw()
     pen.setColor(QColor(0, 160, 255));
 
     int i = 0, height = 0;
-    for (QVector<QString>::const_iterator it=m_ctrl->files().begin(); it!=m_ctrl->files().end(); ++it)
+    for (QVector<QString>::const_iterator it=m_ctrl->files().constBegin(); it!=m_ctrl->files().constEnd(); ++it)
     {
         // resize image and add blue border
-        QPixmap image = QPixmap(*it).scaledToWidth(width, Qt::SmoothTransformation);
+        QPixmap image = QPixmap(*it).scaledToWidth(width, Qt::FastTransformation);
         QPainter painter(&image);
         painter.setPen(pen);
         painter.drawRect(image.rect().adjusted(1, 1, -1, -1));
@@ -70,10 +87,10 @@ void PreviewDialog::draw()
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);
 
-        connect(button, SIGNAL(clicked()), this, SLOT(slotImageClicked()));
+        connect(button, SIGNAL(clicked()), this, SLOT(onThumbnailClicked()));
 
-        ui->gridLayout->addWidget(label, 0, i);
-        ui->gridLayout->addWidget(button, 1, i);
+        m_layout->addWidget(label, 0, i);
+        m_layout->addWidget(button, 1, i);
 
         i++;
         height = qMax(height, image.height());
@@ -83,17 +100,9 @@ void PreviewDialog::draw()
 }
 
 /**
- * @brief PreviewDialog::~PreviewDialog
- */
-PreviewDialog::~PreviewDialog()
-{
-    delete ui;
-}
-
-/**
  * @brief Open image file with default application
  */
-void PreviewDialog::slotImageClicked()
+void PreviewDialog::onThumbnailClicked()
 {
     QWidget* image = (QWidget*)QObject::sender();
 

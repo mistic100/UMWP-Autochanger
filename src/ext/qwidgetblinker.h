@@ -1,5 +1,5 @@
-#ifndef WIDGETBLINKER_H
-#define WIDGETBLINKER_H
+#ifndef QWIDGETBLINKER_H
+#define QWIDGETBLINKER_H
 
 #include <QWidget>
 #include <QTimeLine>
@@ -9,21 +9,17 @@
 /**
  * @brief Util allowing to make any QWidget blink
  */
-class WidgetBlinker : public QWidget
+class QWidgetBlinker : public QWidget
 {
     Q_OBJECT
 
 private:
-    QWidget* m_target;
-
     QTimeLine* m_timeLine;
 
 public:
-    WidgetBlinker(QWidget* _target) : QWidget()
+    QWidgetBlinker(QWidget* _parent, int _duration=1000) : QWidget(_parent)
     {
-        m_target = _target;
-
-        m_timeLine = new QTimeLine(1000);
+        m_timeLine = new QTimeLine(_duration, this);
         m_timeLine->setFrameRange(0, 2);
         m_timeLine->setLoopCount(0);
 
@@ -44,22 +40,23 @@ public:
 
     void hide()
     {
-        m_target->installEventFilter(this);
-        m_target->update();
+        parentWidget()->installEventFilter(this);
+        parentWidget()->update();
     }
 
     void show()
     {
-        m_target->removeEventFilter(this);
-        m_target->update();
+        parentWidget()->removeEventFilter(this);
+        parentWidget()->update();
     }
 
+protected:
     bool eventFilter(QObject*, QEvent* _event)
     {
         return _event->type() == QEvent::Paint;
     }
 
-public slots:
+private slots:
     void frameChanged(int _frame)
     {
         if (_frame == 0) hide();
@@ -67,4 +64,4 @@ public slots:
     }
 };
 
-#endif // WIDGETBLINKER_H
+#endif // QWIDGETBLINKER_H

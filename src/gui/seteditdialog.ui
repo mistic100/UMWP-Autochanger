@@ -131,7 +131,7 @@
   <customwidget>
    <class>QHotKeyWidget</class>
    <extends>QWidget</extends>
-   <header>qhotkeywidget.h</header>
+   <header>ext/qhotkeywidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

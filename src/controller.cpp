@@ -4,21 +4,24 @@
 
 #include "main.h"
 #include "controller.h"
-#include "mainwidget.h"
+#include "gui/mainwidget.h"
 
 
 /**
  * @brief Controller::Controller
  * @param Settings* _settings
+ * @param Environment* _enviro
  */
-Controller::Controller(Settings* _settings) : QObject(0)
+Controller::Controller(Settings* _settings, Environment* _enviro) :
+    QObject(),
+    m_settings(_settings),
+    m_enviro(_enviro),
+    m_set(NULL)
 {
     m_randomEngine.seed((unsigned int)time(NULL));
 
-    m_settings = _settings;
-
     m_mainTimer = new QTimer(this);
-    connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(slotUpdate()));
+    connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
 }
 
 /**
@@ -26,21 +29,21 @@ Controller::Controller(Settings* _settings) : QObject(0)
  */
 void Controller::checkVersion()
 {
-    if (m_settings->opt("check_updates").toBool())
+    if (m_settings->get("check_updates").toBool())
     {
-        VersionChecker* versionChecker = new VersionChecker();
-        connect(versionChecker, SIGNAL(newVersionAvailable(const QString, const QString)),
-                this, SLOT(slotStoreNewVersion(const QString, const QString)));
+        VersionChecker* checker = new VersionChecker();
+        connect(checker, SIGNAL(newVersionAvailable(const QString, const QString)),
+                this, SLOT(onNewVersion(const QString, const QString)));
 
         QThread* thread = new QThread(this);
-        versionChecker->moveToThread(thread);
+        checker->moveToThread(thread);
 
-        connect(thread, SIGNAL(started()), versionChecker, SLOT(run()));
-        connect(versionChecker, SIGNAL(finished()), thread, SLOT(quit()));
-        connect(versionChecker, SIGNAL(finished()), versionChecker, SLOT(deleteLater()));
+        connect(thread, SIGNAL(started()), checker, SLOT(run()));
+        connect(checker, SIGNAL(finished()), thread, SLOT(quit()));
+        connect(checker, SIGNAL(finished()), checker, SLOT(deleteLater()));
 
         qxtLog->trace("Start version checker thread");
-        QTimer::singleShot(1000, thread, SLOT(start()));
+        QTimer::singleShot(500, thread, SLOT(start()));
     }
 }
 
@@ -49,9 +52,9 @@ void Controller::checkVersion()
  * @param string _version
  * @param string _link
  */
-void Controller::slotStoreNewVersion(const QString &_version, const QString &_link)
+void Controller::onNewVersion(const QString &_version, const QString &_link)
 {
-    m_settings->setNewVersion(_version, _link);
+    m_enviro->setNewVersion(_version, _link);
     emit newVersionAvailable();
 }
 
@@ -60,9 +63,11 @@ void Controller::slotStoreNewVersion(const QString &_version, const QString &_li
  */
 void Controller::launchInstaller()
 {
-    if (QFile::exists("installer.exe"))
+    QString path = QDir::currentPath() +"/"+ QString::fromAscii(APP_INSTALLER_FILENAME);
+
+    if (QFile::exists(path))
     {
-        QProcess::startDetached("\""+ QDir::currentPath() +"/installer.exe\" -delete-installer");
+        QProcess::startDetached("\""+ path +"\" -delete-installer");
         qApp->quit();
     }
 }
@@ -73,8 +78,9 @@ void Controller::launchInstaller()
 void Controller::startTimer()
 {
     qxtLog->info("Start timer");
+
     m_mainTimer->stop();
-    m_mainTimer->setInterval(m_settings->opt("delay").toInt()*1000);
+    m_mainTimer->setInterval(m_settings->get("delay").toInt()*1000);
     m_mainTimer->start();
 }
 
@@ -101,12 +107,12 @@ bool Controller::startPause()
 /**
  * @brief Update the wallpaper
  */
-void Controller::slotUpdate()
+void Controller::onUpdate()
 {
     qxtLog->info("Update !");
 
     // update delay if needed
-    int delay = m_settings->opt("delay").toInt()*1000;
+    int delay = m_settings->get("delay").toInt()*1000;
     if (delay != m_mainTimer->interval())
     {
         qxtLog->debug("Timer delay changed to: "+delay);
@@ -114,10 +120,10 @@ void Controller::slotUpdate()
     }
 
     // update config
-    if (m_settings->opt("check").toBool())
+    if (m_settings->get("check").toBool())
     {
         m_settings->updateSets();
-        m_settings->refreshMonitors();
+        m_enviro->refreshMonitors();
         emit listChanged(false);
     }
 
@@ -137,7 +143,7 @@ void Controller::slotUpdate()
 
     if (m_set->type() == UM::W_MONITOR)
     {
-        for (int i=0, l=m_settings->env("nb_monitors").toInt(); i<l; i++)
+        for (int i=0, l=m_enviro->get("nb_monitors").toInt(); i<l; i++)
         {
             m_files.append(getRandomFile(m_set));
         }
@@ -149,16 +155,16 @@ void Controller::slotUpdate()
 
     QVector<QString> files = adaptFilesToFillMode(m_files, m_set);
 
-    QString filename = m_settings->env("wallpath").toString() + QString::fromAscii(APP_WALLPAPER_FILE);
+    QString filename = m_enviro->get("wallpath").toString() + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
     generateFile(filename, files, m_set);
 
     // remove old BMP file
-    QFile::remove(m_settings->env("bmppath").toString());
+    QFile::remove(m_enviro->get("bmppath").toString());
 
     // execute UltraMonDesktop
-    QString cmd = "\"" + m_settings->opt("umpath").toString() + "\" /load \"" + filename + "\"";
+    QString cmd = "\"" + m_settings->get("umpath").toString() + "\" /load \"" + filename + "\"";
     QProcess::startDetached(cmd);
 
     qxtLog->trace("Launch UltraMonDesktop");
@@ -239,7 +245,7 @@ QString Controller::getRandomFile(Set* _set)
 void Controller::generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set)
 {
     // get header from default.wallpaper
-    QByteArray buffer(m_settings->header());
+    QByteArray buffer(m_enviro->header());
 
     // write wallpaper type
     UM::WALLPAPER wp_type = _set->type();
@@ -263,6 +269,7 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
         wall.color1 = 0x00000000;
         wall.color2 = 0x00000000;
         wall.imgStyle = wp_style;
+
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
         _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
 
@@ -279,6 +286,7 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
 /**
  * @brief Resize image files and return an array of new paths in cache folder
  * @param string[] _files
+ * @param Set* _set
  * @return string[] _files
  */
 QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set)
@@ -299,11 +307,11 @@ QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files
         QSize size;
         if (_set->type() == UM::W_DESKTOP)
         {
-            size = m_settings->wpSize(-1);
+            size = m_enviro->wpSize(-1);
         }
         else
         {
-            size = m_settings->wpSize(i);
+            size = m_enviro->wpSize(i);
         }
 
         if (!size.isEmpty())

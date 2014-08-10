@@ -5,7 +5,7 @@
 #include <QVariant>
 
 #include "main.h"
-#include "qscreen.h"
+#include "ext/qscreen.h"
 
 /**
  * @brief Utilities to access environnement configuration

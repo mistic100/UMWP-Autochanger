@@ -26,7 +26,8 @@ Set::Set(const QString &_path, const QString &_name)
     m_valid = true;
     m_lastModif = 0;
     m_hotkey = 0;
-    m_UID = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
+    m_cachePath = QString::fromAscii(APP_CACHE_DIR) +
+            QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
     readCache();
     check();
@@ -93,7 +94,7 @@ double Set::lastChange()
 
 /**
  * @brief Internal recursive function for lastChange()
- * @param string _child
+ * @param string _path
  * @param int _level
  * @return double
  */
@@ -142,7 +143,7 @@ void Set::populateFiles()
 
 /**
  * @brief Internal recursive function for populateFiles()
- * @param string _child
+ * @param string _path
  * @param int _level
  */
 void Set::populateFilesRecur(const QString &_path, const int _level)
@@ -172,7 +173,7 @@ void Set::populateFilesRecur(const QString &_path, const int _level)
  */
 void Set::readCache()
 {
-    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+    QFile file(m_cachePath);
 
     if (file.exists() && file.open(QIODevice::ReadOnly))
     {
@@ -188,7 +189,7 @@ void Set::readCache()
  */
 void Set::writeCache()
 {
-    QFile file(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+    QFile file(m_cachePath);
 
     if (file.open(QIODevice::WriteOnly))
     {
@@ -204,5 +205,5 @@ void Set::writeCache()
  */
 void Set::deleteCache()
 {
-    QFile::remove(QString::fromAscii(APP_CACHE_DIR)+m_UID);
+    QFile::remove(m_cachePath);
 }

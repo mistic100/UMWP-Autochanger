@@ -3,6 +3,7 @@
 
 #include <QSize>
 
+
 /**
  * @brief Object with width, height, top and left properties
  */

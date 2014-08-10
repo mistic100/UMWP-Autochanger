@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-02-13T09:38:53
-#
-#-------------------------------------------------
-
 QT += core gui xml network
 CONFIG += qxt
 QXT += core gui
@@ -16,46 +10,51 @@ RC_FILE = UMWP_Autochanger.rc
 
 SOURCES += \
     main.cpp\
-    mainwindow.cpp \
-    controller.cpp \
     set.cpp \
-    listdelegate.cpp \
+    controller.cpp \
     settings.cpp \
-    errorwidget.cpp \
-    mainwidget.cpp \
-    seteditdialog.cpp \
-    configdialog.cpp \
-    qlineedithotkey.cpp \
-    qtoolbarext.cpp \
-    previewdialog.cpp \
+    environment.cpp \
     sysreader.cpp \
-    newversiondialog.cpp
+    gui/listdelegate.cpp \
+    gui/mainwindow.cpp \
+    gui/errorwidget.cpp \
+    gui/mainwidget.cpp \
+    gui/seteditdialog.cpp \
+    gui/configdialog.cpp \
+    gui/previewdialog.cpp \
+    gui/newversiondialog.cpp
 
 HEADERS += \
-    lib/createshortcut.h \
-    lib/UltraMon.h \
-    mainwindow.h \
-    controller.h \
-    set.h \
-    main.h \
-    listdelegate.h \
-    settings.h \
-    errorwidget.h \
-    versionchecker.h \
-    listproxystyle.h \
-    mainwidget.h \
-    seteditdialog.h \
-    configdialog.h \
-    qlineedithotkey.h \
-    globalshortcut.h \
-    qtoolbarext.h \
-    previewdialog.h \
+    ext/qlineedithotkey.h \
+    ext/qtoolbarext.h \
+    ext/qscreen.h \
+    ext/qhotkeywidget.h \
+    ext/qwidgetblinker.h \
     constants.h \
-    widgetblinker.h \
+    main.h \
+    set.h \
+    controller.h \
+    settings.h \
+    environment.h \
     sysreader.h \
-    qscreen.h \
-    qhotkeywidget.h \
-    newversiondialog.h
+    versionchecker.h \
+    listdelegate.h \
+    listproxystyle.h \
+    globalshortcut.h \
+    gui/mainwindow.h \
+    gui/errorwidget.h \
+    gui/mainwidget.h \
+    gui/seteditdialog.h \
+    gui/configdialog.h \
+    gui/previewdialog.h \
+    gui/newversiondialog.h
+
+FORMS += \
+    ext/qhotkeywidget.ui \
+    gui/mainwidget.ui \
+    gui/seteditdialog.ui \
+    gui/configdialog.ui \
+    gui/newversiondialog.ui
 
 RESOURCES += \
     UMWP_Autochanger.qrc
@@ -66,11 +65,3 @@ TRANSLATIONS += \
 
 OTHER_FILES += \
     UMWP_Autochanger.rc
-
-FORMS += \
-    mainwidget.ui \
-    seteditdialog.ui \
-    configdialog.ui \
-    previewdialog.ui \
-    qhotkeywidget.ui \
-    newversiondialog.ui

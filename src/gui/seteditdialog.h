@@ -21,7 +21,6 @@ class SetEditDialog : public QDialog
 
 private:
     Ui::SetEditDialog *ui;
-
     Settings* m_settings;
 
 public:
@@ -32,7 +31,6 @@ public:
 
 protected:
     void done(int result);
-
 };
 
 #endif // SETEDITDIALOG_H

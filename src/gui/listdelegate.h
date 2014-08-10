@@ -18,7 +18,7 @@ private:
 public:
     ListDelegate(QObject* _parent, Settings* _settings);
 
-    void    paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void    paint(QPainter* _painter, const QStyleOptionViewItem &_option, const QModelIndex &_index) const;
     QSize   sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 

@@ -4,13 +4,13 @@
 
 /**
  * @brief ListDelegate::ListDelegate
- * @param QWidget* _parent
- * @param Controller* _ctrl
+ * @param QObject* _parent
+ * @param Settings* _settings
  */
-ListDelegate::ListDelegate(QObject* _parent, Settings* _settings) : QAbstractItemDelegate(_parent)
-{
-    m_settings = _settings;
-}
+ListDelegate::ListDelegate(QObject* _parent, Settings* _settings) :
+    QAbstractItemDelegate(_parent),
+    m_settings(_settings)
+{}
 
 /**
  * @brief ListDelegate::sizeHint
@@ -24,16 +24,16 @@ QSize ListDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &) 
 /**
  * @brief ListDelegate::paint
  */
-void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option, const QModelIndex &_index) const
 {
     // get configuration
-    Set* set = m_settings->set(index.data(Qt::UserRole).toInt());
-    bool selected = option.state & QStyle::State_Selected;
-    QRect baseRect = option.rect.adjusted(0, 0, -1, 0);
+    Set* set = m_settings->set(_index.data(Qt::UserRole).toInt());
+    bool selected = _option.state & QStyle::State_Selected;
+    QRect baseRect = _option.rect.adjusted(0, 0, -1, 0);
     QRect rect;
 
 
-    painter->setOpacity(!set->isActive() ? 0.8 : 1.0);
+    _painter->setOpacity(!set->isActive() ? 0.8 : 1.0);
 
     // BACKGROUND
     rect = baseRect;
@@ -45,14 +45,14 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
             gradient.setColorAt(0.0,  QColor(254, 187, 187));
             gradient.setColorAt(0.45, QColor(254, 144, 144));
             gradient.setColorAt(1.0,  QColor(255, 92, 92));
-            painter->setBrush(gradient);
+            _painter->setBrush(gradient);
         }
         else
         {
-            painter->setBrush(QColor(254, 214, 214));
+            _painter->setBrush(QColor(254, 214, 214));
         }
 
-        painter->setPen(QColor(255, 15, 15));
+        _painter->setPen(QColor(255, 15, 15));
     }
     else if (selected)
     {
@@ -60,17 +60,17 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         gradient.setColorAt(0.0, QColor(109, 191, 224));
         gradient.setColorAt(0.9, QColor(27, 134, 183));
         gradient.setColorAt(1.0, QColor(0, 120, 174));
-        painter->setBrush(gradient);
+        _painter->setBrush(gradient);
 
-        painter->setPen(QColor(0, 90, 131));
+        _painter->setPen(QColor(0, 90, 131));
     }
     else
     {
-        painter->setPen(QColor(211, 211, 211));
-        painter->setBrush(index.row()%2 ? Qt::white : QColor(255, 254, 239));
+        _painter->setPen(QColor(211, 211, 211));
+        _painter->setBrush(_index.row()%2 ? Qt::white : QColor(255, 254, 239));
     }
 
-    painter->drawRect(rect);
+    _painter->drawRect(rect);
 
 
     // STATE ICON
@@ -84,10 +84,10 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         a_icon = QIcon(":/icon/bullet_red"); break;
     }
     rect = baseRect.adjusted(2, 0, 0, 0);
-    a_icon.paint(painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
+    a_icon.paint(_painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
 
 
-    painter->setOpacity(!set->isActive() ? 0.5 : 1.0);
+    _painter->setOpacity(!set->isActive() ? 0.5 : 1.0);
 
     // MODE ICON
     switch (set->type())
@@ -98,7 +98,7 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         w_icon = QIcon(":/icon/w_monitor"); break;
     }
     rect = baseRect.adjusted(0, 3, -3, 0);
-    w_icon.paint(painter, rect, Qt::AlignTop|Qt::AlignRight);
+    w_icon.paint(_painter, rect, Qt::AlignTop|Qt::AlignRight);
 
 
     // IMAGE ICON
@@ -116,58 +116,58 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem &option, 
         im_icon = QIcon(":/icon/im_fill"); break;
     }
     rect = baseRect.adjusted(0, 0, -2, 0);
-    im_icon.paint(painter, rect, Qt::AlignBottom|Qt::AlignRight);
+    im_icon.paint(_painter, rect, Qt::AlignBottom|Qt::AlignRight);
 
 
-    painter->setOpacity(!set->isActive() ? 0.9 : 1.0);
+    _painter->setOpacity(!set->isActive() ? 0.9 : 1.0);
 
     // HOTKEY
     rect = baseRect.adjusted(0, 3, -23, 0);
-    painter->setFont(QFont("Calibri", 9, -1, true));
+    _painter->setFont(QFont("Calibri", 9, -1, true));
     if (selected)
     {
-        painter->setPen(QColor(220, 220, 220));
+        _painter->setPen(QColor(220, 220, 220));
     }
     else
     {
-        painter->setPen(QColor(150, 150, 150));
+        _painter->setPen(QColor(150, 150, 150));
     }
 
     QString hotkey = set->hotkeyStr();
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
+    _painter->drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
 
-    QFontMetrics metric(painter->font());
+    QFontMetrics metric(_painter->font());
     int hkWidth = metric.width(hotkey);
 
 
     // TITLE
     rect = baseRect.adjusted(19, 1, -hkWidth-26, 0);
-    painter->setFont(QFont("Calibri", 11));
+    _painter->setFont(QFont("Calibri", 11));
     if (selected)
     {
-        painter->setPen(QColor(255, 255, 255));
+        _painter->setPen(QColor(255, 255, 255));
     }
     else
     {
-        painter->setPen(QColor(50, 50, 50));
+        _painter->setPen(QColor(50, 50, 50));
     }
 
-    QString title = QFontMetrics(painter->font()).elidedText(set->fullName(), Qt::ElideMiddle, rect.width());
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title);
+    QString title = QFontMetrics(_painter->font()).elidedText(set->fullName(), Qt::ElideMiddle, rect.width());
+    _painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, title);
 
 
     // PATH
     rect = baseRect.adjusted(19, 19, -25, 0);
-    painter->setFont(QFont("Calibri", 9, -1, true));
+    _painter->setFont(QFont("Calibri", 9, -1, true));
     if (selected)
     {
-        painter->setPen(QColor(220, 220, 220));
+        _painter->setPen(QColor(220, 220, 220));
     }
     else
     {
-        painter->setPen(QColor(150, 150, 150));
+        _painter->setPen(QColor(150, 150, 150));
     }
 
-    QString path = QFontMetrics(painter->font()).elidedText(set->path(), Qt::ElideMiddle, rect.width());
-    painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, path);
+    QString path = QFontMetrics(_painter->font()).elidedText(set->path(), Qt::ElideMiddle, rect.width());
+    _painter->drawText(rect, Qt::AlignTop|Qt::AlignLeft, path);
 }

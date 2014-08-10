@@ -20,7 +20,7 @@ class MainWidget : public QWidget
 
 private:
     Ui::MainWidget* ui;
-    Controller*     m_ctrl;
+    Controller* m_ctrl;
     
 public:
     MainWidget(QWidget* _parent, Controller* _ctrl);
@@ -29,8 +29,8 @@ public:
     QList<int> getSelectedIndexes();
 
 public slots:
-    void slotUpdateList(bool _resetSel);
-    void slotMoveItem(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
+    void onListChanged(bool _resetSel);
+    void onItemMoved(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
 
 private slots:
     void on_buttonAdd_clicked();

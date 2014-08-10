@@ -38,7 +38,7 @@
       <string>Reset</string>
      </property>
      <property name="icon">
-      <iconset resource="UMWP_Autochanger.qrc">
+      <iconset resource="../UMWP_Autochanger.qrc">
        <normaloff>:/icon/bullet_cross</normaloff>:/icon/bullet_cross</iconset>
      </property>
      <property name="flat">
@@ -56,7 +56,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="UMWP_Autochanger.qrc"/>
+  <include location="../UMWP_Autochanger.qrc"/>
  </resources>
  <connections/>
 </ui>

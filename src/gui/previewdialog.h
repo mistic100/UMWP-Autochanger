@@ -2,13 +2,10 @@
 #define PREVIEWDIALOG_H
 
 #include <QDialog>
+#include <QGridLayout>
 
 #include "main.h"
 #include "controller.h"
-
-namespace Ui {
-    class PreviewDialog;
-}
 
 
 /**
@@ -19,18 +16,17 @@ class PreviewDialog : public QDialog
     Q_OBJECT
 
 private:
-    Ui::PreviewDialog *ui;
-
     Controller* m_ctrl;
+    QGridLayout* m_layout;
     
 public:
     PreviewDialog(QWidget* _parent, Controller* _ctrl);
-    ~PreviewDialog();
 
 public slots:
     void draw();
 
-    void slotImageClicked();
+private slots:
+    void onThumbnailClicked();
 };
 
 #endif // PREVIEWDIALOG_H

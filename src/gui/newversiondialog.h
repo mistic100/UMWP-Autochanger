@@ -18,8 +18,8 @@ class NewVersionDialog : public QDialog
     Q_OBJECT
 
 private:
-    Ui::NewVersionDialog*   ui;
-    Controller*             m_ctrl;
+    Ui::NewVersionDialog* ui;
+    Controller* m_ctrl;
 
     QPair<QString, QString> m_version;
 
@@ -27,7 +27,7 @@ private:
     QNetworkReply*  m_reply;
     
 public:
-    NewVersionDialog(Controller* _ctrl, QWidget* _parent = 0);
+    NewVersionDialog(QWidget* _parent, Controller* _ctrl);
     ~NewVersionDialog();
 
 private:
@@ -36,9 +36,9 @@ private:
 private slots:
     void on_updateButton_clicked();
 
-    void slotDataReady();
-    void slotDownloadFinished();
-    void slotDownloadProgress(qint64 _received, qint64 _total);
+    void onDataReady();
+    void onDownloadFinished();
+    void onDownloadProgress(qint64 _received, qint64 _total);
 };
 
 #endif // NEWVERSIONDIALOG_H

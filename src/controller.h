@@ -9,6 +9,7 @@ using namespace std::tr1;
 #include "main.h"
 #include "set.h"
 #include "settings.h"
+#include "environment.h"
 #include "versionchecker.h"
 
 
@@ -21,24 +22,24 @@ class Controller : public QObject
 
 private:
     Settings*        m_settings;
+    Environment*     m_enviro;
+
     QTimer*          m_mainTimer;
     mt19937          m_randomEngine; // mersenne_twister
+
     QVector<QString> m_files;
     Set*             m_set;
 
 public:
-    Controller(Settings* _settings);
+    Controller(Settings* _settings, Environment* _enviro);
 
     void checkVersion();
 
-    Settings* settings() const { return m_settings; }
-    const QVector<QString> &files() const { return m_files; }
-    Set* set() const { return m_set; }
+    Settings*       settings() const    { return m_settings; }
+    Environment*    enviro() const      { return m_enviro; }
 
-    Set*    getRandomSet(int _total);
-    QString getRandomFile(Set* _set);
-    void    generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
-    QVector<QString> adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set);
+    const QVector<QString> &files() const { return m_files; }
+    Set*    currentSet() const          { return m_set; }
 
     void startTimer();
     bool startPause();
@@ -48,10 +49,17 @@ public:
 
     void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
 
-public slots:
-    void slotUpdate();
+private:
+    Set*    getRandomSet(int _total);
+    QString getRandomFile(Set* _set);
+    void    generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
+    QVector<QString> adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set);
 
-    void slotStoreNewVersion(const QString &_ver, const QString &_link);
+public slots:
+    void onUpdate();
+
+private slots:
+    void onNewVersion(const QString &_ver, const QString &_link);
 
 signals:
     void listChanged(bool); // true to reset QListWidget selection

@@ -22,8 +22,8 @@ public:
     ErrorWidget(QWidget* _parent, Controller* _ctrl);
     
 public slots:
-    void slotBrowse();
-    void slotSubmit();
+    void onBrowse();
+    void onSubmit();
 
 signals:
     void pathSaved();

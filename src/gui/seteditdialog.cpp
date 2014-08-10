@@ -10,14 +10,14 @@
  * @param Set* _set
  * @param Settings* _settings
  */
-SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) : QDialog(_parent),
-    ui(new Ui::SetEditDialog)
+SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
+    QDialog(_parent),
+    ui(new Ui::SetEditDialog),
+    m_settings(_settings)
 {
     ui->setupUi(this);
 
     setFixedSize(size());
-
-    m_settings = _settings;
 
     ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
     ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
@@ -37,7 +37,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
     ui->selectStyle->setCurrentIndex(index);
 
     ui->inputHotkey->setHotkey(_set->hotkey());
-    ui->inputHotkey->setDisabled(!m_settings->opt("use_hotkeys").toBool());
+    ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
 
     qxtLog->trace("SetEditDialog openned");
 }

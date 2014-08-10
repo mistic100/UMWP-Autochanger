@@ -15,25 +15,25 @@
  * @param QWidget* _parent
  * @param Controller* _ctrl
  */
-MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) : QWidget(_parent),
-    ui(new Ui::MainWidget)
+MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) :
+    QWidget(_parent),
+    ui(new Ui::MainWidget),
+    m_ctrl(_ctrl)
 {
     ui->setupUi(this);
 
-    m_ctrl = _ctrl;
-
-    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(slotUpdateList(bool)));
+    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
 
     // main list
     ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_ctrl->settings()));
     ui->mainList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->mainList->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->mainList->setStyle(new ListProxyStyle);
+    ui->mainList->setStyle(new ListProxyStyle());
 
     connect(ui->mainList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-            this, SLOT(slotMoveItem(QModelIndex,int,int,QModelIndex,int)));
+            this, SLOT(onItemMoved(QModelIndex,int,int,QModelIndex,int)));
 
-    slotUpdateList(true);
+    onListChanged(true);
 }
 
 /**
@@ -48,13 +48,13 @@ MainWidget::~MainWidget()
  * @brief Update list widget contents
  * @param bool _resetSel - force reset of user selection
  */
-void MainWidget::slotUpdateList(bool _resetSel)
+void MainWidget::onListChanged(bool _resetSel)
 {
-    QList<int> aIndexes;
+    QList<int> indexes;
 
     if (!_resetSel)
     {
-        aIndexes = getSelectedIndexes();
+        indexes = getSelectedIndexes();
     }
     else
     {
@@ -71,7 +71,7 @@ void MainWidget::slotUpdateList(bool _resetSel)
         item->setData(Qt::UserRole, i);
 
         ui->mainList->addItem(item);
-        item->setSelected(aIndexes.contains(i));
+        item->setSelected(indexes.contains(i));
 
         if (!m_ctrl->settings()->set(i)->isValid())
         {
@@ -89,7 +89,7 @@ QList<int> MainWidget::getSelectedIndexes()
     QList<QListWidgetItem*> items = ui->mainList->selectedItems();
     QList<int> indexes;
 
-    for (QList<QListWidgetItem*>::iterator it=items.begin(); it!=items.end(); it++)
+    for (QList<QListWidgetItem*>::const_iterator it=items.constBegin(); it!=items.constEnd(); it++)
     {
         indexes.append((*it)->data(Qt::UserRole).toInt());
     }
@@ -104,7 +104,7 @@ QList<int> MainWidget::getSelectedIndexes()
 void MainWidget::on_buttonAdd_clicked()
 {
     QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"),
-                                                        m_ctrl->settings()->opt("last_dir").toString());
+                                                        m_ctrl->settings()->get("last_dir").toString());
 
     if (!dirname.isEmpty())
     {
@@ -161,6 +161,7 @@ void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
 
     SetEditDialog dialog(this, set, m_ctrl->settings());
 
+    // need to unbind hotkeys to allow hotkeys input
     ((MainWindow*)parent())->clearHotkeys();
     if (dialog.exec())
     {
@@ -218,7 +219,7 @@ void MainWidget::on_mainList_itemSelectionChanged()
  * @param int from
  * @param int to
  */
-void MainWidget::slotMoveItem(const QModelIndex &, int from, int, const QModelIndex &, int to)
+void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
     m_ctrl->settings()->moveSet(from, to);
     m_ctrl->emitListChanged(true);

@@ -14,7 +14,7 @@ private :
     QString          m_name;
     UM::WALLPAPER    m_type;
     UM::IMAGE        m_style;
-    QString          m_UID;
+    QString          m_cachePath;
     bool             m_active;
     bool             m_valid;
     QVector<QString> m_files;
@@ -40,9 +40,9 @@ public:
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
 
-    bool check();
-    double lastChange();
-    void populateFiles();
+    bool    check();
+    double  lastChange();
+    void    populateFiles();
 
     void  readCache();
     void  writeCache();
@@ -52,8 +52,8 @@ public:
     const QString hotkeyStr() const;
 
 private:
-    double lastChangeRecur(const QString &_child="", const int _level=0);
-    void populateFilesRecur(const QString &_child, const int _level=0);
+    double  lastChangeRecur(const QString &_child, const int _level=0);
+    void    populateFilesRecur(const QString &_child, const int _level=0);
 };
 
 #endif // SET_H

@@ -7,35 +7,38 @@
 /**
  * @brief ConfigDialog::ConfigDialog
  * @param QWidget* _parent
- * @param Settings* _settings
+ * @param Controller* _ctrl
  */
-ConfigDialog::ConfigDialog(QWidget* _parent, Settings* _settings) : QDialog(_parent),
-    ui(new Ui::ConfigDialog)
+ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
+    QDialog(_parent),
+    ui(new Ui::ConfigDialog),
+    m_ctrl(_ctrl)
 {
     ui->setupUi(this);
 
     setFixedSize(size());
 
-    m_settings = _settings;
+    Settings* settings = m_ctrl->settings();
+    Environment* enviro = m_ctrl->enviro();
 
-    ui->optionMinimize->setChecked(         m_settings->opt("minimize").toBool());
-    ui->optionCheckFiles->setChecked(       m_settings->opt("check").toBool());
-    ui->optionCheckUpdates->setChecked(     m_settings->opt("check_updates").toBool());
-    ui->optionAutostart->setChecked(        m_settings->isAutostart());
-    ui->optionUseHotkeys->setChecked(       m_settings->opt("use_hotkeys").toBool());
-    ui->optionShowNotifications->setChecked(m_settings->opt("show_notifications").toBool());
+    ui->optionMinimize->setChecked(         settings->get("minimize").toBool());
+    ui->optionCheckFiles->setChecked(       settings->get("check").toBool());
+    ui->optionCheckUpdates->setChecked(     settings->get("check_updates").toBool());
+    ui->optionAutostart->setChecked(        enviro->isAutostart());
+    ui->optionUseHotkeys->setChecked(       settings->get("use_hotkeys").toBool());
+    ui->optionShowNotifications->setChecked(settings->get("show_notifications").toBool());
 
-    ui->optionAutostart->setDisabled(!m_settings->canAddShortcut());
+    ui->optionAutostart->setDisabled(!enviro->canAddShortcut());
 
-    ui->hotkeyRefresh->setDisabled(     !m_settings->opt("use_hotkeys").toBool());
-    ui->hotkeyShowHide->setDisabled(    !m_settings->opt("use_hotkeys").toBool());
-    ui->hotkeyStartPause->setDisabled(  !m_settings->opt("use_hotkeys").toBool());
+    ui->hotkeyRefresh->setDisabled(     !settings->get("use_hotkeys").toBool());
+    ui->hotkeyShowHide->setDisabled(    !settings->get("use_hotkeys").toBool());
+    ui->hotkeyStartPause->setDisabled(  !settings->get("use_hotkeys").toBool());
 
-    ui->hotkeyRefresh->setHotkey(   m_settings->hotkey("refresh"));
-    ui->hotkeyShowHide->setHotkey(  m_settings->hotkey("showhide"));
-    ui->hotkeyStartPause->setHotkey(m_settings->hotkey("startpause"));
+    ui->hotkeyRefresh->setHotkey(   settings->hotkey("refresh"));
+    ui->hotkeyShowHide->setHotkey(  settings->hotkey("showhide"));
+    ui->hotkeyStartPause->setHotkey(settings->hotkey("startpause"));
 
-    QTime time = QTime(0, 0, 0).addSecs(m_settings->opt("delay").toInt());
+    QTime time = QTime(0, 0, 0).addSecs(settings->get("delay").toInt());
     ui->optionDelay->setTime(time);
 
     qxtLog->trace("ConfigDialog openned");
@@ -58,6 +61,7 @@ void ConfigDialog::done(int result)
     if (result == QDialog::Accepted)
     {
         QString error;
+        Settings* settings = m_ctrl->settings();
 
         // validate hotkeys
         QHash<QString, QHotKeyWidget*> requestHotkeys;
@@ -89,9 +93,9 @@ void ConfigDialog::done(int result)
             }
 
             // check against sets hotkeys
-            for (int i=0, l=m_settings->nbSets(); i<l; i++)
+            for (int i=0, l=settings->nbSets(); i<l; i++)
             {
-                Set* poSet = m_settings->set(i);
+                Set* poSet = settings->set(i);
 
                 if (!poSet->hotkey())
                 {
@@ -137,29 +141,32 @@ void ConfigDialog::done(int result)
  */
 void ConfigDialog::save()
 {
+    Settings* settings = m_ctrl->settings();
+    Environment* enviro = m_ctrl->enviro();
+
     QTime time = ui->optionDelay->time();
-    m_settings->setOpt("delay", time.hour()*3600 + time.minute()*60 + time.second());
+    settings->setOpt("delay", time.hour()*3600 + time.minute()*60 + time.second());
 
-    m_settings->setOpt("minimize",              ui->optionMinimize->isChecked());
-    m_settings->setOpt("check",                 ui->optionCheckFiles->isChecked());
-    m_settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
-    m_settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
-    m_settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());
+    settings->setOpt("minimize",              ui->optionMinimize->isChecked());
+    settings->setOpt("check",                 ui->optionCheckFiles->isChecked());
+    settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
+    settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
+    settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());
 
-    m_settings->setHotkey("refresh",    ui->hotkeyRefresh->hotkey());
-    m_settings->setHotkey("showhide",   ui->hotkeyShowHide->hotkey());
-    m_settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
+    settings->setHotkey("refresh",    ui->hotkeyRefresh->hotkey());
+    settings->setHotkey("showhide",   ui->hotkeyShowHide->hotkey());
+    settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {
-        m_settings->createShortcut();
+        enviro->createShortcut();
     }
     else
     {
-        m_settings->deleteShortcut();
+        enviro->deleteShortcut();
     }
 
-    m_settings->save();
+    settings->save();
 
     qxtLog->trace("Configuration updated");
 }

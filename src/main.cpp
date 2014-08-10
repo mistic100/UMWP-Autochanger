@@ -5,15 +5,17 @@
 #include <QxtBasicFileLoggerEngine>
 
 #include "main.h"
-#include "mainwindow.h"
+#include "gui/mainwindow.h"
 #include "controller.h"
 #include "settings.h"
+#include "environment.h"
 
 extern short UMWP_STATE = 0;
 
 
 int main(int argc, char *argv[])
 {
+    // ensure only one running instance
     HANDLE hMutexHandle = CreateMutex(NULL, TRUE, L"com.strangeplanet.umwp_autochanger");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
@@ -48,20 +50,28 @@ int main(int argc, char *argv[])
     appTranslator.load(":/lang/" + QLocale::system().name() + "/main");
     app.installTranslator(&appTranslator);
 
+    // create cache dir
     QDir dirHelper;
     if (!dirHelper.exists(APP_CACHE_DIR))
     {
         dirHelper.mkdir(APP_CACHE_DIR);
     }
 
+    // launch !
     Settings settings;
-    settings.init();
+    settings.load();
+
+    Environment enviro(&settings);
+    enviro.init();
+
     if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
     {
+        qxtLog->debug("App state: "+ QString::number(UMWP_STATE));
         settings.log();
+        enviro.log();
     }
 
-    Controller ctrl(&settings);
+    Controller ctrl(&settings, &enviro);
 
     MainWindow window(&ctrl);
     window.init();
