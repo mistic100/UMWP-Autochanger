@@ -185,122 +185,15 @@ QString SysReader::buildUMwallpaperPath(const QString &_version, bool &_ok)
 }
 
 /**
- * @brief Create default.wallpaper file with monitors dimensions
+ * @brief Read monitors dimensions from UltraMon API
  */
-void SysReader::createUMwallpaper(const QString &_path, const QHash<int, QScreen> &_sizes, bool&_ok)
-{
-    _ok = false;
-    const int version = 2;
-    const int activedesktop = 0;
-    int nbMonitors = _sizes.size()-1;
-
-    QString filename = _path + "default.wallpaper";
-    QByteArray buffer;
-
-    buffer.append("UMWP", 4); // signature
-    buffer.append((char*)&version, 2); // version
-    buffer.append((char*)&activedesktop, 1); // active desktop
-    buffer.append((char*)&nbMonitors, 4); // nb monitors
-
-    // rect monitors
-    for (int i=0; i<nbMonitors; i++)
-    {
-        QScreen screen = _sizes.value(i);
-        RECT rect;
-        rect.right = screen.width();
-        rect.bottom = screen.height();
-        rect.left = screen.left();
-        rect.top = screen.top();
-        buffer.append((char*)&rect, sizeof(RECT));
-    }
-
-    // wp style
-    UM::WALLPAPER wpstyle = UM::W_DESKTOP;
-    buffer.append((char*)&wpstyle, sizeof(UM::WALLPAPER));
-
-    buffer.append((char*)&nbMonitors, 4); // nb walls
-
-    // wallpaper files
-    for (int i=0; i<nbMonitors; i++)
-    {
-        UM::WP_MONITOR_FILE wall;
-        wall.bgType = UM::BG_SOLID;
-        wall.color1 = 0x00000000;
-        wall.color2 = 0x00000000;
-        wall.imgStyle = UM::IM_CENTER;
-        memset(wall.imgFile, 0, 260*sizeof(wchar_t));
-        buffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
-    }
-
-    QFile file(filename);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        _ok = true;
-        file.write(buffer);
-        file.close();
-    }
-}
-
-/**
- * @brief Read monitors dimensions from default.wallpaper file
- */
-void SysReader::readMonitors(const QString &_path, QHash<int, QScreen> &_sizes, QByteArray &_header, bool &_ok)
+void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, bool &_ok)
 {
     _sizes.clear();
     _header.clear();
     _ok = false;
 
-    QString filename = _path + "default.wallpaper";
-    QFile file(filename);
-
-    if (file.open(QIODevice::ReadOnly)) {
-        _ok = true;
-
-        file.seek(7); // "UMWP",  version, activedesktop
-
-        // number of monitors
-        int nbMonitors;
-        file.read((char*)&nbMonitors, sizeof(DWORD));
-
-        // rect monitors
-        int minX=0, maxX=0, minY=0, maxY=0;
-        for (int i=0; i<nbMonitors; i++)
-        {
-            RECT monitor;
-            file.read((char*)&monitor, sizeof(RECT));
-
-            _sizes.insert(i, QScreen(
-                               (int)monitor.right,
-                               (int)monitor.bottom,
-                               (int)monitor.top,
-                               (int)monitor.left
-                            ));
-
-            minX = qMin(minX, (int)monitor.left);
-            minY = qMin(minY, (int)monitor.top);
-            maxX = qMax(maxX, (int)monitor.left+(int)monitor.right);
-            maxY = qMax(maxY, (int)monitor.top+(int)monitor.bottom);
-        }
-
-        // store the header
-        int headerSize = 7 + sizeof(DWORD) + nbMonitors*sizeof(RECT);
-        file.reset();
-        _header = file.read(headerSize);
-
-        _sizes.insert(-1, QScreen(maxX-minX, maxY-minY));
-
-        file.close();
-    }
-}
-
-/**
- * @brief Read monitors dimensions from UltraMon API
- */
-QHash<int, QScreen> SysReader::queryMonitors(bool &_ok)
-{
-    _ok = false;
-
     HRESULT result;
-    QHash<int, QScreen> sizes;
 
     CoInitializeEx(0, COINIT_APARTMENTTHREADED);
 
@@ -309,8 +202,7 @@ QHash<int, QScreen> SysReader::queryMonitors(bool &_ok)
 
     if (result == S_OK)
     {
-        _ok = true;
-
+        // READ DATA FROM UM API
         IUltraMonMonitors* pMons = 0;
         pSys->get_Monitors(&pMons);
 
@@ -321,7 +213,7 @@ QHash<int, QScreen> SysReader::queryMonitors(bool &_ok)
         VARIANT vt = { 0 };
         vt.vt = VT_I4;
 
-        // monitors
+        // cycle monitors
         int minX=0, maxX=0, minY=0, maxY=0;
         for (int i=0; i<nbMonitors; ++i)
         {
@@ -340,7 +232,7 @@ QHash<int, QScreen> SysReader::queryMonitors(bool &_ok)
                 pMon->get_Left(&left);
                 pMon->get_Top(&top);
 
-                sizes.insert(i, QScreen(
+                _sizes.insert(i, QScreen(
                                    (int)width,
                                    (int)height,
                                    (int)top,
@@ -356,15 +248,40 @@ QHash<int, QScreen> SysReader::queryMonitors(bool &_ok)
             pMon->Release();
         }
 
-        sizes.insert(-1, QScreen(maxX-minX, maxY-minY));
+        // CREATE .wallpaper FILE HEADER
+        const int version = 2;
+        const int activedesktop = 0;
+        nbMonitors = _sizes.size();
+
+        if (nbMonitors > 0)
+        {
+            _ok = true;
+
+            _header.append("UMWP", 4); // signature
+            _header.append((char*)&version, 2); // version
+            _header.append((char*)&activedesktop, 1); // active desktop
+            _header.append((char*)&nbMonitors, 4); // nb monitors
+
+            // rect monitors
+            for (int i=0; i<nbMonitors; i++)
+            {
+                QScreen screen = _sizes.value(i);
+                RECT rect;
+                rect.right = screen.width();
+                rect.bottom = screen.height();
+                rect.left = screen.left();
+                rect.top = screen.top();
+                _header.append((char*)&rect, sizeof(RECT));
+            }
+
+            _sizes.insert(-1, QScreen(maxX-minX, maxY-minY));
+        }
 
         pMons->Release();
         pSys->Release();
     }
 
     CoUninitialize();
-
-    return sizes;
 }
 
 /**

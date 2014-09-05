@@ -67,11 +67,9 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) :
                              .arg(QString::fromAscii(APP_MIN_UM_VERSION))
                              );
     }
-    else if (UMWP_STATE & UMWP::FILE_NOT_FOUND)
+    else if (UMWP_STATE & UMWP::COM_ERROR)
     {
-         description->setText(tr("<b>default.wallpaper</b> file not found, impossible to continue.<br><br>Sould be at: %1")
-                             .arg("<i>" + m_ctrl->enviro()->get("wallpath").toString() + "</i>")
-                             );
+         description->setText(tr("Can't access UltraMon API"));
     }
     else if (UMWP_STATE & UMWP::UNKNOWN_ERROR)
     {

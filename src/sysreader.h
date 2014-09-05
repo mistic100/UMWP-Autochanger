@@ -19,9 +19,7 @@ public:
     static QString buildShortcutPath();
 
     static QString buildUMwallpaperPath(const QString &_version, bool &_ok);
-    static void createUMwallpaper(const QString &_path, const QHash<int, QScreen> &_sizes, bool &_ok);
-    static void readMonitors(const QString &_path, QHash<int, QScreen> &_sizes, QByteArray &_header, bool &_ok);
-    static QHash<int, QScreen> queryMonitors(bool &_ok);
+    static void queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, bool &_ok);
 };
 
 #endif // SYSREADER_H

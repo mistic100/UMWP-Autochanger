@@ -85,11 +85,13 @@ void Environment::init()
     {
         umpath = SysReader::searchUMDexe(ok);
 
-        if (!ok) {
+        if (!ok)
+        {
             qxtLog->error("UltraMonDesktop.exe not found");
             UMWP_STATE|= UMWP::NOT_INSTALLED;
         }
-        else {
+        else
+        {
             m_settings->setOpt("umpath", umpath);
             m_settings->save();
         }
@@ -98,7 +100,8 @@ void Environment::init()
     // SEARCH ULTRAMON VERSION
     m_env["umversion"] = SysReader::getUMversion(ok);
 
-    if (!ok) {
+    if (!ok)
+    {
         qxtLog->error("Unknown UltraMon version");
         UMWP_STATE|= UMWP::BAD_VERSION;
     }
@@ -120,12 +123,13 @@ void Environment::init()
     {
         m_env["wallpath"] = SysReader::buildUMwallpaperPath(m_env["umversion"].toString(), ok);
 
-        if (!ok) {
+        if (!ok)
+        {
             UMWP_STATE|= UMWP::UNKNOWN_ERROR;
         }
         else if (!refreshMonitors())
         {
-            UMWP_STATE|= UMWP::FILE_NOT_FOUND;
+            UMWP_STATE|= UMWP::COM_ERROR;
         }
     }
 
@@ -140,32 +144,11 @@ bool Environment::refreshMonitors()
 {
     bool ok;
 
-    if (!QFile::exists(m_env["wallpath"].toString() + "default.wallpaper"))
+    SysReader::queryMonitors(m_wpSizes, m_header, ok);
+
+    if (!ok)
     {
-        qxtLog->error("default.wallpaper not found");
-
-        QHash<int, QScreen> sizes = SysReader::queryMonitors(ok);
-
-        if (!ok || m_wpSizes.size() == 0)
-        {
-            qxtLog->error("Unable to query UltraMon API");
-            return false;
-        }
-        else
-        {
-            SysReader::createUMwallpaper(m_env["wallpath"].toString(), sizes, ok);
-
-            if (!ok) {
-                qxtLog->error("Unable create default.wallpaper");
-                return false;
-            }
-        }
-    }
-
-    SysReader::readMonitors(m_env["wallpath"].toString(), m_wpSizes, m_header, ok);
-
-    if (!ok || m_wpSizes.size() == 0) {
-        qxtLog->error("Unable read default.wallpaper");
+        qxtLog->error("Unable to query UltraMon API");
         return false;
     }
 

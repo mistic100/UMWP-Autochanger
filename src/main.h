@@ -16,6 +16,7 @@ namespace UMWP {
     const short BAD_VERSION = 2;
     const short FILE_NOT_FOUND = 4;
     const short SETTINGS_FILE_ERROR = 8;
+    const short COM_ERROR = 16;
     const short UNKNOWN_ERROR = 256;
 }
 
