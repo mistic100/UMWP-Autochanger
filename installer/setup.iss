@@ -62,6 +62,10 @@ Name: "{userstartup}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: autost
 [Run]
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+[InstallDelete]
+Type: filesandordirs; Name: "{app}\cache";
+Type: files; Name: "{app}\debug.log";
+
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\cache";
 Type: files; Name: "{app}\debug.log";

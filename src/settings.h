@@ -17,6 +17,7 @@ class Settings
 private:
     QHash<QString, QVariant> m_options; // configurable options
     QHash<QString, int>      m_hotkeys;
+    QVector<Monitor>         m_monitors;
     QVector<Set*>            m_sets; // list of wallpaper sets
 
 public:
@@ -34,6 +35,8 @@ public:
     // getters
     const QVariant  get(const QString &_key) const      { return m_options.value(_key); }
     const int       hotkey(const QString &_key) const   { return m_hotkeys.value(_key); }
+    const Monitor   monitor(const int _key) const       { return m_monitors.at(_key);   }
+    const int       nbEnabledMonitors() const;
 
     const QSize     windowSize() const;
 
@@ -45,6 +48,8 @@ public:
     // setters
     void setOpt(const QString &_key, const QVariant &_val)  { m_options[_key] = _val; }
     void setHotkey(const QString &_key, const int &_val)    { m_hotkeys[_key] = _val; }
+    void setMonitor(const int _key, const Monitor &_val)    { m_monitors[_key] = _val; }
+    void setNbMonitors(const int _size) { if (_size>m_monitors.size()) m_monitors.resize(_size); }
 
     void setWindowSize(const QSize &_size, bool _save=true);
     void incrementMsgCount();

@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 
     qxtLog->trace("Starting =================================================");
 
+    qxtLog->debug("Language: " + QLocale::system().name());
+
     // default translations
     QTranslator qtTranslator;
     qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));

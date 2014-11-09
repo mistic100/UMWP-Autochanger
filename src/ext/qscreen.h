@@ -1,28 +1,27 @@
 #ifndef QSCREEN_H
 #define QSCREEN_H
 
-#include <QSize>
+#include <QRect>
 
 
 /**
  * @brief Object with width, height, top and left properties
  */
-class QScreen : public QSize
+class QScreen : public QRect
 {
-private:
-    int _top;
-    int _left;
 
 public:
-    QScreen() : QSize(0, 0), _top(0), _left(0) {}
-    QScreen(int w, int h) : QSize(w, h), _top(0), _left(0) {}
-    QScreen(int w, int h, int t, int l) : QSize(w, h), _top(t), _left(l) {}
+    QScreen() : QRect() {}
+    QScreen(int x, int y, int w, int h) : QRect(x, y, w, h) {}
 
-    const int left() const { return _left; }
-    const int top() const { return _top; }
-
-    void setLeft(int l) { _left = l; }
-    void setTop(int t) { _top = t; }
+    QScreen scaled(float _ratio) const {
+        return QScreen(
+                    left()  *_ratio,
+                    top()   *_ratio,
+                    width() *_ratio,
+                    height()*_ratio
+        );
+    }
 };
 
 #endif // QSCREEN_H

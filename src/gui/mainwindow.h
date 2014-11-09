@@ -54,6 +54,7 @@ public slots:
     void onHotkey();
 
     void openConfigDialog();
+    void openScreensDialog();
     void openHelpDialog();
     void openAboutDialog();
     void openPreviewDialog();

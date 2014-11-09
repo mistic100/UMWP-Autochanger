@@ -8,6 +8,7 @@
 #include "errorwidget.h"
 #include "mainwidget.h"
 #include "configdialog.h"
+#include "screensdialog.h"
 #include "previewdialog.h"
 #include "newversiondialog.h"
 
@@ -260,6 +261,19 @@ void MainWindow::openConfigDialog()
 }
 
 /**
+ * @brief Open screens dialog
+ */
+void MainWindow::openScreensDialog()
+{
+    ScreensDialog dialog(this, m_ctrl);
+
+    if (dialog.exec())
+    {
+        dialog.save();
+    }
+}
+
+/**
  * @brief Open dialog to export config file
  */
 void MainWindow::openExportDialog()
@@ -297,7 +311,9 @@ void MainWindow::openImportDialog()
 
     if (m_ctrl->settings()->load(filename))
     {
+        m_ctrl->enviro()->checkSettings();
         m_ctrl->settings()->setOpt("umpath", UMPath);
+        m_ctrl->settings()->save();
 
         m_ctrl->emitListChanged(true);
         m_ctrl->onUpdate();

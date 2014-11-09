@@ -65,7 +65,10 @@ void Environment::log()
     sizes.append("== MONITORS");
     for (QHash<int, QScreen>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
     {
-        sizes.append(QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height()));
+        sizes.append(
+            QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height())
+            +" at "+ QString::number(it.value().left()) +"x"+ QString::number(it.value().top())
+        );
     }
 
     qxtLog->debug(env);
@@ -154,7 +157,17 @@ bool Environment::refreshMonitors()
 
     m_env["nb_monitors"] = m_wpSizes.size() - 1; // an extra entry stores full available size
 
+    checkSettings();
+
     return true;
+}
+
+/**
+ * @brief Ensure that the settings are coherent with some environnement params
+ */
+void Environment::checkSettings()
+{
+    m_settings->setNbMonitors(m_env["nb_monitors"].toInt());
 }
 
 /**

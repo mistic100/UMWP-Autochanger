@@ -24,7 +24,9 @@ SOURCES += \
     gui/previewdialog.cpp \
     gui/newversiondialog.cpp \
     gui/menubar.cpp \
-    gui/trayicon.cpp
+    gui/trayicon.cpp \
+    gui/screensdialog.cpp \
+    wallpapergenerator.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -51,14 +53,17 @@ HEADERS += \
     gui/previewdialog.h \
     gui/newversiondialog.h \
     gui/menubar.h \
-    gui/trayicon.h
+    gui/trayicon.h \
+    gui/screensdialog.h \
+    wallpapergenerator.h
 
 FORMS += \
     ext/qhotkeywidget.ui \
     gui/mainwidget.ui \
     gui/seteditdialog.ui \
     gui/configdialog.ui \
-    gui/newversiondialog.ui
+    gui/newversiondialog.ui \
+    gui/screensdialog.ui
 
 RESOURCES += \
     UMWP_Autochanger.qrc

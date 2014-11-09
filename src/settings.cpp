@@ -58,6 +58,21 @@ void Settings::setWindowSize(const QSize &_size, bool _save)
 }
 
 /**
+ * @brief Return the number of enabled monitors
+ */
+const int Settings::nbEnabledMonitors() const
+{
+    int n = 0;
+
+    foreach (Monitor mon, m_monitors)
+    {
+        if (mon.enabled) n++;
+    }
+
+    return n;
+}
+
+/**
  * @brief Increment tray tooltip count
  */
 void Settings::incrementMsgCount()
@@ -226,6 +241,24 @@ bool Settings::load(QString _filename)
                 setNode = setNode.nextSibling().toElement();
             }
         }
+        // monitors node
+        else if (settingsNode.tagName() == "monitors")
+        {
+            QDomElement monNode = settingsNode.firstChild().toElement();
+
+            m_monitors.clear();
+
+            while (!monNode.isNull())
+            {
+                Monitor mon;
+                mon.enabled = (bool) monNode.attribute("enabled").toInt();
+                mon.color = (COLORREF) monNode.attribute("color").toInt();
+
+                m_monitors.append(mon);
+
+                monNode = monNode.nextSibling().toElement();
+            }
+        }
 
         settingsNode = settingsNode.nextSibling().toElement();
     }
@@ -291,21 +324,38 @@ bool Settings::save(QString _filename)
 
     for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
     {
-        Set* pSet = *it;
+        Set* set = *it;
 
         // set node
         QDomElement setNode = dom.createElement("set");
-        setNode.setAttribute("name", pSet->name());
-        setNode.setAttribute("type", pSet->type());
-        setNode.setAttribute("style", pSet->style());
-        setNode.setAttribute("active", pSet->isActive());
-        setNode.setAttribute("hotkey", pSet->hotkey());
-        setDomNodeValue(&dom, &setNode, pSet->path());
+        setNode.setAttribute("name", set->name());
+        setNode.setAttribute("type", set->type());
+        setNode.setAttribute("style", set->style());
+        setNode.setAttribute("active", set->isActive());
+        setNode.setAttribute("hotkey", set->hotkey());
+        setDomNodeValue(&dom, &setNode, set->path());
 
         setsNode.appendChild(setNode);
     }
 
     mainNode.appendChild(setsNode);
+
+    // monitors node
+    QDomElement monsNode = dom.createElement("monitors");
+
+    for (QVector<Monitor>::const_iterator it = m_monitors.constBegin(); it != m_monitors.constEnd(); ++it)
+    {
+        Monitor mon = *it;
+
+        // monitor node
+        QDomElement monNode = dom.createElement("monitor");
+        monNode.setAttribute("enabled", mon.enabled);
+        monNode.setAttribute("color", (int)mon.color);
+
+        monsNode.appendChild(monNode);
+    }
+
+    mainNode.appendChild(monsNode);
 
     dom.appendChild(mainNode);
 

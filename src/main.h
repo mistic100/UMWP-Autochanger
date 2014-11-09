@@ -52,6 +52,13 @@ namespace UM {
     };
 }
 
+// helper for monitors config
+struct Monitor {
+    bool enabled;
+    COLORREF color;
+    Monitor() : enabled(true), color(0x00000000) {}
+};
+
 Q_DECLARE_METATYPE(UM::WALLPAPER)
 Q_DECLARE_METATYPE(UM::IMAGE)
 

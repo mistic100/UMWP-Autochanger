@@ -27,6 +27,7 @@ public slots:
 
 private slots:
     void onThumbnailClicked();
+    void onDeleteButtonClicked();
 };
 
 #endif // PREVIEWDIALOG_H

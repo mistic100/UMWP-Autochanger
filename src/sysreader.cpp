@@ -233,11 +233,11 @@ void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, 
                 pMon->get_Top(&top);
 
                 _sizes.insert(i, QScreen(
-                                   (int)width,
-                                   (int)height,
-                                   (int)top,
-                                   (int)left
-                                ));
+                                  (int)left,
+                                  (int)top,
+                                  (int)width,
+                                  (int)height
+                ));
 
                 minX = qMin(minX, (int)left);
                 minY = qMin(minY, (int)top);
@@ -274,7 +274,8 @@ void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, 
                 _header.append((char*)&rect, sizeof(RECT));
             }
 
-            _sizes.insert(-1, QScreen(maxX-minX, maxY-minY));
+            // store whoel desktop size with its top-left-most position
+            _sizes.insert(-1, QScreen(minX, minY, maxX-minX, maxY-minY));
         }
 
         pMons->Release();

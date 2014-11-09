@@ -27,10 +27,11 @@ public:
     void init();
     void log();
     bool refreshMonitors();
+    void checkSettings();
 
     // getters
     const QVariant      get(const QString &_key) const  { return m_env.value(_key); }
-
+    const int           nbMonitors() const              { return get("nb_monitors").toInt(); }
     const QScreen       wpSize(int _i) const            { return m_wpSizes.value(_i); }
     const QByteArray    &header() const                 { return m_header; }
     const QPair<QString, QString> newVersion()          { return m_newVersion; }

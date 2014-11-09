@@ -26,8 +26,7 @@ Set::Set(const QString &_path, const QString &_name)
     m_valid = true;
     m_lastModif = 0;
     m_hotkey = 0;
-    m_cachePath = QString::fromAscii(APP_CACHE_DIR) +
-            QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
+    m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
     readCache();
     check();
@@ -173,7 +172,7 @@ void Set::populateFilesRecur(const QString &_path, const int _level)
  */
 void Set::readCache()
 {
-    QFile file(m_cachePath);
+    QFile file(QString::fromAscii(APP_CACHE_DIR) + m_uuid);
 
     if (file.exists() && file.open(QIODevice::ReadOnly))
     {
@@ -189,7 +188,7 @@ void Set::readCache()
  */
 void Set::writeCache()
 {
-    QFile file(m_cachePath);
+    QFile file(QString::fromAscii(APP_CACHE_DIR) + m_uuid);
 
     if (file.open(QIODevice::WriteOnly))
     {
@@ -201,9 +200,15 @@ void Set::writeCache()
 }
 
 /**
- * @brief Delete cache file
+ * @brief Delete cache files
  */
 void Set::deleteCache()
 {
-    QFile::remove(m_cachePath);
+    QDir cache(QString::fromAscii(APP_CACHE_DIR));
+    QStringList files = cache.entryList(QStringList()<<"*"+m_uuid+"*", QDir::Files);
+
+    foreach (QString file, files)
+    {
+        QFile::remove(cache.absoluteFilePath(file));
+    }
 }

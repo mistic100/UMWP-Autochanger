@@ -1,4 +1,3 @@
-#include <ctime>
 #include <iostream>
 #include <fstream>
 
@@ -18,7 +17,7 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     m_enviro(_enviro),
     m_set(NULL)
 {
-    m_randomEngine.seed((unsigned int)time(NULL));
+    m_generator = new WallpaperGenerator(this);
 
     m_mainTimer = new QTimer(this);
     connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
@@ -107,7 +106,7 @@ bool Controller::startPause()
 /**
  * @brief Update the wallpaper
  */
-void Controller::onUpdate()
+void Controller::onUpdate(bool _forceRefresh)
 {
     qxtLog->info("Update !");
 
@@ -115,50 +114,45 @@ void Controller::onUpdate()
     int delay = m_settings->get("delay").toInt()*1000;
     if (delay != m_mainTimer->interval())
     {
-        qxtLog->debug("Timer delay changed to: "+delay);
+        qxtLog->debug("Timer delay changed to: "+QString::number(delay));
         m_mainTimer->setInterval(delay);
     }
 
     // update config
-    if (m_settings->get("check").toBool())
+    if (_forceRefresh || m_settings->get("check").toBool())
     {
         m_settings->updateSets();
         m_enviro->refreshMonitors();
         emit listChanged(false);
     }
 
-    int totalSets = m_settings->nbActiveSets(true);
+    // get random files
+    m_set = m_generator->getRandomSet();
 
-    if (totalSets == 0)
+    if (m_set == NULL)
     {
         qxtLog->warning("No active set");
         return;
     }
 
-    // get random files
-    m_set = getRandomSet(totalSets);
     qxtLog->debug("Current set: "+m_set->name());
 
-    m_files.clear();
+    m_files = m_generator->getFiles(m_set);
 
-    if (m_set->type() == UM::W_MONITOR)
+    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
     {
-        for (int i=0, l=m_enviro->get("nb_monitors").toInt(); i<l; i++)
+        foreach (QString file, m_files)
         {
-            m_files.append(getRandomFile(m_set));
+            qxtLog->debug("Current file: "+file);
         }
     }
-    else
-    {
-        m_files.append(getRandomFile(m_set));
-    }
 
-    QVector<QString> files = adaptFilesToFillMode(m_files, m_set);
+    QVector<QString> tempFiles = m_generator->adaptFiles(m_set, m_files);
 
     QString filename = m_enviro->get("wallpath").toString() + QString::fromAscii(APP_WALLPAPER_FILE);
 
     // generate .wallpaper file
-    generateFile(filename, files, m_set);
+    generateFile(filename, tempFiles, m_set);
 
     // remove old BMP file
     QFile::remove(m_enviro->get("bmppath").toString());
@@ -170,70 +164,6 @@ void Controller::onUpdate()
     qxtLog->trace("Launch UltraMonDesktop");
 
     emit wallpaperChanged();
-}
-
-/**
- * @brief Get a random Set among all active sets
- * @param int _total - total number of Sets
- * @return Set*
- */
-Set* Controller::getRandomSet(int _total)
-{
-    if (_total == 1)
-    {
-        return m_settings->activeSet(0);
-    }
-
-    uniform_int<int> unif(0, _total-1);
-    int counter = unif(m_randomEngine);
-
-    return m_settings->activeSet(counter);
-}
-
-/**
- * @brief Get a random file within a Set
- * @param Set* _set
- * @return string
- */
-QString Controller::getRandomFile(Set* _set)
-{
-    int total = _set->count();
-
-    // only one file in the set ?!
-    if (total == 1)
-    {
-        return _set->file(0);
-    }
-
-    // rare case for very small sets
-    if (total <= m_files.size())
-    {
-        uniform_int<int> unif(0, m_files.size()-1);
-        int counter = unif(m_randomEngine);
-        return m_files.at(counter);
-    }
-
-    // search a random unused file
-    short loop = 10;
-    QString file;
-    uniform_int<int> unif(0, total-1);
-
-    while (loop > 0)
-    {
-        int counter = unif(m_randomEngine);
-        file = _set->file(counter);
-
-        if (!m_files.contains(file))
-        {
-            loop = 0;
-        }
-
-        loop--;
-    }
-
-    qxtLog->debug("Current file: "+file);
-
-    return file;
 }
 
 /**
@@ -266,12 +196,16 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
     {
         UM::WP_MONITOR_FILE wall;
         wall.bgType = UM::BG_SOLID;
-        wall.color1 = 0x00000000;
+        wall.color1 = m_settings->monitor(i).color;
         wall.color2 = 0x00000000;
         wall.imgStyle = wp_style;
 
         memset(wall.imgFile, 0, 260*sizeof(wchar_t));
-        _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
+
+        if (!_files.at(i).isEmpty())
+        {
+            _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
+        }
 
         buffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
     }
@@ -284,73 +218,23 @@ void Controller::generateFile(const QString &_filename, const QVector<QString> &
 }
 
 /**
- * @brief Resize image files and return an array of new paths in cache folder
- * @param string[] _files
- * @param Set* _set
- * @return string[] _files
+ * @brief Move a file to trash bin
+ * @param string _filename
+ * @return bool
  */
-QVector<QString> Controller::adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set)
+bool Controller::moveFileToTrash(const QString &_filename)
 {
-    if (_set->style() != UM::IM_FILL)
-    {
-        return _files;
-    }
+    wchar_t path[MAX_PATH];
+    memset(path, 0, sizeof(path));
+    int l = _filename.toWCharArray(path);
+    path[l] = '\0';
 
-    QVector<QString> newFiles;
-    int nb_walls = _files.size();
+    SHFILEOPSTRUCT shfos = {0};
+    shfos.wFunc  = FO_DELETE;
+    shfos.pFrom  = path;
+    shfos.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
 
-    QString tmpRoot = QDir::toNativeSeparators(QFileInfo(QString::fromAscii(APP_CACHE_DIR)).absoluteFilePath()+"/");
+    int ret = SHFileOperation(&shfos);
 
-    for (int i=0; i<nb_walls; i++)
-    {
-        // target size
-        QSize size;
-        if (_set->type() == UM::W_DESKTOP)
-        {
-            size = m_enviro->wpSize(-1);
-        }
-        else
-        {
-            size = m_enviro->wpSize(i);
-        }
-
-        if (!size.isEmpty())
-        {
-            QFileInfo file(_files.at(i));
-            QString tmpPath = tmpRoot+file.completeBaseName()+"-"+QString::number(size.width())+"x"+QString::number(size.height())+"."+file.suffix();
-
-            if (!QFile::exists(tmpPath))
-            {
-                QImage image(file.absoluteFilePath());
-
-                // if image ratio is almost the same, do not waste time in image croppping
-                double curRatio = (double)image.size().width()/image.size().height();
-                double targetRatio = (double)size.width()/size.height();
-
-                if (qAbs(curRatio - targetRatio) < 0.02)
-                {
-                    newFiles.append(_files.at(i));
-                    continue;
-                }
-
-                // scale
-                image = image.scaled(size, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-
-                // crop
-                int diffW = image.width()-size.width();
-                int diffH = image.height()-size.height();
-                image = image.copy(diffW/2, diffH/2, size.width(), size.height());
-
-                image.save(tmpPath);
-            }
-
-            newFiles.append(tmpPath);
-        }
-        else
-        {
-            newFiles.append(_files.at(i));
-        }
-    }
-
-    return newFiles;
+    return ret == 0;
 }

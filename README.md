@@ -60,6 +60,13 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
+* 1.8
+    * new: disable wallpaper support on specific monitors
+    * new: choose background of each monitor
+    * new: "Delete" button on "Active files" dialog
+    * new: auto-update process
+    * fixed: crash after changing delay
+    
 * [1.7 (01/08/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.7)
     * new: add "Fill" mode
     * new: create default.wallpaper file if not present

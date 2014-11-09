@@ -1,16 +1,14 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <random>
 #include <QTimer>
-
-using namespace std::tr1;
 
 #include "main.h"
 #include "set.h"
 #include "settings.h"
 #include "environment.h"
 #include "versionchecker.h"
+#include "wallpapergenerator.h"
 
 
 /**
@@ -23,9 +21,9 @@ class Controller : public QObject
 private:
     Settings*        m_settings;
     Environment*     m_enviro;
+    WallpaperGenerator* m_generator;
 
     QTimer*          m_mainTimer;
-    mt19937          m_randomEngine; // mersenne_twister
 
     QVector<QString> m_files;
     Set*             m_set;
@@ -49,14 +47,13 @@ public:
 
     void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
 
+    bool moveFileToTrash(const QString &_filename);
+
 private:
-    Set*    getRandomSet(int _total);
-    QString getRandomFile(Set* _set);
-    void    generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
-    QVector<QString> adaptFilesToFillMode(const QVector<QString> &_files, const Set* _set);
+    void generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
 
 public slots:
-    void onUpdate();
+    void onUpdate(bool _forceRefresh=false);
 
 private slots:
     void onNewVersion(const QString &_ver, const QString &_link);

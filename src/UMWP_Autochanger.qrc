@@ -27,6 +27,7 @@
         <file alias="images">images/icons/images.png</file>
         <file alias="help-color">images/icons/help_color.png</file>
         <file alias="bullet_cross">images/icons/bullet_cross.png</file>
+        <file alias="color">images/icons/color.png</file>
     </qresource>
     <qresource prefix="/button">
         <file alias="activate">images/buttons/button_activate.png</file>

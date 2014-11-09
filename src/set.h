@@ -14,7 +14,7 @@ private :
     QString          m_name;
     UM::WALLPAPER    m_type;
     UM::IMAGE        m_style;
-    QString          m_cachePath;
+    QString          m_uuid;
     bool             m_active;
     bool             m_valid;
     QVector<QString> m_files;
@@ -32,6 +32,7 @@ public:
     const bool          isActive() const    { return m_active; }
     const bool          isValid() const     { return m_valid; }
     const int           hotkey() const      { return m_hotkey; }
+    const QString       uuid() const        { return m_uuid; }
     const QString       file(int _i) const;
 
     void setActive(const bool _a)           { m_active=_a; }

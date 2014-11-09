@@ -15,6 +15,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/icon/settings"), tr("Options"));
+    QAction* actionScreens = menuConfig->addAction(QIcon(":/icon/w_monitor"), tr("Manage monitors"));
                              menuConfig->addSeparator();
     QAction* actionImport =  menuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
     QAction* actionExport =  menuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
@@ -40,6 +41,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(m_actionPause,   SIGNAL(clicked()), _parent, SLOT(startPause()));
 
     connect(actionOptions,   SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
+    connect(actionScreens,   SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
     connect(actionImport,    SIGNAL(triggered()), _parent, SLOT(openImportDialog()));
     connect(actionExport,    SIGNAL(triggered()), _parent, SLOT(openExportDialog()));
 
