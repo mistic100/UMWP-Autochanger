@@ -20,7 +20,7 @@ NewVersionDialog::NewVersionDialog(QWidget* _parent, Controller* _ctrl) :
     m_version = m_ctrl->enviro()->newVersion();
 
     ui->progressBar->setVisible(false);
-    ui->label->setText(tr("A new version is available : %1").arg(m_version.first));
+    ui->label->setText(tr("A new version is available : %1").arg(m_version.code));
 }
 
 /**
@@ -49,10 +49,10 @@ void NewVersionDialog::on_updateButton_clicked()
         errorMessage();
     }
 
-    ui->label->setText(tr("Downloading UMWP_Autochanger_%1_Setup.exe ...").arg(m_version.first));
+    ui->label->setText(tr("Downloading UMWP_Autochanger_%1_Setup.exe ...").arg(m_version.code));
 
     QNetworkAccessManager* manager = new QNetworkAccessManager();
-    m_reply = manager->get(QNetworkRequest(QUrl(m_version.second)));
+    m_reply = manager->get(QNetworkRequest(QUrl(m_version.link)));
 
     connect(m_reply, SIGNAL(readyRead()), this, SLOT(onDataReady()));
     connect(m_reply, SIGNAL(finished()), this, SLOT(onDownloadFinished()));
@@ -64,9 +64,7 @@ void NewVersionDialog::on_updateButton_clicked()
  */
 void NewVersionDialog::errorMessage()
 {
-    QMessageBox msgBox;
-    msgBox.setText(tr("Unable to download installer file."));
-    msgBox.exec();
+    QMessageBox::critical(this, tr("Error"), tr("Unable to download installer file."), QMessageBox::Ok, QMessageBox::Ok);
     done(0);
 }
 
@@ -85,7 +83,8 @@ void NewVersionDialog::onDataReady()
  */
 void NewVersionDialog::onDownloadProgress(qint64 _received, qint64 _total)
 {
-    if (_total == -1) {
+    if (_total == -1)
+    {
         _total = qMax(_received, (qint64) APP_INSTALLER_SIZE);
     }
 
@@ -111,7 +110,8 @@ void NewVersionDialog::onDownloadFinished()
         m_file.remove();
         errorMessage();
     }
-    else {
+    else
+    {
         qxtLog->trace("Download finished");
 
         ui->progressBar->setValue(100);

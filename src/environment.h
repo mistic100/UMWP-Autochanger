@@ -8,6 +8,17 @@
 
 
 /**
+ * @brief Store data about new version
+ */
+struct NewVersion {
+    QString code;
+    QString link;
+};
+
+Q_DECLARE_METATYPE(NewVersion)
+
+
+/**
  * @brief Holds environment state
  */
 class Environment
@@ -18,7 +29,7 @@ private:
     QHash<QString, QVariant> m_env;     // environnement variables
     QHash<int, QScreen>      m_wpSizes;
     QByteArray               m_header;
-    QPair<QString, QString>  m_newVersion;
+    NewVersion               m_newVersion;
 
 public:
     Environment(Settings* _settings);
@@ -34,10 +45,10 @@ public:
     const int           nbMonitors() const              { return get("nb_monitors").toInt(); }
     const QScreen       wpSize(int _i) const            { return m_wpSizes.value(_i); }
     const QByteArray    &header() const                 { return m_header; }
-    const QPair<QString, QString> newVersion()          { return m_newVersion; }
+    const NewVersion    newVersion() const              { return m_newVersion; }
 
     // setters
-    void setNewVersion(const QString &_ver, const QString &_link);
+    void setNewVersion(const NewVersion &_version)      { m_newVersion = _version; }
 
     // shortcut
     const bool isAutostart() const;

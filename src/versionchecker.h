@@ -6,6 +6,7 @@
 #include <QNetworkReply>
 
 #include "main.h"
+#include "environment.h"
 
 
 /**
@@ -31,13 +32,14 @@ private slots:
     {
         if (_reply->error() == QNetworkReply::NoError)
         {
-            QString version = _reply->readLine().trimmed();
-            QString link = _reply->readLine().trimmed();
+            NewVersion version;
+            version.code = _reply->readLine().trimmed();
+            version.link = _reply->readLine().trimmed();
 
-            if (version.compare(QString::fromAscii(APP_VERSION)) > 0)
+            if (version.code.compare(QString::fromAscii(APP_VERSION)) > 0)
             {
-                qxtLog->debug("New version detected: "+version);
-                emit newVersionAvailable(version, link);
+                qxtLog->debug("New version detected: "+version.code);
+                emit newVersionAvailable(version);
             }
         }
 
@@ -48,7 +50,7 @@ private slots:
     }
     
 signals:
-    void newVersionAvailable(const QString, const QString);
+    void newVersionAvailable(const NewVersion);
     void finished();
     
 };

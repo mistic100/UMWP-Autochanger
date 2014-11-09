@@ -123,7 +123,7 @@ void ConfigDialog::done(int result)
         if (!error.isEmpty())
         {
             qxtLog->error(error);
-            QMessageBox::critical(this, tr("Error"),  error, QMessageBox::Ok, QMessageBox::Ok);
+            QMessageBox::critical(this, tr("Error"), error, QMessageBox::Ok, QMessageBox::Ok);
         }
         else
         {

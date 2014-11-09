@@ -20,6 +20,8 @@ Environment::Environment(Settings* _settings) :
     m_env["umversion"] = "";
     m_env["startlinkpath"] = QVariant();
     m_env["nb_monitors"] = 0;
+
+    qRegisterMetaType<NewVersion>("NewVersion");
 }
 
 /**
@@ -36,17 +38,6 @@ const bool Environment::canAddShortcut() const
 const bool Environment::isAutostart() const
 {
     return QFile::exists(m_env["startlinkpath"].toString());
-}
-
-/**
- * @brief Save data of the new version available
- * @param string _ver
- * @param string _link
- */
-void Environment::setNewVersion(const QString &_ver, const QString &_link)
-{
-    m_newVersion.first = _ver;
-    m_newVersion.second = _link;
 }
 
 /**

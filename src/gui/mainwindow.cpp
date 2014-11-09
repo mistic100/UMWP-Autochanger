@@ -449,7 +449,7 @@ void MainWindow::onHotkey()
  */
 void MainWindow::onNewVersion()
 {
-    QString _version = m_ctrl->enviro()->newVersion().first;
+    QString _version = m_ctrl->enviro()->newVersion().code;
 
     // message in status bar
     QPushButton* statusLabel = new QPushButton(tr("A new version is available : %1").arg(_version));

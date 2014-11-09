@@ -16,8 +16,8 @@
 #define APP_MAX_TRAVERSAL 3
 
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
-#define APP_VERSION_URL "http://www.strangeplanet.fr/work/umwp-autochanger/last-version-2.txt"
-#define APP_INSTALLER_SIZE 5203022
+#define APP_VERSION_URL "http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
+#define APP_INSTALLER_SIZE 5228000
 #define APP_INSTALLER_FILENAME "installer.exe"
 
 #define APP_MIN_WIDTH 440

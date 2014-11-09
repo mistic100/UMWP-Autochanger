@@ -13,6 +13,9 @@ namespace Ui {
 }
 
 
+/**
+ * @brief Dialog to download new installer
+ */
 class NewVersionDialog : public QDialog
 {
     Q_OBJECT
@@ -21,7 +24,7 @@ private:
     Ui::NewVersionDialog* ui;
     Controller* m_ctrl;
 
-    QPair<QString, QString> m_version;
+    NewVersion      m_version;
 
     QFile           m_file;
     QNetworkReply*  m_reply;

@@ -20,7 +20,7 @@ ScreensDialog::ScreensDialog(QWidget* _parent, Controller* _ctrl) :
 {
     ui->setupUi(this);
 
-    for (int i=0, l=m_ctrl->enviro()->get("nb_monitors").toInt(); i<l; i++)
+    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
     {
         m_monitors.append(m_ctrl->settings()->monitor(i));
     }
@@ -55,6 +55,8 @@ void ScreensDialog::done(int result)
 
         if (!one)
         {
+            qxtLog->error("At least one monitor must be enabled");
+
             QMessageBox::critical(this, tr("Error"), tr("At least one monitor must be enabled"), QMessageBox::Ok, QMessageBox::Ok);
         }
         else
@@ -73,7 +75,7 @@ void ScreensDialog::done(int result)
  */
 void ScreensDialog::save()
 {
-    for (int i=0, l=m_ctrl->enviro()->get("nb_monitors").toInt(); i<l; i++)
+    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
     {
         m_ctrl->settings()->setMonitor(i, m_monitors[i]);
     }
@@ -98,7 +100,7 @@ void ScreensDialog::initScene()
     m_scene->setSceneRect(rect);
     m_scene->addRect(rect, Qt::NoPen, QBrush(Qt::gray));
 
-    for (int i=0, l=m_ctrl->enviro()->get("nb_monitors").toInt(); i<l; i++)
+    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
     {
         addScreen(i, m_ctrl->enviro()->wpSize(i));
     }

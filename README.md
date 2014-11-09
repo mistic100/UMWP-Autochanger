@@ -5,8 +5,8 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.7  
-Release date  : 01/08/2014  
+Version       : 1.8  
+Release date  : 10/11/2014  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3  
@@ -32,18 +32,17 @@ The application is currently available in English and French. [A translation pag
 
 
 ## Configuration
-* Double-click on a set to edit it. You can change its name, its style (one image for each monitor or one image for the whole desktop) and the transformation style for images (center, tile or stretch).
+* Double-click on a set to edit it. You can change its name, its style (one image for each monitor or one image for the whole desktop), the transformation style for images (center, tile or stretch) and the hotkey.
 
 * On the "Options" dialog you can choose the delay, change the behavior of the tool and configure the hotkeys.  
 Hotkeys are a way to interact with the application while it is hidden in the system bar. Hotkeys can also be defined for each individual sets.
+
+* On the "Manage monitors" dialog you can disable the wallpaper on specific monitor, as well as choosing their background color.
 
 
 ## Troubleshouting
 Q: When I launch UMWP Autochanger, the window doesn't appear.  
 A: When you have already registered sets, the window automatically minimize to the system bar, double-click on the icon (or right-click => "Show") to open it. This behavior can be changed on the "Options" menu.
-
-Q: Can I edit a set ?  
-A: Yes. Double-click on it's name, you can set the name, the type and the style of wallpaper and the hotkey of the set.
 
 Q: How hotkeys work ?  
 A: There are two kind of hotkeys: the ones defined in the "Options" dialog allow to show/hide the application window, refresh the wallpaper and start/pause the timer.  
@@ -60,9 +59,9 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
-* 1.8
-    * new: disable wallpaper support on specific monitors
-    * new: choose background of each monitor
+* [1.8 (10/11/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.7)
+    * new: can disable wallpaper support on specific monitors
+    * new: choose background color of each monitor
     * new: "Delete" button on "Active files" dialog
     * new: auto-update process
     * fixed: crash after changing delay

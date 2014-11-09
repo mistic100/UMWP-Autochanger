@@ -31,8 +31,7 @@ void Controller::checkVersion()
     if (m_settings->get("check_updates").toBool())
     {
         VersionChecker* checker = new VersionChecker();
-        connect(checker, SIGNAL(newVersionAvailable(const QString, const QString)),
-                this, SLOT(onNewVersion(const QString, const QString)));
+        connect(checker, SIGNAL(newVersionAvailable(const NewVersion)), this, SLOT(onNewVersion(const NewVersion)));
 
         QThread* thread = new QThread(this);
         checker->moveToThread(thread);
@@ -51,9 +50,9 @@ void Controller::checkVersion()
  * @param string _version
  * @param string _link
  */
-void Controller::onNewVersion(const QString &_version, const QString &_link)
+void Controller::onNewVersion(const NewVersion _version)
 {
-    m_enviro->setNewVersion(_version, _link);
+    m_enviro->setNewVersion(_version);
     emit newVersionAvailable();
 }
 

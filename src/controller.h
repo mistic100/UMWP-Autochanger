@@ -56,7 +56,7 @@ public slots:
     void onUpdate(bool _forceRefresh=false);
 
 private slots:
-    void onNewVersion(const QString &_ver, const QString &_link);
+    void onNewVersion(const NewVersion _version);
 
 signals:
     void listChanged(bool); // true to reset QListWidget selection
