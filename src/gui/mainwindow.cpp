@@ -382,9 +382,8 @@ void MainWindow::openAboutDialog()
  */
 void MainWindow::openPreviewDialog()
 {
-    PreviewDialog* dialog = new PreviewDialog(this, m_ctrl);
-    dialog->move(geometry().left()+geometry().width()+15, geometry().top());
-    dialog->show();
+    PreviewDialog dialog(this, m_ctrl);
+    dialog.exec();
 }
 
 /**

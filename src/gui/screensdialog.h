@@ -52,7 +52,7 @@ public:
     void save();
 
 private:
-    void initScene();
+    void init();
     void addScreen(int _i, const QScreen &_screen);
     void updateScreen(int _i);
     void selectScreen(int _i);

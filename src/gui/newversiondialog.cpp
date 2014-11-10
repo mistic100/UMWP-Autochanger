@@ -17,6 +17,8 @@ NewVersionDialog::NewVersionDialog(QWidget* _parent, Controller* _ctrl) :
 {
     ui->setupUi(this);
 
+    setWindowFlags(SimpleDialogFlag);
+
     m_version = m_ctrl->enviro()->newVersion();
 
     ui->progressBar->setVisible(false);

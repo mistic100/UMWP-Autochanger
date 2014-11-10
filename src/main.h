@@ -1,4 +1,5 @@
 #ifndef MAIN_H
+#define MAIN_H
 
 #include <windows.h>
 #include <QtXml>
@@ -14,8 +15,8 @@ namespace UMWP {
     const short OK = 0;
     const short NOT_INSTALLED = 1;
     const short BAD_VERSION = 2;
-    const short FILE_NOT_FOUND = 4;
-    const short SETTINGS_FILE_ERROR = 8;
+    const short FILE_NOT_FOUND = 4; // not used
+    const short SETTINGS_FILE_ERROR = 8; // not used
     const short COM_ERROR = 16;
     const short UNKNOWN_ERROR = 256;
 }
@@ -62,10 +63,11 @@ struct Monitor {
 Q_DECLARE_METATYPE(UM::WALLPAPER)
 Q_DECLARE_METATYPE(UM::IMAGE)
 
+// flags for dialog without help button
+const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
 
 // common functions
 void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value);
 void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value);
 
-#define MAIN_H
 #endif // MAIN_H

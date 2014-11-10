@@ -19,6 +19,8 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
 
     setFixedSize(size());
 
+    setWindowFlags(SimpleDialogFlag);
+
     ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
     ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
 

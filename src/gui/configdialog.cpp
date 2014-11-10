@@ -18,6 +18,8 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     setFixedSize(size());
 
+    setWindowFlags(SimpleDialogFlag);
+
     Settings* settings = m_ctrl->settings();
     Environment* enviro = m_ctrl->enviro();
 

@@ -10,7 +10,11 @@
 #include "settings.h"
 #include "environment.h"
 
-extern short UMWP_STATE = 0;
+
+/**
+ * @brief Global holding app state (main errors)
+ */
+short UMWP_STATE = 0;
 
 
 int main(int argc, char *argv[])

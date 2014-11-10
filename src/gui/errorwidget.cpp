@@ -71,7 +71,7 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) :
     {
          description->setText(tr("Can't access UltraMon API"));
     }
-    else if (UMWP_STATE & UMWP::UNKNOWN_ERROR)
+    else
     {
          description->setText(tr("An unknown error appened!"));
     }

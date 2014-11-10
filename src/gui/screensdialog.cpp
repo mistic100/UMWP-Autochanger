@@ -25,7 +25,9 @@ ScreensDialog::ScreensDialog(QWidget* _parent, Controller* _ctrl) :
         m_monitors.append(m_ctrl->settings()->monitor(i));
     }
 
-    initScene();
+    init();
+
+    setWindowFlags(SimpleDialogFlag);
 
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -88,7 +90,7 @@ void ScreensDialog::save()
 /**
  * @brief Build the scenes displaying monitors
  */
-void ScreensDialog::initScene()
+void ScreensDialog::init()
 {
     m_ratio = 400.f/m_ctrl->enviro()->wpSize(-1).width();
     m_viewport = m_ctrl->enviro()->wpSize(-1).scaled(m_ratio);

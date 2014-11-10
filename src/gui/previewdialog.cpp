@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QMessageBox>
+#include <QFontMetrics>
 
 #include "previewdialog.h"
 
@@ -32,6 +33,10 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
     draw();
 
     setWindowTitle(tr("Active files"));
+
+    setWindowFlags(SimpleDialogFlag);
+
+    mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     qxtLog->trace("PreviewDialog openned");
 }
@@ -75,7 +80,8 @@ void PreviewDialog::draw()
         }
 
         // label with filename
-        QLabel* label = new QLabel(QFileInfo(*it).fileName());
+        QString text = fontMetrics().elidedText(QFileInfo(*it).fileName(), Qt::ElideRight, width);
+        QLabel* label = new QLabel(text);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);
 
@@ -111,8 +117,6 @@ void PreviewDialog::draw()
         i++;
         height = qMax(height, image.height());
     }
-
-    setFixedSize(QSize(i*width+22+(i-1)*6, height+100));
 }
 
 /**

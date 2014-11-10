@@ -59,7 +59,7 @@ You will need Qt 4.8.4 and libqxt 0.6.2
 
 
 ## Changelog
-* [1.8 (10/11/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.7)
+* [1.8 (10/11/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.8)
     * new: can disable wallpaper support on specific monitors
     * new: choose background color of each monitor
     * new: "Delete" button on "Active files" dialog
