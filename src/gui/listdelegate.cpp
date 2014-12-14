@@ -122,22 +122,27 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     _painter->setOpacity(!set->isActive() ? 0.9 : 1.0);
 
     // HOTKEY
-    rect = baseRect.adjusted(0, 3, -23, 0);
-    _painter->setFont(QFont("Calibri", 9, -1, true));
-    if (selected)
-    {
-        _painter->setPen(QColor(220, 220, 220));
-    }
-    else
-    {
-        _painter->setPen(QColor(150, 150, 150));
-    }
+    int hkWidth = 0;
 
-    QString hotkey = set->hotkeyStr();
-    _painter->drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
+    if (m_settings->get("use_hotkeys").toBool() && set->hotkey() > 0)
+    {
+        rect = baseRect.adjusted(0, 3, -23, 0);
+        _painter->setFont(QFont("Calibri", 9, -1, true));
+        if (selected)
+        {
+            _painter->setPen(QColor(220, 220, 220));
+        }
+        else
+        {
+            _painter->setPen(QColor(150, 150, 150));
+        }
 
-    QFontMetrics metric(_painter->font());
-    int hkWidth = metric.width(hotkey);
+        QString hotkey = set->hotkeyStr();
+        _painter->drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
+
+        QFontMetrics metric(_painter->font());
+        hkWidth = metric.width(hotkey);
+    }
 
 
     // TITLE

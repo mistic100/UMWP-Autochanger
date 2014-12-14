@@ -10,7 +10,6 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     QSystemTrayIcon((QWidget*) _parent),
     m_ctrl(_ctrl)
 {
-    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged()));
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
 
@@ -30,8 +29,6 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     this->setIcon(QIcon(":/img/icon"));
     this->setToolTip(APP_NAME);
     this->setContextMenu(menu);
-
-    onListChanged();
 }
 
 /**
@@ -69,7 +66,7 @@ void TrayIcon::setPause(bool _pause)
 /**
  * @brief Populate quick change list
  */
-void TrayIcon::onListChanged()
+void TrayIcon::populateList()
 {
     m_quickMenu->clear();
 
@@ -77,7 +74,13 @@ void TrayIcon::onListChanged()
     {
         Set* set = m_ctrl->settings()->set(i);
 
-        QAction* action = m_quickMenu->addAction(set->name());
+        QString title = set->name();
+        if (m_ctrl->settings()->get("use_hotkeys").toBool() && set->hotkey() > 0)
+        {
+            title+= " (" + set->hotkeyStr() + ")";
+        }
+
+        QAction* action = m_quickMenu->addAction(title);
         action->setData(i);
 
         if (set->isActive())
@@ -111,8 +114,12 @@ void TrayIcon::onQuickClicked()
  */
 void TrayIcon::onActivated(QSystemTrayIcon::ActivationReason _reason)
 {
-    if (_reason && _reason == QSystemTrayIcon::DoubleClick)
+    if (_reason == QSystemTrayIcon::DoubleClick)
     {
         ((MainWindow*)parent())->toggleWindow();
+    }
+    else if (_reason == QSystemTrayIcon::Context)
+    {
+        populateList();
     }
 }

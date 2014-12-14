@@ -156,6 +156,8 @@ void MainWindow::defineHotkeys()
 
     if (m_ctrl->settings()->get("use_hotkeys").toBool())
     {
+        qxtLog->trace("Create global hotkeys");
+
         // sets hotkeys
         QHash<int, QList<int>> mergedHotkeys;
         GlobalShortcut* shortcut;

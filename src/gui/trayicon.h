@@ -31,7 +31,7 @@ public:
     void setPause(bool _pause);
 
 public slots:
-    void onListChanged();
+    void populateList();
 
 private slots:
     void onQuickClicked();
