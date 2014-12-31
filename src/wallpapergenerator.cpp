@@ -283,7 +283,7 @@ QVector<QString> WallpaperGenerator::adaptFileDesktopWithDisabled(const Set* _se
     // save
     QString cachePath = getCacheFilename(_files.at(0), desktop, _set->uuid()+"-"+getConfigurationKey(_set->style()));
 
-    image.save(cachePath);
+    image.save(cachePath, 0, 90);
 
     return QVector<QString>()<<cachePath;
 }
@@ -337,7 +337,7 @@ QVector<QString> WallpaperGenerator::adaptFilesFillMode(const Set* _set, const Q
                 int diffH = image.height()-size.height();
                 image = image.copy(diffW/2, diffH/2, size.width(), size.height());
 
-                image.save(cachePath);
+                image.save(cachePath, 0, 90);
             }
 
             newFiles.append(cachePath);
