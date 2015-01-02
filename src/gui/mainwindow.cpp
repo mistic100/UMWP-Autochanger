@@ -11,6 +11,7 @@
 #include "screensdialog.h"
 #include "previewdialog.h"
 #include "newversiondialog.h"
+#include "setcontextmenu.h"
 
 extern short UMWP_STATE;
 
@@ -237,13 +238,33 @@ void MainWindow::toggleWindow(bool _forceHide)
 }
 
 /**
- * @brief start or pause the timer
+ * @brief Start or pause the timer
  */
 void MainWindow::startPause()
 {
     bool run = m_ctrl->startPause();
     m_menuBar->setPause(!run);
     m_trayIcon->setPause(!run);
+}
+
+/**
+ * @brief Open dialog for directory selection
+ */
+void MainWindow::addSet()
+{
+    QString dirname = QFileDialog::getExistingDirectory(this, tr("Add set"),
+                                                        m_ctrl->settings()->get("last_dir").toString());
+
+    if (!dirname.isEmpty())
+    {
+        QDir dir(dirname);
+        dir.cdUp();
+        m_ctrl->settings()->setOpt("last_dir", dir.absolutePath());
+
+        dirname.replace('/', '\\');
+        m_ctrl->settings()->addSet(dirname);
+        m_ctrl->emitListChanged(true);
+    }
 }
 
 /**
@@ -386,6 +407,12 @@ void MainWindow::openPreviewDialog()
 {
     PreviewDialog dialog(this, m_ctrl);
     dialog.exec();
+}
+
+void MainWindow::showContextMenu(const QList<int> &_sets, const QPoint &_pos)
+{
+    SetContextMenu menu(this, m_ctrl, _sets);
+    menu.exec(_pos);
 }
 
 /**

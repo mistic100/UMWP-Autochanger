@@ -27,6 +27,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     QAction* actionAbout = menuHelp->addAction(QIcon(":/icon/about"), tr("About"));
 
     QToolButton* actionQuit =    this->addButton(QIcon(":/icon/quit"), tr("Quit"));
+    QToolButton* actionAdd =     this->addButton(QIcon(":/icon/add2"), tr("Add set"));
     m_actionPause =              this->addButton(QIcon(":/icon/playpause"), tr("Pause"));
     m_actionRefresh =            this->addButton(QIcon(":/icon/refresh"), tr("Refresh"));
     m_actionHide =               this->addButton(QIcon(":/icon/hide"), tr("Hide"));
@@ -36,6 +37,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     m_pauseBlinker = new QWidgetBlinker(m_actionPause);
 
     connect(actionQuit,      SIGNAL(clicked()), _parent, SLOT(quit()));
+    connect(actionAdd,       SIGNAL(clicked()), _parent, SLOT(addSet()));
     connect(m_actionHide,    SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
     connect(m_actionRefresh, SIGNAL(clicked()), m_ctrl,  SLOT(onUpdate()));
     connect(m_actionPause,   SIGNAL(clicked()), _parent, SLOT(startPause()));

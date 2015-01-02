@@ -11,139 +11,20 @@
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
-   <property name="margin">
+   <property name="leftMargin">
     <number>6</number>
+   </property>
+   <property name="topMargin">
+    <number>6</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>2</number>
    </property>
    <item>
     <widget class="QListWidget" name="mainList"/>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>2</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="buttonAdd">
-       <property name="maximumSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Add</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normalon>:/button/add</normalon>
-        </iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonActivate">
-       <property name="maximumSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Activate</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normalon>:/button/activate</normalon>
-        </iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonDeactivate">
-       <property name="maximumSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Deactivate</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normalon>:/button/deactivate</normalon>
-        </iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonDelete">
-       <property name="maximumSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Delete</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normalon>:/button/delete</normalon>
-        </iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>58</width>
-         <height>36</height>
-        </size>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

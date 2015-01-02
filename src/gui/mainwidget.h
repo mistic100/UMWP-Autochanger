@@ -30,16 +30,10 @@ public:
 
 public slots:
     void onListChanged(bool _resetSel);
-    void onItemMoved(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
 
 private slots:
-    void on_buttonAdd_clicked();
-    void on_buttonActivate_clicked();
-    void on_buttonDeactivate_clicked();
-    void on_buttonDelete_clicked();
-
-    void on_mainList_itemSelectionChanged();
-    void on_mainList_itemDoubleClicked(QListWidgetItem*);
+    void onItemMoved(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
+    void on_mainList_customContextMenuRequested(const QPoint &_pos);
 };
 
 #endif // MAINWIDGET_H

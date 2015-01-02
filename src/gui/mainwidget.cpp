@@ -22,16 +22,16 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) :
 {
     ui->setupUi(this);
 
-    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
-
-    // main list
     ui->mainList->setItemDelegate(new ListDelegate(ui->mainList, m_ctrl->settings()));
     ui->mainList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->mainList->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->mainList->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->mainList->setStyle(new ListProxyStyle());
 
     connect(ui->mainList->model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             this, SLOT(onItemMoved(QModelIndex,int,int,QModelIndex,int)));
+
+    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
 
     onListChanged(true);
 }
@@ -55,12 +55,6 @@ void MainWidget::onListChanged(bool _resetSel)
     if (!_resetSel)
     {
         indexes = getSelectedIndexes();
-    }
-    else
-    {
-        ui->buttonActivate->setVisible(false);
-        ui->buttonDeactivate->setVisible(false);
-        ui->buttonDelete->setVisible(false);
     }
 
     ui->mainList->clear();
@@ -89,129 +83,13 @@ QList<int> MainWidget::getSelectedIndexes()
     QList<QListWidgetItem*> items = ui->mainList->selectedItems();
     QList<int> indexes;
 
-    for (QList<QListWidgetItem*>::const_iterator it=items.constBegin(); it!=items.constEnd(); it++)
+    foreach (const QListWidgetItem* item, items)
     {
-        indexes.append((*it)->data(Qt::UserRole).toInt());
+        indexes.append(item->data(Qt::UserRole).toInt());
     }
 
     qSort(indexes);
     return indexes;
-}
-
-/**
- * @brief Open file dialog to add a new set
- */
-void MainWidget::on_buttonAdd_clicked()
-{
-    QString dirname = QFileDialog::getExistingDirectory(this, tr("Add"),
-                                                        m_ctrl->settings()->get("last_dir").toString());
-
-    if (!dirname.isEmpty())
-    {
-        QDir dir(dirname);
-        dir.cdUp();
-        m_ctrl->settings()->setOpt("last_dir", dir.absolutePath());
-
-        dirname.replace('/', '\\');
-        m_ctrl->settings()->addSet(dirname);
-        m_ctrl->emitListChanged(true);
-    }
-}
-
-/**
- * @brief Open confirmation to delete selected sets
- */
-void MainWidget::on_buttonDelete_clicked()
-{
-    int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
-                                   QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
-
-    if (ret == QMessageBox::Ok)
-    {
-        m_ctrl->settings()->deleteSets(getSelectedIndexes());
-        m_ctrl->emitListChanged(true);
-    }
-}
-
-/**
- * @brief Activate selected sets
- */
-void MainWidget::on_buttonActivate_clicked()
-{
-    m_ctrl->settings()->activateSets(getSelectedIndexes());
-    m_ctrl->emitListChanged();
-}
-
-/**
- * @brief Deactivate selected sets
- */
-void MainWidget::on_buttonDeactivate_clicked()
-{
-    m_ctrl->settings()->unactivateSets(getSelectedIndexes());
-    m_ctrl->emitListChanged();
-}
-
-/**
- * @brief Open dialog for set edition
- */
-void MainWidget::on_mainList_itemDoubleClicked(QListWidgetItem*)
-{
-    int index = getSelectedIndexes().at(0);
-    Set* set = m_ctrl->settings()->set(index);
-
-    SetEditDialog dialog(this, set, m_ctrl->settings());
-
-    // need to unbind hotkeys to allow hotkeys input
-    ((MainWindow*)parent())->clearHotkeys();
-    if (dialog.exec())
-    {
-        dialog.save(index);
-        m_ctrl->emitListChanged();
-    }
-    ((MainWindow*)parent())->defineHotkeys();
-}
-
-/**
- * @brief Update buttons visibility on user selection
- */
-void MainWidget::on_mainList_itemSelectionChanged()
-{
-    QList<int> indexes = getSelectedIndexes();
-
-    if (indexes.size() == 0)
-    {
-        ui->buttonActivate->setVisible(false);
-        ui->buttonDeactivate->setVisible(false);
-        ui->buttonDelete->setVisible(false);
-    }
-    else
-    {
-        int nbActive = 0, nbInactive=0;
-
-        for (QList<int>::iterator i=indexes.begin(); i!=indexes.end(); i++)
-        {
-            if (m_ctrl->settings()->set(*i)->isActive())
-            {
-                nbActive++;
-            }
-            else
-            {
-                nbInactive++;
-            }
-        }
-
-        if (nbActive >= nbInactive)
-        {
-            ui->buttonActivate->setVisible(false);
-            ui->buttonDeactivate->setVisible(true);
-        }
-        else
-        {
-            ui->buttonActivate->setVisible(true);
-            ui->buttonDeactivate->setVisible(false);
-        }
-        ui->buttonDelete->setVisible(true);
-    }
 }
 
 /**
@@ -223,4 +101,15 @@ void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelInd
 {
     m_ctrl->settings()->moveSet(from, to);
     m_ctrl->emitListChanged(true);
+}
+
+/**
+ * @brief Right click on list
+ * @param QPoint _pos
+ */
+void MainWidget::on_mainList_customContextMenuRequested(const QPoint &_pos)
+{
+    QList<int> sets = getSelectedIndexes();
+    QPoint pos = ui->mainList->mapToGlobal(_pos);
+    ((MainWindow*)parent())->showContextMenu(sets, pos);
 }

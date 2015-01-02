@@ -28,12 +28,13 @@
         <file alias="help-color">images/icons/help_color.png</file>
         <file alias="bullet_cross">images/icons/bullet_cross.png</file>
         <file alias="color">images/icons/color.png</file>
-    </qresource>
-    <qresource prefix="/button">
-        <file alias="activate">images/buttons/button_activate.png</file>
-        <file alias="add">images/buttons/button_add.png</file>
-        <file alias="deactivate">images/buttons/button_deactivate.png</file>
-        <file alias="delete">images/buttons/button_delete.png</file>
+        <file alias="add">images/icons/add.png</file>
+        <file alias="clear">images/icons/clear.png</file>
+        <file alias="delete">images/icons/delete.png</file>
+        <file alias="disable">images/icons/disable.png</file>
+        <file alias="edit">images/icons/edit.png</file>
+        <file alias="enable">images/icons/enable.png</file>
+        <file alias="add2">images/icons/add2.png</file>
     </qresource>
     <qresource prefix="/lang/en_GB">
         <file alias="help">lang/en_GB/help.htm</file>

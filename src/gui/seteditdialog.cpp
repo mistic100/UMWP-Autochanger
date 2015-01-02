@@ -10,7 +10,7 @@
  * @param Set* _set
  * @param Settings* _settings
  */
-SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
+SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, int _set) :
     QDialog(_parent),
     ui(new Ui::SetEditDialog),
     m_settings(_settings)
@@ -30,15 +30,17 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings) :
     ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
     ui->selectStyle->addItem(QIcon(":/icon/im_fill"),         tr("Fill"),                 UM::IM_FILL);
 
-    ui->inputName->setText(_set->name());
+    Set* set = m_settings->set(_set);
 
-    int index = ui->selectType->findData(_set->type());
+    ui->inputName->setText(set->name());
+
+    int index = ui->selectType->findData(set->type());
     ui->selectType->setCurrentIndex(index);
 
-    index = ui->selectStyle->findData(_set->style());
+    index = ui->selectStyle->findData(set->style());
     ui->selectStyle->setCurrentIndex(index);
 
-    ui->inputHotkey->setHotkey(_set->hotkey());
+    ui->inputHotkey->setHotkey(set->hotkey());
     ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
 
     qxtLog->trace("SetEditDialog openned");

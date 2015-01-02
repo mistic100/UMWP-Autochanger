@@ -25,6 +25,7 @@ SOURCES += \
     gui/newversiondialog.cpp \
     gui/menubar.cpp \
     gui/trayicon.cpp \
+    gui/setcontextmenu.cpp \
     gui/screensdialog.cpp \
     wallpapergenerator.cpp
 
@@ -54,6 +55,7 @@ HEADERS += \
     gui/newversiondialog.h \
     gui/menubar.h \
     gui/trayicon.h \
+    gui/setcontextmenu.h \
     gui/screensdialog.h \
     wallpapergenerator.h
 

@@ -40,6 +40,8 @@ public:
     void showMain();
     void showError();
 
+    void showContextMenu(const QList<int> &_sets, const QPoint &_pos);
+
 protected:
     void showEvent(QShowEvent* _event);
     void resizeEvent(QResizeEvent* _event);
@@ -49,6 +51,7 @@ protected:
 public slots:
     void init();
     void quit();
+    void addSet();
     void startPause();
     void toggleWindow(bool _forceHide=false);
     void onHotkey();

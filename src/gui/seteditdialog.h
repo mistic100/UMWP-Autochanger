@@ -24,7 +24,7 @@ private:
     Settings* m_settings;
 
 public:
-    SetEditDialog(QWidget* _parent, Set* _set, Settings* _settings);
+    SetEditDialog(QWidget* _parent, Settings* _settings, int _set);
     ~SetEditDialog();
 
     void save(int index);

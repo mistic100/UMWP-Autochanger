@@ -20,7 +20,7 @@
 #define APP_INSTALLER_SIZE 5228000
 #define APP_INSTALLER_FILENAME "installer.exe"
 
-#define APP_MIN_WIDTH 440
-#define APP_MIN_HEIGHT 240
+#define APP_MIN_WIDTH 505
+#define APP_MIN_HEIGHT 260
 
 #endif // VERSION_H
