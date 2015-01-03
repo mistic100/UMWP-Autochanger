@@ -39,7 +39,7 @@ private:
     QVector<QString> adaptFileDesktopWithDisabled(const Set* _set, const QVector<QString> &_file);
     QVector<QString> adaptFilesFillMode(const Set* _set, const QVector<QString> &_files);
     QString getConfigurationKey(UM::IMAGE _style);
-    QString getCacheFilename(const QString &_originalFile, const QScreen &_rect, const QString &_key);
+    QString getCacheFilename(const QString &_originalFile, const QRect &_rect, const QString &_key);
 
 };
 

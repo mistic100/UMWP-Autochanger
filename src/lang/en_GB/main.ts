@@ -160,7 +160,7 @@
 <context>
     <name>MainWidget</name>
     <message>
-        <location filename="../../gui/mainwidget.cpp" line="72"/>
+        <location filename="../../gui/mainwidget.cpp" line="69"/>
         <source>This set doesn&apos;t exist on the disk anymore</source>
         <translation type="unfinished"></translation>
     </message>
@@ -168,79 +168,79 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="520"/>
+        <location filename="../../gui/mainwindow.cpp" line="538"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="319"/>
+        <location filename="../../gui/mainwindow.cpp" line="323"/>
         <source>Import configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="301"/>
+        <location filename="../../gui/mainwindow.cpp" line="305"/>
         <source>Export configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="379"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/mainwindow.cpp" line="396"/>
+        <location filename="../../gui/mainwindow.cpp" line="400"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="303"/>
-        <location filename="../../gui/mainwindow.cpp" line="321"/>
+        <location filename="../../gui/mainwindow.cpp" line="307"/>
+        <location filename="../../gui/mainwindow.cpp" line="325"/>
         <source>XML files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="252"/>
+        <location filename="../../gui/mainwindow.cpp" line="256"/>
         <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="344"/>
+        <location filename="../../gui/mainwindow.cpp" line="348"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="344"/>
+        <location filename="../../gui/mainwindow.cpp" line="348"/>
         <source>Invalid settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="437"/>
+        <location filename="../../gui/mainwindow.cpp" line="383"/>
+        <source>User guide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/mainwindow.cpp" line="455"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="441"/>
+        <location filename="../../gui/mainwindow.cpp" line="459"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="466"/>
+        <location filename="../../gui/mainwindow.cpp" line="484"/>
         <source>Current sets : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="480"/>
-        <location filename="../../gui/mainwindow.cpp" line="491"/>
+        <location filename="../../gui/mainwindow.cpp" line="498"/>
+        <location filename="../../gui/mainwindow.cpp" line="509"/>
         <source>A new version is available : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="218"/>
+        <location filename="../../gui/mainwindow.cpp" line="219"/>
         <source>%1 is still running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="520"/>
+        <location filename="../../gui/mainwindow.cpp" line="538"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -268,7 +268,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="24"/>
+        <location filename="../../gui/menubar.cpp" line="37"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,48 +278,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../gui/menubar.cpp" line="24"/>
+        <source>User guide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../gui/menubar.cpp" line="27"/>
-        <source>About</source>
+        <source>Report a bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/menubar.cpp" line="28"/>
+        <source>Homepage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="29"/>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/menubar.cpp" line="30"/>
-        <source>Add set</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="31"/>
-        <location filename="../../gui/menubar.cpp" line="77"/>
-        <source>Pause</source>
+        <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="32"/>
-        <source>Refresh</source>
+        <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="33"/>
-        <source>Hide</source>
+        <location filename="../../gui/menubar.cpp" line="89"/>
+        <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="34"/>
-        <source>Configuration</source>
+        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="35"/>
-        <source>?</source>
+        <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="82"/>
+        <location filename="../../gui/menubar.cpp" line="36"/>
+        <source>Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/menubar.cpp" line="94"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -416,17 +426,17 @@
 <context>
     <name>SetContextMenu</name>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="21"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="43"/>
         <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="37"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="31"/>
         <source>Disable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="42"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="36"/>
         <source>Enable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -436,18 +446,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="54"/>
-        <location filename="../../gui/setcontextmenu.cpp" line="84"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="56"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="86"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="57"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="59"/>
         <source>Clear cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="84"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="86"/>
         <source>Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>

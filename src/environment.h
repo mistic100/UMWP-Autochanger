@@ -3,7 +3,6 @@
 
 #include <QHash>
 
-#include "ext/qscreen.h"
 #include "settings.h"
 
 
@@ -27,7 +26,7 @@ private:
     Settings*                m_settings;
 
     QHash<QString, QVariant> m_env;     // environnement variables
-    QHash<int, QScreen>      m_wpSizes;
+    QHash<int, QRect>      m_wpSizes;
     QByteArray               m_header;
     NewVersion               m_newVersion;
 
@@ -43,7 +42,7 @@ public:
     // getters
     const QVariant      get(const QString &_key) const  { return m_env.value(_key); }
     const int           nbMonitors() const              { return get("nb_monitors").toInt(); }
-    const QScreen       wpSize(int _i) const            { return m_wpSizes.value(_i); }
+    const QRect         wpSize(int _i) const            { return m_wpSizes.value(_i); }
     const QByteArray    &header() const                 { return m_header; }
     const NewVersion    newVersion() const              { return m_newVersion; }
 

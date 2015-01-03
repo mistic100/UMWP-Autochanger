@@ -155,7 +155,7 @@ QVector<QString> WallpaperGenerator::adaptFiles(const Set* _set, const QVector<Q
  */
 QVector<QString> WallpaperGenerator::adaptFileDesktopWithDisabled(const Set* _set, const QVector<QString> &_files)
 {
-    QScreen desktop = m_enviro->wpSize(-1);
+    QRect desktop = m_enviro->wpSize(-1);
     QPoint offset = -desktop.topLeft();
 
     QImage image(desktop.size(), QImage::Format_RGB32);
@@ -303,7 +303,7 @@ QVector<QString> WallpaperGenerator::adaptFilesFillMode(const Set* _set, const Q
         if (!_files.at(i).isEmpty())
         {
             // target size
-            QScreen size;
+            QRect size;
             if (_set->type() == UM::W_DESKTOP)
             {
                 size = m_enviro->wpSize(-1);
@@ -362,7 +362,7 @@ QString WallpaperGenerator::getConfigurationKey(UM::IMAGE _style)
 
     for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
     {
-        QScreen screen = m_enviro->wpSize(i);
+        QRect screen = m_enviro->wpSize(i);
         Monitor monitor = m_settings->monitor(i);
 
         str+= QString::number(screen.left());
@@ -385,7 +385,7 @@ QString WallpaperGenerator::getConfigurationKey(UM::IMAGE _style)
  * @param string _key
  * @return string
  */
-QString WallpaperGenerator::getCacheFilename(const QString &_originalFile, const QScreen &_rect, const QString &_key)
+QString WallpaperGenerator::getCacheFilename(const QString &_originalFile, const QRect &_rect, const QString &_key)
 {
     QFileInfo file(_originalFile);
 

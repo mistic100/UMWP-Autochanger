@@ -93,7 +93,7 @@ void ScreensDialog::save()
 void ScreensDialog::init()
 {
     m_ratio = 400.f/m_ctrl->enviro()->wpSize(-1).width();
-    m_viewport = m_ctrl->enviro()->wpSize(-1).scaled(m_ratio);
+    m_viewport = scaledRect(m_ctrl->enviro()->wpSize(-1), m_ratio);
 
     QRect rect(QPoint(0, 0), m_viewport.size());
 
@@ -113,11 +113,11 @@ void ScreensDialog::init()
 /**
  * @brief Add a monitor in the scene
  * @param int _i
- * @param QScreen _screen
+ * @param QRect _screen
  */
-void ScreensDialog::addScreen(int _i, const QScreen &_screen)
+void ScreensDialog::addScreen(int _i, const QRect &_screen)
 {
-    QScreen scaled = _screen.scaled(m_ratio);
+    QRect scaled = scaledRect(_screen, m_ratio);
     scaled.translate(-m_viewport.left()+5, -m_viewport.top()+5);
     scaled.setWidth(scaled.width()-10);
     scaled.setHeight(scaled.height()-10);
@@ -259,4 +259,20 @@ void ScreensDialog::on_enabled_clicked(bool _enabled)
     m_monitors[m_currentScreen].enabled = _enabled;
 
     updateScreen(m_currentScreen);
+}
+
+/**
+ * @brief Return a scaled copy of a rectangle
+ * @param QRect _rect
+ * @param float _ratio
+ * @return QRect
+ */
+QRect ScreensDialog::scaledRect(const QRect &_rect, float _ratio)
+{
+    return QRect(
+                _rect.left()  *_ratio,
+                _rect.top()   *_ratio,
+                _rect.width() *_ratio,
+                _rect.height()*_ratio
+    );
 }

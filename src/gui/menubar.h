@@ -22,6 +22,7 @@ class MenuBar : public QToolBarExt
 private:
     Controller*  m_ctrl;
 
+    QToolButton* m_actionAdd;
     QToolButton* m_actionConfig;
     QToolButton* m_actionHide;
     QToolButton* m_actionPause;

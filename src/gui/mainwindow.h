@@ -63,6 +63,7 @@ public slots:
     void openPreviewDialog();
     void openExportDialog();
     void openImportDialog();
+    void openLink(const QString &_link);
 
     void onNewVersion();
     void openNewVersionDialog();

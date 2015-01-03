@@ -41,7 +41,7 @@ private:
     QList<ScreenThumbnail*> m_thumbs;
     QGraphicsScene* m_scene;
 
-    QScreen m_viewport;
+    QRect m_viewport;
     float m_ratio;
     int m_currentScreen;
     
@@ -53,9 +53,11 @@ public:
 
 private:
     void init();
-    void addScreen(int _i, const QScreen &_screen);
+    void addScreen(int _i, const QRect &_screen);
     void updateScreen(int _i);
     void selectScreen(int _i);
+
+    QRect scaledRect(const QRect &_rect, float _ratio);
 
 protected:
     void done(int result);

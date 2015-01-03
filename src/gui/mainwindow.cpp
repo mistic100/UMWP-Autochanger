@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QFile>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 #include "mainwindow.h"
 #include "errorwidget.h"
@@ -379,7 +380,7 @@ void MainWindow::openHelpDialog()
     QMessageBox dialog(this);
     dialog.setIcon(QMessageBox::Information);
     dialog.setText(mainText);
-    dialog.setWindowTitle(tr("Help"));
+    dialog.setWindowTitle(tr("User guide"));
     dialog.exec();
 }
 
@@ -390,7 +391,7 @@ void MainWindow::openAboutDialog()
 {
     QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
     mainText+= "Created by Damien \"Mistic\" Sorel.<br>";
-    mainText+= "&copy; 2013-2014 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    mainText+= "&copy; 2013-2015 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     mainText+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
 
     QMessageBox dialog(this);
@@ -409,10 +410,24 @@ void MainWindow::openPreviewDialog()
     dialog.exec();
 }
 
+/**
+ * @brief Show the sets context menu
+ * @param int[]  _sets
+ * @param QPoint _pos
+ */
 void MainWindow::showContextMenu(const QList<int> &_sets, const QPoint &_pos)
 {
     SetContextMenu menu(this, m_ctrl, _sets);
     menu.exec(_pos);
+}
+
+/**
+ * @brief Open a web page
+ * @param string _link
+ */
+void MainWindow::openLink(const QString &_link)
+{
+    QDesktopServices::openUrl(QUrl(_link));
 }
 
 /**

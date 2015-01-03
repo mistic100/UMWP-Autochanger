@@ -21,23 +21,25 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     QAction* actionExport =  menuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
 
     QMenu* menuHelp = new QMenu();
-    QAction* actionHelp =  menuHelp->addAction(QIcon(":/icon/help-color"), tr("Help"));
-    m_actionFiles =        menuHelp->addAction(QIcon(":/icon/images"), tr("Active files"));
-                           menuHelp->addSeparator();
-    QAction* actionAbout = menuHelp->addAction(QIcon(":/icon/about"), tr("About"));
+    QAction* actionHelp =   menuHelp->addAction(QIcon(":/icon/help-color"), tr("User guide"));
+    m_actionFiles =         menuHelp->addAction(QIcon(":/icon/images"), tr("Active files"));
+                            menuHelp->addSeparator();
+    QAction* actionIssues = menuHelp->addAction(QIcon(":/icon/bug"), tr("Report a bug"));
+    QAction* actionHome =   menuHelp->addAction(QIcon(":/icon/house"), tr("Homepage"));
+    QAction* actionAbout =  menuHelp->addAction(QIcon(":/icon/about"), tr("About"));
 
-    QToolButton* actionQuit =    this->addButton(QIcon(":/icon/quit"), tr("Quit"));
-    QToolButton* actionAdd =     this->addButton(QIcon(":/icon/add2"), tr("Add set"));
-    m_actionPause =              this->addButton(QIcon(":/icon/playpause"), tr("Pause"));
-    m_actionRefresh =            this->addButton(QIcon(":/icon/refresh"), tr("Refresh"));
-    m_actionHide =               this->addButton(QIcon(":/icon/hide"), tr("Hide"));
-    m_actionConfig =             this->addMenu(QIcon(":/icon/config"), tr("Configuration"), menuConfig);
-                                 this->addMenu(QIcon(":/icon/help"), tr("?"), menuHelp, Qt::ToolButtonIconOnly);
+    QToolButton* actionQuit = this->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextUnderIcon);
+    m_actionAdd =             this->addButton(QIcon(":/icon/add2"), tr("Add set"), Qt::ToolButtonTextUnderIcon);
+    m_actionPause =           this->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextUnderIcon);
+    m_actionRefresh =         this->addButton(QIcon(":/icon/refresh"), tr("Refresh"), Qt::ToolButtonTextUnderIcon);
+    m_actionHide =            this->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextUnderIcon);
+    m_actionConfig =          this->addMenu(QIcon(":/icon/config"), tr("Configuration"), menuConfig, Qt::ToolButtonTextUnderIcon);
+                              this->addMenu(QIcon(":/icon/help"), tr("Help"), menuHelp, Qt::ToolButtonTextUnderIcon);
 
     m_pauseBlinker = new QWidgetBlinker(m_actionPause);
 
     connect(actionQuit,      SIGNAL(clicked()), _parent, SLOT(quit()));
-    connect(actionAdd,       SIGNAL(clicked()), _parent, SLOT(addSet()));
+    connect(m_actionAdd,     SIGNAL(clicked()), _parent, SLOT(addSet()));
     connect(m_actionHide,    SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
     connect(m_actionRefresh, SIGNAL(clicked()), m_ctrl,  SLOT(onUpdate()));
     connect(m_actionPause,   SIGNAL(clicked()), _parent, SLOT(startPause()));
@@ -50,6 +52,15 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionHelp,      SIGNAL(triggered()), _parent, SLOT(openHelpDialog()));
     connect(actionAbout,     SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
     connect(m_actionFiles,   SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
+
+    // use signal mapper for all buttons oppening a web page
+    QSignalMapper* mapper = new QSignalMapper(this);
+    connect(mapper, SIGNAL(mapped(const QString &)), _parent, SLOT(openLink(const QString &)));
+
+    connect(actionIssues, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(actionIssues, QString::fromAscii(APP_ISSUES_URL));
+    connect(actionHome, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(actionHome, QString::fromAscii(APP_HOMEPAGE));
 }
 
 /**
@@ -58,6 +69,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
  */
 void MenuBar::setMinimal(bool _hide)
 {
+    m_actionAdd->defaultAction()->setVisible(!_hide);
     m_actionHide->defaultAction()->setVisible(!_hide);
     m_actionPause->defaultAction()->setVisible(!_hide);
     m_actionConfig->defaultAction()->setVisible(!_hide);

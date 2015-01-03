@@ -5,7 +5,6 @@
 #include <QVariant>
 
 #include "main.h"
-#include "ext/qscreen.h"
 
 /**
  * @brief Utilities to access environnement configuration
@@ -19,7 +18,7 @@ public:
     static QString buildShortcutPath();
 
     static QString buildUMwallpaperPath(const QString &_version, bool &_ok);
-    static void queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, bool &_ok);
+    static void queryMonitors(QHash<int, QRect> &_sizes, QByteArray &_header, bool &_ok);
 };
 
 #endif // SYSREADER_H

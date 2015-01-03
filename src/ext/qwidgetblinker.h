@@ -7,7 +7,7 @@
 
 
 /**
- * @brief Util allowing to make any QWidget blink
+ * @brief Utility allowing to make any QWidget blink
  */
 class QWidgetBlinker : public QWidget
 {
@@ -38,6 +38,7 @@ public:
         m_timeLine->stop();
     }
 
+private:
     void hide()
     {
         parentWidget()->installEventFilter(this);
@@ -59,8 +60,7 @@ protected:
 private slots:
     void frameChanged(int _frame)
     {
-        if (_frame == 0) hide();
-        else if (_frame == 1) show();
+        _frame == 0 ?  hide() : show();
     }
 };
 

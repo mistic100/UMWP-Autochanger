@@ -17,6 +17,7 @@
 
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
 #define APP_VERSION_URL "http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
+#define APP_ISSUES_URL "https://github.com/mistic100/UMWP-Autochanger/issues"
 #define APP_INSTALLER_SIZE 5228000
 #define APP_INSTALLER_FILENAME "installer.exe"
 

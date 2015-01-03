@@ -15,13 +15,7 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
     m_ctrl(_ctrl),
     m_sets(_sets)
 {
-
-    if (m_sets.size() == 0)
-    {
-        QAction* actionAdd = addAction(QIcon(":/icon/add"), tr("Add set"));
-        connect(actionAdd, SIGNAL(triggered()), _parent, SLOT(addSet()));
-    }
-    else
+    if (m_sets.size() > 0)
     {
         int nbActive = 0, nbInactive=0;
         foreach (int i, m_sets)
@@ -44,12 +38,20 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
         }
 
         addSeparator();
+    }
 
+    QAction* actionAdd = addAction(QIcon(":/icon/add"), tr("Add set"));
+    connect(actionAdd, SIGNAL(triggered()), _parent, SLOT(addSet()));
+
+    if (m_sets.size() > 0)
+    {
         if (m_sets.size() == 1)
         {
             QAction* actionEdit = addAction(QIcon(":/icon/edit"), tr("Edit"));
             connect(actionEdit, SIGNAL(triggered()), this, SLOT(editSet()));
         }
+
+        addSeparator();
 
         QAction* actionDelete = addAction(QIcon(":/icon/delete"), tr("Delete"));
         connect(actionDelete, SIGNAL(triggered()), this, SLOT(deleteSets()));

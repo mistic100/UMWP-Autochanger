@@ -35,6 +35,8 @@
         <file alias="edit">images/icons/edit.png</file>
         <file alias="enable">images/icons/enable.png</file>
         <file alias="add2">images/icons/add2.png</file>
+        <file alias="bug">images/icons/bug.png</file>
+        <file alias="house">images/icons/house.png</file>
     </qresource>
     <qresource prefix="/lang/en_GB">
         <file alias="help">lang/en_GB/help.htm</file>

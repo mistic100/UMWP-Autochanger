@@ -54,7 +54,7 @@ void Environment::log()
 
     QList<QVariant> sizes;
     sizes.append("== MONITORS");
-    for (QHash<int, QScreen>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
+    for (QHash<int, QRect>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
     {
         sizes.append(
             QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height())

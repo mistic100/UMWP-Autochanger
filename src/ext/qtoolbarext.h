@@ -7,7 +7,7 @@
 
 
 /**
- * @brief Custom QToolBar with addButton method
+ * @brief Custom QToolBar allowing to add a button/menu with text and icon
  */
 class QToolBarExt : public QToolBar
 {
@@ -16,6 +16,9 @@ class QToolBarExt : public QToolBar
 public:
     QToolBarExt(QWidget* _parent) : QToolBar(_parent) {}
 
+    /**
+     * @brief Add a button with text only
+     */
     QToolButton* addButton(const QString &_text)
     {
         QToolButton* button = new QToolButton(this);
@@ -26,7 +29,11 @@ public:
         return button;
     }
 
-    QToolButton* addButton(const QIcon &_icon, const QString &_text, Qt::ToolButtonStyle _style = Qt::ToolButtonTextBesideIcon)
+    /**
+     * @brief Add a button with text and icon
+     */
+    QToolButton* addButton(const QIcon &_icon, const QString &_text,
+                           Qt::ToolButtonStyle _style = Qt::ToolButtonTextBesideIcon)
     {
         QToolButton* button = addButton(_text);
         button->setIcon(_icon);
@@ -34,11 +41,27 @@ public:
         return button;
     }
 
-    QToolButton* addMenu(const QIcon &_icon, const QString &_text, QMenu* _menu, Qt::ToolButtonStyle _style = Qt::ToolButtonTextBesideIcon)
+    /**
+     * @brief Add a menu with text only
+     */
+    QToolButton* addMenu(const QString &_text, QMenu* _menu,
+                         QToolButton::ToolButtonPopupMode _mode = QToolButton::InstantPopup)
+    {
+        QToolButton* button = addButton(_text);
+        button->setMenu(_menu);
+        button->setPopupMode(_mode);
+        return button;
+    }
+
+    /**
+     * @brief Add a menu with text and icon
+     */
+    QToolButton* addMenu(const QIcon &_icon, const QString &_text, QMenu* _menu,
+                         Qt::ToolButtonStyle _style = Qt::ToolButtonTextBesideIcon, QToolButton::ToolButtonPopupMode _mode = QToolButton::InstantPopup)
     {
         QToolButton* button = addButton(_icon, _text, _style);
         button->setMenu(_menu);
-        button->setPopupMode(QToolButton::InstantPopup);
+        button->setPopupMode(_mode);
         return button;
     }
 };

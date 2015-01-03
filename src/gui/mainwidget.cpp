@@ -1,6 +1,3 @@
-#include <QFileDialog>
-#include <QMessageBox>
-
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include "mainwindow.h"

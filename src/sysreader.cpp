@@ -187,7 +187,7 @@ QString SysReader::buildUMwallpaperPath(const QString &_version, bool &_ok)
 /**
  * @brief Read monitors dimensions from UltraMon API
  */
-void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, bool &_ok)
+void SysReader::queryMonitors(QHash<int, QRect> &_sizes, QByteArray &_header, bool &_ok)
 {
     _sizes.clear();
     _header.clear();
@@ -232,7 +232,7 @@ void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, 
                 pMon->get_Left(&left);
                 pMon->get_Top(&top);
 
-                _sizes.insert(i, QScreen(
+                _sizes.insert(i, QRect(
                                   (int)left,
                                   (int)top,
                                   (int)width,
@@ -265,7 +265,7 @@ void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, 
             // rect monitors
             for (int i=0; i<nbMonitors; i++)
             {
-                QScreen screen = _sizes.value(i);
+                QRect screen = _sizes.value(i);
                 RECT rect;
                 rect.right = screen.width();
                 rect.bottom = screen.height();
@@ -275,7 +275,7 @@ void SysReader::queryMonitors(QHash<int, QScreen> &_sizes, QByteArray &_header, 
             }
 
             // store whoel desktop size with its top-left-most position
-            _sizes.insert(-1, QScreen(minX, minY, maxX-minX, maxY-minY));
+            _sizes.insert(-1, QRect(minX, minY, maxX-minX, maxY-minY));
         }
 
         pMons->Release();
