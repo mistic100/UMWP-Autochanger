@@ -15,13 +15,21 @@ extern short UMWP_STATE;
 Environment::Environment(Settings* _settings) :
     m_settings(_settings)
 {
+    qRegisterMetaType<NewVersion>("NewVersion");
+
     m_env["wallpath"] = QVariant();
     m_env["bmppath"] = QVariant();
     m_env["umversion"] = "";
     m_env["startlinkpath"] = QVariant();
     m_env["nb_monitors"] = 0;
 
-    qRegisterMetaType<NewVersion>("NewVersion");
+    QDirIterator it(":/lang");
+    while (it.hasNext())
+    {
+        it.next();
+        m_languages.append(it.fileName());
+    }
+    qSort(m_languages);
 }
 
 /**
@@ -62,8 +70,16 @@ void Environment::log()
         );
     }
 
+    QList<QVariant> langs;
+    langs.append("== LANGUAGES");
+    foreach (const QString lang, m_languages)
+    {
+        langs.append(lang);
+    }
+
     qxtLog->debug(env);
     qxtLog->debug(sizes);
+    qxtLog->debug(langs);
 }
 
 /**

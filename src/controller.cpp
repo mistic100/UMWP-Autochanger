@@ -142,7 +142,10 @@ void Controller::onUpdate(bool _forceRefresh)
     {
         foreach (QString file, m_files)
         {
-            qxtLog->debug("Current file: "+file);
+            if (!file.isEmpty())
+            {
+                qxtLog->debug("Current file: "+file);
+            }
         }
     }
 

@@ -41,9 +41,11 @@
     <qresource prefix="/lang/en_GB">
         <file alias="help">lang/en_GB/help.htm</file>
         <file alias="main">lang/en_GB/main.qm</file>
+        <file alias="flag">lang/en_GB/flag.png</file>
     </qresource>
     <qresource prefix="/lang/fr_FR">
         <file alias="help">lang/fr_FR/help.htm</file>
         <file alias="main">lang/fr_FR/main.qm</file>
+        <file alias="flag">lang/fr_FR/flag.png</file>
     </qresource>
 </RCC>

@@ -44,18 +44,6 @@ int main(int argc, char *argv[])
 
     qxtLog->trace("Starting =================================================");
 
-    qxtLog->debug("Language: " + QLocale::system().name());
-
-    // default translations
-    QTranslator qtTranslator;
-    qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    app.installTranslator(&qtTranslator);
-
-    // app translations
-    QTranslator appTranslator;
-    appTranslator.load(":/lang/" + QLocale::system().name() + "/main");
-    app.installTranslator(&appTranslator);
-
     // create cache dir
     QDir dirHelper;
     if (!dirHelper.exists(APP_CACHE_DIR))
@@ -63,7 +51,6 @@ int main(int argc, char *argv[])
         dirHelper.mkdir(APP_CACHE_DIR);
     }
 
-    // launch !
     Settings settings;
     settings.load();
 
@@ -76,6 +63,18 @@ int main(int argc, char *argv[])
         settings.log();
         enviro.log();
     }
+
+    QString language = settings.get("language").toString();
+
+    // default translations
+    QTranslator qtTranslator;
+    qtTranslator.load("qt_" + language, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&qtTranslator);
+
+    // app translations
+    QTranslator appTranslator;
+    appTranslator.load(":/lang/" + language + "/main");
+    app.installTranslator(&appTranslator);
 
     Controller ctrl(&settings, &enviro);
 

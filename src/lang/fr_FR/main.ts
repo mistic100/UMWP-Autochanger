@@ -9,99 +9,114 @@
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="30"/>
+        <location filename="../../gui/configdialog.ui" line="20"/>
         <source>Configuration</source>
         <translation>Configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="38"/>
+        <location filename="../../gui/configdialog.ui" line="28"/>
+        <source>Language :</source>
+        <translation>Langue :</translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.ui" line="42"/>
         <source>Delay :</source>
         <translation>Délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="67"/>
+        <location filename="../../gui/configdialog.ui" line="71"/>
         <source>Minimize on startup</source>
         <translation>Réduire au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="74"/>
+        <location filename="../../gui/configdialog.ui" line="78"/>
         <source>Check files periodically</source>
         <translation>Vérifier les fichier périodiquement</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="81"/>
+        <location filename="../../gui/configdialog.ui" line="85"/>
         <source>Check updates</source>
         <translation>Chercher les nouvelles versions</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="88"/>
+        <location filename="../../gui/configdialog.ui" line="92"/>
         <source>Start with Windows</source>
         <translation>Démarrer avec Windows</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="95"/>
+        <location filename="../../gui/configdialog.ui" line="99"/>
         <source>Show notifications</source>
         <translation>Afficher les notifications</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="105"/>
+        <location filename="../../gui/configdialog.ui" line="119"/>
         <source>Hotkeys</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="124"/>
+        <location filename="../../gui/configdialog.ui" line="138"/>
         <source>Show/Hide :</source>
         <translation>Masquer/Afficher :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="114"/>
+        <location filename="../../gui/configdialog.ui" line="128"/>
         <source>Refresh :</source>
         <translation>Rafraîchir :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="141"/>
+        <location filename="../../gui/configdialog.ui" line="155"/>
         <source>Start/Pause :</source>
         <translation>Démarrer/Pause :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="134"/>
+        <location filename="../../gui/configdialog.ui" line="148"/>
         <source>Use hotkeys</source>
         <translation>Utiliser les raccourcis</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="70"/>
+        <location filename="../../gui/configdialog.cpp" line="82"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="71"/>
+        <location filename="../../gui/configdialog.cpp" line="83"/>
         <source>Show/Hide</source>
         <translation>Afficher/Masquer</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="72"/>
+        <location filename="../../gui/configdialog.cpp" line="84"/>
         <source>Start/Pause</source>
         <translation>Démarrer/Pause</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="90"/>
+        <location filename="../../gui/configdialog.cpp" line="102"/>
         <source>Hotkey for &quot;%1&quot; already used for &quot;%2&quot;</source>
         <translation>Raccourci &quot;%1&quot; déjà utilisé pour &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="108"/>
+        <location filename="../../gui/configdialog.cpp" line="120"/>
         <source>Hotkey for &quot;%1&quot; already used for set &quot;%2&quot;</source>
         <translation>Raccourci &quot;%1&quot; déjà utilisé pour le set &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="121"/>
+        <location filename="../../gui/configdialog.cpp" line="133"/>
         <source>Delay can not be lower than 10 seconds</source>
         <translation>Le délai ne peut pas être inférieur à 10 secondes</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="128"/>
+        <location filename="../../gui/configdialog.cpp" line="140"/>
         <source>Error</source>
         <translation>Erreur</translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="169"/>
+        <source>Language changed</source>
+        <translation>Langue modifiée</translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="170"/>
+        <source>You must restart %1 to apply the new language.</source>
+        <translation>Vous devez redémarrer %1 pour appliquer la nouvelle langue.</translation>
     </message>
 </context>
 <context>

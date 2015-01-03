@@ -25,10 +25,11 @@ class Environment
 private:
     Settings*                m_settings;
 
-    QHash<QString, QVariant> m_env;     // environnement variables
-    QHash<int, QRect>      m_wpSizes;
-    QByteArray               m_header;
-    NewVersion               m_newVersion;
+    QHash<QString, QVariant> m_env;        // environnement variables
+    QList<QString>           m_languages;  // languages packaged with UMWPA
+    QHash<int, QRect>        m_wpSizes;    // monitors sizes
+    QByteArray               m_header;     // .wallpaper file header
+    NewVersion               m_newVersion; // struct to hold new version data
 
 public:
     Environment(Settings* _settings);
@@ -45,6 +46,7 @@ public:
     const QRect         wpSize(int _i) const            { return m_wpSizes.value(_i); }
     const QByteArray    &header() const                 { return m_header; }
     const NewVersion    newVersion() const              { return m_newVersion; }
+    const QList<QString> &languages() const             { return m_languages; }
 
     // setters
     void setNewVersion(const NewVersion &_version)      { m_newVersion = _version; }

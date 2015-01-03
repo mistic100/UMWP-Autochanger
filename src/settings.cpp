@@ -20,6 +20,7 @@ Settings::Settings()
     m_options["use_hotkeys"] = false;
     m_options["show_notifications"] = true;
     m_options["last_dir"] = QDir::homePath();
+    m_options["language"] = QLocale::system().name();
 
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;

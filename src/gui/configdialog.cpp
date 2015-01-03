@@ -43,6 +43,18 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     QTime time = QTime(0, 0, 0).addSecs(settings->get("delay").toInt());
     ui->optionDelay->setTime(time);
 
+    foreach (QString lang, m_ctrl->enviro()->languages())
+    {
+        ui->optionLang->addItem(
+                    QIcon(":/lang/" + lang + "/flag"),
+                    QLocale::languageToString(QLocale(lang).language()),
+                    lang
+        );
+    }
+
+    int langIndex = ui->optionLang->findData(settings->get("language"));
+    ui->optionLang->setCurrentIndex(langIndex);
+
     qxtLog->trace("ConfigDialog openned");
 }
 
@@ -147,8 +159,20 @@ void ConfigDialog::save()
     Environment* enviro = m_ctrl->enviro();
 
     QTime time = ui->optionDelay->time();
-    settings->setOpt("delay", time.hour()*3600 + time.minute()*60 + time.second());
+    int delay = time.hour()*3600 + time.minute()*60 + time.second();
 
+    int langIndex = ui->optionLang->currentIndex();
+    QString lang = ui->optionLang->itemData(langIndex).toString();
+
+    if (lang != settings->get("language").toString())
+    {
+        QMessageBox::warning(this, tr("Language changed"),
+                             tr("You must restart %1 to apply the new language.").arg(APP_NAME),
+                             QMessageBox::Ok, QMessageBox::Ok);
+    }
+
+    settings->setOpt("delay",                 delay);
+    settings->setOpt("language",              lang);
     settings->setOpt("minimize",              ui->optionMinimize->isChecked());
     settings->setOpt("check",                 ui->optionCheckFiles->isChecked());
     settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
