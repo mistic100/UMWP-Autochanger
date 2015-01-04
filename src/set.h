@@ -9,7 +9,13 @@
  */
 class Set
 {
-private :
+public:
+    struct Current {
+        QString file;
+        int index;
+    };
+
+private:
     QString          m_path;
     QString          m_name;
     UM::WALLPAPER    m_type;
@@ -18,6 +24,7 @@ private :
     bool             m_active;
     bool             m_valid;
     QVector<QString> m_files;
+    Current          m_current;
     double           m_lastModif;
     int              m_hotkey;
 
@@ -33,6 +40,7 @@ public:
     const bool          isValid() const     { return m_valid; }
     const int           hotkey() const      { return m_hotkey; }
     const QString       uuid() const        { return m_uuid; }
+    const Current       current() const     { return m_current; }
     const QString       file(int _i) const;
 
     void setActive(const bool _a)           { m_active=_a; }
@@ -40,17 +48,19 @@ public:
     void setType(const UM::WALLPAPER _type) { m_type=_type; }
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
+    void setCurrent(const Current &_curr)   { m_current=_curr; }
 
-    bool    check();
-    double  lastChange();
-    void    populateFiles();
+    bool   check();
+    double lastChange();
+    void   populateFiles();
 
-    void  readCache();
-    void  writeCache();
-    void  deleteCache();
+    void readCache();
+    void writeCache() const;
+    void deleteCache() const;
 
     const QString fullName() const;
     const QString hotkeyStr() const;
+    const int fileIndex(const QString &_file) const { return m_files.indexOf(_file); }
 
 private:
     double  lastChangeRecur(const QString &_child, const int _level=0);

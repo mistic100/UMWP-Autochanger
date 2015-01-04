@@ -31,11 +31,12 @@ public:
     WallpaperGenerator(Controller* _ctrl);
 
     Set* getRandomSet();
-    QVector<QString> getFiles(const Set* _set);
+    QVector<QString> getFiles(Set* _set);
     QVector<QString> adaptFiles(const Set* _set, const QVector<QString> &_files);
 
 private:
-    QString getRandomFile(const Set* _set, const QVector<QString> &_files);
+    QString getNextFile(Set* _set);
+    QString getRandomFile(Set* _set, const QVector<QString> &_files);
     QVector<QString> adaptFileDesktopWithDisabled(const Set* _set, const QVector<QString> &_file);
     QVector<QString> adaptFilesFillMode(const Set* _set, const QVector<QString> &_files);
     QString getConfigurationKey(UM::IMAGE _style);

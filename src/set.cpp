@@ -26,6 +26,8 @@ Set::Set(const QString &_path, const QString &_name)
     m_valid = true;
     m_lastModif = 0;
     m_hotkey = 0;
+    m_current.index = 0;
+    m_current.file = "";
     m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
     readCache();
@@ -147,22 +149,24 @@ void Set::populateFiles()
  */
 void Set::populateFilesRecur(const QString &_path, const int _level)
 {
-    QDirIterator dir(_path, FILES_FILTER, QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
+    QDir dir(_path);
+    QStringList files = dir.entryList(FILES_FILTER,
+                                      QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot,
+                                      QDir::Name | QDir::DirsLast | QDir::IgnoreCase
+                                      );
 
-    while (dir.hasNext())
+    foreach (QString path, files)
     {
-        QString path = dir.next();
-
-        if (dir.fileInfo().isDir())
+        if (QFileInfo(_path + path).isDir())
         {
             if (_level+1 < APP_MAX_TRAVERSAL)
             {
-                populateFilesRecur(path + "/", _level+1);
+                populateFilesRecur(_path + path + "/", _level+1);
             }
         }
         else
         {
-            m_files.append(path);
+            m_files.append(_path + path);
         }
     }
 }
@@ -177,8 +181,15 @@ void Set::readCache()
     if (file.exists() && file.open(QIODevice::ReadOnly))
     {
         QDataStream in(&file);
+
         in>>m_lastModif;
         in>>m_files;
+        if (!in.atEnd())
+        {
+            in>>m_current.file;
+            in>>m_current.index;
+        }
+
         file.close();
     }
 }
@@ -186,15 +197,19 @@ void Set::readCache()
 /**
  * @brief Write cache data
  */
-void Set::writeCache()
+void Set::writeCache() const
 {
     QFile file(QString::fromAscii(APP_CACHE_DIR) + m_uuid);
 
     if (file.open(QIODevice::WriteOnly))
     {
         QDataStream out(&file);
+
         out<<m_lastModif;
         out<<m_files;
+        out<<m_current.file;
+        out<<m_current.index;
+
         file.close();
     }
 }
@@ -202,7 +217,7 @@ void Set::writeCache()
 /**
  * @brief Delete cache files
  */
-void Set::deleteCache()
+void Set::deleteCache() const
 {
     QDir cache(QString::fromAscii(APP_CACHE_DIR));
     QStringList files = cache.entryList(QStringList()<<"*"+m_uuid+"*", QDir::Files);

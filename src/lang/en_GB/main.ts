@@ -9,112 +9,127 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="20"/>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="28"/>
+        <location filename="../../gui/configdialog.ui" line="47"/>
         <source>Language :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="42"/>
+        <location filename="../../gui/configdialog.ui" line="57"/>
         <source>Delay :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="71"/>
+        <location filename="../../gui/configdialog.ui" line="103"/>
         <source>Minimize on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="78"/>
+        <location filename="../../gui/configdialog.ui" line="117"/>
         <source>Check files periodically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="85"/>
+        <location filename="../../gui/configdialog.ui" line="110"/>
         <source>Check updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="92"/>
+        <location filename="../../gui/configdialog.ui" line="34"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.ui" line="67"/>
+        <source>Mode :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.ui" line="96"/>
         <source>Start with Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="99"/>
+        <location filename="../../gui/configdialog.ui" line="124"/>
         <source>Show notifications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="119"/>
+        <location filename="../../gui/configdialog.ui" line="132"/>
         <source>Hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="138"/>
+        <location filename="../../gui/configdialog.ui" line="157"/>
         <source>Show/Hide :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="128"/>
+        <location filename="../../gui/configdialog.ui" line="167"/>
         <source>Refresh :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="155"/>
+        <location filename="../../gui/configdialog.ui" line="147"/>
         <source>Start/Pause :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="148"/>
+        <location filename="../../gui/configdialog.ui" line="177"/>
         <source>Use hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="82"/>
+        <location filename="../../gui/configdialog.cpp" line="58"/>
+        <source>Random</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="59"/>
+        <source>Sequential</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="88"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="83"/>
+        <location filename="../../gui/configdialog.cpp" line="89"/>
         <source>Show/Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="84"/>
+        <location filename="../../gui/configdialog.cpp" line="90"/>
         <source>Start/Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="102"/>
+        <location filename="../../gui/configdialog.cpp" line="108"/>
         <source>Hotkey for &quot;%1&quot; already used for &quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="120"/>
+        <location filename="../../gui/configdialog.cpp" line="126"/>
         <source>Hotkey for &quot;%1&quot; already used for set &quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="133"/>
+        <location filename="../../gui/configdialog.cpp" line="139"/>
         <source>Delay can not be lower than 10 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="140"/>
+        <location filename="../../gui/configdialog.cpp" line="146"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="169"/>
+        <location filename="../../gui/configdialog.cpp" line="175"/>
         <source>Language changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="170"/>
+        <location filename="../../gui/configdialog.cpp" line="176"/>
         <source>You must restart %1 to apply the new language.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -367,17 +382,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="54"/>
+        <location filename="../../gui/newversiondialog.cpp" line="55"/>
         <source>Downloading UMWP_Autochanger_%1_Setup.exe ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="69"/>
+        <location filename="../../gui/newversiondialog.cpp" line="71"/>
         <source>Unable to download installer file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="69"/>
+        <location filename="../../gui/newversiondialog.cpp" line="71"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

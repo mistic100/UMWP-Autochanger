@@ -55,6 +55,12 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     int langIndex = ui->optionLang->findData(settings->get("language"));
     ui->optionLang->setCurrentIndex(langIndex);
 
+    ui->optionMode->addItem(tr("Random"), "random");
+    ui->optionMode->addItem(tr("Sequential"), "sequential");
+
+    int modeIndex = ui->optionMode->findData(settings->get("mode"));
+    ui->optionMode->setCurrentIndex(modeIndex);
+
     qxtLog->trace("ConfigDialog openned");
 }
 
@@ -162,17 +168,20 @@ void ConfigDialog::save()
     int delay = time.hour()*3600 + time.minute()*60 + time.second();
 
     int langIndex = ui->optionLang->currentIndex();
-    QString lang = ui->optionLang->itemData(langIndex).toString();
+    QVariant lang = ui->optionLang->itemData(langIndex);
 
-    if (lang != settings->get("language").toString())
+    if (lang != settings->get("language"))
     {
         QMessageBox::warning(this, tr("Language changed"),
                              tr("You must restart %1 to apply the new language.").arg(APP_NAME),
                              QMessageBox::Ok, QMessageBox::Ok);
     }
 
+    int modeIndex = ui->optionMode->currentIndex();
+
     settings->setOpt("delay",                 delay);
     settings->setOpt("language",              lang);
+    settings->setOpt("mode",                  ui->optionMode->itemData(modeIndex));
     settings->setOpt("minimize",              ui->optionMinimize->isChecked());
     settings->setOpt("check",                 ui->optionCheckFiles->isChecked());
     settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());

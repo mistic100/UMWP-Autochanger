@@ -21,6 +21,7 @@ Settings::Settings()
     m_options["show_notifications"] = true;
     m_options["last_dir"] = QDir::homePath();
     m_options["language"] = QLocale::system().name();
+    m_options["mode"] = "random";
 
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;

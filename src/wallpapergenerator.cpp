@@ -44,13 +44,15 @@ Set* WallpaperGenerator::getRandomSet()
 }
 
 /**
- * @brief Get random files URI from a Set. Contains empty strings for disabled monitors.
+ * @brief Get files URI from a Set. Contains empty strings for disabled monitors.
  * @param Set* _set
  * @return string[]
  */
-QVector<QString> WallpaperGenerator::getFiles(const Set* _set)
+QVector<QString> WallpaperGenerator::getFiles(Set* _set)
 {
     QVector<QString> files;
+
+    bool random = m_settings->get("mode") == "random";
 
     if (_set->type() == UM::W_MONITOR)
     {
@@ -58,7 +60,14 @@ QVector<QString> WallpaperGenerator::getFiles(const Set* _set)
         {
             if (m_settings->monitor(i).enabled)
             {
-                files.append(getRandomFile(_set, files));
+                if (random)
+                {
+                    files.append(getRandomFile(_set, files));
+                }
+                else
+                {
+                    files.append(getNextFile(_set));
+                }
             }
             else
             {
@@ -68,10 +77,61 @@ QVector<QString> WallpaperGenerator::getFiles(const Set* _set)
     }
     else
     {
-        files.append(getRandomFile(_set, files));
+        if (random)
+        {
+            files.append(getRandomFile(_set, files));
+        }
+        else
+        {
+            files.append(getNextFile(_set));
+        }
+    }
+
+    if (!random)
+    {
+        // save current file info
+        _set->writeCache();
     }
 
     return files;
+}
+
+/**
+ * @brief Get next file in Set
+ * @param Set* _set
+ * @return string
+ */
+QString WallpaperGenerator::getNextFile(Set* _set)
+{
+    Set::Current current = _set->current();
+    int index = 0;
+
+    if (!current.file.isEmpty())
+    {
+        index = _set->fileIndex(current.file);
+
+        if (index == -1)
+        {
+            index = current.index;
+        }
+        else
+        {
+            index++;
+        }
+
+        if (index >= _set->count())
+        {
+            index = 0;
+        }
+    }
+
+    QString file = _set->file(index);
+
+    current.file = file;
+    current.index = index;
+    _set->setCurrent(current);
+
+    return file;
 }
 
 /**
@@ -80,7 +140,7 @@ QVector<QString> WallpaperGenerator::getFiles(const Set* _set)
  * @param string[] _files
  * @return string
  */
-QString WallpaperGenerator::getRandomFile(const Set* _set, const QVector<QString> &_files)
+QString WallpaperGenerator::getRandomFile(Set* _set, const QVector<QString> &_files)
 {
     int total = _set->count();
 
