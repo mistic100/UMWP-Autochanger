@@ -69,6 +69,7 @@ Type: files; Name: "{app}\debug.log";
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\cache";
 Type: files; Name: "{app}\debug.log";
+Type: files; Name: "{app}\installer.exe";
 
 [Code]
 // ask for delete config file during uninstall

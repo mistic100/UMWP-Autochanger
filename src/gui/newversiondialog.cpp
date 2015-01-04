@@ -50,15 +50,17 @@ void NewVersionDialog::on_updateButton_clicked()
 
         errorMessage();
     }
+    else
+    {
+        ui->label->setText(tr("Downloading UMWP_Autochanger_%1_Setup.exe ...").arg(m_version.code));
 
-    ui->label->setText(tr("Downloading UMWP_Autochanger_%1_Setup.exe ...").arg(m_version.code));
+        QNetworkAccessManager* manager = new QNetworkAccessManager();
+        m_reply = manager->get(QNetworkRequest(QUrl(m_version.link)));
 
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-    m_reply = manager->get(QNetworkRequest(QUrl(m_version.link)));
-
-    connect(m_reply, SIGNAL(readyRead()), this, SLOT(onDataReady()));
-    connect(m_reply, SIGNAL(finished()), this, SLOT(onDownloadFinished()));
-    connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownloadProgress(qint64,qint64)));
+        connect(m_reply, SIGNAL(readyRead()), this, SLOT(onDataReady()));
+        connect(m_reply, SIGNAL(finished()), this, SLOT(onDownloadFinished()));
+        connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(onDownloadProgress(qint64,qint64)));
+    }
 }
 
 /**
@@ -114,11 +116,26 @@ void NewVersionDialog::onDownloadFinished()
     }
     else
     {
-        qxtLog->trace("Download finished");
+        m_file.open(QIODevice::ReadOnly);
+        QByteArray data = m_file.readAll();
+        QString hash = QString(QCryptographicHash::hash(data, QCryptographicHash::Md5).toHex());
+        m_file.close();
 
-        ui->progressBar->setValue(100);
-        ui->progressBar->setMaximum(100);
+        if (hash.compare(m_version.hash, Qt::CaseInsensitive) != 0)
+        {
+            qxtLog->error("File corrupted");
 
-        m_ctrl->launchInstaller();
+            m_file.remove();
+            errorMessage();
+        }
+        else
+        {
+            qxtLog->trace("Download finished");
+
+            ui->progressBar->setValue(100);
+            ui->progressBar->setMaximum(100);
+
+            m_ctrl->launchInstaller();
+        }
     }
 }

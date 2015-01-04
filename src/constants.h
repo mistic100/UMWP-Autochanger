@@ -20,6 +20,7 @@
 #define APP_ISSUES_URL "https://github.com/mistic100/UMWP-Autochanger/issues"
 #define APP_INSTALLER_SIZE 5228000
 #define APP_INSTALLER_FILENAME "installer.exe"
+#define APP_LOG_FILENAME "debug.log"
 
 #define APP_MIN_WIDTH 505
 #define APP_MIN_HEIGHT 260

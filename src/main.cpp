@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     // logger
     if (argc > 1 && std::string(argv[1]) == "--log")
     {
-        QxtBasicFileLoggerEngine* debug = new QxtBasicFileLoggerEngine("debug.log");
+        QxtBasicFileLoggerEngine* debug = new QxtBasicFileLoggerEngine(QString::fromAscii(APP_LOG_FILENAME));
         qxtLog->addLoggerEngine("debug", debug);
         qxtLog->enableAllLogLevels();
     }

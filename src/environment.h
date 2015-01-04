@@ -12,6 +12,7 @@
 struct NewVersion {
     QString code;
     QString link;
+    QString hash;
 };
 
 Q_DECLARE_METATYPE(NewVersion)

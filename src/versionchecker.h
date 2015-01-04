@@ -35,6 +35,7 @@ private slots:
             NewVersion version;
             version.code = _reply->readLine().trimmed();
             version.link = _reply->readLine().trimmed();
+            version.hash = _reply->readLine().trimmed();
 
             if (version.code.compare(QString::fromAscii(APP_VERSION)) > 0)
             {
