@@ -84,7 +84,6 @@ void MainWindow::init()
         defineHotkeys();
 
         m_ctrl->checkVersion();
-        m_ctrl->startTimer();
         m_ctrl->onUpdate();
     }
     else

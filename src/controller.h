@@ -39,7 +39,6 @@ public:
     const QVector<QString> &files() const { return m_files; }
     Set*    currentSet() const          { return m_set; }
 
-    void startTimer();
     bool startPause();
     bool isPaused() const { return !m_mainTimer->isActive(); }
 

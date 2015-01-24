@@ -71,18 +71,6 @@ void Controller::launchInstaller()
 }
 
 /**
- * @brief Stop the timer, update the delay and restart the timer
- */
-void Controller::startTimer()
-{
-    qxtLog->info("Start timer");
-
-    m_mainTimer->stop();
-    m_mainTimer->setInterval(m_settings->get("delay").toInt()*1000);
-    m_mainTimer->start();
-}
-
-/**
  * @brief Pause or start the timer
  * @return bool - true if the timer is running
  */
@@ -109,13 +97,8 @@ void Controller::onUpdate()
 {
     qxtLog->info("Update !");
 
-    // update delay if needed
-    int delay = m_settings->get("delay").toInt()*1000;
-    if (delay != m_mainTimer->interval())
-    {
-        qxtLog->debug("Timer delay changed to: "+QString::number(delay));
-        m_mainTimer->setInterval(delay);
-    }
+    // restart timer
+    m_mainTimer->start(m_settings->get("delay").toInt()*1000);
 
     // update config
     m_settings->updateSets();
