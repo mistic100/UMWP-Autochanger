@@ -105,7 +105,7 @@ bool Controller::startPause()
 /**
  * @brief Update the wallpaper
  */
-void Controller::onUpdate(bool _forceRefresh)
+void Controller::onUpdate()
 {
     qxtLog->info("Update !");
 
@@ -118,12 +118,9 @@ void Controller::onUpdate(bool _forceRefresh)
     }
 
     // update config
-    if (_forceRefresh || m_settings->get("check").toBool())
-    {
-        m_settings->updateSets();
-        m_enviro->refreshMonitors();
-        emit listChanged(false);
-    }
+    m_settings->updateSets();
+    m_enviro->refreshMonitors();
+    emit listChanged(false);
 
     // get random files
     m_set = m_generator->getRandomSet();

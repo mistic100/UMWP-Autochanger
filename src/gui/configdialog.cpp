@@ -24,7 +24,6 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     Environment* enviro = m_ctrl->enviro();
 
     ui->optionMinimize->setChecked(         settings->get("minimize").toBool());
-    ui->optionCheckFiles->setChecked(       settings->get("check").toBool());
     ui->optionCheckUpdates->setChecked(     settings->get("check_updates").toBool());
     ui->optionAutostart->setChecked(        enviro->isAutostart());
     ui->optionUseHotkeys->setChecked(       settings->get("use_hotkeys").toBool());
@@ -183,7 +182,6 @@ void ConfigDialog::save()
     settings->setOpt("language",              lang);
     settings->setOpt("mode",                  ui->optionMode->itemData(modeIndex));
     settings->setOpt("minimize",              ui->optionMinimize->isChecked());
-    settings->setOpt("check",                 ui->optionCheckFiles->isChecked());
     settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
     settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
     settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());

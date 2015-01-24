@@ -14,7 +14,6 @@ Settings::Settings()
     m_options["window_height"] = 240;
     m_options["delay"] = 60;
     m_options["minimize"] = true;
-    m_options["check"] = true;
     m_options["check_updates"] = true;
     m_options["msgcount"] = 0;
     m_options["use_hotkeys"] = false;
@@ -167,7 +166,7 @@ bool Settings::load(QString _filename)
                     newHotkey = configNode.text().toInt();
                     updated = true;
                 }
-                else
+                else if (m_options.contains(configNode.tagName()))
                 {
                     m_options[ configNode.tagName() ] = configNode.text();
                 }

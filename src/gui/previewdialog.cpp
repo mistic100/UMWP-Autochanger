@@ -148,6 +148,6 @@ void PreviewDialog::onDeleteButtonClicked()
         qxtLog->trace("Delete "+ path);
 
         m_ctrl->moveFileToTrash(path);
-        m_ctrl->onUpdate(true);
+        m_ctrl->onUpdate();
     }
 }
