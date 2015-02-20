@@ -20,6 +20,7 @@ private:
     QString          m_name;
     UM::WALLPAPER    m_type;
     UM::IMAGE        m_style;
+    UM::MODE         m_mode;
     QString          m_uuid;
     bool             m_active;
     bool             m_valid;
@@ -35,6 +36,7 @@ public:
     const QString       &name() const       { return m_name; }
     const UM::WALLPAPER type() const        { return m_type; }
     const UM::IMAGE     style() const       { return m_style; }
+    const UM::MODE      mode() const        { return m_mode; }
     const int           count() const       { return m_files.size(); }
     const bool          isActive() const    { return m_active; }
     const bool          isValid() const     { return m_valid; }
@@ -47,6 +49,7 @@ public:
     void setName(const QString &_name)      { m_name=_name; }
     void setType(const UM::WALLPAPER _type) { m_type=_type; }
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
+    void setMode(const UM::MODE _mode)      { m_mode=_mode; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
     void setCurrent(const Current &_curr)   { m_current=_curr; }
 

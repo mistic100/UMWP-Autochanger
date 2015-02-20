@@ -74,49 +74,72 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
 
 
     // STATE ICON
-    QIcon a_icon, w_icon, im_icon;
+    QIcon icon;
 
     switch (set->isActive())
     {
     case true:
-        a_icon = QIcon(":/icon/bullet_green"); break;
+        icon = QIcon(":/icon/bullet_green");
+        break;
     case false:
-        a_icon = QIcon(":/icon/bullet_red"); break;
+        icon = QIcon(":/icon/bullet_red");
+        break;
     }
     rect = baseRect.adjusted(2, 0, 0, 0);
-    a_icon.paint(_painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
+    icon.paint(_painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
 
 
     _painter->setOpacity(!set->isActive() ? 0.5 : 1.0);
 
-    // MODE ICON
+    // TYPE ICON
     switch (set->type())
     {
-    case 0:
-        w_icon = QIcon(":/icon/w_desktop"); break;
-    case 1:
-        w_icon = QIcon(":/icon/w_monitor"); break;
+    case UM::W_DESKTOP:
+        icon = QIcon(":/icon/w_desktop");
+        break;
+    case UM::W_MONITOR:
+        icon = QIcon(":/icon/w_monitor");
+        break;
     }
     rect = baseRect.adjusted(0, 3, -3, 0);
-    w_icon.paint(_painter, rect, Qt::AlignTop|Qt::AlignRight);
+    icon.paint(_painter, rect, Qt::AlignTop|Qt::AlignRight);
 
 
-    // IMAGE ICON
+    // STYLE ICON
     switch (set->style())
     {
-    case 0:
-        im_icon = QIcon(":/icon/im_center"); break;
-    case 1:
-        im_icon = QIcon(":/icon/im_tile"); break;
-    case 2:
-        im_icon = QIcon(":/icon/im_stretch"); break;
-    case 3:
-        im_icon = QIcon(":/icon/im_stretch_prop"); break;
-    case 4:
-        im_icon = QIcon(":/icon/im_fill"); break;
+    case UM::IM_CENTER:
+        icon = QIcon(":/icon/im_center");
+        break;
+    case UM::IM_TILE:
+        icon = QIcon(":/icon/im_tile");
+        break;
+    case UM::IM_STRETCH:
+        icon = QIcon(":/icon/im_stretch");
+        break;
+    case UM::IM_STRETCH_PROP:
+        icon = QIcon(":/icon/im_stretch_prop");
+        break;
+    case UM::IM_FILL:
+        icon = QIcon(":/icon/im_fill");
+        break;
     }
     rect = baseRect.adjusted(0, 0, -2, 0);
-    im_icon.paint(_painter, rect, Qt::AlignBottom|Qt::AlignRight);
+    icon.paint(_painter, rect, Qt::AlignBottom|Qt::AlignRight);
+
+
+    // MODE ICON
+    switch (set->mode())
+    {
+    case UM::RANDOM:
+        icon = QIcon(":/icon/mode_random");
+        break;
+    case UM::SEQUENTIAL:
+        icon = QIcon(":/icon/mode_sequential");
+        break;
+    }
+    rect = baseRect.adjusted(0, 0, -24, 0);
+    icon.paint(_painter, rect, Qt::AlignBottom|Qt::AlignRight);
 
 
     _painter->setOpacity(!set->isActive() ? 0.9 : 1.0);

@@ -22,6 +22,7 @@ Set::Set(const QString &_path, const QString &_name)
 
     m_type = UM::W_MONITOR;
     m_style = UM::IM_FILL;
+    m_mode = UM::RANDOM;
     m_active = true;
     m_valid = true;
     m_lastModif = 0;

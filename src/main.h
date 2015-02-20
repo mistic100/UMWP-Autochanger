@@ -22,8 +22,8 @@ namespace UMWP {
 }
 
 
-// types for wallpaper file
 namespace UM {
+    // types for wallpaper file
     enum WALLPAPER
     {
         W_DESKTOP = 0,
@@ -51,6 +51,14 @@ namespace UM {
         IMAGE imgStyle;
         wchar_t imgFile[260];
     };
+
+    // other enums
+    enum MODE
+    {
+        NONE = 0,
+        RANDOM = 1,
+        SEQUENTIAL = 2
+    };
 }
 
 // helper for monitors config
@@ -62,6 +70,7 @@ struct Monitor {
 
 Q_DECLARE_METATYPE(UM::WALLPAPER)
 Q_DECLARE_METATYPE(UM::IMAGE)
+Q_DECLARE_METATYPE(UM::MODE)
 
 // flags for dialog without help button
 const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;

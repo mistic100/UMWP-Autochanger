@@ -20,9 +20,12 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     setWindowFlags(SimpleDialogFlag);
 
+    ui->tabWidget->setCurrentIndex(0);
+
     Settings* settings = m_ctrl->settings();
     Environment* enviro = m_ctrl->enviro();
 
+    // checkboxes
     ui->optionMinimize->setChecked(         settings->get("minimize").toBool());
     ui->optionCheckUpdates->setChecked(     settings->get("check_updates").toBool());
     ui->optionAutostart->setChecked(        enviro->isAutostart());
@@ -31,6 +34,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     ui->optionAutostart->setDisabled(!enviro->canAddShortcut());
 
+    // hotkeys
     ui->hotkeyRefresh->setDisabled(     !settings->get("use_hotkeys").toBool());
     ui->hotkeyShowHide->setDisabled(    !settings->get("use_hotkeys").toBool());
     ui->hotkeyStartPause->setDisabled(  !settings->get("use_hotkeys").toBool());
@@ -39,9 +43,11 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->hotkeyShowHide->setHotkey(  settings->hotkey("showhide"));
     ui->hotkeyStartPause->setHotkey(settings->hotkey("startpause"));
 
+    // delay
     QTime time = QTime(0, 0, 0).addSecs(settings->get("delay").toInt());
     ui->optionDelay->setTime(time);
 
+    // languages
     foreach (QString lang, m_ctrl->enviro()->languages())
     {
         ui->optionLang->addItem(
@@ -50,15 +56,25 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
                     lang
         );
     }
+    ui->optionLang->setCurrentData(settings->get("language"));
 
-    int langIndex = ui->optionLang->findData(settings->get("language"));
-    ui->optionLang->setCurrentIndex(langIndex);
+    // type
+    ui->optionType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
+    ui->optionType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
+    ui->optionType->setCurrentData(settings->get("default_type"));
 
-    ui->optionMode->addItem(tr("Random"), "random");
-    ui->optionMode->addItem(tr("Sequential"), "sequential");
+    // style
+    ui->optionStyle->addItem(QIcon(":/icon/im_center"),       tr("Center"),               UM::IM_CENTER);
+    ui->optionStyle->addItem(QIcon(":/icon/im_tile"),         tr("Tile"),                 UM::IM_TILE);
+    ui->optionStyle->addItem(QIcon(":/icon/im_stretch"),      tr("Stretch"),              UM::IM_STRETCH);
+    ui->optionStyle->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
+    ui->optionStyle->addItem(QIcon(":/icon/im_fill"),         tr("Fill"),                 UM::IM_FILL);
+    ui->optionStyle->setCurrentData(settings->get("default_style"));
 
-    int modeIndex = ui->optionMode->findData(settings->get("mode"));
-    ui->optionMode->setCurrentIndex(modeIndex);
+    // mode
+    ui->optionMode->addItem(QIcon(":/icon/mode_random"),     tr("Random"),     UM::RANDOM);
+    ui->optionMode->addItem(QIcon(":/icon/mode_sequential"), tr("Sequential"), UM::SEQUENTIAL);
+    ui->optionMode->setCurrentData(settings->get("default_mode"));
 
     qxtLog->trace("ConfigDialog openned");
 }
@@ -176,11 +192,11 @@ void ConfigDialog::save()
                              QMessageBox::Ok, QMessageBox::Ok);
     }
 
-    int modeIndex = ui->optionMode->currentIndex();
-
     settings->setOpt("delay",                 delay);
     settings->setOpt("language",              lang);
-    settings->setOpt("mode",                  ui->optionMode->itemData(modeIndex));
+    settings->setOpt("default_mode",          ui->optionMode->currentData());
+    settings->setOpt("default_type",          ui->optionType->currentData());
+    settings->setOpt("default_style",         ui->optionStyle->currentData());
     settings->setOpt("minimize",              ui->optionMinimize->isChecked());
     settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
     settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());

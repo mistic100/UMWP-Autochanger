@@ -52,15 +52,13 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
 {
     QVector<QString> files;
 
-    bool random = m_settings->get("mode") == "random";
-
     if (_set->type() == UM::W_MONITOR)
     {
         for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
         {
             if (m_settings->monitor(i).enabled)
             {
-                if (random)
+                if (_set->mode() == UM::RANDOM)
                 {
                     files.append(getRandomFile(_set, files));
                 }
@@ -77,7 +75,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
     }
     else
     {
-        if (random)
+        if (_set->mode() == UM::RANDOM)
         {
             files.append(getRandomFile(_set, files));
         }
@@ -87,7 +85,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
         }
     }
 
-    if (!random)
+    if (_set->mode() == UM::SEQUENTIAL)
     {
         // save current file info
         _set->writeCache();

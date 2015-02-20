@@ -37,6 +37,8 @@
         <file alias="add2">images/icons/add2.png</file>
         <file alias="bug">images/icons/bug.png</file>
         <file alias="house">images/icons/house.png</file>
+        <file alias="mode_random">images/icons/mode_random.png</file>
+        <file alias="mode_sequential">images/icons/mode_sequential.png</file>
     </qresource>
     <qresource prefix="/lang/en_GB">
         <file alias="help">lang/en_GB/help.htm</file>

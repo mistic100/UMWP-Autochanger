@@ -34,6 +34,7 @@ HEADERS += \
     ext/qtoolbarext.h \
     ext/qhotkeywidget.h \
     ext/qwidgetblinker.h \
+    ext/qcomboboxext.h \
     constants.h \
     main.h \
     set.h \

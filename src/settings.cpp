@@ -20,7 +20,9 @@ Settings::Settings()
     m_options["show_notifications"] = true;
     m_options["last_dir"] = QDir::homePath();
     m_options["language"] = QLocale::system().name();
-    m_options["mode"] = "random";
+    m_options["default_mode"] = UM::RANDOM;
+    m_options["default_type"] = UM::W_MONITOR;
+    m_options["default_style"] = UM::IM_STRETCH_PROP;
 
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;
@@ -149,6 +151,7 @@ bool Settings::load(QString _filename)
     QDomElement settingsNode = dom.documentElement().firstChild().toElement();
 
     int newHotkey = 0;
+    UM::MODE newMode = UM::NONE;
     bool updated = false;
 
     while (!settingsNode.isNull())
@@ -160,11 +163,16 @@ bool Settings::load(QString _filename)
 
             while (!configNode.isNull())
             {
-                // migration from 1.2
+                // migration to 1.3
                 if (configNode.tagName() == "hotkey")
                 {
                     newHotkey = configNode.text().toInt();
-                    updated = true;
+                }
+                // migration to 1.9
+                else if (configNode.tagName() == "mode")
+                {
+                    newMode = configNode.text() == "random" ? UM::RANDOM : UM::SEQUENTIAL;
+                    m_options["default_mode"] = newMode;
                 }
                 else if (m_options.contains(configNode.tagName()))
                 {
@@ -221,7 +229,14 @@ bool Settings::load(QString _filename)
                         set->setStyle(im_style);
                     }
 
-                    // added in 1.3 - 1.3 format
+                    // added in 1.9
+                    if (setNode.hasAttribute("mode"))
+                    {
+                        UM::MODE mode = static_cast<UM::MODE>(setNode.attribute("mode").toInt());
+                        set->setMode(mode);
+                    }
+
+                    // 1.3 format
                     if (setNode.hasAttribute("hotkey_mod"))
                     {
                         set->setHotkey(
@@ -270,6 +285,14 @@ bool Settings::load(QString _filename)
     {
         qxtLog->info("Need to update hotkeys");
         upgradeHotkeys(newHotkey);
+        updated = true;
+    }
+
+    if (newMode != UM::NONE)
+    {
+        qxtLog->info("Need to update modes");
+        upgradeMode(newMode);
+        updated = true;
     }
 
     if (updated) {
@@ -332,6 +355,7 @@ bool Settings::save(QString _filename)
         setNode.setAttribute("name", set->name());
         setNode.setAttribute("type", set->type());
         setNode.setAttribute("style", set->style());
+        setNode.setAttribute("mode", set->mode());
         setNode.setAttribute("active", set->isActive());
         setNode.setAttribute("hotkey", set->hotkey());
         setDomNodeValue(&dom, &setNode, set->path());
@@ -436,6 +460,10 @@ Set* Settings::addSet(const QString &_path, const QString &_name)
     {
         set->setName(dir.dirName());
     }
+
+    set->setMode(static_cast<UM::MODE>(m_options["default_mode"].toInt()));
+    set->setStyle(static_cast<UM::IMAGE>(m_options["default_style"].toInt()));
+    set->setType(static_cast<UM::WALLPAPER>(m_options["default_type"].toInt()));
 
     m_sets.append(set);
     save();
@@ -544,14 +572,16 @@ void Settings::setActiveSets(const QList<int> &_sets)
  * @param UM::IMAGE _style
  * @param int _hotkey
  */
-void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const int _hotkey)
+void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey)
 {
     if (_i < m_sets.size())
     {
         Set* set = m_sets.at(_i);
+
         set->setName(_name);
         set->setType(_type);
         set->setStyle(_style);
+        set->setMode(_mode);
         set->setHotkey(_hotkey);
 
         qxtLog->debug("Edit set: "+set->name());
@@ -677,4 +707,16 @@ void Settings::upgradeHotkeys(int WinMod)
     }
 
     m_options["use_hotkeys"] = true;
+}
+
+/**
+ * @brief Apply global mode to each set, migration to 1.9
+ * @param int _mode
+ */
+void Settings::upgradeMode(UM::MODE _mode)
+{
+    foreach (Set* set, m_sets)
+    {
+        set->setMode(_mode);
+    }
 }

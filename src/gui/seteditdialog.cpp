@@ -30,16 +30,15 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, int _set) :
     ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
     ui->selectStyle->addItem(QIcon(":/icon/im_fill"),         tr("Fill"),                 UM::IM_FILL);
 
+    ui->selectMode->addItem(QIcon(":/icon/mode_random"),     tr("Random"),     UM::RANDOM);
+    ui->selectMode->addItem(QIcon(":/icon/mode_sequential"), tr("Sequential"), UM::SEQUENTIAL);
+
     Set* set = m_settings->set(_set);
 
     ui->inputName->setText(set->name());
-
-    int index = ui->selectType->findData(set->type());
-    ui->selectType->setCurrentIndex(index);
-
-    index = ui->selectStyle->findData(set->style());
-    ui->selectStyle->setCurrentIndex(index);
-
+    ui->selectType->setCurrentData(set->type());
+    ui->selectStyle->setCurrentData(set->style());
+    ui->selectMode->setCurrentData(set->mode());
     ui->inputHotkey->setHotkey(set->hotkey());
     ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
 
@@ -109,13 +108,11 @@ void SetEditDialog::done(int result)
  */
 void SetEditDialog::save(int index)
 {
-    QVariant selectedType = ui->selectType->itemData(ui->selectType->currentIndex());
-    QVariant selectedStyle = ui->selectStyle->itemData(ui->selectStyle->currentIndex());
-
     m_settings->editSet(index,
                         ui->inputName->text(),
-                        static_cast<UM::WALLPAPER>(selectedType.toInt()),
-                        static_cast<UM::IMAGE>(selectedStyle.toInt()),
+                        static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt()),
+                        static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt()),
+                        static_cast<UM::MODE>(ui->selectMode->currentData().toInt()),
                         ui->inputHotkey->hotkey()
                         );
 
