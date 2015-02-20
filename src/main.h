@@ -27,7 +27,8 @@ namespace UM {
     enum WALLPAPER
     {
         W_DESKTOP = 0,
-        W_MONITOR = 1
+        W_MONITOR = 1,
+        W_NONE = 16
     };
     enum BACKGROUND
     {
@@ -41,7 +42,8 @@ namespace UM {
         IM_TILE = 1,
         IM_STRETCH = 2,
         IM_STRETCH_PROP = 3,
-        IM_FILL = 4
+        IM_FILL = 4,
+        IM_NONE = 16
     };
     struct WP_MONITOR_FILE
     {
@@ -55,9 +57,9 @@ namespace UM {
     // other enums
     enum MODE
     {
-        NONE = 0,
-        RANDOM = 1,
-        SEQUENTIAL = 2
+        RANDOM = 0,
+        SEQUENTIAL = 1,
+        NONE = 16
     };
 }
 

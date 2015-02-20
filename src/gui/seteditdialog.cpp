@@ -10,16 +10,24 @@
  * @param Set* _set
  * @param Settings* _settings
  */
-SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, int _set) :
+SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<int> &_sets) :
     QDialog(_parent),
     ui(new Ui::SetEditDialog),
-    m_settings(_settings)
+    m_settings(_settings),
+    m_sets(_sets)
 {
     ui->setupUi(this);
 
     setFixedSize(size());
 
     setWindowFlags(SimpleDialogFlag);
+
+    if (m_sets.size() > 1)
+    {
+        ui->selectType->addItem(tr("[keep]"),  UM::W_NONE);
+        ui->selectStyle->addItem(tr("[keep]"), UM::IM_NONE);
+        ui->selectMode->addItem(tr("[keep]"),  UM::NONE);
+    }
 
     ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
     ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
@@ -33,14 +41,26 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, int _set) :
     ui->selectMode->addItem(QIcon(":/icon/mode_random"),     tr("Random"),     UM::RANDOM);
     ui->selectMode->addItem(QIcon(":/icon/mode_sequential"), tr("Sequential"), UM::SEQUENTIAL);
 
-    Set* set = m_settings->set(_set);
+    if (m_sets.size() == 1)
+    {
+        Set* set = m_settings->set(m_sets.at(0));
 
-    ui->inputName->setText(set->name());
-    ui->selectType->setCurrentData(set->type());
-    ui->selectStyle->setCurrentData(set->style());
-    ui->selectMode->setCurrentData(set->mode());
-    ui->inputHotkey->setHotkey(set->hotkey());
-    ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
+        ui->inputName->setText(set->name());
+        ui->selectType->setCurrentData(set->type());
+        ui->selectStyle->setCurrentData(set->style());
+        ui->selectMode->setCurrentData(set->mode());
+        ui->inputHotkey->setHotkey(set->hotkey());
+        ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
+    }
+    else
+    {
+        ui->inputName->setText(tr("[multiple sets]"));
+        ui->inputName->setDisabled(true);
+        ui->selectType->setCurrentIndex(0);
+        ui->selectStyle->setCurrentIndex(0);
+        ui->selectMode->setCurrentIndex(0);
+        ui->inputHotkey->setDisabled(true);
+    }
 
     qxtLog->trace("SetEditDialog openned");
 }
@@ -106,15 +126,24 @@ void SetEditDialog::done(int result)
  * @brief Save changes in Settings object
  * @param int index
  */
-void SetEditDialog::save(int index)
+void SetEditDialog::save()
 {
-    m_settings->editSet(index,
-                        ui->inputName->text(),
-                        static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt()),
-                        static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt()),
-                        static_cast<UM::MODE>(ui->selectMode->currentData().toInt()),
-                        ui->inputHotkey->hotkey()
-                        );
+    UM::WALLPAPER type = static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt());
+    UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
+    UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
+
+    if (m_sets.size() == 1)
+    {
+        m_settings->editSet(m_sets.at(0),
+                            ui->inputName->text(),
+                            type, style, mode,
+                            ui->inputHotkey->hotkey()
+                            );
+    }
+    else
+    {
+        m_settings->editSets(m_sets, type, style, mode);
+    }
 
     qxtLog->trace("Set \""+ ui->inputName->text() +"\" updated");
 }

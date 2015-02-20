@@ -22,12 +22,13 @@ class SetEditDialog : public QDialog
 private:
     Ui::SetEditDialog *ui;
     Settings* m_settings;
+    QList<int> m_sets;
 
 public:
-    SetEditDialog(QWidget* _parent, Settings* _settings, int _set);
+    SetEditDialog(QWidget* _parent, Settings* _settings, const QList<int> &_sets);
     ~SetEditDialog();
 
-    void save(int index);
+    void save();
 
 protected:
     void done(int result);

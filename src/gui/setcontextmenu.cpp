@@ -45,11 +45,8 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
 
     if (m_sets.size() > 0)
     {
-        if (m_sets.size() == 1)
-        {
-            QAction* actionEdit = addAction(QIcon(":/icon/edit"), tr("Edit"));
-            connect(actionEdit, SIGNAL(triggered()), this, SLOT(editSet()));
-        }
+        QAction* actionEdit = addAction(QIcon(":/icon/edit"), tr("Edit"));
+        connect(actionEdit, SIGNAL(triggered()), this, SLOT(editSets()));
 
         addSeparator();
 
@@ -64,15 +61,15 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
 /**
  * @brief Open set edit dialog
  */
-void SetContextMenu::editSet()
+void SetContextMenu::editSets()
 {
-    SetEditDialog dialog(this, m_ctrl->settings(), m_sets.at(0));
+    SetEditDialog dialog(this, m_ctrl->settings(), m_sets);
 
     // need to unbind hotkeys to allow hotkeys input
     ((MainWindow*)parent())->clearHotkeys();
     if (dialog.exec())
     {
-        dialog.save(m_sets.at(0));
+        dialog.save();
         m_ctrl->emitListChanged();
     }
     ((MainWindow*)parent())->defineHotkeys();

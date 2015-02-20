@@ -22,7 +22,7 @@ public:
     SetContextMenu(MainWindow* _parent, Controller* _ctrl, const QList<int> &_sets);
 
 private slots:
-    void editSet();
+    void editSets();
     void deleteSets();
     void clearCache();
     void activateSets();
