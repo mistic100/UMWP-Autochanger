@@ -16,6 +16,8 @@ class SetContextMenu : public QMenu
 
 private:
     Controller* m_ctrl;
+    Settings*   m_settings;
+
     QList<int>  m_sets;
 
 public:

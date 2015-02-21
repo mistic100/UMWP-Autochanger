@@ -52,7 +52,7 @@ private:
     void generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
 
 public slots:
-    void onUpdate();
+    void update();
 
 private slots:
     void onNewVersion(const NewVersion _version);

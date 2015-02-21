@@ -13,6 +13,7 @@
 SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QList<int> &_sets) :
     QMenu(_parent),
     m_ctrl(_ctrl),
+    m_settings(_ctrl->settings()),
     m_sets(_sets)
 {
     if (m_sets.size() > 0)
@@ -20,7 +21,7 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
         int nbActive = 0, nbInactive=0;
         foreach (int i, m_sets)
         {
-            if (m_ctrl->settings()->set(i)->isActive())
+            if (m_settings->set(i)->isActive())
                 nbActive++;
             else
                 nbInactive++;
@@ -63,7 +64,7 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
  */
 void SetContextMenu::editSets()
 {
-    SetEditDialog dialog(this, m_ctrl->settings(), m_sets);
+    SetEditDialog dialog(this, m_settings, m_sets);
 
     // need to unbind hotkeys to allow hotkeys input
     ((MainWindow*)parent())->clearHotkeys();
@@ -85,7 +86,7 @@ void SetContextMenu::deleteSets()
 
     if (ret == QMessageBox::Ok)
     {
-        m_ctrl->settings()->deleteSets(m_sets);
+        m_settings->deleteSets(m_sets);
         m_ctrl->emitListChanged(true);
     }
 }
@@ -97,7 +98,7 @@ void SetContextMenu::clearCache()
 {
     foreach (int i, m_sets)
     {
-        m_ctrl->settings()->set(i)->deleteCache();
+        m_settings->set(i)->deleteCache();
     }
 }
 
@@ -106,7 +107,7 @@ void SetContextMenu::clearCache()
  */
 void SetContextMenu::activateSets()
 {
-    m_ctrl->settings()->activateSets(m_sets);
+    m_settings->activateSets(m_sets);
     m_ctrl->emitListChanged();
 }
 
@@ -115,6 +116,6 @@ void SetContextMenu::activateSets()
  */
 void SetContextMenu::unactivateSets()
 {
-    m_ctrl->settings()->unactivateSets(m_sets);
+    m_settings->unactivateSets(m_sets);
     m_ctrl->emitListChanged();
 }

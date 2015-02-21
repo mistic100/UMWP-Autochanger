@@ -15,7 +15,8 @@
 MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) :
     QWidget(_parent),
     ui(new Ui::MainWidget),
-    m_ctrl(_ctrl)
+    m_ctrl(_ctrl),
+    m_settings(_ctrl->settings())
 {
     ui->setupUi(this);
 
@@ -56,7 +57,7 @@ void MainWidget::onListChanged(bool _resetSel)
 
     ui->mainList->clear();
 
-    for (int i=0, l=m_ctrl->settings()->nbSets(); i<l; i++)
+    for (int i=0, l=m_settings->nbSets(); i<l; i++)
     {
         QListWidgetItem* item = new QListWidgetItem();
         item->setData(Qt::UserRole, i);
@@ -64,7 +65,7 @@ void MainWidget::onListChanged(bool _resetSel)
         ui->mainList->addItem(item);
         item->setSelected(indexes.contains(i));
 
-        if (!m_ctrl->settings()->set(i)->isValid())
+        if (!m_settings->set(i)->isValid())
         {
             item->setToolTip(tr("This set doesn't exist on the disk anymore"));
         }
@@ -96,7 +97,7 @@ QList<int> MainWidget::getSelectedIndexes()
  */
 void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
-    m_ctrl->settings()->moveSet(from, to);
+    m_settings->moveSet(from, to);
     m_ctrl->emitListChanged(true);
 }
 

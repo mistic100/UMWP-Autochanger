@@ -41,7 +41,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionQuit,      SIGNAL(clicked()), _parent, SLOT(quit()));
     connect(m_actionAdd,     SIGNAL(clicked()), _parent, SLOT(addSet()));
     connect(m_actionHide,    SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
-    connect(m_actionRefresh, SIGNAL(clicked()), m_ctrl,  SLOT(onUpdate()));
+    connect(m_actionRefresh, SIGNAL(clicked()), m_ctrl,  SLOT(update()));
     connect(m_actionPause,   SIGNAL(clicked()), _parent, SLOT(startPause()));
 
     connect(actionOptions,   SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));

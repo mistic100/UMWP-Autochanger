@@ -23,7 +23,9 @@ extern short UMWP_STATE;
  */
 MainWindow::MainWindow(Controller* _ctrl) :
     QMainWindow(),
-    m_ctrl(_ctrl)
+    m_ctrl(_ctrl),
+    m_settings(_ctrl->settings()),
+    m_enviro(_ctrl->enviro())
 {
     m_altPressed = false;
     installEventFilter(this);
@@ -46,7 +48,7 @@ MainWindow::MainWindow(Controller* _ctrl) :
     copyright+= QString::fromAscii(APP_NAME) + "</a>";
     copyright+= " " + QString::fromAscii(APP_VERSION);
     copyright+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a>";
-    copyright+= " " + m_ctrl->enviro()->get("umversion").toString();
+    copyright+= " " + m_enviro->get("umversion").toString();
 
     QLabel* statusLabel = new QLabel(copyright);
     statusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -84,7 +86,7 @@ void MainWindow::init()
         defineHotkeys();
 
         m_ctrl->checkVersion();
-        m_ctrl->onUpdate();
+        m_ctrl->update();
     }
     else
     {
@@ -125,11 +127,11 @@ void MainWindow::showMain()
     MainWidget* widget = new MainWidget(this, m_ctrl);
     setCentralWidget(widget);
 
-    resize(m_ctrl->settings()->windowSize());
+    resize(m_settings->windowSize());
 
     // window is hidden by default if the config is not empty
-    if (m_ctrl->settings()->nbSets()>0 &&
-        m_ctrl->settings()->get("minimize").toBool()
+    if (m_settings->nbSets()>0 &&
+        m_settings->get("minimize").toBool()
     ) {
         toggleWindow(true);
     }
@@ -155,7 +157,7 @@ void MainWindow::defineHotkeys()
 {
     clearHotkeys();
 
-    if (m_ctrl->settings()->get("use_hotkeys").toBool())
+    if (m_settings->get("use_hotkeys").toBool())
     {
         qxtLog->trace("Create global hotkeys");
 
@@ -163,9 +165,9 @@ void MainWindow::defineHotkeys()
         QHash<int, QList<int>> mergedHotkeys;
         GlobalShortcut* shortcut;
 
-        for (int i=0, l=m_ctrl->settings()->nbSets(); i<l; i++)
+        for (int i=0, l=m_settings->nbSets(); i<l; i++)
         {
-            Set* pSet = m_ctrl->settings()->set(i);
+            Set* pSet = m_settings->set(i);
 
             if (pSet->hotkey())
             {
@@ -184,9 +186,9 @@ void MainWindow::defineHotkeys()
 
         // main hotkeys
         QHash<GlobalShortcut::Type, int> otherHotkeys;
-        otherHotkeys.insert(GlobalShortcut::REFRESH, m_ctrl->settings()->hotkey("refresh"));
-        otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_ctrl->settings()->hotkey("startpause"));
-        otherHotkeys.insert(GlobalShortcut::SHOWHIDE, m_ctrl->settings()->hotkey("showhide"));
+        otherHotkeys.insert(GlobalShortcut::REFRESH, m_settings->hotkey("refresh"));
+        otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_settings->hotkey("startpause"));
+        otherHotkeys.insert(GlobalShortcut::SHOWHIDE, m_settings->hotkey("showhide"));
 
         for (QHash<GlobalShortcut::Type, int>::Iterator it=otherHotkeys.begin(); it!=otherHotkeys.end(); ++it)
         {
@@ -212,16 +214,16 @@ void MainWindow::toggleWindow(bool _forceHide)
     {
         hide();
 
-        if (m_ctrl->settings()->get("show_notifications").toBool() &&
-            m_ctrl->settings()->get("msgcount").toInt() < 3)
+        if (m_settings->get("show_notifications").toBool() &&
+            m_settings->get("msgcount").toInt() < 3)
         {
             m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
-            m_ctrl->settings()->incrementMsgCount();
+            m_settings->incrementMsgCount();
         }
 
         if (!_forceHide)
         {
-            m_ctrl->settings()->setWindowSize(size());
+            m_settings->setWindowSize(size());
         }
 
         m_trayIcon->setHidden(true);
@@ -253,16 +255,16 @@ void MainWindow::startPause()
 void MainWindow::addSet()
 {
     QString dirname = QFileDialog::getExistingDirectory(this, tr("Add set"),
-                                                        m_ctrl->settings()->get("last_dir").toString());
+                                                        m_settings->get("last_dir").toString());
 
     if (!dirname.isEmpty())
     {
         QDir dir(dirname);
         dir.cdUp();
-        m_ctrl->settings()->setOpt("last_dir", dir.absolutePath());
+        m_settings->setOpt("last_dir", dir.absolutePath());
 
         dirname.replace('/', '\\');
-        m_ctrl->settings()->addSet(dirname);
+        m_settings->addSet(dirname);
         m_ctrl->emitListChanged(true);
     }
 }
@@ -309,7 +311,7 @@ void MainWindow::openExportDialog()
         return;
     }
 
-    m_ctrl->settings()->save(filename);
+    m_settings->save(filename);
 
     qxtLog->trace("Export config to \""+ filename +"\"");
 }
@@ -328,18 +330,18 @@ void MainWindow::openImportDialog()
     }
 
     // preserve UM path
-    QString UMPath = m_ctrl->settings()->get("umpath").toString();
+    QString UMPath = m_settings->get("umpath").toString();
 
     qxtLog->trace("Import config from \""+ filename +"\"");
 
-    if (m_ctrl->settings()->load(filename))
+    if (m_settings->load(filename))
     {
-        m_ctrl->enviro()->checkSettings();
-        m_ctrl->settings()->setOpt("umpath", UMPath);
-        m_ctrl->settings()->save();
+        m_enviro->checkSettings();
+        m_settings->setOpt("umpath", UMPath);
+        m_settings->save();
 
         m_ctrl->emitListChanged(true);
-        m_ctrl->onUpdate();
+        m_ctrl->update();
     }
     else
     {
@@ -441,13 +443,13 @@ void MainWindow::onHotkey()
     switch (shortcut->type())
     {
     case GlobalShortcut::REFRESH:
-        m_ctrl->onUpdate();
+        m_ctrl->update();
         break;
 
     case GlobalShortcut::STARTPAUSE:
         startPause();
 
-        if (!isVisible() && m_ctrl->settings()->get("show_notifications").toBool())
+        if (!isVisible() && m_settings->get("show_notifications").toBool())
         {
             if (!m_ctrl->isPaused())
             {
@@ -465,16 +467,16 @@ void MainWindow::onHotkey()
         break;
 
     case GlobalShortcut::SETS:
-        m_ctrl->settings()->setActiveSets(shortcut->sets());
+        m_settings->setActiveSets(shortcut->sets());
         m_ctrl->emitListChanged();
-        m_ctrl->onUpdate();
+        m_ctrl->update();
 
-        if (!isVisible() && m_ctrl->settings()->get("show_notifications").toBool())
+        if (!isVisible() && m_settings->get("show_notifications").toBool())
         {
             QString setsName;
-            for (int i=0, l=m_ctrl->settings()->nbActiveSets(); i<l; i++)
+            for (int i=0, l=m_settings->nbActiveSets(); i<l; i++)
             {
-                Set* set = m_ctrl->settings()->activeSet(i);
+                Set* set = m_settings->activeSet(i);
 
                 if (i>0) setsName.append(", ");
                 setsName.append(set->name());
@@ -491,7 +493,7 @@ void MainWindow::onHotkey()
  */
 void MainWindow::onNewVersion()
 {
-    QString _version = m_ctrl->enviro()->newVersion().code;
+    QString _version = m_enviro->newVersion().code;
 
     // message in status bar
     QPushButton* statusLabel = new QPushButton(tr("A new version is available : %1").arg(_version));
@@ -544,7 +546,7 @@ void MainWindow::quit()
 
     if (isVisible())
     {
-        m_ctrl->settings()->setWindowSize(size());
+        m_settings->setWindowSize(size());
     }
 
     qApp->quit();
@@ -555,7 +557,7 @@ void MainWindow::quit()
  */
 void MainWindow::showEvent(QShowEvent* _event)
 {
-    resize(m_ctrl->settings()->windowSize());
+    resize(m_settings->windowSize());
 
     QMainWindow::showEvent(_event);
 }
@@ -566,7 +568,7 @@ void MainWindow::showEvent(QShowEvent* _event)
  */
 void MainWindow::resizeEvent(QResizeEvent* _event)
 {
-    m_ctrl->settings()->setWindowSize(_event->size(), false);
+    m_settings->setWindowSize(_event->size(), false);
 
     QMainWindow::resizeEvent(_event);
 }

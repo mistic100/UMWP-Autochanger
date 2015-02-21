@@ -25,7 +25,7 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     connect(actionQuit,    SIGNAL(triggered()), _parent, SLOT(quit()));
     connect(m_actionHide,  SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
     connect(m_actionPause, SIGNAL(triggered()), _parent, SLOT(startPause()));
-    connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(onUpdate()));
+    connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
 
     this->setIcon(QIcon(":/img/icon"));
     this->setToolTip(APP_NAME);
@@ -103,7 +103,7 @@ void TrayIcon::onQuickClicked()
 
     m_ctrl->settings()->setActiveSets(QList<int>()<<idx);
     m_ctrl->emitListChanged();
-    m_ctrl->onUpdate();
+    m_ctrl->update();
 }
 
 /**

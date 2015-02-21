@@ -12,7 +12,9 @@
 ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     QDialog(_parent),
     ui(new Ui::ConfigDialog),
-    m_ctrl(_ctrl)
+    m_ctrl(_ctrl),
+    m_settings(_ctrl->settings()),
+    m_enviro(_ctrl->enviro())
 {
     ui->setupUi(this);
 
@@ -22,33 +24,30 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     ui->tabWidget->setCurrentIndex(0);
 
-    Settings* settings = m_ctrl->settings();
-    Environment* enviro = m_ctrl->enviro();
-
     // checkboxes
-    ui->optionMinimize->setChecked(         settings->get("minimize").toBool());
-    ui->optionCheckUpdates->setChecked(     settings->get("check_updates").toBool());
-    ui->optionAutostart->setChecked(        enviro->isAutostart());
-    ui->optionUseHotkeys->setChecked(       settings->get("use_hotkeys").toBool());
-    ui->optionShowNotifications->setChecked(settings->get("show_notifications").toBool());
+    ui->optionMinimize->setChecked(         m_settings->get("minimize").toBool());
+    ui->optionCheckUpdates->setChecked(     m_settings->get("check_updates").toBool());
+    ui->optionAutostart->setChecked(        m_enviro->isAutostart());
+    ui->optionUseHotkeys->setChecked(       m_settings->get("use_hotkeys").toBool());
+    ui->optionShowNotifications->setChecked(m_settings->get("show_notifications").toBool());
 
-    ui->optionAutostart->setDisabled(!enviro->canAddShortcut());
+    ui->optionAutostart->setDisabled(!m_enviro->canAddShortcut());
 
     // hotkeys
-    ui->hotkeyRefresh->setDisabled(     !settings->get("use_hotkeys").toBool());
-    ui->hotkeyShowHide->setDisabled(    !settings->get("use_hotkeys").toBool());
-    ui->hotkeyStartPause->setDisabled(  !settings->get("use_hotkeys").toBool());
+    ui->hotkeyRefresh->setDisabled(     !m_settings->get("use_hotkeys").toBool());
+    ui->hotkeyShowHide->setDisabled(    !m_settings->get("use_hotkeys").toBool());
+    ui->hotkeyStartPause->setDisabled(  !m_settings->get("use_hotkeys").toBool());
 
-    ui->hotkeyRefresh->setHotkey(   settings->hotkey("refresh"));
-    ui->hotkeyShowHide->setHotkey(  settings->hotkey("showhide"));
-    ui->hotkeyStartPause->setHotkey(settings->hotkey("startpause"));
+    ui->hotkeyRefresh->setHotkey(   m_settings->hotkey("refresh"));
+    ui->hotkeyShowHide->setHotkey(  m_settings->hotkey("showhide"));
+    ui->hotkeyStartPause->setHotkey(m_settings->hotkey("startpause"));
 
     // delay
-    QTime time = QTime(0, 0, 0).addSecs(settings->get("delay").toInt());
+    QTime time = QTime(0, 0, 0).addSecs(m_settings->get("delay").toInt());
     ui->optionDelay->setTime(time);
 
     // languages
-    foreach (QString lang, m_ctrl->enviro()->languages())
+    foreach (QString lang, m_enviro->languages())
     {
         ui->optionLang->addItem(
                     QIcon(":/lang/" + lang + "/flag"),
@@ -56,12 +55,12 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
                     lang
         );
     }
-    ui->optionLang->setCurrentData(settings->get("language"));
+    ui->optionLang->setCurrentData(m_settings->get("language"));
 
     // type
     ui->optionType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
     ui->optionType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
-    ui->optionType->setCurrentData(settings->get("default_type"));
+    ui->optionType->setCurrentData(m_settings->get("default_type"));
 
     // style
     ui->optionStyle->addItem(QIcon(":/icon/im_center"),       tr("Center"),               UM::IM_CENTER);
@@ -69,12 +68,12 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionStyle->addItem(QIcon(":/icon/im_stretch"),      tr("Stretch"),              UM::IM_STRETCH);
     ui->optionStyle->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
     ui->optionStyle->addItem(QIcon(":/icon/im_fill"),         tr("Fill"),                 UM::IM_FILL);
-    ui->optionStyle->setCurrentData(settings->get("default_style"));
+    ui->optionStyle->setCurrentData(m_settings->get("default_style"));
 
     // mode
     ui->optionMode->addItem(QIcon(":/icon/mode_random"),     tr("Random"),     UM::RANDOM);
     ui->optionMode->addItem(QIcon(":/icon/mode_sequential"), tr("Sequential"), UM::SEQUENTIAL);
-    ui->optionMode->setCurrentData(settings->get("default_mode"));
+    ui->optionMode->setCurrentData(m_settings->get("default_mode"));
 
     qxtLog->trace("ConfigDialog openned");
 }
@@ -96,7 +95,6 @@ void ConfigDialog::done(int result)
     if (result == QDialog::Accepted)
     {
         QString error;
-        Settings* settings = m_ctrl->settings();
 
         // validate hotkeys
         QHash<QString, QHotKeyWidget*> requestHotkeys;
@@ -128,9 +126,9 @@ void ConfigDialog::done(int result)
             }
 
             // check against sets hotkeys
-            for (int i=0, l=settings->nbSets(); i<l; i++)
+            for (int i=0, l=m_settings->nbSets(); i<l; i++)
             {
-                Set* poSet = settings->set(i);
+                Set* poSet = m_settings->set(i);
 
                 if (!poSet->hotkey())
                 {
@@ -176,46 +174,43 @@ void ConfigDialog::done(int result)
  */
 void ConfigDialog::save()
 {
-    Settings* settings = m_ctrl->settings();
-    Environment* enviro = m_ctrl->enviro();
-
     QTime time = ui->optionDelay->time();
     int delay = time.hour()*3600 + time.minute()*60 + time.second();
 
     int langIndex = ui->optionLang->currentIndex();
     QVariant lang = ui->optionLang->itemData(langIndex);
 
-    if (lang != settings->get("language"))
+    if (lang != m_settings->get("language"))
     {
         QMessageBox::warning(this, tr("Language changed"),
                              tr("You must restart %1 to apply the new language.").arg(APP_NAME),
                              QMessageBox::Ok, QMessageBox::Ok);
     }
 
-    settings->setOpt("delay",                 delay);
-    settings->setOpt("language",              lang);
-    settings->setOpt("default_mode",          ui->optionMode->currentData());
-    settings->setOpt("default_type",          ui->optionType->currentData());
-    settings->setOpt("default_style",         ui->optionStyle->currentData());
-    settings->setOpt("minimize",              ui->optionMinimize->isChecked());
-    settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
-    settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
-    settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());
+    m_settings->setOpt("delay",                 delay);
+    m_settings->setOpt("language",              lang);
+    m_settings->setOpt("default_mode",          ui->optionMode->currentData());
+    m_settings->setOpt("default_type",          ui->optionType->currentData());
+    m_settings->setOpt("default_style",         ui->optionStyle->currentData());
+    m_settings->setOpt("minimize",              ui->optionMinimize->isChecked());
+    m_settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
+    m_settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
+    m_settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());
 
-    settings->setHotkey("refresh",    ui->hotkeyRefresh->hotkey());
-    settings->setHotkey("showhide",   ui->hotkeyShowHide->hotkey());
-    settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
+    m_settings->setHotkey("refresh",    ui->hotkeyRefresh->hotkey());
+    m_settings->setHotkey("showhide",   ui->hotkeyShowHide->hotkey());
+    m_settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {
-        enviro->createShortcut();
+        m_enviro->createShortcut();
     }
     else
     {
-        enviro->deleteShortcut();
+        m_enviro->deleteShortcut();
     }
 
-    settings->save();
+    m_settings->save();
 
     qxtLog->trace("Configuration updated");
 }

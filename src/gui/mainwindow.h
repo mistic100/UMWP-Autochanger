@@ -20,7 +20,9 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    Controller* m_ctrl;
+    Controller*     m_ctrl;
+    Settings*       m_settings;
+    Environment*    m_enviro;
 
     QStatusBar* m_statusBar;
     MenuBar*    m_menuBar;

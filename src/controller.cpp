@@ -14,13 +14,13 @@
 Controller::Controller(Settings* _settings, Environment* _enviro) :
     QObject(),
     m_settings(_settings),
-    m_enviro(_enviro),
-    m_set(NULL)
+    m_enviro(_enviro)
 {
     m_generator = new WallpaperGenerator(this);
+    m_set = NULL;
 
     m_mainTimer = new QTimer(this);
-    connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+    connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 /**
@@ -93,7 +93,7 @@ bool Controller::startPause()
 /**
  * @brief Update the wallpaper
  */
-void Controller::onUpdate()
+void Controller::update()
 {
     qxtLog->info("Update !");
 

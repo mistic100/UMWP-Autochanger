@@ -20,7 +20,10 @@ class ConfigDialog : public QDialog
 
 private:
     Ui::ConfigDialog* ui;
-    Controller* m_ctrl;
+
+    Controller*     m_ctrl;
+    Settings*       m_settings;
+    Environment*    m_enviro;
     
 public:
     ConfigDialog(QWidget* _parent, Controller* _ctrl);

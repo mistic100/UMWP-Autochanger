@@ -20,7 +20,9 @@ class MainWidget : public QWidget
 
 private:
     Ui::MainWidget* ui;
-    Controller* m_ctrl;
+
+    Controller*     m_ctrl;
+    Settings*       m_settings;
     
 public:
     MainWidget(QWidget* _parent, Controller* _ctrl);
