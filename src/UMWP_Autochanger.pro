@@ -9,6 +9,7 @@ RC_FILE = UMWP_Autochanger.rc
 
 
 SOURCES += \
+    ext/qglobalshortcut.cpp \
     main.cpp\
     set.cpp \
     controller.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     ext/qhotkeywidget.h \
     ext/qwidgetblinker.h \
     ext/qcomboboxext.h \
+    ext/qglobalshortcut.h \
     constants.h \
     main.h \
     set.h \
