@@ -39,7 +39,7 @@ private slots:
 
             if (version.code.compare(QString::fromAscii(APP_VERSION)) > 0)
             {
-                qxtLog->debug("New version detected: "+version.code);
+                QLOG_DEBUG() << "New version detected: " << version.code;
                 emit newVersionAvailable(version);
             }
         }

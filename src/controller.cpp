@@ -40,7 +40,7 @@ void Controller::checkVersion()
         connect(checker, SIGNAL(finished()), thread, SLOT(quit()));
         connect(checker, SIGNAL(finished()), checker, SLOT(deleteLater()));
 
-        qxtLog->trace("Start version checker thread");
+        QLOG_TRACE() << "Start version checker thread";
         QTimer::singleShot(500, thread, SLOT(start()));
     }
 }
@@ -78,12 +78,12 @@ bool Controller::startPause()
 {
     if (m_mainTimer->isActive())
     {
-        qxtLog->info("Pause timer");
+        QLOG_INFO() << "Pause timer";
         m_mainTimer->stop();
     }
     else
     {
-        qxtLog->info("Restart timer");
+        QLOG_INFO() << "Restart timer";
         m_mainTimer->start();
     }
 
@@ -95,7 +95,7 @@ bool Controller::startPause()
  */
 void Controller::update()
 {
-    qxtLog->info("Update !");
+    QLOG_INFO() << "Update !";
 
     // restart timer
     m_mainTimer->start(m_settings->get("delay").toInt()*1000);
@@ -110,21 +110,21 @@ void Controller::update()
 
     if (m_set == NULL)
     {
-        qxtLog->warning("No active set");
+        QLOG_WARN() << "No active set";
         return;
     }
 
-    qxtLog->debug("Current set: "+m_set->name());
+    QLOG_DEBUG() << "Current set: " << m_set->name();
 
     m_files = m_generator->getFiles(m_set);
 
-    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
     {
         foreach (QString file, m_files)
         {
             if (!file.isEmpty())
             {
-                qxtLog->debug("Current file: "+file);
+                QLOG_DEBUG() << "Current file: " << file;
             }
         }
     }
@@ -143,7 +143,7 @@ void Controller::update()
     QString cmd = "\"" + m_settings->get("umpath").toString() + "\" /load \"" + filename + "\"";
     QProcess::startDetached(cmd);
 
-    qxtLog->trace("Launch UltraMonDesktop");
+    QLOG_TRACE() << "Launch UltraMonDesktop";
 
     emit wallpaperChanged();
 }

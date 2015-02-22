@@ -38,7 +38,7 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
 
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
-    qxtLog->trace("PreviewDialog openned");
+    QLOG_TRACE() << "PreviewDialog openned";
 }
 
 /**
@@ -127,7 +127,7 @@ void PreviewDialog::onThumbnailClicked()
     QWidget* thumb = (QWidget*)QObject::sender();
     QString path = thumb->property("path").toString();
 
-    qxtLog->trace("Open "+ path);
+    QLOG_TRACE() << "Open " << path;
 
     QDesktopServices::openUrl(QUrl("file:///"+ path));
 }
@@ -145,7 +145,7 @@ void PreviewDialog::onDeleteButtonClicked()
 
     if (ret == QMessageBox::Ok)
     {
-        qxtLog->trace("Delete "+ path);
+        QLOG_TRACE() << "Delete " << path;
 
         m_ctrl->moveFileToTrash(path);
         m_ctrl->update();

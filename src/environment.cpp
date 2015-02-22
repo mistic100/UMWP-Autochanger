@@ -53,15 +53,13 @@ const bool Environment::isAutostart() const
  */
 void Environment::log()
 {
-    QList<QVariant> env;
-    env.append("== ENVIRONEMENT");
+    QList<QString> env;
     for (QHash<QString, QVariant>::const_iterator it=m_env.begin(); it!=m_env.end(); ++it)
     {
         env.append(it.key() +": "+ it.value().toString());
     }
 
-    QList<QVariant> sizes;
-    sizes.append("== MONITORS");
+    QList<QString> sizes;
     for (QHash<int, QRect>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
     {
         sizes.append(
@@ -70,16 +68,18 @@ void Environment::log()
         );
     }
 
-    QList<QVariant> langs;
-    langs.append("== LANGUAGES");
+    QList<QString> langs;
     foreach (const QString lang, m_languages)
     {
         langs.append(lang);
     }
 
-    qxtLog->debug(env);
-    qxtLog->debug(sizes);
-    qxtLog->debug(langs);
+    QLOG_DEBUG() << "== ENVIRONEMENT";
+    QLOG_DEBUG() << env;
+    QLOG_DEBUG() << "== MONITORS";
+    QLOG_DEBUG() << sizes;
+    QLOG_DEBUG() << "== LANGUAGES";
+    QLOG_DEBUG() << langs;
 }
 
 /**
@@ -97,7 +97,7 @@ void Environment::init()
 
         if (!ok)
         {
-            qxtLog->error("UltraMonDesktop.exe not found");
+            QLOG_ERROR() << "UltraMonDesktop.exe not found";
             UMWP_STATE|= UMWP::NOT_INSTALLED;
         }
         else
@@ -112,12 +112,12 @@ void Environment::init()
 
     if (!ok)
     {
-        qxtLog->error("Unknown UltraMon version");
+        QLOG_ERROR() << "Unknown UltraMon version";
         UMWP_STATE|= UMWP::BAD_VERSION;
     }
     else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
     {
-        qxtLog->error("Invalid UltraMon version");
+        QLOG_ERROR() << "Invalid UltraMon version";
         UMWP_STATE|= UMWP::BAD_VERSION;
     }
 
@@ -158,7 +158,7 @@ bool Environment::refreshMonitors()
 
     if (!ok)
     {
-        qxtLog->error("Unable to query UltraMon API");
+        QLOG_ERROR() << "Unable to query UltraMon API";
         return false;
     }
 
@@ -184,7 +184,7 @@ void Environment::createShortcut()
 {
     if (canAddShortcut())
     {
-        qxtLog->trace("Attempt to create shortcut");
+        QLOG_TRACE() << "Attempt to create shortcut";
 
         wchar_t* path1 = (wchar_t*) malloc(256);
         wchar_t* path2 = (wchar_t*) malloc(256);
@@ -207,7 +207,7 @@ void Environment::deleteShortcut()
 {
     if (isAutostart())
     {
-        qxtLog->trace("Remove shortcut");
+        QLOG_TRACE() << "Remove shortcut";
 
         QFile::remove(m_env["startlinkpath"].toString());
     }

@@ -62,7 +62,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
         ui->inputHotkey->setDisabled(true);
     }
 
-    qxtLog->trace("SetEditDialog openned");
+    QLOG_TRACE() << "SetEditDialog openned";
 }
 
 /**
@@ -108,7 +108,7 @@ void SetEditDialog::done(int result)
 
         if (!error.isEmpty())
         {
-            qxtLog->error(error);
+            QLOG_ERROR() << error;
             QMessageBox::critical(this, tr("Error"), error, QMessageBox::Ok, QMessageBox::Ok);
         }
         else
@@ -145,5 +145,5 @@ void SetEditDialog::save()
         m_settings->editSets(m_sets, type, style, mode);
     }
 
-    qxtLog->trace("Set \""+ ui->inputName->text() +"\" updated");
+    QLOG_TRACE() << "Set \"" << ui->inputName->text() << "\" updated";
 }

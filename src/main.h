@@ -5,7 +5,7 @@
 #include <QtXml>
 #include <QString>
 #include <QVector>
-#include <QxtLogger>
+#include <QsLog.h>
 
 #include "constants.h"
 

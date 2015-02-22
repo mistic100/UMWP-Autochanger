@@ -99,7 +99,7 @@ void MainWindow::init()
  */
 void MainWindow::showError()
 {
-    qxtLog->trace("Init error widget");
+    QLOG_TRACE() << "Init error widget";
 
     m_trayIcon->hide();
     m_menuBar->setMinimal(true);
@@ -119,7 +119,7 @@ void MainWindow::showError()
  */
 void MainWindow::showMain()
 {
-    qxtLog->trace("Init main widget");
+    QLOG_TRACE() << "Init main widget";
 
     m_trayIcon->show();
     m_menuBar->setMinimal(false);
@@ -159,7 +159,7 @@ void MainWindow::defineHotkeys()
 
     if (m_settings->get("use_hotkeys").toBool())
     {
-        qxtLog->trace("Create global hotkeys");
+        QLOG_TRACE() << "Create global hotkeys";
 
         // sets hotkeys
         QHash<int, QList<int>> mergedHotkeys;
@@ -313,7 +313,7 @@ void MainWindow::openExportDialog()
 
     m_settings->save(filename);
 
-    qxtLog->trace("Export config to \""+ filename +"\"");
+    QLOG_TRACE() << "Export config to \""+ filename +"\"";
 }
 
 /**
@@ -332,7 +332,7 @@ void MainWindow::openImportDialog()
     // preserve UM path
     QString UMPath = m_settings->get("umpath").toString();
 
-    qxtLog->trace("Import config from \""+ filename +"\"");
+    QLOG_TRACE() << "Import config from \""+ filename +"\"";
 
     if (m_settings->load(filename))
     {
@@ -345,7 +345,7 @@ void MainWindow::openImportDialog()
     }
     else
     {
-        qxtLog->error("Invalid settings file");
+        QLOG_ERROR() << "Invalid settings file";
         QMessageBox::critical(this, tr("Error"), tr("Invalid settings file"), QMessageBox::Ok);
     }
 }
@@ -438,7 +438,7 @@ void MainWindow::onHotkey()
 {
     GlobalShortcut* shortcut = (GlobalShortcut*)QObject::sender();
 
-    qxtLog->debug("Hotkey: "+QString::number(shortcut->type()));
+    QLOG_DEBUG() << "Hotkey: " << QString::number(shortcut->type());
 
     switch (shortcut->type())
     {

@@ -75,7 +75,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionMode->addItem(QIcon(":/icon/mode_sequential"), tr("Sequential"), UM::SEQUENTIAL);
     ui->optionMode->setCurrentData(m_settings->get("default_mode"));
 
-    qxtLog->trace("ConfigDialog openned");
+    QLOG_TRACE() << "ConfigDialog openned";
 }
 
 /**
@@ -155,7 +155,7 @@ void ConfigDialog::done(int result)
 
         if (!error.isEmpty())
         {
-            qxtLog->error(error);
+            QLOG_ERROR() << error;
             QMessageBox::critical(this, tr("Error"), error, QMessageBox::Ok, QMessageBox::Ok);
         }
         else
@@ -212,7 +212,7 @@ void ConfigDialog::save()
 
     m_settings->save();
 
-    qxtLog->trace("Configuration updated");
+    QLOG_TRACE() << "Configuration updated";
 }
 
 /**

@@ -144,7 +144,7 @@ QString SysReader::buildBMPpath(bool &_ok)
     }
     else
     {
-        qxtLog->fatal("Something went really wrong!");
+        QLOG_FATAL() << "Something went really wrong!";
     }
 
     CoTaskMemFree(value);
@@ -175,7 +175,7 @@ QString SysReader::buildUMwallpaperPath(const QString &_version, bool &_ok)
     }
     else
     {
-        qxtLog->fatal("Something went really wrong!");
+        QLOG_FATAL() << "Something went really wrong!";
     }
 
     CoTaskMemFree(value);
@@ -305,7 +305,7 @@ QString SysReader::buildShortcutPath()
     }
     else
     {
-        qxtLog->fatal("Something went really wrong!");
+        QLOG_FATAL() << "Something went really wrong!";
     }
 
     CoTaskMemFree(value);

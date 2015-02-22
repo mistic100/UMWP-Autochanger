@@ -46,7 +46,7 @@ void NewVersionDialog::on_updateButton_clicked()
 
     if (!m_file.open(QIODevice::WriteOnly))
     {
-        qxtLog->error("Unable to open installer destination file.");
+        QLOG_ERROR() << "Unable to open installer destination file.";
 
         errorMessage();
     }
@@ -109,7 +109,7 @@ void NewVersionDialog::onDownloadFinished()
 
     if (m_reply->error() != QNetworkReply::NoError)
     {
-        qxtLog->error("Network error");
+        QLOG_ERROR() << "Network error";
 
         m_file.remove();
         errorMessage();
@@ -123,14 +123,14 @@ void NewVersionDialog::onDownloadFinished()
 
         if (hash.compare(m_version.hash, Qt::CaseInsensitive) != 0)
         {
-            qxtLog->error("File corrupted");
+            QLOG_ERROR() << "File corrupted";
 
             m_file.remove();
             errorMessage();
         }
         else
         {
-            qxtLog->trace("Download finished");
+            QLOG_TRACE() << "Download finished";
 
             ui->progressBar->setValue(100);
             ui->progressBar->setMaximum(100);

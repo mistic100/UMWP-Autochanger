@@ -2,7 +2,8 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QLocale>
-#include <QxtBasicFileLoggerEngine>
+#include <QsLog.h>
+#include <QsLogDest.h>
 
 #include "main.h"
 #include "gui/mainwindow.h"
@@ -31,18 +32,25 @@ int main(int argc, char *argv[])
     app.setQuitOnLastWindowClosed(false);
 
     // logger
+    QsLogging::Logger& logger = QsLogging::Logger::instance();
+
     if (argc > 1 && std::string(argv[1]) == "--log")
     {
-        QxtBasicFileLoggerEngine* debug = new QxtBasicFileLoggerEngine(QString::fromAscii(APP_LOG_FILENAME));
-        qxtLog->addLoggerEngine("debug", debug);
-        qxtLog->enableAllLogLevels();
+        logger.setLoggingLevel(QsLogging::TraceLevel);
+
+        logger.addDestination(QsLogging::DestinationFactory::MakeFileDestination(
+                                  QString::fromAscii(APP_LOG_FILENAME),
+                                  QsLogging::EnableLogRotation,
+                                  QsLogging::MaxSizeBytes(1024*1024*5)
+                                  ));
+        logger.addDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     }
     else
     {
-        qxtLog->disableAllLogLevels();
+        logger.setLoggingLevel(QsLogging::OffLevel);
     }
 
-    qxtLog->trace("Starting =================================================");
+    QLOG_TRACE() << "Starting =================================================";
 
     // create cache dir
     QDir dirHelper;
@@ -57,9 +65,9 @@ int main(int argc, char *argv[])
     Environment enviro(&settings);
     enviro.init();
 
-    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
     {
-        qxtLog->debug("App state: "+ QString::number(UMWP_STATE));
+        QLOG_DEBUG() << "App state: "+ QString::number(UMWP_STATE);
         settings.log();
         enviro.log();
     }
@@ -83,7 +91,7 @@ int main(int argc, char *argv[])
 
     int ret = app.exec();
 
-    qxtLog->trace("Finished");
+    QLOG_TRACE() << "Finished";
 
     ReleaseMutex(hMutexHandle);
     CloseHandle(hMutexHandle);

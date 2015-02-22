@@ -31,7 +31,7 @@ ScreensDialog::ScreensDialog(QWidget* _parent, Controller* _ctrl) :
 
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    qxtLog->trace("ScreensDialog openned");
+    QLOG_TRACE() << "ScreensDialog openned";
 }
 
 /**
@@ -57,7 +57,7 @@ void ScreensDialog::done(int result)
 
         if (!one)
         {
-            qxtLog->error("At least one monitor must be enabled");
+            QLOG_ERROR() << "At least one monitor must be enabled";
 
             QMessageBox::critical(this, tr("Error"), tr("At least one monitor must be enabled"), QMessageBox::Ok, QMessageBox::Ok);
         }
@@ -84,7 +84,7 @@ void ScreensDialog::save()
 
     m_ctrl->settings()->save();
 
-    qxtLog->trace("Configuration updated");
+    QLOG_TRACE() << "Configuration updated";
 }
 
 /**

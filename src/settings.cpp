@@ -88,30 +88,30 @@ void Settings::incrementMsgCount()
  */
 void Settings::log()
 {
-    QList<QVariant> options;
-    options.append("== OPTIONS");
+    QList<QString> options;
     for (QHash<QString, QVariant>::const_iterator it=m_options.begin(); it!=m_options.end(); ++it)
     {
         options.append(it.key() +": "+ it.value().toString());
     }
 
-    QList<QVariant> hotkeys;
-    hotkeys.append("== HOTKEYS");
+    QList<QString> hotkeys;
     for (QHash<QString, int>::const_iterator it=m_hotkeys.begin(); it!=m_hotkeys.end(); ++it)
     {
         hotkeys.append(it.key() +": "+ QString::number(it.value()));
     }
 
-    QList<QVariant> sets;
-    sets.append("== SETS");
+    QList<QString> sets;
     for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
     {
         sets.append((*it)->name()+": "+((*it)->isActive()?"active":"inactive"));
     }
 
-    qxtLog->debug(options);
-    qxtLog->debug(hotkeys);
-    qxtLog->debug(sets);
+    QLOG_DEBUG() << "== OPTIONS";
+    QLOG_DEBUG() << options;
+    QLOG_DEBUG() << "== HOTKEYS";
+    QLOG_DEBUG() << hotkeys;
+    QLOG_DEBUG() << "== SETS";
+    QLOG_DEBUG() << sets;
 }
 
 /**
@@ -131,7 +131,7 @@ bool Settings::load(QString _filename)
 
     if (!file.exists() || !file.open(QIODevice::ReadOnly))
     {
-        qxtLog->error("Unable to load config file");
+        QLOG_ERROR() << "Unable to load config file";
         return false;
     }
 
@@ -139,7 +139,7 @@ bool Settings::load(QString _filename)
     QDomDocument dom;
     if (!dom.setContent(file.readAll()))
     {
-        qxtLog->error("Unable to load config file");
+        QLOG_ERROR() << "Unable to load config file";
         return false;
     }
 
@@ -279,24 +279,24 @@ bool Settings::load(QString _filename)
         settingsNode = settingsNode.nextSibling().toElement();
     }
 
-    qxtLog->trace("Config loaded from file");
+    QLOG_TRACE() << "Config loaded from file";
 
     if (newHotkey > 0)
     {
-        qxtLog->info("Need to update hotkeys");
+        QLOG_INFO() << "Need to update hotkeys";
         upgradeHotkeys(newHotkey);
         updated = true;
     }
 
     if (newMode != UM::NONE)
     {
-        qxtLog->info("Need to update modes");
+        QLOG_INFO() << "Need to update modes";
         upgradeMode(newMode);
         updated = true;
     }
 
     if (updated) {
-        qxtLog->info("Settings file format changed");
+        QLOG_INFO() << "Settings file format changed";
         save();
     }
 
@@ -393,12 +393,12 @@ bool Settings::save(QString _filename)
 
         file.close();
 
-        qxtLog->trace("Config file saved");
+        QLOG_TRACE() << "Config file saved";
 
         return true;
     }
 
-    qxtLog->error("Unable to save config file");
+    QLOG_ERROR() << "Unable to save config file";
 
     return false;
 }
@@ -446,12 +446,12 @@ Set* Settings::addSet(const QString &_path)
  */
 Set* Settings::addSet(const QString &_path, const QString &_name)
 {
-    qxtLog->debug("New set: "+_path);
+    QLOG_DEBUG() << "New set: " << _path;
 
     QDir dir = QDir(_path);
     if (!dir.exists())
     {
-        qxtLog->error("Invalid set path");
+        QLOG_ERROR() << "Invalid set path";
         return NULL;
     }
 
@@ -482,7 +482,7 @@ void Settings::deleteSets(const QList<int> &_sets)
     {
         int pos = *i-offset;
 
-        qxtLog->debug("Delete set: "+m_sets.at(pos)->name());
+        QLOG_DEBUG() << "Delete set: " << m_sets.at(pos)->name();
 
         m_sets.at(pos)->deleteCache();
         delete m_sets.at(pos);
@@ -517,7 +517,7 @@ void Settings::activateSets(const QList<int> &_sets)
     {
         m_sets.at(*i)->setActive(true);
 
-        qxtLog->debug("Activate set: "+m_sets.at(*i)->name());
+        QLOG_DEBUG() << "Activate set: " << m_sets.at(*i)->name();
     }
 
     save();
@@ -533,7 +533,7 @@ void Settings::unactivateSets(const QList<int> &_sets)
     {
         m_sets.at(*i)->setActive(false);
 
-        qxtLog->debug("Unactive set: "+m_sets.at(*i)->name());
+        QLOG_DEBUG() << "Unactive set: " << m_sets.at(*i)->name();
     }
 
     save();
@@ -550,15 +550,16 @@ void Settings::setActiveSets(const QList<int> &_sets)
         m_sets.at(i)->setActive(_sets.contains(i));
     }
 
-    if (qxtLog->isLogLevelEnabled("debug", QxtLogger::DebugLevel))
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
     {
-        QList<QVariant> sets;
-        sets.append("Change sets state:");
+        QList<QString> sets;
         for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
         {
             sets.append((*it)->name()+", "+((*it)->isActive()?"active":"inactive"));
         }
-        qxtLog->debug(sets);
+
+        QLOG_DEBUG() << "Change sets state:";
+        QLOG_DEBUG() << sets;
     }
 
     save();
@@ -585,7 +586,7 @@ void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, 
         set->setMode(_mode);
         set->setHotkey(_hotkey);
 
-        qxtLog->debug("Edit set: "+set->name());
+        QLOG_DEBUG() << "Edit set: " << set->name();
 
         save();
     }
@@ -608,7 +609,7 @@ void Settings::editSets(const QList<int> _sets, const UM::WALLPAPER _type, const
         if (_style != UM::IM_NONE) set->setStyle(_style);
         if (_mode != UM::NONE)     set->setMode(_mode);
 
-        qxtLog->debug("Edit set: "+set->name());
+        QLOG_DEBUG() << "Edit set: " << set->name();
     }
 
     save();
@@ -633,7 +634,7 @@ void Settings::moveSet(int _from, int _to)
         m_sets.remove(_from+1);
     }
 
-    qxtLog->debug("Move set: "+set->name()+", "+_from+"->"+_to);
+    QLOG_DEBUG() << "Move set: " << set->name() << ", " << _from << "->" << _to;
 
     save();
 }
