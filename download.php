@@ -13,6 +13,7 @@ $versions = array(
     '1.6' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.6.zip',
     '1.7' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.7.zip',
     '1.8' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.8.zip',
+    '1.9' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.9.zip',
     ),
   
   'exe' => array(
@@ -20,6 +21,7 @@ $versions = array(
     '1.6' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.6_Setup.exe',
     '1.7' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.7_Setup.exe',
     '1.8' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.8_Setup.exe',
+    '1.9' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.9_Setup.exe',
     ),
   );
   
