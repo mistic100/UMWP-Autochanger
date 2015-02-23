@@ -5,16 +5,19 @@ UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ult
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 1.8  
-Release date  : 10/11/2014  
+Version       : 1.9  
+Release date  : 24/02/2015  
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
-License       : GNU General Public License Version 3  
+License       : GNU General Public License Version 3
+
+[**Download lastest version**](http://www.strangeplanet.fr/work/umwp-autochanger/download.php)
 
 
 ## Requirement
 * UltraMon 3.2.1 or higher
 * Windows 7/8 32/64 bits
+
 
 ## Translation
 The application is currently available in English and French. [A translation page](https://www.transifex.com/projects/p/umwp-autochanger) has been created on Transifex, feel free to register and contribute.
@@ -32,7 +35,7 @@ The application is currently available in English and French. [A translation pag
 
 
 ## Configuration
-* Double-click on a set to edit it. You can change its name, its style (one image for each monitor or one image for the whole desktop), the transformation style for images (center, tile or stretch) and the hotkey.
+* Right-click on a set to open a menu from which you can edit the set, change its state and delete it.
 
 * On the "Options" dialog you can choose the delay, change the behavior of the tool and configure the hotkeys.  
 Hotkeys are a way to interact with the application while it is hidden in the system bar. Hotkeys can also be defined for each individual sets.
@@ -55,68 +58,4 @@ A: Yes. Simply drag & drop them.
 
 ## Compiling
 You can compile the application yourself with Qt Designer.  
-You will need Qt 4.8.4 and libqxt 0.6.2
-
-
-## Changelog
-* [1.8 (10/11/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.8)
-    * new: can disable wallpaper support on specific monitors
-    * new: choose background color of each monitor
-    * new: "Delete" button on "Active files" dialog
-    * new: auto-update process
-    * fixed: crash after changing delay
-    
-* [1.7 (01/08/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.7)
-    * new: add "Fill" mode
-    * new: create default.wallpaper file if not present
-    * change: don't delete missing sets but highlight them
-
-* [1.6 (08/03/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.6)
-    * change: Alt-F4 effectively closes application without prompt
-    * fixed: application closes when closing dialog window while main window is hidden
-    * fixed: delay input with wrong display format
-    * fixed: set parameters randomly resetted
-
-* [1.5 (12/02/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.5)
-    * new: export and import XML configuration file
-    * new: check UltraMon version
-    * new: add logger for debuging purposes
-    * new: "Active files" dialog with cliquable thumbnails for direct access to files
-    * fixed: better detection of UltraMon executable
-    * fixed: no more freeze when updating wallpaper
-
-* [1.4 (06/01/2014)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.4)
-    * new: more flexibility for hot keys + new hotkeys for refresh, start/pause, show/hide
-    * new: permanently save last used directory
-
-* [1.3 (03/12/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.3)
-    * new: can choose the type of wallpaper ('monitor' or 'desktop') and the style ('center', 'tile', 'stretch', 'stretch proportional')
-    * new: icons for main buttons (add, [de]activate, delete)
-    * change: dedicated configuration dialog
-    * change: use a cache to speed up startup
-    * change: random images are taken from the same (random too) set if more than one is active
-    * fixed: refresh issue of the list when deleting sets
-
-* [1.2 (09/09/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.2)
-    * new: system-wide hotkeys for quick change
-    * new: reorder sets with drag'n'drop
-    * new: integrated help
-
-* [1.1 (13/05/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.1)
-    * fixed: use better shuffle
-    * fixed: remember last used directory
-    * fixed: accept files with .jpeg extension
-    * new: add version checker
-    * new: add quick switch menu in tray con
-    * code optimizations
-
-* [1.0 (02/03/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.0)
-    * fixed: multi delete doesn't work correclty
-
-* [1.0 alpha2 (28/02/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.0a2)
-    * fixed: autorun shortcut not starting in the good working directory
-    * fixed: delay spinbox no initialized correctly
-    * new: multiple selection
-
-* [1.0 alpha1 (27/02/2013)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.0a1)
-    * first version
+You will need Qt 4.8.4.
