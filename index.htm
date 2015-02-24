@@ -86,8 +86,8 @@
       <li>Install and configure <i>UltraMon</i> on your computer.</li>
       <li>Launch <b>UMWP Autochanger</b>.</li>
       <li>Depending on your configuration, you might be asked to locate <b>UltraMonDesktop.exe</b>.</li>
-      <li>Click on the <b>plus</b> button to add a new set.</li>
-      <li>Once you have added your sets, click on the <b>refresh</b> button, the wallpaper will randomly change every 60 seconds.</li>
+      <li>Click on the <b><img src="src/icons/add2.png"> Add set</b> button to add a new set.</li>
+      <li>Once you have added your sets, click on the <b><img src="src/icons/refresh.png"> Refresh</b> button, the wallpaper will randomly change every 60 seconds.</li>
     </ol>
     </div>
   </div>
@@ -112,16 +112,17 @@
   
   <div class="the_page">
     <p>The core concept of UMWP Autochanger is <b>sets</b>. Basically sets are folders on your computer where the tool will search recursively JPEG/PNG/BMP/GIF files up to 3 levels deep.</p>
-    <p>Once configured the tool will choose a random set among all activated set, then choose one random image file for each monitor. Finally UltraMon is requested to refresh the wallpaper with these new files.</p>
+    <p>Once configured the tool will choose a random set among all activated set, then choose one image file for each monitor. Finally UltraMon is requested to refresh the wallpaper with these new files.</p>
     <p>The wallpaper is updated periodically, by default every 60 seconds (configurable).</p>
     
     <h3>Add, delete and activate sets</h3>
-    <p>To add a set just click on the &laquo; <b>+</b> &raquo; green button, an explorer window will open to allow you to choose a folder.</p>
-    <p>To delete a set, selected it on the list and click on the &laquo; <b>x</b> &raquo; red button.</p>
-    <p>To activate/deactivate a set, selected it on the list and click on the orange/grey switch button. Active sets are marked with a <img src="src/icons/bullet_green.png"> green bullet and inactive sets are marked with a <img src="src/icons/bullet_red.png"> red bullet.</p>
+    <p>To add a set just click on the <img src="src/icons/add2.png"> menu button, on right-click in the list and click <img src="src/icons/add.png">, an explorer window will open to allow you to choose a folder.</p>
+    <p>To delete a set, right-click on it and click on <img src="src/icons/delete.png">.</p>
+    <p>To activate/deactivate a set, right-click on it and click on <img src="src/icons/enable.png"> or <img src="src/icons/disable.png">. Active sets are marked with a <img src="src/icons/bullet_green.png"> icon and inactive sets are marked with a <img src="src/icons/bullet_red.png"> icon.</p>
     
     <h3>Edit sets</h3>
-    <p>Double click on a set to edit it's properties, you can change the name, the style, the type and the shortcut (see dedicated section about shortcuts).</p>
+    <p>Right-click on a set and click on <img src="src/icons/edit.png"> to edit it's properties, you can change the name, the style, the type, the mode and the shortcut (see dedicated section about shortcuts).</p>
+    <p>You can edit several sets together by selecting them before right-click. In this mode, names and shortcuts can't be edited.</p>
     <p>There are two types available:</p>
       <ul class="cb1">
         <li><b><img src="src/icons/w_monitor.png"> Monitor:</b> a different image is used for each monitor</li>
@@ -135,9 +136,15 @@
         <li><b><img src="src/icons/im_stretch_prop.png"> Strecth proportional</b></li>
         <li><b><img src="src/icons/im_fill.png"> Fill</b> (this mode is not available - yet - in UltraMon, UWMPA emulates it by resizing/cropping files internally)</li>
       </ul>
+    <p>There are two modes available:</p>
+      <ul class="cb1">
+        <li><b><img src="src/icons/mode_random.png"> Random:</b> files are chosen randomly in the set</li>
+        <li><b><img src="src/icons/mode_sequential.png"> Sequential:</b> files are chosen sequentially in alphabetical order</li>
+      </ul>
       
     <h3>Configuration</h3>
     <p>In <b><img src="src/icons/config.png"> Configuration &#8227; <img src="src/icons/settings.png"> Options</b> menu you can configure the update delay, the shortcuts and some other options.</p>
+    <p>The <b>Defaults</b> is used to define default type, style and mode for new sets.</p>
     <p>Additionally you can <b><img src="src/icons/export.png"> export</b> and <b><img src="src/icons/import.png"> import</b> the configuration as a XML file, usefull if you plan the reset your system !</p>
     
     <h3>Shortcuts</h3>
