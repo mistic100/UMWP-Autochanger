@@ -22,7 +22,7 @@
 #define APP_INSTALLER_FILENAME "installer.exe"
 #define APP_LOG_FILENAME "debug.log"
 
-#define APP_MIN_WIDTH 505
-#define APP_MIN_HEIGHT 260
+#define APP_MIN_WIDTH 450
+#define APP_MIN_HEIGHT 250
 
 #endif // VERSION_H

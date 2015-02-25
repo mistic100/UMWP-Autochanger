@@ -22,6 +22,8 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
 
     setWindowFlags(SimpleDialogFlag);
 
+    ui->inputName->setFocus();
+
     if (m_sets.size() > 1)
     {
         ui->selectType->addItem(tr("[keep]"),  UM::W_NONE);
