@@ -1,3 +1,3 @@
 1.9
-http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=latest&type=zip&serve
-1A04860733329EFC6A77CE598E24B973
+http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=latest&type=exe&serve
+68388A5D3187572E1D0309C8279C8BD1
