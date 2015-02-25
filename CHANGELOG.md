@@ -1,6 +1,6 @@
 # Changelog
 
-* [1.9 (24/02/2015)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.9)
+* [1.9 (25/02/2015)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.9)
     * fixed: 90% JPEG quality for generated wallpapers
     * fiexd: timer not reseted on manual refresh
     * new: right-click context menu to edit sets
