@@ -9,5 +9,3 @@ Put these DLLs in `data` directory before running `setup.iss` or `package.bat`:
 * QtGui4.dll
 * QtNetwork4.dll
 * QtXml4.dll
-* QxtCore.dll
-* QxtGui.dll
