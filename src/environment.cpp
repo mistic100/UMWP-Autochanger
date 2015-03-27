@@ -33,22 +33,6 @@ Environment::Environment(Settings* _settings) :
 }
 
 /**
- * Can we create the shortcut ?
- */
-const bool Environment::canAddShortcut() const
-{
-    return !m_env["startlinkpath"].isNull();
-}
-
-/**
- * @brief Does the shortcut exists ?
- */
-const bool Environment::isAutostart() const
-{
-    return QFile::exists(m_env["startlinkpath"].toString());
-}
-
-/**
  * @brief Dump whole env in the log
  */
 void Environment::log()
@@ -178,6 +162,32 @@ void Environment::checkSettings()
 }
 
 /**
+ * Can we create the shortcut ?
+ */
+const bool Environment::canAddShortcut() const
+{
+    return !m_env["startlinkpath"].isNull();
+}
+
+/**
+ * @brief Does the shortcut exists ?
+ */
+const bool Environment::isAutostart() const
+{
+    if (!QFile::exists(m_env["startlinkpath"].toString()))
+    {
+        return false;
+    }
+
+    wchar_t* path = (wchar_t*) malloc(256);
+    ResolveShortcut((LPCWSTR)m_env["startlinkpath"].toString().utf16(), path);
+    QString startlinkpath = QString::fromWCharArray(path);
+    free(path);
+
+    return startlinkpath.compare(QDir::toNativeSeparators(QCoreApplication::applicationFilePath())) == 0;
+}
+
+/**
  * @brief Create the startup shortcut
  */
 void Environment::createShortcut()
@@ -186,17 +196,11 @@ void Environment::createShortcut()
     {
         QLOG_TRACE() << "Attempt to create shortcut";
 
-        wchar_t* path1 = (wchar_t*) malloc(256);
-        wchar_t* path2 = (wchar_t*) malloc(256);
-
-        GetModuleFileName(NULL, path1, 256);
-        wcscpy(path2, path1);
-        PathRemoveFileSpec(path2);
-
-        CreateShortcut(path1, path2, (LPCWSTR)m_env["startlinkpath"].toString().utf16());
-
-        free(path1);
-        free(path2);
+        CreateShortcut(
+            (LPCWSTR)QDir::toNativeSeparators(QCoreApplication::applicationFilePath()).utf16(),
+            (LPCWSTR)QDir::toNativeSeparators(QCoreApplication::applicationDirPath()).utf16(),
+            (LPCWSTR)m_env["startlinkpath"].toString().utf16()
+        );
     }
 }
 
