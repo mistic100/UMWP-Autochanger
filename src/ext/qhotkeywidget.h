@@ -17,6 +17,10 @@ class QHotKeyWidget : public QWidget
 {
     Q_OBJECT
 
+public:
+    static const int KEEP_KEY = -1;
+    static const int NO_KEY = 0;
+
 private:
     Ui::QHotKeyWidget* ui;
 
@@ -28,6 +32,7 @@ public:
         ui(new Ui::QHotKeyWidget)
     {
         ui->setupUi(this);
+        setHotkey(NO_KEY);
     }
 
     ~QHotKeyWidget()
@@ -43,7 +48,15 @@ public:
     void setHotkey(const int _hotkey)
     {
         m_hotkey = _hotkey;
-        ui->key->setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
+
+        if (_hotkey == KEEP_KEY)
+        {
+            ui->key->setText(tr("[keep]"));
+        }
+        else
+        {
+            ui->key->setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
+        }
     }
 
 private slots:

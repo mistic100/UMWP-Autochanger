@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "ext/qhotkeywidget.h"
 
 extern short UMWP_STATE;
 
@@ -598,8 +599,9 @@ void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, 
  * @param UM::WALLPAPER _type
  * @param UM::IMAGE _style
  * @param UM::MODE _mode
+ * @param int _hotkey
  */
-void Settings::editSets(const QList<int> _sets, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode)
+void Settings::editSets(const QList<int> _sets, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey)
 {
     foreach (int i, _sets)
     {
@@ -608,6 +610,7 @@ void Settings::editSets(const QList<int> _sets, const UM::WALLPAPER _type, const
         if (_type != UM::W_NONE)   set->setType(_type);
         if (_style != UM::IM_NONE) set->setStyle(_style);
         if (_mode != UM::NONE)     set->setMode(_mode);
+        if (_hotkey != QHotKeyWidget::KEEP_KEY) set->setHotkey(_hotkey);
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }

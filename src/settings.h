@@ -67,7 +67,7 @@ public:
     void setActiveSets(const QList<int> &_sets);
 
     void editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey);
-    void editSets(const QList<int> _sets, UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode);
+    void editSets(const QList<int> _sets, UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey);
     void moveSet(int _from, int _to);
 
 private:

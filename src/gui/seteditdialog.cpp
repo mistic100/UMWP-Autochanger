@@ -52,7 +52,6 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
         ui->selectStyle->setCurrentData(set->style());
         ui->selectMode->setCurrentData(set->mode());
         ui->inputHotkey->setHotkey(set->hotkey());
-        ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
     }
     else
     {
@@ -61,8 +60,10 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
         ui->selectType->setCurrentIndex(0);
         ui->selectStyle->setCurrentIndex(0);
         ui->selectMode->setCurrentIndex(0);
-        ui->inputHotkey->setDisabled(true);
+        ui->inputHotkey->setHotkey(QHotKeyWidget::KEEP_KEY);
     }
+
+    ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
 
     QLOG_TRACE() << "SetEditDialog openned";
 }
@@ -87,7 +88,7 @@ void SetEditDialog::done(int result)
 
         int hotkey = ui->inputHotkey->hotkey();
 
-        if (hotkey)
+        if (hotkey > QHotKeyWidget::NO_KEY)
         {
             if (hotkey == m_settings->hotkey("refresh"))
             {
@@ -144,8 +145,11 @@ void SetEditDialog::save()
     }
     else
     {
-        m_settings->editSets(m_sets, type, style, mode);
+        m_settings->editSets(m_sets,
+                             type, style, mode,
+                             ui->inputHotkey->hotkey()
+                             );
     }
 
-    QLOG_TRACE() << "Set \"" << ui->inputName->text() << "\" updated";
+    QLOG_TRACE() << "Set " << ui->inputName->text() << " updated";
 }
