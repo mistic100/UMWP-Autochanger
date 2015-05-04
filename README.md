@@ -1,5 +1,7 @@
-UltraMon Wallpaper Autochanger
-================
+# UltraMon Wallpaper Autochanger
+
+![stable version](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=version)
+![downloads](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=downloads)
 
 UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ultramon/) users. I has two main features :
 * randomly and periodically change the wallpaper of all your monitors,
