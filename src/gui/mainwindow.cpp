@@ -530,16 +530,27 @@ void MainWindow::openNewVersionDialog()
  */
 void MainWindow::quit()
 {
-    if (UMWP_STATE != UMWP::OK)
+    if (UMWP_STATE != UMWP::OK || !m_settings->get("close_warning").toBool())
     {
         qApp->quit();
         return;
     }
 
-    int ret = QMessageBox::warning(this, tr("Quit"), tr("If you quit the application now,<br>the wallpaper will not change anymore."),
-                                   QMessageBox::Cancel | QMessageBox::Close, QMessageBox::Close);
+    QMessageBox dialog;
+    dialog.setIcon(QMessageBox::Warning);
+    dialog.setWindowTitle(tr("Quit"));
+    dialog.setText(tr("If you quit the application now,<br>the wallpaper will not change anymore."));
+    dialog.setStandardButtons(QMessageBox::Cancel | QMessageBox::Close | QMessageBox::Discard);
+    dialog.setDefaultButton(QMessageBox::Close);
+    dialog.setButtonText(QMessageBox::Discard, tr("Close and don't show this message again"));
 
-    if (ret == QMessageBox::Cancel)
+    int ret = dialog.exec();
+
+    if (ret == QMessageBox::Discard)
+    {
+        m_settings->setOpt("close_warning", false);
+    }
+    else if (ret == QMessageBox::Cancel)
     {
         return;
     }
@@ -548,6 +559,8 @@ void MainWindow::quit()
     {
         m_settings->setWindowSize(size());
     }
+
+    m_settings->save();
 
     qApp->quit();
 }
@@ -568,7 +581,7 @@ void MainWindow::showEvent(QShowEvent* _event)
  */
 void MainWindow::resizeEvent(QResizeEvent* _event)
 {
-    m_settings->setWindowSize(_event->size(), false);
+    m_settings->setWindowSize(_event->size());
 
     QMainWindow::resizeEvent(_event);
 }

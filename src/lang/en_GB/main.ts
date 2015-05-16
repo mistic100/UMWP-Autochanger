@@ -248,7 +248,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="539"/>
+        <location filename="../../gui/mainwindow.cpp" line="541"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -315,12 +315,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../gui/mainwindow.cpp" line="544"/>
+        <source>Close and don&apos;t show this message again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../gui/mainwindow.cpp" line="220"/>
         <source>%1 is still running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="539"/>
+        <location filename="../../gui/mainwindow.cpp" line="542"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation type="unfinished"></translation>
     </message>

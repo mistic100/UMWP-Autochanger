@@ -17,6 +17,7 @@ Settings::Settings()
     m_options["minimize"] = true;
     m_options["check_updates"] = true;
     m_options["msgcount"] = 0;
+    m_options["close_warning"] = true;
     m_options["use_hotkeys"] = false;
     m_options["show_notifications"] = true;
     m_options["last_dir"] = QDir::homePath();
@@ -50,15 +51,10 @@ const QSize Settings::windowSize() const
 /**
  * @brief Save new window size
  */
-void Settings::setWindowSize(const QSize &_size, bool _save)
+void Settings::setWindowSize(const QSize &_size)
 {
     m_options["window_width"] = _size.width();
     m_options["window_height"] = _size.height();
-
-    if (_save)
-    {
-        save();
-    }
 }
 
 /**

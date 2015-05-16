@@ -51,7 +51,7 @@ public:
     void setMonitor(const int _key, const Monitor &_val)    { m_monitors[_key] = _val; }
     void setNbMonitors(const int _size) { if (_size>m_monitors.size()) m_monitors.resize(_size); }
 
-    void setWindowSize(const QSize &_size, bool _save=true);
+    void setWindowSize(const QSize &_size);
     void incrementMsgCount();
     bool setExePath(const QString &_sPath);
 

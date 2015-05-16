@@ -248,7 +248,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="539"/>
+        <location filename="../../gui/mainwindow.cpp" line="541"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
@@ -315,12 +315,17 @@
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
+        <location filename="../../gui/mainwindow.cpp" line="544"/>
+        <source>Close and don&apos;t show this message again</source>
+        <translation>Fermer et ne plus afficher ce message</translation>
+    </message>
+    <message>
         <location filename="../../gui/mainwindow.cpp" line="220"/>
         <source>%1 is still running</source>
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="539"/>
+        <location filename="../../gui/mainwindow.cpp" line="542"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
     </message>
