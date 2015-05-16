@@ -25,6 +25,7 @@ public:
 
 private slots:
     void editSets();
+    void openSets();
     void deleteSets();
     void clearCache();
     void activateSets();

@@ -1,5 +1,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDesktopServices>
 
 #include "setcontextmenu.h"
 #include "seteditdialog.h"
@@ -43,6 +44,9 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
         QAction* actionEdit = addAction(QIcon(":/icon/edit"), tr("Edit"));
         connect(actionEdit, SIGNAL(triggered()), this, SLOT(editSets()));
 
+        QAction* actionOpen = addAction(QIcon(":/icon/folder"), tr("Open directory"));
+        connect(actionOpen, SIGNAL(triggered()), this, SLOT(openSets()));
+
         QAction* actionClearCache = addAction(QIcon(":/icon/clear"), tr("Clear cache"));
         connect(actionClearCache, SIGNAL(triggered()), this, SLOT(clearCache()));
 
@@ -71,6 +75,17 @@ void SetContextMenu::editSets()
         m_ctrl->emitListChanged();
     }
     ((MainWindow*)parent())->defineHotkeys();
+}
+
+/**
+ * @brief Open directories of selected sets
+ */
+void SetContextMenu::openSets()
+{
+    foreach (int i, m_sets)
+    {
+        QDesktopServices::openUrl(QUrl("file:///" + m_settings->set(i)->path()));
+    }
 }
 
 /**
