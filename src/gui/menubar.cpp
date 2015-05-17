@@ -14,27 +14,27 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     this->setIconSize(QSize(20, 20));
 
     QMenu* menuConfig = new QMenu();
-    QAction* actionOptions = menuConfig->addAction(QIcon(":/icon/settings"), tr("Options"));
-    QAction* actionScreens = menuConfig->addAction(QIcon(":/icon/w_monitor"), tr("Manage monitors"));
+    QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
+    QAction* actionScreens = menuConfig->addAction(QIcon(":/images/icons/w_monitor.png"), tr("Manage monitors"));
                              menuConfig->addSeparator();
-    QAction* actionImport =  menuConfig->addAction(QIcon(":/icon/import"), tr("Import configuration file"));
-    QAction* actionExport =  menuConfig->addAction(QIcon(":/icon/export"), tr("Export configuration file"));
+    QAction* actionImport =  menuConfig->addAction(QIcon(":/images/icons/import.png"), tr("Import configuration file"));
+    QAction* actionExport =  menuConfig->addAction(QIcon(":/images/icons/export.png"), tr("Export configuration file"));
 
     QMenu* menuHelp = new QMenu();
-    QAction* actionHelp =   menuHelp->addAction(QIcon(":/icon/help-color"), tr("User guide"));
-    m_actionFiles =         menuHelp->addAction(QIcon(":/icon/images"), tr("Active files"));
+    QAction* actionHelp =   menuHelp->addAction(QIcon(":/images/icons/help_color.png"), tr("User guide"));
+    m_actionFiles =         menuHelp->addAction(QIcon(":/images/icons/images.png"),     tr("Active files"));
                             menuHelp->addSeparator();
-    QAction* actionIssues = menuHelp->addAction(QIcon(":/icon/bug"), tr("Report a bug"));
-    QAction* actionHome =   menuHelp->addAction(QIcon(":/icon/house"), tr("Homepage"));
-    QAction* actionAbout =  menuHelp->addAction(QIcon(":/icon/about"), tr("About"));
+    QAction* actionIssues = menuHelp->addAction(QIcon(":/images/icons/bug.png"),   tr("Report a bug"));
+    QAction* actionHome =   menuHelp->addAction(QIcon(":/images/icons/house.png"), tr("Homepage"));
+    QAction* actionAbout =  menuHelp->addAction(QIcon(":/images/icons/about.png"), tr("About"));
 
-    QToolButton* actionQuit = this->addButton(QIcon(":/icon/quit"), tr("Quit"), Qt::ToolButtonTextUnderIcon);
-    m_actionAdd =             this->addButton(QIcon(":/icon/add2"), tr("Add set"), Qt::ToolButtonTextUnderIcon);
-    m_actionPause =           this->addButton(QIcon(":/icon/playpause"), tr("Pause"), Qt::ToolButtonTextUnderIcon);
-    m_actionRefresh =         this->addButton(QIcon(":/icon/refresh"), tr("Refresh"), Qt::ToolButtonTextUnderIcon);
-    m_actionHide =            this->addButton(QIcon(":/icon/hide"), tr("Hide"), Qt::ToolButtonTextUnderIcon);
-    m_actionConfig =          this->addMenu(QIcon(":/icon/config"), tr("Configuration"), menuConfig, Qt::ToolButtonTextUnderIcon);
-                              this->addMenu(QIcon(":/icon/help"), tr("Help"), menuHelp, Qt::ToolButtonTextUnderIcon);
+    QToolButton* actionQuit = this->addButton(QIcon(":/images/icons/quit.png"),       tr("Quit"),    Qt::ToolButtonTextUnderIcon);
+    m_actionAdd =             this->addButton(QIcon(":/images/icons/add.png"),        tr("Add set"), Qt::ToolButtonTextUnderIcon);
+    m_actionPause =           this->addButton(QIcon(":/images/icons/play_pause.png"), tr("Pause"),   Qt::ToolButtonTextUnderIcon);
+    m_actionRefresh =         this->addButton(QIcon(":/images/icons/refresh.png"),    tr("Refresh"), Qt::ToolButtonTextUnderIcon);
+    m_actionHide =            this->addButton(QIcon(":/images/icons/hide.png"),       tr("Hide"),    Qt::ToolButtonTextUnderIcon);
+    m_actionConfig =          this->addMenu(QIcon(":/images/icons/config.png"),       tr("Configuration"), menuConfig, Qt::ToolButtonTextUnderIcon);
+                              this->addMenu(QIcon(":/images/icons/help.png"),         tr("Help"), menuHelp, Qt::ToolButtonTextUnderIcon);
 
     m_pauseBlinker = new QWidgetBlinker(m_actionPause);
 

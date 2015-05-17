@@ -15,19 +15,19 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
 
     QMenu* menu = new QMenu();
-    m_actionPause =          menu->addAction(QIcon(":/icon/playpause"), tr("Pause"));
-    QAction* actionRefresh = menu->addAction(QIcon(":/icon/refresh"), tr("Refresh"));
-    m_actionHide =           menu->addAction(QIcon(":/icon/hide"), tr("Hide"));
-    m_quickMenu =            menu->addMenu(QIcon(":/icon/quick"), tr("Quick switch"));
+    m_actionPause =          menu->addAction(QIcon(":/images/icons/play_pause.png"), tr("Pause"));
+    QAction* actionRefresh = menu->addAction(QIcon(":/images/icons/refresh.png"),    tr("Refresh"));
+    m_actionHide =           menu->addAction(QIcon(":/images/icons/hide.png"),       tr("Hide"));
+    m_quickMenu =            menu->addMenu(QIcon(":/images/icons/quick.png"),        tr("Quick switch"));
                              menu->addSeparator();
-    QAction* actionQuit =    menu->addAction(QIcon(":/icon/quit"), tr("Quit"));
+    QAction* actionQuit =    menu->addAction(QIcon(":/images/icons/quit.png"),       tr("Quit"));
 
     connect(actionQuit,    SIGNAL(triggered()), _parent, SLOT(quit()));
     connect(m_actionHide,  SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
     connect(m_actionPause, SIGNAL(triggered()), _parent, SLOT(startPause()));
     connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
 
-    this->setIcon(QIcon(":/img/icon"));
+    this->setIcon(QIcon(":/images/icon.png"));
     this->setToolTip(APP_NAME);
     this->setContextMenu(menu);
 
@@ -82,11 +82,11 @@ void TrayIcon::onListChanged()
 
         if (set->isActive())
         {
-            action->setIcon(QIcon(":/icon/bullet_green"));
+            action->setIcon(QIcon(":/images/icons/bullet_green.png"));
         }
         else
         {
-            action->setIcon(QIcon(":/icon/bullet_red"));
+            action->setIcon(QIcon(":/images/icons/bullet_red.png"));
         }
 
         connect(action, SIGNAL(triggered()), this, SLOT(onQuickClicked()));

@@ -103,7 +103,7 @@ void PreviewDialog::draw()
 
         // delete button
         QPushButton* button = new QPushButton();
-        button->setIcon(QIcon(":/icon/bullet_cross"));
+        button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
         button->setText(tr("Delete"));
         button->setProperty("path", *it);
         button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);

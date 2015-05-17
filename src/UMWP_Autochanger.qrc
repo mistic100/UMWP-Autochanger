@@ -1,54 +1,48 @@
 <RCC>
-    <qresource prefix="/img">
-        <file alias="error">images/error.png</file>
-        <file alias="icon">images/icon.png</file>
-    </qresource>
-    <qresource prefix="/icon">
-        <file alias="bullet_green">images/icons/bullet_green.png</file>
-        <file alias="bullet_red">images/icons/bullet_red.png</file>
-        <file alias="playpause">images/icons/play_pause.png</file>
-        <file alias="hide">images/icons/hide.png</file>
-        <file alias="refresh">images/icons/refresh.png</file>
-        <file alias="quick">images/icons/quick.png</file>
-        <file alias="im_center">images/icons/im_center.png</file>
-        <file alias="im_stretch">images/icons/im_stretch.png</file>
-        <file alias="im_stretch_prop">images/icons/im_stretch_prop.png</file>
-        <file alias="im_tile">images/icons/im_tile.png</file>
-        <file alias="im_fill">images/icons/im_fill.png</file>
-        <file alias="w_desktop">images/icons/w_desktop.png</file>
-        <file alias="w_monitor">images/icons/w_monitor.png</file>
-        <file alias="export">images/icons/export.png</file>
-        <file alias="import">images/icons/import.png</file>
-        <file alias="settings">images/icons/settings.png</file>
-        <file alias="quit">images/icons/quit.png</file>
-        <file alias="config">images/icons/config.png</file>
-        <file alias="help">images/icons/help.png</file>
-        <file alias="about">images/icons/about.png</file>
-        <file alias="images">images/icons/images.png</file>
-        <file alias="help-color">images/icons/help_color.png</file>
-        <file alias="bullet_cross">images/icons/bullet_cross.png</file>
-        <file alias="color">images/icons/color.png</file>
-        <file alias="add">images/icons/add.png</file>
-        <file alias="clear">images/icons/clear.png</file>
-        <file alias="delete">images/icons/delete.png</file>
-        <file alias="disable">images/icons/disable.png</file>
-        <file alias="edit">images/icons/edit.png</file>
-        <file alias="enable">images/icons/enable.png</file>
-        <file alias="add2">images/icons/add2.png</file>
-        <file alias="bug">images/icons/bug.png</file>
-        <file alias="house">images/icons/house.png</file>
-        <file alias="mode_random">images/icons/mode_random.png</file>
-        <file alias="mode_sequential">images/icons/mode_sequential.png</file>
-        <file alias="folder">images/icons/folder.png</file>
-    </qresource>
-    <qresource prefix="/lang/en_GB">
-        <file alias="help">lang/en_GB/help.htm</file>
-        <file alias="main">lang/en_GB/main.qm</file>
-        <file alias="flag">lang/en_GB/flag.png</file>
-    </qresource>
-    <qresource prefix="/lang/fr_FR">
-        <file alias="help">lang/fr_FR/help.htm</file>
-        <file alias="main">lang/fr_FR/main.qm</file>
-        <file alias="flag">lang/fr_FR/flag.png</file>
+    <qresource prefix="/">
+        <file>images/icon.png</file>
+        <file>images/error.png</file>
+        <file>images/icons/about.png</file>
+        <file>images/icons/add.png</file>
+        <file>images/icons/add_color.png</file>
+        <file>images/icons/bug.png</file>
+        <file>images/icons/bullet_cross.png</file>
+        <file>images/icons/bullet_green.png</file>
+        <file>images/icons/bullet_red.png</file>
+        <file>images/icons/clear.png</file>
+        <file>images/icons/color.png</file>
+        <file>images/icons/config.png</file>
+        <file>images/icons/delete.png</file>
+        <file>images/icons/disable.png</file>
+        <file>images/icons/edit.png</file>
+        <file>images/icons/enable.png</file>
+        <file>images/icons/export.png</file>
+        <file>images/icons/folder.png</file>
+        <file>images/icons/help.png</file>
+        <file>images/icons/help_color.png</file>
+        <file>images/icons/hide.png</file>
+        <file>images/icons/house.png</file>
+        <file>images/icons/im_center.png</file>
+        <file>images/icons/im_fill.png</file>
+        <file>images/icons/im_stretch.png</file>
+        <file>images/icons/im_stretch_prop.png</file>
+        <file>images/icons/im_tile.png</file>
+        <file>images/icons/images.png</file>
+        <file>images/icons/import.png</file>
+        <file>images/icons/mode_random.png</file>
+        <file>images/icons/mode_sequential.png</file>
+        <file>images/icons/play_pause.png</file>
+        <file>images/icons/quick.png</file>
+        <file>images/icons/quit.png</file>
+        <file>images/icons/refresh.png</file>
+        <file>images/icons/settings.png</file>
+        <file>images/icons/w_desktop.png</file>
+        <file>images/icons/w_monitor.png</file>
+        <file>lang/en_GB/flag.png</file>
+        <file>lang/en_GB/help.htm</file>
+        <file>lang/en_GB/main.qm</file>
+        <file>lang/fr_FR/flag.png</file>
+        <file>lang/fr_FR/help.htm</file>
+        <file>lang/fr_FR/main.qm</file>
     </qresource>
 </RCC>

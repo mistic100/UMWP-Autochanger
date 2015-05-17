@@ -31,17 +31,17 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
         ui->selectMode->addItem(tr("[keep]"),  UM::NONE);
     }
 
-    ui->selectType->addItem(QIcon(":/icon/w_monitor"), tr("One image for each monitor"),      UM::W_MONITOR);
-    ui->selectType->addItem(QIcon(":/icon/w_desktop"), tr("One image for the whole desktop"), UM::W_DESKTOP);
+    ui->selectType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
+    ui->selectType->addItem(QIcon(":/images/icons/w_desktop.png"), tr("One image for the whole desktop"), UM::W_DESKTOP);
 
-    ui->selectStyle->addItem(QIcon(":/icon/im_center"),       tr("Center"),               UM::IM_CENTER);
-    ui->selectStyle->addItem(QIcon(":/icon/im_tile"),         tr("Tile"),                 UM::IM_TILE);
-    ui->selectStyle->addItem(QIcon(":/icon/im_stretch"),      tr("Stretch"),              UM::IM_STRETCH);
-    ui->selectStyle->addItem(QIcon(":/icon/im_stretch_prop"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
-    ui->selectStyle->addItem(QIcon(":/icon/im_fill"),         tr("Fill"),                 UM::IM_FILL);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),                 UM::IM_TILE);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
 
-    ui->selectMode->addItem(QIcon(":/icon/mode_random"),     tr("Random"),     UM::RANDOM);
-    ui->selectMode->addItem(QIcon(":/icon/mode_sequential"), tr("Sequential"), UM::SEQUENTIAL);
+    ui->selectMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::RANDOM);
+    ui->selectMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::SEQUENTIAL);
 
     if (m_sets.size() == 1)
     {

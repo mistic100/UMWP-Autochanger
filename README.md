@@ -1,7 +1,8 @@
 # UltraMon Wallpaper Autochanger
 
-![stable version](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=version)
-![downloads](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=downloads)
+[![stable version](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=version)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php)
+[![downloads](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=downloads)](http://www.strangeplanet.fr/work/umwp-autochanger)
+[![Documentation](https://img.shields.io/badge/documentation-online-blue.svg)](http://www.strangeplanet.fr/work/umwp-autochanger#install)
 [![Gratipay](https://img.shields.io/gratipay/mistic100.svg)](https://gratipay.com/mistic100)
 
 UMWP Autochanger is a little tool for [UltraMon](http://www.realtimesoft.com/ultramon/) users. I has two main features :
@@ -13,10 +14,6 @@ Release date  : 25/02/2015
 Author        : Damien "Mistic" Sorel  
 Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
 License       : GNU General Public License Version 3
-
-[**Download lastest version**](http://www.strangeplanet.fr/work/umwp-autochanger/download.php)
-
-[**Documentation**](http://www.strangeplanet.fr/work/umwp-autochanger#install)
 
 
 ## Requirement

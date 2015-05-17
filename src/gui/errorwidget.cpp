@@ -24,7 +24,7 @@ ErrorWidget::ErrorWidget(QWidget* _parent, Controller* _ctrl) :
 
     // error icon
     QLabel* icon = new QLabel();
-    icon->setPixmap(QPixmap(":/img/error"));
+    icon->setPixmap(QPixmap(":/images/error.png"));
     mainLayout->addWidget(icon, 0, 0, 2, 1);
 
     // oups !

@@ -38,7 +38,7 @@ MainWindow::MainWindow(Controller* _ctrl) :
     // WINDOW PROPERTIES
     setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
     setWindowTitle(APP_NAME);
-    setWindowIcon(QPixmap(":/img/icon"));
+    setWindowIcon(QPixmap(":/images/icon.png"));
 
 
     // STATUS BAR

@@ -30,33 +30,29 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
 
         if (nbActive >= nbInactive)
         {
-            QAction* actionUnactivate = addAction(QIcon(":/icon/disable"), tr("Disable"));
+            QAction* actionUnactivate = addAction(QIcon(":/images/icons/disable.png"), tr("Disable"));
             connect(actionUnactivate, SIGNAL(triggered()), this, SLOT(unactivateSets()));
         }
         else
         {
-            QAction* actionActivate = addAction(QIcon(":/icon/enable"), tr("Enable"));
+            QAction* actionActivate = addAction(QIcon(":/images/icons/enable.png"), tr("Enable"));
             connect(actionActivate, SIGNAL(triggered()), this, SLOT(activateSets()));
         }
 
         addSeparator();
-
-        QAction* actionEdit = addAction(QIcon(":/icon/edit"), tr("Edit"));
-        connect(actionEdit, SIGNAL(triggered()), this, SLOT(editSets()));
-
-        QAction* actionOpen = addAction(QIcon(":/icon/folder"), tr("Open directory"));
-        connect(actionOpen, SIGNAL(triggered()), this, SLOT(openSets()));
-
-        QAction* actionClearCache = addAction(QIcon(":/icon/clear"), tr("Clear cache"));
-        connect(actionClearCache, SIGNAL(triggered()), this, SLOT(clearCache()));
-
+        QAction* actionEdit =   addAction(QIcon(":/images/icons/edit.png"),   tr("Edit"));
+        QAction* actionOpen =   addAction(QIcon(":/images/icons/folder.png"), tr("Open directory"));
+        QAction* actionClear =  addAction(QIcon(":/images/icons/clear.png"),  tr("Clear cache"));
         addSeparator();
+        QAction* actionDelete = addAction(QIcon(":/images/icons/delete.png"), tr("Delete"));
 
-        QAction* actionDelete = addAction(QIcon(":/icon/delete"), tr("Delete"));
+        connect(actionEdit,   SIGNAL(triggered()), this, SLOT(editSets()));
+        connect(actionOpen,   SIGNAL(triggered()), this, SLOT(openSets()));
+        connect(actionClear,  SIGNAL(triggered()), this, SLOT(clearCache()));
         connect(actionDelete, SIGNAL(triggered()), this, SLOT(deleteSets()));
     }
 
-    QAction* actionAdd = addAction(QIcon(":/icon/add"), tr("Add set"));
+    QAction* actionAdd = addAction(QIcon(":/images/icons/add_color.png"), tr("Add set"));
     connect(actionAdd, SIGNAL(triggered()), _parent, SLOT(addSet()));
 }
 

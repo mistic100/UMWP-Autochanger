@@ -79,10 +79,10 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     switch (set->isActive())
     {
     case true:
-        icon = QIcon(":/icon/bullet_green");
+        icon = QIcon(":/images/icons/bullet_green.png");
         break;
     case false:
-        icon = QIcon(":/icon/bullet_red");
+        icon = QIcon(":/images/icons/bullet_red.png");
         break;
     }
     rect = baseRect.adjusted(2, 0, 0, 0);
@@ -95,10 +95,10 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     switch (set->type())
     {
     case UM::W_DESKTOP:
-        icon = QIcon(":/icon/w_desktop");
+        icon = QIcon(":/images/icons/w_desktop.png");
         break;
     case UM::W_MONITOR:
-        icon = QIcon(":/icon/w_monitor");
+        icon = QIcon(":/images/icons/w_monitor.png");
         break;
     }
     rect = baseRect.adjusted(0, 3, -3, 0);
@@ -109,19 +109,19 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     switch (set->style())
     {
     case UM::IM_CENTER:
-        icon = QIcon(":/icon/im_center");
+        icon = QIcon(":/images/icons/im_center.png");
         break;
     case UM::IM_TILE:
-        icon = QIcon(":/icon/im_tile");
+        icon = QIcon(":/images/icons/im_tile.png");
         break;
     case UM::IM_STRETCH:
-        icon = QIcon(":/icon/im_stretch");
+        icon = QIcon(":/images/icons/im_stretch.png");
         break;
     case UM::IM_STRETCH_PROP:
-        icon = QIcon(":/icon/im_stretch_prop");
+        icon = QIcon(":/images/icons/im_stretch_prop.png");
         break;
     case UM::IM_FILL:
-        icon = QIcon(":/icon/im_fill");
+        icon = QIcon(":/images/icons/im_fill.png");
         break;
     }
     rect = baseRect.adjusted(0, 0, -2, 0);
@@ -132,10 +132,10 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     switch (set->mode())
     {
     case UM::RANDOM:
-        icon = QIcon(":/icon/mode_random");
+        icon = QIcon(":/images/icons/mode_random.png");
         break;
     case UM::SEQUENTIAL:
-        icon = QIcon(":/icon/mode_sequential");
+        icon = QIcon(":/images/icons/mode_sequential.png");
         break;
     }
     rect = baseRect.adjusted(0, 0, -24, 0);
