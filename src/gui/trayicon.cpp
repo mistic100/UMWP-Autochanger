@@ -27,9 +27,9 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     connect(m_actionPause, SIGNAL(triggered()), _parent, SLOT(startPause()));
     connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
 
-    this->setIcon(QIcon(":/images/icon.png"));
-    this->setToolTip(APP_NAME);
-    this->setContextMenu(menu);
+    setIcon(QIcon(":/images/icon.png"));
+    setToolTip(APP_NAME);
+    setContextMenu(menu);
 
     onListChanged();
 }
@@ -59,10 +59,12 @@ void TrayIcon::setPause(bool _pause)
     if (!_pause)
     {
         m_actionPause->setText(tr("Pause"));
+        setIcon(QIcon(":/images/icon.png"));
     }
     else
     {
         m_actionPause->setText(tr("Start"));
+        setIcon(QIcon(":/images/icon_pause.png"));
     }
 }
 
