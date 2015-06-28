@@ -3,9 +3,6 @@
 #include "lib/createshortcut.h"
 
 #include "environment.h"
-#include "sysreader.h"
-
-extern short UMWP_STATE;
 
 
 /**
@@ -17,12 +14,7 @@ Environment::Environment(Settings* _settings) :
 {
     qRegisterMetaType<NewVersion>("NewVersion");
 
-    m_env["wallpath"] = QVariant();
-    m_env["bmppath"] = QVariant();
-    m_env["umversion"] = "";
-    m_env["startlinkpath"] = QVariant();
-    m_env["nb_monitors"] = 0;
-
+    // LIST LANGUAGES
     QDirIterator it(":/lang");
     while (it.hasNext())
     {
@@ -30,6 +22,27 @@ Environment::Environment(Settings* _settings) :
         m_languages.append(it.fileName());
     }
     qSort(m_languages);
+
+    QLOG_DEBUG() << "== LANGUAGES" << m_languages;
+
+    // SEARCH SHORTCUT FILE
+    wchar_t* value;
+    HRESULT result;
+
+    value = (wchar_t*) malloc(256);
+    result = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &value);
+
+    if (result == S_OK)
+    {
+        m_shortcutPath = QString::fromWCharArray(value);
+        m_shortcutPath.append("\\UMWP Autochanger.lnk");
+    }
+    else
+    {
+        QLOG_FATAL() << "Something went really wrong!";
+    }
+
+    CoTaskMemFree(value);
 }
 
 /**
@@ -37,12 +50,6 @@ Environment::Environment(Settings* _settings) :
  */
 void Environment::log()
 {
-    QList<QString> env;
-    for (QHash<QString, QVariant>::const_iterator it=m_env.begin(); it!=m_env.end(); ++it)
-    {
-        env.append(it.key() +": "+ it.value().toString());
-    }
-
     QList<QString> sizes;
     for (QHash<int, QRect>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
     {
@@ -52,83 +59,7 @@ void Environment::log()
         );
     }
 
-    QList<QString> langs;
-    foreach (const QString lang, m_languages)
-    {
-        langs.append(lang);
-    }
-
-    QLOG_DEBUG() << "== ENVIRONEMENT";
-    QLOG_DEBUG() << env;
-    QLOG_DEBUG() << "== MONITORS";
-    QLOG_DEBUG() << sizes;
-    QLOG_DEBUG() << "== LANGUAGES";
-    QLOG_DEBUG() << langs;
-}
-
-/**
- * @brief Init environnement variables
- */
-void Environment::init()
-{
-    bool ok;
-
-    // SEARCH ULTRAMON EXE
-    QString umpath = m_settings->get("umpath").toString();
-    if (umpath.isEmpty() || !QFile::exists(umpath))
-    {
-        umpath = SysReader::searchUMDexe(ok);
-
-        if (!ok)
-        {
-            QLOG_ERROR() << "UltraMonDesktop.exe not found";
-            UMWP_STATE|= UMWP::NOT_INSTALLED;
-        }
-        else
-        {
-            m_settings->setOpt("umpath", umpath);
-            m_settings->save();
-        }
-    }
-
-    // SEARCH ULTRAMON VERSION
-    m_env["umversion"] = SysReader::getUMversion(ok);
-
-    if (!ok)
-    {
-        QLOG_ERROR() << "Unknown UltraMon version";
-        UMWP_STATE|= UMWP::BAD_VERSION;
-    }
-    else if (m_env["umversion"].toString().compare(QString::fromAscii(APP_MIN_UM_VERSION)) < 0)
-    {
-        QLOG_ERROR() << "Invalid UltraMon version";
-        UMWP_STATE|= UMWP::BAD_VERSION;
-    }
-
-    // SEARCH BMP PATH
-    m_env["bmppath"] = SysReader::buildBMPpath(ok);
-
-    if (!ok) {
-        UMWP_STATE|= UMWP::UNKNOWN_ERROR;
-    }
-
-    // SEARCH WALLPAPER FOLDER
-    if (!(UMWP_STATE & UMWP::BAD_VERSION))
-    {
-        m_env["wallpath"] = SysReader::buildUMwallpaperPath(m_env["umversion"].toString(), ok);
-
-        if (!ok)
-        {
-            UMWP_STATE|= UMWP::UNKNOWN_ERROR;
-        }
-        else if (!refreshMonitors())
-        {
-            UMWP_STATE|= UMWP::COM_ERROR;
-        }
-    }
-
-    // SEARCH SHORTCUT FILE
-    m_env["startlinkpath"] = SysReader::buildShortcutPath();
+    QLOG_DEBUG() << "== MONITORS" << sizes;
 }
 
 /**
@@ -136,21 +67,68 @@ void Environment::init()
  */
 bool Environment::refreshMonitors()
 {
-    bool ok;
-
-    SysReader::queryMonitors(m_wpSizes, m_header, ok);
-
-    if (!ok)
+    if (!queryMonitors(m_wpSizes))
     {
-        QLOG_ERROR() << "Unable to query UltraMon API";
         return false;
     }
-
-    m_env["nb_monitors"] = m_wpSizes.size() - 1; // an extra entry stores full available size
 
     checkSettings();
 
     return true;
+}
+
+BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM dwData)
+{
+    MONITORINFO mi;
+    mi.cbSize = sizeof(mi);
+    GetMonitorInfo(hMonitor, &mi);
+
+    QList<RECT>* monitors = reinterpret_cast<QList<RECT>*>(dwData);
+    monitors->append(mi.rcMonitor);
+
+    return true;
+}
+
+/**
+ * @brief Get monitors positions and sizes
+ * @param QRect[] _sizes
+ * @return bool
+ */
+bool Environment::queryMonitors(QHash<int, QRect> &_sizes)
+{
+    _sizes.clear();
+
+    QList<RECT> monitors;
+    EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, reinterpret_cast<LPARAM>(&monitors));
+
+    if (monitors.size() > 0) {
+        int i=0, minX=0, maxX=0, minY=0, maxY=0;
+
+        foreach (RECT rect, monitors)
+        {
+            _sizes.insert(i++, QRect(
+                             rect.left,
+                             rect.top,
+                             rect.right-rect.left,
+                             rect.bottom-rect.top
+            ));
+
+            minX = qMin(minX, (int)rect.left);
+            minY = qMin(minY, (int)rect.top);
+            maxX = qMax(maxX, (int)rect.right);
+            maxY = qMax(maxY, (int)rect.bottom);
+        }
+
+        // store whole desktop size with its top-left-most position
+        _sizes.insert(-1, QRect(minX, minY, maxX-minX, maxY-minY));
+    }
+
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
+    {
+        log();
+    }
+
+    return _sizes.size() > 0;
 }
 
 /**
@@ -158,7 +136,44 @@ bool Environment::refreshMonitors()
  */
 void Environment::checkSettings()
 {
-    m_settings->setNbMonitors(m_env["nb_monitors"].toInt());
+    m_settings->setNbMonitors(nbMonitors());
+}
+
+/**
+ * @brief Refresh Windows wallpaper
+ * @param string _file
+ */
+void Environment::setWallpaper(const QString &_file)
+{
+    CRegKey regKey;
+    LONG result;
+
+    result = regKey.Open(HKEY_CURRENT_USER, L"Control Panel\\Desktop", KEY_READ | KEY_WRITE);
+
+    if (result == ERROR_SUCCESS)
+    {
+        result = regKey.SetKeyValue(L"WallpaperStyle", L"0");
+    }
+
+    if (result == ERROR_SUCCESS)
+    {
+        result = regKey.SetKeyValue(L"TileWallpaper", L"1");
+    }
+
+    if (result == ERROR_SUCCESS)
+    {
+        if (!SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, (PVOID)_file.toStdWString().c_str(), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE))
+        {
+            result = 1L;
+        }
+    }
+
+    if (result != ERROR_SUCCESS)
+    {
+        QLOG_ERROR() << "Failed to set new wallpaper";
+    }
+
+    regKey.Close();
 }
 
 /**
@@ -166,7 +181,7 @@ void Environment::checkSettings()
  */
 const bool Environment::canAddShortcut() const
 {
-    return !m_env["startlinkpath"].isNull();
+    return !m_shortcutPath.isNull();
 }
 
 /**
@@ -174,13 +189,13 @@ const bool Environment::canAddShortcut() const
  */
 const bool Environment::isAutostart() const
 {
-    if (!QFile::exists(m_env["startlinkpath"].toString()))
+    if (!QFile::exists(m_shortcutPath))
     {
         return false;
     }
 
     wchar_t* path = (wchar_t*) malloc(256);
-    ResolveShortcut((LPCWSTR)m_env["startlinkpath"].toString().utf16(), path);
+    ResolveShortcut((LPCWSTR)m_shortcutPath.utf16(), path);
     QString startlinkpath = QString::fromWCharArray(path);
     free(path);
 
@@ -199,7 +214,7 @@ void Environment::createShortcut()
         CreateShortcut(
             (LPCWSTR)QDir::toNativeSeparators(QCoreApplication::applicationFilePath()).utf16(),
             (LPCWSTR)QDir::toNativeSeparators(QCoreApplication::applicationDirPath()).utf16(),
-            (LPCWSTR)m_env["startlinkpath"].toString().utf16()
+            (LPCWSTR)m_shortcutPath.utf16()
         );
     }
 }
@@ -213,6 +228,6 @@ void Environment::deleteShortcut()
     {
         QLOG_TRACE() << "Remove shortcut";
 
-        QFile::remove(m_env["startlinkpath"].toString());
+        QFile::remove(m_shortcutPath);
     }
 }

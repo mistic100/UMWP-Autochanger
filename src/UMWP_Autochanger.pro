@@ -14,10 +14,8 @@ SOURCES += \
     controller.cpp \
     settings.cpp \
     environment.cpp \
-    sysreader.cpp \
     gui/listdelegate.cpp \
     gui/mainwindow.cpp \
-    gui/errorwidget.cpp \
     gui/mainwidget.cpp \
     gui/seteditdialog.cpp \
     gui/configdialog.cpp \
@@ -42,13 +40,11 @@ HEADERS += \
     controller.h \
     settings.h \
     environment.h \
-    sysreader.h \
     versionchecker.h \
     listdelegate.h \
     listproxystyle.h \
     globalshortcut.h \
     gui/mainwindow.h \
-    gui/errorwidget.h \
     gui/mainwidget.h \
     gui/seteditdialog.h \
     gui/configdialog.h \
@@ -62,7 +58,6 @@ HEADERS += \
 
 FORMS += \
     ext/qhotkeywidget.ui \
-    gui/mainwidget.ui \
     gui/seteditdialog.ui \
     gui/configdialog.ui \
     gui/newversiondialog.ui \

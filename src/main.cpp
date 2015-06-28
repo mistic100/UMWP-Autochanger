@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
     }
 
     QApplication app(argc, argv);
-
     app.setQuitOnLastWindowClosed(false);
 
     // logger
@@ -59,18 +58,12 @@ int main(int argc, char *argv[])
         dirHelper.mkdir(APP_CACHE_DIR);
     }
 
+
+    // init
     Settings settings;
     settings.load();
 
     Environment enviro(&settings);
-    enviro.init();
-
-    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
-    {
-        QLOG_DEBUG() << "App state: "+ QString::number(UMWP_STATE);
-        settings.log();
-        enviro.log();
-    }
 
     QString language = settings.get("language").toString();
 
@@ -84,11 +77,18 @@ int main(int argc, char *argv[])
     appTranslator.load(":/lang/" + language + "/main");
     app.installTranslator(&appTranslator);
 
+
+    // core
     Controller ctrl(&settings, &enviro);
 
     MainWindow window(&ctrl);
     window.init();
 
+    ctrl.checkVersion();
+    ctrl.update();
+
+
+    // end
     int ret = app.exec();
 
     QLOG_TRACE() << "Finished";

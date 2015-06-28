@@ -48,9 +48,6 @@ public:
 
     bool moveFileToTrash(const QString &_filename);
 
-private:
-    void generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set);
-
 public slots:
     void update();
 

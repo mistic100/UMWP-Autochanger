@@ -10,8 +10,8 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     QToolBarExt((QWidget*) _parent),
     m_ctrl(_ctrl)
 {
-    this->setMovable(false);
-    this->setIconSize(QSize(20, 20));
+    setMovable(false);
+    setIconSize(QSize(20, 20));
 
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
@@ -28,20 +28,20 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     QAction* actionHome =   menuHelp->addAction(QIcon(":/images/icons/house.png"), tr("Homepage"));
     QAction* actionAbout =  menuHelp->addAction(QIcon(":/images/icons/about.png"), tr("About"));
 
-    QToolButton* actionQuit = this->addButton(QIcon(":/images/icons/quit.png"),       tr("Quit"),    Qt::ToolButtonTextUnderIcon);
-    m_actionAdd =             this->addButton(QIcon(":/images/icons/add.png"),        tr("Add set"), Qt::ToolButtonTextUnderIcon);
-    m_actionPause =           this->addButton(QIcon(":/images/icons/play_pause.png"), tr("Pause"),   Qt::ToolButtonTextUnderIcon);
-    m_actionRefresh =         this->addButton(QIcon(":/images/icons/refresh.png"),    tr("Refresh"), Qt::ToolButtonTextUnderIcon);
-    m_actionHide =            this->addButton(QIcon(":/images/icons/hide.png"),       tr("Hide"),    Qt::ToolButtonTextUnderIcon);
-    m_actionConfig =          this->addMenu(QIcon(":/images/icons/config.png"),       tr("Configuration"), menuConfig, Qt::ToolButtonTextUnderIcon);
-                              this->addMenu(QIcon(":/images/icons/help.png"),         tr("Help"), menuHelp, Qt::ToolButtonTextUnderIcon);
+    QToolButton* actionQuit =     addButton(QIcon(":/images/icons/quit.png"),       tr("Quit"),    Qt::ToolButtonTextUnderIcon);
+    QToolButton* actionAdd =      addButton(QIcon(":/images/icons/add.png"),        tr("Add set"), Qt::ToolButtonTextUnderIcon);
+    m_actionPause =               addButton(QIcon(":/images/icons/play_pause.png"), tr("Pause"),   Qt::ToolButtonTextUnderIcon);
+    QToolButton* actionRefresh =  addButton(QIcon(":/images/icons/refresh.png"),    tr("Refresh"), Qt::ToolButtonTextUnderIcon);
+    QToolButton* actionHide =     addButton(QIcon(":/images/icons/hide.png"),       tr("Hide"),    Qt::ToolButtonTextUnderIcon);
+                                  addMenu(QIcon(":/images/icons/config.png"),       tr("Configuration"), menuConfig, Qt::ToolButtonTextUnderIcon);
+                                  addMenu(QIcon(":/images/icons/help.png"),         tr("Help"), menuHelp, Qt::ToolButtonTextUnderIcon);
 
     m_pauseBlinker = new QWidgetBlinker(m_actionPause);
 
     connect(actionQuit,      SIGNAL(clicked()), _parent, SLOT(quit()));
-    connect(m_actionAdd,     SIGNAL(clicked()), _parent, SLOT(addSet()));
-    connect(m_actionHide,    SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
-    connect(m_actionRefresh, SIGNAL(clicked()), m_ctrl,  SLOT(update()));
+    connect(actionAdd,       SIGNAL(clicked()), _parent, SLOT(addSet()));
+    connect(actionHide,      SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
+    connect(actionRefresh,   SIGNAL(clicked()), m_ctrl,  SLOT(update()));
     connect(m_actionPause,   SIGNAL(clicked()), _parent, SLOT(startPause()));
 
     connect(actionOptions,   SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
@@ -61,20 +61,6 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     mapper->setMapping(actionIssues, QString::fromAscii(APP_ISSUES_URL));
     connect(actionHome, SIGNAL(triggered()), mapper, SLOT(map()));
     mapper->setMapping(actionHome, QString::fromAscii(APP_HOMEPAGE));
-}
-
-/**
- * @brief Show or hide some buttons
- * @param _hide
- */
-void MenuBar::setMinimal(bool _hide)
-{
-    m_actionAdd->defaultAction()->setVisible(!_hide);
-    m_actionHide->defaultAction()->setVisible(!_hide);
-    m_actionPause->defaultAction()->setVisible(!_hide);
-    m_actionConfig->defaultAction()->setVisible(!_hide);
-    m_actionRefresh->defaultAction()->setVisible(!_hide);
-    m_actionFiles->setVisible(!_hide);
 }
 
 /**

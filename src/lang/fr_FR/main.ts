@@ -185,62 +185,9 @@
     </message>
 </context>
 <context>
-    <name>ErrorWidget</name>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="31"/>
-        <source>Oops !</source>
-        <translation>Oups !</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="47"/>
-        <source>Unable to locate UltraMon install directory.&lt;br&gt;Please indicate the location of &lt;b&gt;UltraMonDesktop.exe&lt;/b&gt;</source>
-        <translation>Impossible de trouver le dossier d&apos;installation d&apos;UltraMon.&lt;br&gt;Veuillez indiquer l&apos;emplacement de &lt;b&gt;UltraMonDesktop.exe&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="49"/>
-        <source>Browse</source>
-        <translation>Parcourir</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="50"/>
-        <source>Continue</source>
-        <translation>Valider</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="64"/>
-        <source>%1 is incompatible with the current version of UltraMon (%2).&lt;br&gt;Minimum version: %3</source>
-        <translation>%1 n&apos;est pas compatible avec la version actuelle d&apos;UltraMon (%2).&lt;br&gt;Version minimum : %3</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="72"/>
-        <source>Can&apos;t access UltraMon API</source>
-        <translation>Impossible de communiquer avec UltraMon</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="76"/>
-        <source>An unknown error appened!</source>
-        <translation>Une erreur inconnue est survenue !</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="87"/>
-        <source>Locate UltraMonDesktop</source>
-        <translation>Localiser UltraMonDesktop</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="111"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
-    </message>
-    <message>
-        <location filename="../../gui/errorwidget.cpp" line="111"/>
-        <source>Invalid path</source>
-        <translation>Chemin invalide</translation>
-    </message>
-</context>
-<context>
     <name>MainWidget</name>
     <message>
-        <location filename="../../gui/mainwidget.cpp" line="70"/>
+        <location filename="../../gui/mainwidget.cpp" line="60"/>
         <source>This set doesn&apos;t exist on the disk anymore</source>
         <translation>Ce dossier n&apos;existe plus sur le disque dur</translation>
     </message>
@@ -248,84 +195,84 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="541"/>
+        <location filename="../../gui/mainwindow.cpp" line="491"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="324"/>
+        <location filename="../../gui/mainwindow.cpp" line="278"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="306"/>
+        <location filename="../../gui/mainwindow.cpp" line="260"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="401"/>
+        <location filename="../../gui/mainwindow.cpp" line="351"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="308"/>
-        <location filename="../../gui/mainwindow.cpp" line="326"/>
+        <location filename="../../gui/mainwindow.cpp" line="262"/>
+        <location filename="../../gui/mainwindow.cpp" line="280"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="257"/>
+        <location filename="../../gui/mainwindow.cpp" line="211"/>
         <source>Add set</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="349"/>
+        <location filename="../../gui/mainwindow.cpp" line="299"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="349"/>
+        <location filename="../../gui/mainwindow.cpp" line="299"/>
         <source>Invalid settings file</source>
         <translation>Fichier de configuration invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="384"/>
+        <location filename="../../gui/mainwindow.cpp" line="334"/>
         <source>User guide</source>
         <translation>Guide d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="456"/>
+        <location filename="../../gui/mainwindow.cpp" line="406"/>
         <source>Paused</source>
         <translation>Mis en pause</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="460"/>
+        <location filename="../../gui/mainwindow.cpp" line="410"/>
         <source>Running</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="485"/>
+        <location filename="../../gui/mainwindow.cpp" line="435"/>
         <source>Current sets : %1</source>
         <translation>Sets actuels : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="499"/>
-        <location filename="../../gui/mainwindow.cpp" line="510"/>
+        <location filename="../../gui/mainwindow.cpp" line="449"/>
+        <location filename="../../gui/mainwindow.cpp" line="460"/>
         <source>A new version is available : %1</source>
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="544"/>
+        <location filename="../../gui/mainwindow.cpp" line="495"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Fermer et ne plus afficher ce message</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="220"/>
+        <location filename="../../gui/mainwindow.cpp" line="174"/>
         <source>%1 is still running</source>
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="542"/>
+        <location filename="../../gui/mainwindow.cpp" line="492"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
     </message>
@@ -394,7 +341,7 @@
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="33"/>
-        <location filename="../../gui/menubar.cpp" line="89"/>
+        <location filename="../../gui/menubar.cpp" line="75"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
@@ -414,7 +361,7 @@
         <translation>Configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="94"/>
+        <location filename="../../gui/menubar.cpp" line="80"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
@@ -474,7 +421,7 @@
 <context>
     <name>QHotKeyWidget</name>
     <message>
-        <location filename="../../ext/qhotkeywidget.ui" line="38"/>
+        <location filename="../../ext/qhotkeywidget.ui" line="47"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
@@ -516,7 +463,7 @@
 <context>
     <name>SetContextMenu</name>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="59"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="55"/>
         <source>Add set</source>
         <translation>Ajouter</translation>
     </message>
@@ -531,28 +478,28 @@
         <translation>Activer</translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="44"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="43"/>
         <source>Edit</source>
         <translation>Éditer</translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="47"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="44"/>
         <source>Open directory</source>
         <translation>Ouvrir le dossier</translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="55"/>
-        <location filename="../../gui/setcontextmenu.cpp" line="96"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="47"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="92"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="50"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="45"/>
         <source>Clear cache</source>
         <translation>Effacer le cache</translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="96"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="92"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>
@@ -714,7 +661,7 @@
         <translation>Afficher</translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="65"/>
+        <location filename="../../gui/trayicon.cpp" line="66"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>

@@ -22,11 +22,7 @@ class MenuBar : public QToolBarExt
 private:
     Controller*  m_ctrl;
 
-    QToolButton* m_actionAdd;
-    QToolButton* m_actionConfig;
-    QToolButton* m_actionHide;
     QToolButton* m_actionPause;
-    QToolButton* m_actionRefresh;
     QAction*     m_actionFiles;
 
     QWidgetBlinker* m_pauseBlinker;
@@ -34,7 +30,6 @@ private:
 public:
     MenuBar(MainWindow* _parent, Controller* _ctrl);
     
-    void setMinimal(bool _hide);
     void setPause(bool _pause);
 };
 

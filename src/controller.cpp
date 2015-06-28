@@ -114,89 +114,18 @@ void Controller::update()
         return;
     }
 
-    QLOG_DEBUG() << "Current set: " << m_set->name();
+    QLOG_DEBUG() << "Current set:" << m_set->name() << "Type:" << m_set->type() << "Style:" << m_set->style();
 
     m_files = m_generator->getFiles(m_set);
-
-    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
-    {
-        foreach (QString file, m_files)
-        {
-            if (!file.isEmpty())
-            {
-                QLOG_DEBUG() << "Current file: " << file;
-            }
-        }
-    }
+    QLOG_DEBUG() << "Current files:" << m_files;
 
     QVector<QString> tempFiles = m_generator->adaptFiles(m_set, m_files);
 
-    QString filename = m_enviro->get("wallpath").toString() + QString::fromAscii(APP_WALLPAPER_FILE);
+    QString wallpaper = m_generator->generateFile(m_set, tempFiles);
 
-    // generate .wallpaper file
-    generateFile(filename, tempFiles, m_set);
-
-    // remove old BMP file
-    QFile::remove(m_enviro->get("bmppath").toString());
-
-    // execute UltraMonDesktop
-    QString cmd = "\"" + m_settings->get("umpath").toString() + "\" /load \"" + filename + "\"";
-    QProcess::startDetached(cmd);
-
-    QLOG_TRACE() << "Launch UltraMonDesktop";
+    m_enviro->setWallpaper(wallpaper);
 
     emit wallpaperChanged();
-}
-
-/**
- * @brief Generate AutoChanger.wallpaper file
- * @param string _filename
- * @param string[] _files
- * @param Set* _set
- */
-void Controller::generateFile(const QString &_filename, const QVector<QString> &_files, const Set* _set)
-{
-    // get header from default.wallpaper
-    QByteArray buffer(m_enviro->header());
-
-    // write wallpaper type
-    UM::WALLPAPER wp_type = _set->type();
-    buffer.append((char*)&wp_type, sizeof(UM::WALLPAPER));
-
-    // write number of wallpapers
-    DWORD nb_walls = _files.size();
-    buffer.append((char*)&nb_walls, sizeof(DWORD));
-
-    UM::IMAGE wp_style = _set->style();
-    if (wp_style == UM::IM_FILL)
-    {
-        wp_style = UM::IM_STRETCH_PROP;
-    }
-
-    // write wallpapers
-    for (unsigned int i=0; i<nb_walls; i++)
-    {
-        UM::WP_MONITOR_FILE wall;
-        wall.bgType = UM::BG_SOLID;
-        wall.color1 = m_settings->monitor(i).color;
-        wall.color2 = 0x00000000;
-        wall.imgStyle = wp_style;
-
-        memset(wall.imgFile, 0, 260*sizeof(wchar_t));
-
-        if (!_files.at(i).isEmpty())
-        {
-            _files.at(i).toWCharArray((wchar_t*)wall.imgFile);
-        }
-
-        buffer.append((char*)&wall, sizeof(UM::WP_MONITOR_FILE));
-    }
-
-    // save file
-    QFile file(_filename);
-    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
-    file.write(buffer);
-    file.close();
 }
 
 /**

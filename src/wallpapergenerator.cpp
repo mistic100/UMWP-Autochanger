@@ -179,48 +179,302 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QVector<QString> &_fi
  */
 QVector<QString> WallpaperGenerator::adaptFiles(const Set* _set, const QVector<QString> &_files)
 {
-    // desktop mode with disabled monitors
+    QVector<QString> newFiles;
+
     if (_set->type() == UM::W_DESKTOP)
     {
-        bool has_disabled = false;
+        QRect scrRect = m_enviro->wpSize(-1);
+        QRect wpRect = getDesktopEnabledRect();
 
-        for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
-        {
-            has_disabled|= !m_settings->monitor(i).enabled;
-        }
-
-        if (has_disabled)
-        {
-            return adaptFileDesktopWithDisabled(_set, _files);
-        }
+        newFiles.append(adaptFileToMonitor(_files.at(0), -1, scrRect, wpRect, _set));
     }
-
-    // fill mode not handled by UltraMon
-    if (_set->style() == UM::IM_FILL)
+    else
     {
-        return adaptFilesFillMode(_set, _files);
+        for (int i=0, l=_files.size(); i<l; i++)
+        {
+            if (!_files.at(i).isEmpty())
+            {
+                QRect scrRect = m_enviro->wpSize(i);
+                QRect wpRect(QPoint(), scrRect.size());
+
+                newFiles.append(adaptFileToMonitor(_files.at(i), i, scrRect, wpRect, _set));
+            }
+            else
+            {
+                newFiles.append(_files.at(i));
+            }
+        }
     }
 
-    return _files;
-
+    return newFiles;
 }
 
 /**
- * @brief Create a new wallpaper file when we are in desktop mode with disabled monitors.
+ * @brief Compute an image to fit in the monitor with a particular style, with cache management
+ * @param string _file
+ * @param int _idx
+ * @param QRect _scrRect
+ * @param QRect _wpRect
  * @param Set* _set
- * @param string[] _files (one element)
- * @return string[] (one element)
+ * @return string
  */
-QVector<QString> WallpaperGenerator::adaptFileDesktopWithDisabled(const Set* _set, const QVector<QString> &_files)
+QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, const QRect &_scrRect, const QRect &_wpRect, const Set* _set)
 {
-    QRect desktop = m_enviro->wpSize(-1);
-    QPoint offset = -desktop.topLeft();
+    QString key;
+    if (_set->type() == UM::W_DESKTOP)
+    {
+        key = getDesktopWallpaperKey(_set->style());
+    }
+    else
+    {
+        key = QString::number(_set->style());
+        key+= QString::number(m_settings->monitor(_idx).color);
+    }
 
-    QImage image(desktop.size(), QImage::Format_RGB32);
-    image.fill(Qt::black);
+    QString cachePath = getCacheFilename(_file, _scrRect, key, _set->uuid());
 
+    if (QFile::exists(cachePath))
+    {
+        return cachePath;
+    }
+
+    QImage source(_file);
+    QRect srcRect = QRect(QPoint(), source.size());
+
+    QLOG_DEBUG() << "Resizing image. Screen:" << _scrRect << "WP:" << _wpRect << "Image:" << srcRect;
+
+    // if current image is really close to final size, don't compute it
+    if (_set->type() == UM::W_DESKTOP && _scrRect.size() != _wpRect.size()) // computation is always required if we are in desktop mode with disabled monitors
+    {
+        // continue
+    }
+    else if (_set->style() == UM::IM_STRETCH) // stretching is done when generating the final wallpaper
+    {
+        return _file;
+    }
+    else if (_set->style() == UM::IM_CENTER || _set->style() == UM::IM_TILE) // for tile and center styles, compare the sizes
+    {
+        if (qAbs(srcRect.width() - _wpRect.width()) < 5 && qAbs(srcRect.height() - _wpRect.height()) < 5)
+        {
+            return _file;
+        }
+    }
+    else // for every other styles, compare the ratios
+    {
+        double imageRatio = (double)srcRect.width() / srcRect.height();
+        double screenRatio = (double)_wpRect.width() / _wpRect.height();
+
+        if (qAbs(imageRatio - screenRatio) < 0.02)
+        {
+            return _file;
+        }
+    }
+
+    QImage image(_scrRect.size(), QImage::Format_RGB32);
     QPainter painter(&image);
 
+    // draw background color of enabled monitors
+    if (_set->type() == UM::W_DESKTOP)
+    {
+        image.fill(Qt::black);
+
+        for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
+        {
+            if (m_settings->monitor(i).enabled)
+            {
+                QColor color((QRgb) m_settings->monitor(i).color);
+                QRect rect = m_enviro->wpSize(i).translated(-_scrRect.topLeft());
+
+                painter.setBrush(QBrush(color));
+                painter.drawRect(rect);
+            }
+        }
+    }
+    else
+    {
+        QColor color((QRgb) m_settings->monitor(_idx).color);
+        image.fill(color);
+    }
+
+    // draw image depending on style
+    switch (_set->style())
+    {
+    case UM::IM_CENTER:
+    {
+        QRect zoneTarget(0, 0,
+                   qMin(_wpRect.width(), srcRect.width()),
+                   qMin(_wpRect.height(), srcRect.height())
+        );
+        zoneTarget.moveCenter(_wpRect.center());
+
+        QRect zoneSource = zoneTarget;
+        zoneSource.moveCenter(srcRect.center());
+
+        painter.drawImage(zoneTarget, source, zoneSource);
+
+        break;
+    }
+    case UM::IM_TILE:
+    {
+        QPoint pos = _wpRect.topLeft();
+
+        do {
+            painter.drawImage(pos, source);
+
+            pos.rx()+= srcRect.width();
+
+            if (!_wpRect.contains(pos))
+            {
+                pos.setX(_wpRect.left());
+                pos.ry()+= srcRect.height();
+            }
+        }
+        while (_wpRect.contains(pos));
+
+        break;
+    }
+    case UM::IM_STRETCH:
+    {
+        painter.drawImage(_wpRect, source, srcRect);
+        break;
+    }
+    case UM::IM_STRETCH_PROP:
+    {
+        source = source.scaled(_wpRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        srcRect = QRect(QPoint(), source.size());
+
+        QRect zoneTarget(
+                    (_wpRect.width()-srcRect.width()) / 2,
+                    (_wpRect.height()-srcRect.height()) / 2,
+                     srcRect.width(),
+                     srcRect.height()
+        );
+        zoneTarget.translate(_wpRect.topLeft());
+
+        painter.drawImage(zoneTarget, source, srcRect);
+
+        break;
+    }
+    case UM::IM_FILL:
+    {
+        source = source.scaled(_wpRect.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        srcRect = QRect(QPoint(), source.size());
+
+        QRect zoneSource(
+                    (srcRect.width()-_wpRect.width()) / 2,
+                    (srcRect.height()-_wpRect.height()) / 2,
+                     _wpRect.width(),
+                     _wpRect.height()
+        );
+
+        painter.drawImage(_wpRect, source, zoneSource);
+
+        break;
+    }
+    }
+
+    painter.end();
+
+    image.save(cachePath, 0, 90);
+
+    return cachePath;
+}
+
+/**
+ * @brief Generate the final wallpaper file
+ * @param Set* _set
+ * @param string[] _files
+ * @return string
+ */
+QString WallpaperGenerator::generateFile(const Set *_set, const QVector<QString> &_files)
+{
+    QRect rect = m_enviro->wpSize(-1);
+    QPoint offset = rect.topLeft();
+
+    QImage image(rect.size(), QImage::Format_ARGB32);
+    QPainter painter(&image);
+    image.fill(Qt::black);
+
+    if (_set->type() == UM::W_DESKTOP)
+    {
+        QImage source(_files.at(0));
+        QRect srcRect(QPoint(), source.size());
+        QRect targRect = rect.translated(-offset);
+
+        painter.drawImage(targRect, source, srcRect);
+    }
+    else
+    {
+        for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
+        {
+            QRect wpRect = m_enviro->wpSize(i).translated(-offset);
+
+            if (m_settings->monitor(i).enabled)
+            {
+                QImage source(_files.at(i));
+                QRect srcRect(QPoint(), source.size());
+
+                painter.drawImage(wpRect, source, srcRect);
+            }
+            else
+            {
+                QColor color((QRgb) m_settings->monitor(i).color);
+
+                painter.setBrush(QBrush(color));
+                painter.drawRect(wpRect);
+            }
+        }
+    }
+
+    painter.end();
+
+    QString filename = QDir::toNativeSeparators(QDir::tempPath() + "/" + QString::fromAscii(APP_WALLPAPER_FILE));
+
+    // shift the tile if desktop origin is not at wallpaper origin
+    if (offset != QPoint(0,0))
+    {
+        QImage image2(rect.size(), QImage::Format_RGB32);
+        QPainter painter2(&image2);
+
+        // main
+        QRect targRect = rect.translated(-offset);
+        QRect srcRect = rect.translated(-2*offset);
+        painter2.drawImage(targRect, image, srcRect);
+
+        // left
+        targRect = QRect(rect.width()+rect.left(), 0, -rect.left(), rect.height()+rect.top());
+        srcRect = QRect(0, -rect.top(), -rect.left(), rect.height()+rect.top());
+        painter2.drawImage(targRect, image, srcRect);
+
+        // top
+        targRect = QRect(0, rect.height()+rect.top(), rect.width()+rect.left(), -rect.top());
+        srcRect = QRect(-rect.left(), 0, rect.width()+rect.left(), -rect.top());
+        painter2.drawImage(targRect, image, srcRect);
+
+        // left-top
+        targRect = QRect(rect.width()+rect.left(), rect.height()+rect.top(), -rect.left(), -rect.top());
+        srcRect = QRect(0, 0, -rect.left(), -rect.top());
+        painter2.drawImage(targRect, image, srcRect);
+
+        painter2.end();
+
+        image2.save(filename, 0, 90);
+    }
+    else
+    {
+        image.save(filename, 0, 90);
+    }
+
+    return filename;
+}
+
+/**
+ * @brief Compute the total size of enabled monitors
+ * @return  QRect
+ */
+QRect WallpaperGenerator::getDesktopEnabledRect()
+{
+    // compute enabled zone
     int minX=0, maxX=0, minY=0, maxY=0;
 
     for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
@@ -230,183 +484,16 @@ QVector<QString> WallpaperGenerator::adaptFileDesktopWithDisabled(const Set* _se
             continue;
         }
 
-        // draw background color of enabled monitors
-        QColor color((QRgb) m_settings->monitor(i).color);
         QRect rect = m_enviro->wpSize(i);
 
-        painter.setBrush(QBrush(color));
-        painter.drawRect(rect.translated(offset));
-
-        // compute enabled zone
         minX = qMin(minX, rect.left());
         minY = qMin(minY, rect.top());
         maxX = qMax(maxX, rect.left()+rect.width());
         maxY = qMax(maxY, rect.top()+rect.height());
     }
 
-    // copy image with appropriate mode
-    QRect enabledRect = QRect(minX, minY, maxX-minX, maxY-minY).translated(offset);
-    QImage source(_files.at(0));
-    QRect sourceRect = QRect(QPoint(), source.size());
-
-    switch (_set->style())
-    {
-    case UM::IM_CENTER:
-    {
-        QRect zoneTarget(0, 0,
-                   qMin(enabledRect.width(), sourceRect.width()),
-                   qMin(enabledRect.height(), sourceRect.height())
-        );
-        zoneTarget.moveCenter(enabledRect.center());
-
-        QRect zoneSource = zoneTarget;
-        zoneSource.moveCenter(sourceRect.center());
-
-        painter.drawImage(zoneTarget, source, zoneSource);
-        break;
-    }
-    case UM::IM_TILE:
-    {
-        QPoint pos = enabledRect.topLeft();
-
-        do {
-            painter.drawImage(pos, source);
-
-            pos.rx()+= sourceRect.width();
-
-            if (!enabledRect.contains(pos))
-            {
-                pos.setX(enabledRect.left());
-                pos.ry()+= sourceRect.height();
-            }
-        }
-        while (enabledRect.contains(pos));
-        break;
-    }
-    case UM::IM_STRETCH:
-    {
-        painter.drawImage(enabledRect, source, sourceRect);
-        break;
-    }
-    case UM::IM_STRETCH_PROP:
-    {
-        source = source.scaled(enabledRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        sourceRect = QRect(QPoint(), source.size());
-
-        QRect zoneTarget(
-                    (enabledRect.width()-sourceRect.width()) / 2,
-                    (enabledRect.height()-sourceRect.height()) / 2,
-                     sourceRect.width(),
-                     sourceRect.height()
-        );
-        zoneTarget.translate(offset);
-
-        painter.drawImage(zoneTarget, source, sourceRect);
-
-        break;
-    }
-    case UM::IM_FILL:
-    {
-        source = source.scaled(enabledRect.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-        sourceRect = QRect(QPoint(), source.size());
-
-        QRect zoneSource(
-                    (sourceRect.width()-enabledRect.width()) / 2,
-                    (sourceRect.height()-enabledRect.height()) / 2,
-                     enabledRect.width(),
-                     enabledRect.height()
-        );
-
-        painter.drawImage(enabledRect, source, zoneSource);
-
-        break;
-    }
-    }
-
-    // draw color of disabled monitors
-    for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
-    {
-        if (m_settings->monitor(i).enabled)
-        {
-            continue;
-        }
-
-        QColor color((QRgb) m_settings->monitor(i).color);
-        QRect rect = m_enviro->wpSize(i).translated(offset);
-
-        painter.setBrush(QBrush(color));
-        painter.drawRect(rect);
-    }
-
-    // save
-    QString cachePath = getCacheFilename(_files.at(0), desktop, _set->uuid()+"-"+getConfigurationKey(_set->style()));
-
-    image.save(cachePath, 0, 90);
-
-    return QVector<QString>()<<cachePath;
-}
-
-/**
- * @brief Resize images for custom FILL mode
- * @param Set* _set
- * @param string[] _files
- * @return string[]
- */
-QVector<QString> WallpaperGenerator::adaptFilesFillMode(const Set* _set, const QVector<QString> &_files)
-{
-    QVector<QString> newFiles;
-
-    for (int i=0, l=_files.size(); i<l; i++)
-    {
-        if (!_files.at(i).isEmpty())
-        {
-            // target size
-            QRect size;
-            if (_set->type() == UM::W_DESKTOP)
-            {
-                size = m_enviro->wpSize(-1);
-            }
-            else
-            {
-                size = m_enviro->wpSize(i);
-            }
-
-            QString cachePath = getCacheFilename(_files.at(i), size, _set->uuid());
-
-            if (!QFile::exists(cachePath))
-            {
-                QImage image(_files.at(i));
-
-                // if image ratio is almost the same, do not waste time in image cropping
-                double curRatio = (double)image.size().width()/image.size().height();
-                double targetRatio = (double)size.width()/size.height();
-
-                if (qAbs(curRatio - targetRatio) < 0.02)
-                {
-                    newFiles.append(_files.at(i));
-                    continue;
-                }
-
-                // scale
-                image = image.scaled(size.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-
-                // crop
-                int diffW = image.width()-size.width();
-                int diffH = image.height()-size.height();
-                image = image.copy(diffW/2, diffH/2, size.width(), size.height());
-
-                image.save(cachePath, 0, 90);
-            }
-
-            newFiles.append(cachePath);
-        }
-        else
-        {
-            newFiles.append(_files.at(i));
-        }
-    }
-
-    return newFiles;
+    QPoint offset = m_enviro->wpSize(-1).topLeft();
+    return QRect(minX, minY, maxX-minX, maxY-minY).translated(-offset);
 }
 
 /**
@@ -414,7 +501,7 @@ QVector<QString> WallpaperGenerator::adaptFilesFillMode(const Set* _set, const Q
  * @param int _style
  * @return string
  */
-QString WallpaperGenerator::getConfigurationKey(UM::IMAGE _style)
+QString WallpaperGenerator::getDesktopWallpaperKey(UM::IMAGE _style)
 {
     QString str = QString::number(_style);
 
@@ -431,9 +518,7 @@ QString WallpaperGenerator::getConfigurationKey(UM::IMAGE _style)
         str+= QString::number(monitor.color);
     }
 
-    uint32_t crc = crc32_1byte(str.toStdString().c_str(), str.size());
-
-    return QString::number(crc, 16);
+    return str;
 }
 
 /**
@@ -443,12 +528,15 @@ QString WallpaperGenerator::getConfigurationKey(UM::IMAGE _style)
  * @param string _key
  * @return string
  */
-QString WallpaperGenerator::getCacheFilename(const QString &_originalFile, const QRect &_rect, const QString &_key)
+QString WallpaperGenerator::getCacheFilename(const QString &_file, const QRect &_rect, const QString &_key1, const QString &_key2)
 {
-    QFileInfo file(_originalFile);
+    uint32_t crc1 = crc32_1byte(_file.toStdString().c_str(), _file.size());
+    uint32_t crc2 = crc32_1byte(_key1.toStdString().c_str(), _key1.size());
 
     return QDir::toNativeSeparators(QFileInfo(QString::fromAscii(APP_CACHE_DIR)).absoluteFilePath()+"/")
-            + file.completeBaseName() + "-" + _key + "-"
+            + QString::number(crc1, 16) + "-"
+            + QString::number(crc2, 16) + "-"
+            + _key2 + "-"
             + QString::number(_rect.width()) + "x" + QString::number(_rect.height())
-            + "." + file.suffix();
+            + ".jpg";
 }

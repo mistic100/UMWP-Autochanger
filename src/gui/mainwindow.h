@@ -39,9 +39,6 @@ public:
     void defineHotkeys();
     void clearHotkeys();
 
-    void showMain();
-    void showError();
-
     void showContextMenu(const QList<int> &_sets, const QPoint &_pos);
 
 protected:

@@ -26,26 +26,24 @@ class Environment
 private:
     Settings*                m_settings;
 
-    QHash<QString, QVariant> m_env;        // environnement variables
+    QString                  m_shortcutPath;        // environnement variables
     QList<QString>           m_languages;  // languages packaged with UMWPA
     QHash<int, QRect>        m_wpSizes;    // monitors sizes
-    QByteArray               m_header;     // .wallpaper file header
     NewVersion               m_newVersion; // struct to hold new version data
 
 public:
     Environment(Settings* _settings);
 
     // main methods
-    void init();
     void log();
     bool refreshMonitors();
     void checkSettings();
+    void setWallpaper(const QString &_file);
 
     // getters
-    const QVariant      get(const QString &_key) const  { return m_env.value(_key); }
-    const int           nbMonitors() const              { return get("nb_monitors").toInt(); }
+    const QString       shortcutPath() const            { return m_shortcutPath; }
+    const int           nbMonitors() const              { return m_wpSizes.size()-1; }
     const QRect         wpSize(int _i) const            { return m_wpSizes.value(_i); }
-    const QByteArray    &header() const                 { return m_header; }
     const NewVersion    newVersion() const              { return m_newVersion; }
     const QList<QString> &languages() const             { return m_languages; }
 
@@ -57,6 +55,9 @@ public:
     const bool canAddShortcut() const;
     void createShortcut();
     void deleteShortcut();
+
+private:
+    bool queryMonitors(QHash<int, QRect> &_sizes);
 };
 
 #endif // ENVIRONMENT_H

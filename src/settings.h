@@ -53,7 +53,6 @@ public:
 
     void setWindowSize(const QSize &_size);
     void incrementMsgCount();
-    bool setExePath(const QString &_sPath);
 
     // sets management
     Set* addSet(const QString &_path);

@@ -14,7 +14,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -39,7 +48,7 @@
      </property>
      <property name="icon">
       <iconset resource="../UMWP_Autochanger.qrc">
-       <normaloff>:/icon/bullet_cross</normaloff>:/icon/bullet_cross</iconset>
+       <normaloff>:/images/icons/bullet_cross.png</normaloff>:/images/icons/bullet_cross.png</iconset>
      </property>
      <property name="flat">
       <bool>true</bool>

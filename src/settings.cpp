@@ -1,8 +1,6 @@
 #include "settings.h"
 #include "ext/qhotkeywidget.h"
 
-extern short UMWP_STATE;
-
 
 /**
  * @brief Settings::Settings
@@ -10,7 +8,6 @@ extern short UMWP_STATE;
 Settings::Settings()
 {
     // default configuration
-    m_options["umpath"] = QVariant();
     m_options["window_width"] = 440;
     m_options["window_height"] = 240;
     m_options["delay"] = 60;
@@ -103,12 +100,9 @@ void Settings::log()
         sets.append((*it)->name()+": "+((*it)->isActive()?"active":"inactive"));
     }
 
-    QLOG_DEBUG() << "== OPTIONS";
-    QLOG_DEBUG() << options;
-    QLOG_DEBUG() << "== HOTKEYS";
-    QLOG_DEBUG() << hotkeys;
-    QLOG_DEBUG() << "== SETS";
-    QLOG_DEBUG() << sets;
+    QLOG_DEBUG() << "== OPTIONS" << options;
+    QLOG_DEBUG() << "== HOTKEYS" << hotkeys;
+    QLOG_DEBUG() << "== SETS" << sets;
 }
 
 /**
@@ -292,9 +286,15 @@ bool Settings::load(QString _filename)
         updated = true;
     }
 
-    if (updated) {
+    if (updated)
+    {
         QLOG_INFO() << "Settings file format changed";
         save();
+    }
+
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
+    {
+        log();
     }
 
     return true;
@@ -399,31 +399,6 @@ bool Settings::save(QString _filename)
 
     return false;
 }
-
-
-/**
- * @brief Change the path of UltraMonDesktop.exe
- * @param string _path
- * @return bool - true if the path is valid
- */
-bool Settings::setExePath(const QString &_path)
-{
-    if (QFile::exists(_path))
-    {
-        QString filename = _path.section('\\', -1);
-        if (filename.compare("UltraMonDesktop.exe")==0)
-        {
-            setOpt("umpath", _path);
-            save();
-
-            UMWP_STATE&= ~UMWP::NOT_INSTALLED;
-            return true;
-        }
-    }
-
-    return false;
-}
-
 
 /**
  * @brief Add a new set from path

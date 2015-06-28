@@ -6,15 +6,12 @@
 #include <QDesktopServices>
 
 #include "mainwindow.h"
-#include "errorwidget.h"
 #include "mainwidget.h"
 #include "configdialog.h"
 #include "screensdialog.h"
 #include "previewdialog.h"
 #include "newversiondialog.h"
 #include "setcontextmenu.h"
-
-extern short UMWP_STATE;
 
 
 /**
@@ -47,8 +44,6 @@ MainWindow::MainWindow(Controller* _ctrl) :
     QString copyright = "<a href='" + QString::fromAscii(APP_HOMEPAGE) + "'>";
     copyright+= QString::fromAscii(APP_NAME) + "</a>";
     copyright+= " " + QString::fromAscii(APP_VERSION);
-    copyright+= " | <a href='http://www.realtimesoft.com/ultramon'>UltraMon</a>";
-    copyright+= " " + m_enviro->get("umversion").toString();
 
     QLabel* statusLabel = new QLabel(copyright);
     statusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -65,6 +60,7 @@ MainWindow::MainWindow(Controller* _ctrl) :
 
     // TRAY ICON
     m_trayIcon = new TrayIcon(this, m_ctrl);
+    m_trayIcon->show();
 }
 
 /**
@@ -80,53 +76,9 @@ MainWindow::~MainWindow()
  */
 void MainWindow::init()
 {
-    if (UMWP_STATE == UMWP::OK)
-    {
-        showMain();
-        defineHotkeys();
-
-        m_ctrl->checkVersion();
-        m_ctrl->update();
-    }
-    else
-    {
-        showError();
-    }
-}
-
-/**
- * @brief Display error widget
- */
-void MainWindow::showError()
-{
-    QLOG_TRACE() << "Init error widget";
-
-    m_trayIcon->hide();
-    m_menuBar->setMinimal(true);
-
-    ErrorWidget* widget = new ErrorWidget(this, m_ctrl);
-    setCentralWidget(widget);
-
-    connect(widget, SIGNAL(pathSaved()), this, SLOT(init()));
-
-    resize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
-
-    show();
-}
-
-/**
- * @brief Display main widget
- */
-void MainWindow::showMain()
-{
-    QLOG_TRACE() << "Init main widget";
-
-    m_trayIcon->show();
-    m_menuBar->setMinimal(false);
-
     MainWidget* widget = new MainWidget(this, m_ctrl);
-    setCentralWidget(widget);
 
+    setCentralWidget(widget);
     resize(m_settings->windowSize());
 
     // window is hidden by default if the config is not empty
@@ -139,6 +91,8 @@ void MainWindow::showMain()
     {
         show();
     }
+
+    defineHotkeys();
 }
 
 /**
@@ -329,15 +283,11 @@ void MainWindow::openImportDialog()
         return;
     }
 
-    // preserve UM path
-    QString UMPath = m_settings->get("umpath").toString();
-
     QLOG_TRACE() << "Import config from \""+ filename +"\"";
 
     if (m_settings->load(filename))
     {
         m_enviro->checkSettings();
-        m_settings->setOpt("umpath", UMPath);
         m_settings->save();
 
         m_ctrl->emitListChanged(true);
@@ -530,7 +480,7 @@ void MainWindow::openNewVersionDialog()
  */
 void MainWindow::quit()
 {
-    if (UMWP_STATE != UMWP::OK || !m_settings->get("close_warning").toBool())
+    if (!m_settings->get("close_warning").toBool())
     {
         qApp->quit();
         return;
@@ -592,7 +542,7 @@ void MainWindow::resizeEvent(QResizeEvent* _event)
  */
 void MainWindow::closeEvent(QCloseEvent* _event)
 {
-    if (UMWP_STATE == UMWP::OK && _event && !m_altPressed)
+    if (_event && !m_altPressed)
     {
         _event->ignore();
         toggleWindow();

@@ -10,18 +10,6 @@
 #include "constants.h"
 
 
-// state values
-namespace UMWP {
-    const short OK = 0;
-    const short NOT_INSTALLED = 1;
-    const short BAD_VERSION = 2;
-    const short FILE_NOT_FOUND = 4; // not used
-    const short SETTINGS_FILE_ERROR = 8; // not used
-    const short COM_ERROR = 16;
-    const short UNKNOWN_ERROR = 256;
-}
-
-
 namespace UM {
     // types for wallpaper file
     enum WALLPAPER
