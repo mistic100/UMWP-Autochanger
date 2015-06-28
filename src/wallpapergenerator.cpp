@@ -334,7 +334,8 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     }
     case UM::IM_STRETCH:
     {
-        painter.drawImage(_wpRect, source, srcRect);
+        source = source.scaled(_wpRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        painter.drawImage(_wpRect.topLeft(), source);
         break;
     }
     case UM::IM_STRETCH_PROP:
@@ -397,10 +398,11 @@ QString WallpaperGenerator::generateFile(const Set *_set, const QVector<QString>
     if (_set->type() == UM::W_DESKTOP)
     {
         QImage source(_files.at(0));
-        QRect srcRect(QPoint(), source.size());
         QRect wpRect = getDesktopEnabledRect().translated(-offset);
 
-        painter.drawImage(wpRect, source, srcRect);
+        source = source.scaled(wpRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+        painter.drawImage(wpRect.topLeft(), source);
     }
     else
     {
@@ -409,10 +411,11 @@ QString WallpaperGenerator::generateFile(const Set *_set, const QVector<QString>
             if (m_settings->monitor(i).enabled)
             {
                 QImage source(_files.at(i));
-                QRect srcRect(QPoint(), source.size());
                 QRect wpRect = m_enviro->wpSize(i).translated(-offset);
 
-                painter.drawImage(wpRect, source, srcRect);
+                source = source.scaled(wpRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+                painter.drawImage(wpRect.topLeft(), source);
             }
         }
     }
