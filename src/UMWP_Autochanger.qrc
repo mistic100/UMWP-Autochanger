@@ -45,5 +45,7 @@
         <file>lang/fr_FR/flag.png</file>
         <file>lang/fr_FR/help.htm</file>
         <file>lang/fr_FR/main.qm</file>
+        <file>lang/fr_FR/changelog.htm</file>
+        <file>lang/en_GB/changelog.htm</file>
     </qresource>
 </RCC>

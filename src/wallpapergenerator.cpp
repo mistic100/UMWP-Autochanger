@@ -183,10 +183,9 @@ QVector<QString> WallpaperGenerator::adaptFiles(const Set* _set, const QVector<Q
 
     if (_set->type() == UM::W_DESKTOP)
     {
-        QRect scrRect = m_enviro->wpSize(-1);
-        QRect wpRect = getDesktopEnabledRect();
+        QRect rect = QRect(QPoint(), getDesktopEnabledRect().size());
 
-        newFiles.append(adaptFileToMonitor(_files.at(0), -1, scrRect, wpRect, _set));
+        newFiles.append(adaptFileToMonitor(_files.at(0), -1, rect, rect, _set));
     }
     else
     {
@@ -243,12 +242,7 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
 
     QLOG_DEBUG() << "Resizing image. Screen:" << _scrRect << "WP:" << _wpRect << "Image:" << srcRect;
 
-    // if current image is really close to final size, don't compute it
-    if (_set->type() == UM::W_DESKTOP && _scrRect.size() != _wpRect.size()) // computation is always required if we are in desktop mode with disabled monitors
-    {
-        // continue
-    }
-    else if (_set->style() == UM::IM_STRETCH) // stretching is done when generating the final wallpaper
+    if (_set->style() == UM::IM_STRETCH) // stretching is done when generating the final wallpaper
     {
         return _file;
     }
@@ -399,30 +393,35 @@ QString WallpaperGenerator::generateFile(const Set *_set, const QVector<QString>
     {
         QImage source(_files.at(0));
         QRect srcRect(QPoint(), source.size());
-        QRect targRect = rect.translated(-offset);
+        QRect wpRect = getDesktopEnabledRect().translated(-offset);
 
-        painter.drawImage(targRect, source, srcRect);
+        painter.drawImage(wpRect, source, srcRect);
     }
     else
     {
         for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
         {
-            QRect wpRect = m_enviro->wpSize(i).translated(-offset);
-
             if (m_settings->monitor(i).enabled)
             {
                 QImage source(_files.at(i));
                 QRect srcRect(QPoint(), source.size());
+                QRect wpRect = m_enviro->wpSize(i).translated(-offset);
 
                 painter.drawImage(wpRect, source, srcRect);
             }
-            else
-            {
-                QColor color((QRgb) m_settings->monitor(i).color);
+        }
+    }
 
-                painter.setBrush(QBrush(color));
-                painter.drawRect(wpRect);
-            }
+    // draw background color of disabled monitors
+    for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
+    {
+        if (!m_settings->monitor(i).enabled)
+        {
+            QColor color((QRgb) m_settings->monitor(i).color);
+            QRect wpRect = m_enviro->wpSize(i).translated(-offset);
+
+            painter.setBrush(QBrush(color));
+            painter.drawRect(wpRect);
         }
     }
 
@@ -492,8 +491,7 @@ QRect WallpaperGenerator::getDesktopEnabledRect()
         maxY = qMax(maxY, rect.top()+rect.height());
     }
 
-    QPoint offset = m_enviro->wpSize(-1).topLeft();
-    return QRect(minX, minY, maxX-minX, maxY-minY).translated(-offset);
+    return QRect(minX, minY, maxX-minX, maxY-minY);
 }
 
 /**

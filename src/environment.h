@@ -26,7 +26,7 @@ class Environment
 private:
     Settings*                m_settings;
 
-    QString                  m_shortcutPath;        // environnement variables
+    QString                  m_shortcutPath;
     QList<QString>           m_languages;  // languages packaged with UMWPA
     QHash<int, QRect>        m_wpSizes;    // monitors sizes
     NewVersion               m_newVersion; // struct to hold new version data

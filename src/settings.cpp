@@ -22,6 +22,7 @@ Settings::Settings()
     m_options["default_mode"] = UM::RANDOM;
     m_options["default_type"] = UM::W_MONITOR;
     m_options["default_style"] = UM::IM_STRETCH_PROP;
+    m_options["changelog_shown"] = "0.0.0";
 
     m_hotkeys["refresh"] = 0;
     m_hotkeys["startpause"] = 0;

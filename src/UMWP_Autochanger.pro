@@ -54,14 +54,16 @@ HEADERS += \
     gui/trayicon.h \
     gui/setcontextmenu.h \
     gui/screensdialog.h \
-    wallpapergenerator.h
+    wallpapergenerator.h \
+    gui/changelogdialog.h
 
 FORMS += \
     ext/qhotkeywidget.ui \
     gui/seteditdialog.ui \
     gui/configdialog.ui \
     gui/newversiondialog.ui \
-    gui/screensdialog.ui
+    gui/screensdialog.ui \
+    gui/changelogdialog.ui
 
 RESOURCES += \
     UMWP_Autochanger.qrc

@@ -12,6 +12,7 @@
 #include "previewdialog.h"
 #include "newversiondialog.h"
 #include "setcontextmenu.h"
+#include "changelogdialog.h"
 
 
 /**
@@ -90,6 +91,11 @@ void MainWindow::init()
     else
     {
         show();
+
+        if (QString::fromAscii(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
+        {
+            openChangelogDialog();
+        }
     }
 
     defineHotkeys();
@@ -305,34 +311,46 @@ void MainWindow::openImportDialog()
  */
 void MainWindow::openHelpDialog()
 {
-    QFile helpFile;
+    QFile file;
     QString lang = QLocale::system().name().section('_', 0, 0);
     if (lang.compare("fr")==0)
     {
-        helpFile.setFileName(":/lang/fr_FR/help");
+        file.setFileName(":/lang/fr_FR/help.htm");
     }
     else
     {
-        helpFile.setFileName(":/lang/en_GB/help");
+        file.setFileName(":/lang/en_GB/help.htm");
     }
 
-    QString mainText;
-    mainText.append("<style>");
-    mainText.append("dt { font-weight:bold; }");
-    mainText.append("dd { margin-bottom:1em; margin-left:1em; }");
-    mainText.append("</style>");
+    QString text;
+    text.append("<style>");
+    text.append("dt { font-weight:bold; }");
+    text.append("dd { margin:0 0 1em 1em; }");
+    text.append("</style>");
 
-    helpFile.open(QIODevice::ReadOnly);
-    QTextStream content(&helpFile);
+    file.open(QIODevice::ReadOnly);
+    QTextStream content(&file);
     content.setCodec("UTF-8");
-    mainText.append(content.readAll());
-    helpFile.close();
+    text.append(content.readAll());
+    file.close();
 
     QMessageBox dialog(this);
     dialog.setIcon(QMessageBox::Information);
-    dialog.setText(mainText);
+    dialog.setWindowTitle(tr("User guide"));
+    dialog.setText(text);
     dialog.setWindowTitle(tr("User guide"));
     dialog.exec();
+}
+
+/**
+ * @brief Open changelog dialog
+ */
+void MainWindow::openChangelogDialog()
+{
+    ChangelogDialog dialog(this);
+    dialog.exec();
+
+    m_settings->setOpt("changelog_shown", QString::fromAscii(APP_VERSION));
 }
 
 /**
@@ -340,16 +358,25 @@ void MainWindow::openHelpDialog()
  */
 void MainWindow::openAboutDialog()
 {
-    QString mainText = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
-    mainText+= "Created by Damien \"Mistic\" Sorel.<br>";
-    mainText+= "&copy; 2013-2015 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
-    mainText+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
+    QString text = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
+    text+= "Created by Damien \"Mistic\" Sorel.<br>";
+    text+= "&copy; 2013-2015 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    text+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
 
-    QMessageBox dialog(this);
+    QMessageBox dialog;
     dialog.setIcon(QMessageBox::Information);
-    dialog.setText(mainText);
     dialog.setWindowTitle(tr("About"));
-    dialog.exec();
+    dialog.setText(text);
+    dialog.setStandardButtons(QMessageBox::Close | QMessageBox::Open);
+    dialog.setDefaultButton(QMessageBox::Close);
+    dialog.setButtonText(QMessageBox::Open, tr("Changelog"));
+
+    int ret = dialog.exec();
+
+    if (ret == QMessageBox::Open)
+    {
+        openChangelogDialog();
+    }
 }
 
 /**

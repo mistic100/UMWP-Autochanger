@@ -5,13 +5,13 @@
 #define APP_VERSION "2.0.0"
 #define APP_VERSION_DW 2,0,0
 #define APP_COMPANYNAME "StrangePlanet"
-#define APP_FILEDESCRIPTION "UltraMon Wallpaper Autochanger"
+#define APP_FILEDESCRIPTION "Ultimate Monitor Wallpaper Autochanger"
 #define APP_LEGALCOPYRIGHT "Copyright (c) 2013-2015 StrangePlanet"
 #define APP_ORIGINALFILENAME "UMWP_Autochanger.exe"
 
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_CACHE_DIR "cache/"
-#define APP_WALLPAPER_FILE "wallpaper.jpg"
+#define APP_WALLPAPER_FILE "wallpaper.bmp"
 #define APP_MAX_TRAVERSAL 3
 
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"

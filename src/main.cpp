@@ -12,12 +12,6 @@
 #include "environment.h"
 
 
-/**
- * @brief Global holding app state (main errors)
- */
-short UMWP_STATE = 0;
-
-
 int main(int argc, char *argv[])
 {
     // ensure only one running instance
@@ -85,8 +79,9 @@ int main(int argc, char *argv[])
     window.init();
 
     ctrl.checkVersion();
-    ctrl.update();
 
+    // fire update with delay
+    QTimer::singleShot(500, &ctrl, SLOT(update()));
 
     // end
     int ret = app.exec();

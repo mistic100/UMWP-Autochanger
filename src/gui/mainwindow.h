@@ -59,6 +59,7 @@ public slots:
     void openScreensDialog();
     void openHelpDialog();
     void openAboutDialog();
+    void openChangelogDialog();
     void openPreviewDialog();
     void openExportDialog();
     void openImportDialog();
