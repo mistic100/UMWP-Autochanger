@@ -1,5 +1,12 @@
 # Changelog
 
+* [2.0 (28/06/2015)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=2.0)
+    * change: delete all dependencies to UltraMon
+    * new: allows to edit keyboard hotkeys of multiple sets in one time
+    * new: adds a "Open directory" button in the context menu
+    * new: allows to hide the closing warning
+    * new: change tray icon when paused
+
 * [1.9 (25/02/2015)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php?ver=1.9)
     * fixed: 90% JPEG quality for generated wallpapers
     * fixed: timer not reseted on manual refresh

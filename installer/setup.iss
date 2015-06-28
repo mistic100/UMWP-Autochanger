@@ -1,6 +1,6 @@
 #define AppId "{401CCECB-FFCC-4AF3-846D-A535F59D0834}"
 #define AppName "UMWP Autochanger"
-#define AppVersion "1.9"
+#define AppVersion "2.0"
 #define AppPublisher "StrangePlanet"
 #define PublisherURL "http://www.strangeplanet.fr"
 #define ProjectURL "http://www.strangeplanet.fr/work/umwp-autochanger"
@@ -30,7 +30,6 @@ DisableProgramGroupPage=auto
 
 ; readme
 LicenseFile={#DataRoot}\gpl-3.0.txt
-InfoAfterFile={#DataRoot}\readme.txt
 
 ; output
 OutputDir=./
@@ -65,6 +64,7 @@ Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(
 [InstallDelete]
 Type: filesandordirs; Name: "{app}\cache";
 Type: files; Name: "{app}\debug.log";
+Type: files; Name: "{app}\readme.txt";
 Type: files; Name: "{app}\QxtCore.dll";
 Type: files; Name: "{app}\QxtGui.dll";
 

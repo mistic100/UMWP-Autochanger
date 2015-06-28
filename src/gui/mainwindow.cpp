@@ -94,7 +94,12 @@ void MainWindow::init()
 
         if (QString::fromAscii(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
         {
-            openChangelogDialog();
+            m_settings->setOpt("changelog_shown", QString::fromAscii(APP_VERSION));
+
+            if (m_settings->nbSets()>0) // do not show changelog at first startup
+            {
+                openChangelogDialog();
+            }
         }
     }
 
@@ -196,6 +201,12 @@ void MainWindow::toggleWindow(bool _forceHide)
         activateWindow();
 
         m_trayIcon->setHidden(false);
+
+        if (QString::fromAscii(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
+        {
+            m_settings->setOpt("changelog_shown", QString::fromAscii(APP_VERSION));
+            openChangelogDialog();
+        }
     }
 }
 
@@ -349,8 +360,6 @@ void MainWindow::openChangelogDialog()
 {
     ChangelogDialog dialog(this);
     dialog.exec();
-
-    m_settings->setOpt("changelog_shown", QString::fromAscii(APP_VERSION));
 }
 
 /**
@@ -358,7 +367,7 @@ void MainWindow::openChangelogDialog()
  */
 void MainWindow::openAboutDialog()
 {
-    QString text = "<h3>" + QString::fromAscii(APP_NAME) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
+    QString text = "<h3>" + QString::fromAscii(APP_FILEDESCRIPTION) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
     text+= "Created by Damien \"Mistic\" Sorel.<br>";
     text+= "&copy; 2013-2015 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     text+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
@@ -384,8 +393,15 @@ void MainWindow::openAboutDialog()
  */
 void MainWindow::openPreviewDialog()
 {
-    PreviewDialog dialog(this, m_ctrl);
-    dialog.exec();
+    if (m_ctrl->files().isEmpty())
+    {
+        QMessageBox::warning(this, tr("Error"), tr("No active files"), QMessageBox::Ok);
+    }
+    else
+    {
+        PreviewDialog dialog(this, m_ctrl);
+        dialog.exec();
+    }
 }
 
 /**

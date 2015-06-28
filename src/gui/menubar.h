@@ -23,8 +23,6 @@ private:
     Controller*  m_ctrl;
 
     QToolButton* m_actionPause;
-    QAction*     m_actionFiles;
-
     QWidgetBlinker* m_pauseBlinker;
 
 public:

@@ -22,7 +22,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     QMenu* menuHelp = new QMenu();
     QAction* actionHelp =   menuHelp->addAction(QIcon(":/images/icons/help_color.png"), tr("User guide"));
-    m_actionFiles =         menuHelp->addAction(QIcon(":/images/icons/images.png"),     tr("Active files"));
+    QAction* actionFiles =  menuHelp->addAction(QIcon(":/images/icons/images.png"),     tr("Active files"));
                             menuHelp->addSeparator();
     QAction* actionIssues = menuHelp->addAction(QIcon(":/images/icons/bug.png"),   tr("Report a bug"));
     QAction* actionHome =   menuHelp->addAction(QIcon(":/images/icons/house.png"), tr("Homepage"));
@@ -51,7 +51,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     connect(actionHelp,      SIGNAL(triggered()), _parent, SLOT(openHelpDialog()));
     connect(actionAbout,     SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
-    connect(m_actionFiles,   SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
+    connect(actionFiles,     SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
 
     // use signal mapper for all buttons oppening a web page
     QSignalMapper* mapper = new QSignalMapper(this);

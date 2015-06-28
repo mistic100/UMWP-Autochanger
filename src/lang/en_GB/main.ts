@@ -5,7 +5,7 @@
     <name>ChangelogDialog</name>
     <message>
         <location filename="../../gui/changelogdialog.ui" line="14"/>
-        <location filename="../../gui/changelogdialog.h" line="59"/>
+        <location filename="../../gui/changelogdialog.h" line="60"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,90 +204,96 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="518"/>
+        <location filename="../../gui/mainwindow.cpp" line="534"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="284"/>
+        <location filename="../../gui/mainwindow.cpp" line="295"/>
         <source>Import configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="266"/>
+        <location filename="../../gui/mainwindow.cpp" line="277"/>
         <source>Export configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="368"/>
+        <location filename="../../gui/mainwindow.cpp" line="377"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="268"/>
-        <location filename="../../gui/mainwindow.cpp" line="286"/>
+        <location filename="../../gui/mainwindow.cpp" line="279"/>
+        <location filename="../../gui/mainwindow.cpp" line="297"/>
         <source>XML files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="217"/>
+        <location filename="../../gui/mainwindow.cpp" line="228"/>
         <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="305"/>
+        <location filename="../../gui/mainwindow.cpp" line="316"/>
+        <location filename="../../gui/mainwindow.cpp" line="398"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="305"/>
+        <location filename="../../gui/mainwindow.cpp" line="316"/>
         <source>Invalid settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="339"/>
-        <location filename="../../gui/mainwindow.cpp" line="341"/>
+        <location filename="../../gui/mainwindow.cpp" line="350"/>
+        <location filename="../../gui/mainwindow.cpp" line="352"/>
         <source>User guide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="372"/>
+        <location filename="../../gui/mainwindow.cpp" line="381"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="433"/>
+        <location filename="../../gui/mainwindow.cpp" line="398"/>
+        <source>No active files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/mainwindow.cpp" line="449"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="437"/>
+        <location filename="../../gui/mainwindow.cpp" line="453"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="462"/>
+        <location filename="../../gui/mainwindow.cpp" line="478"/>
         <source>Current sets : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="476"/>
-        <location filename="../../gui/mainwindow.cpp" line="487"/>
+        <location filename="../../gui/mainwindow.cpp" line="492"/>
+        <location filename="../../gui/mainwindow.cpp" line="503"/>
         <source>A new version is available : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="522"/>
+        <location filename="../../gui/mainwindow.cpp" line="538"/>
         <source>Close and don&apos;t show this message again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="180"/>
+        <location filename="../../gui/mainwindow.cpp" line="185"/>
         <source>%1 is still running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="519"/>
+        <location filename="../../gui/mainwindow.cpp" line="535"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation type="unfinished"></translation>
     </message>

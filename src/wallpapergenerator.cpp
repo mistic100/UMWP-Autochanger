@@ -142,6 +142,11 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QVector<QString> &_fi
 {
     int total = _set->count();
 
+    if (total == 0)
+    {
+        return "";
+    }
+
     // only one file in the set ?!
     if (total == 1)
     {

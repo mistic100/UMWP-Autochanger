@@ -13,15 +13,21 @@
   <property name="windowTitle">
    <string>Changelog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QTextEdit" name="content">
-     <property name="readOnly">
-      <bool>true</bool>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../UMWP_Autochanger.qrc">:/images/icons/todo.png</pixmap>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -34,9 +40,21 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="1">
+    <widget class="QTextBrowser" name="content">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="openLinks">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../UMWP_Autochanger.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

@@ -104,6 +104,7 @@ void Controller::update()
     m_settings->updateSets();
     m_enviro->refreshMonitors();
     emit listChanged(false);
+    m_files.clear();
 
     // get random files
     m_set = m_generator->getRandomSet();

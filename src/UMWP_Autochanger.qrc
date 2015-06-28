@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>images/icon.png</file>
         <file>images/icon_pause.png</file>
-        <file>images/error.png</file>
         <file>images/icons/about.png</file>
         <file>images/icons/add.png</file>
         <file>images/icons/add_color.png</file>
@@ -47,5 +46,6 @@
         <file>lang/fr_FR/main.qm</file>
         <file>lang/fr_FR/changelog.htm</file>
         <file>lang/en_GB/changelog.htm</file>
+        <file>images/icons/todo.png</file>
     </qresource>
 </RCC>

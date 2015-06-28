@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QDesktopServices>
 
 #include "ui_changelogdialog.h"
 
@@ -62,6 +63,12 @@ public:
     ~ChangelogDialog()
     {
         delete ui;
+    }
+
+private slots:
+    void on_content_anchorClicked(const QUrl &_url)
+    {
+        QDesktopServices::openUrl(_url);
     }
 };
 
