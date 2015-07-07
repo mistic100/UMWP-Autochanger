@@ -17,14 +17,18 @@ License       : GNU General Public License Version 3
 
 ![screenshot](http://www.strangeplanet.fr/work/umwp-autochanger/src/screenshot-main.png)
 
-## Requirement
+### Requirement
 * Windows 7/8 32/64 bits
 
 
-## Translation
+### Translation
 The application is currently available in English and French. [A translation page](https://www.transifex.com/projects/p/umwp-autochanger) has been created on Transifex, feel free to register and contribute.
 
 
-## Compiling
+### Compiling
 You can compile the application yourself with Qt Creator.  
 You will need Qt 4.8.4.
+
+
+### Branding
+UMWP originally meant **UltraMon Wallpaper**. When I removed UltraMon dependency in version 2 I searched a new name that match with the acronym. And I came with **Ultimate Monitor Wallpaper**, which is very pompous !
