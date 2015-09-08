@@ -1,6 +1,6 @@
 #include "mainwidget.h"
 #include "mainwindow.h"
-#include "set.h"
+#include "../set.h"
 #include "listdelegate.h"
 #include "listproxystyle.h"
 #include "seteditdialog.h"

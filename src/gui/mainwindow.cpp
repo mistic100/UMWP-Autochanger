@@ -1,8 +1,8 @@
-#include <QMessageBox>
-#include <QPushButton>
-#include <QLabel>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLabel>
 #include <QFile>
-#include <QFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <QDesktopServices>
 
 #include "mainwindow.h"
@@ -42,9 +42,9 @@ MainWindow::MainWindow(Controller* _ctrl) :
     // STATUS BAR
     m_statusBar = new QStatusBar(this);
 
-    QString copyright = "<a href='" + QString::fromAscii(APP_HOMEPAGE) + "'>";
-    copyright+= QString::fromAscii(APP_NAME) + "</a>";
-    copyright+= " " + QString::fromAscii(APP_VERSION);
+    QString copyright = "<a href='" + QString(APP_HOMEPAGE) + "'>";
+    copyright+= QString(APP_NAME) + "</a>";
+    copyright+= " " + QString(APP_VERSION);
 
     QLabel* statusLabel = new QLabel(copyright);
     statusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -92,9 +92,9 @@ void MainWindow::init()
     {
         show();
 
-        if (QString::fromAscii(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
+        if (QString(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
         {
-            m_settings->setOpt("changelog_shown", QString::fromAscii(APP_VERSION));
+            m_settings->setOpt("changelog_shown", APP_VERSION);
 
             if (m_settings->nbSets()>0) // do not show changelog at first startup
             {
@@ -202,9 +202,9 @@ void MainWindow::toggleWindow(bool _forceHide)
 
         m_trayIcon->setHidden(false);
 
-        if (QString::fromAscii(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
+        if (QString(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
         {
-            m_settings->setOpt("changelog_shown", QString::fromAscii(APP_VERSION));
+            m_settings->setOpt("changelog_shown", APP_VERSION);
             openChangelogDialog();
         }
     }
@@ -367,7 +367,7 @@ void MainWindow::openChangelogDialog()
  */
 void MainWindow::openAboutDialog()
 {
-    QString text = "<h3>" + QString::fromAscii(APP_FILEDESCRIPTION) + " " + QString::fromAscii(APP_VERSION) + "</h3>";
+    QString text = "<h3>" + QString(APP_FILEDESCRIPTION) + " " + QString(APP_VERSION) + "</h3>";
     text+= "Created by Damien \"Mistic\" Sorel.<br>";
     text+= "&copy; 2013-2015 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     text+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
@@ -529,7 +529,7 @@ void MainWindow::quit()
         return;
     }
 
-    QMessageBox dialog;
+    QMessageBox dialog(this);
     dialog.setIcon(QMessageBox::Warning);
     dialog.setWindowTitle(tr("Quit"));
     dialog.setText(tr("If you quit the application now,<br>the wallpaper will not change anymore."));

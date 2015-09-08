@@ -1,4 +1,4 @@
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include "configdialog.h"
 #include "ui_configdialog.h"

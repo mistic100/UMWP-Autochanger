@@ -43,8 +43,7 @@
 
 class QGlobalShortcut : public QObject
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-    // FIXME: moc compilation error
-    //, public QAbstractNativeEventFilter
+    , public QAbstractNativeEventFilter
 #endif
 {
     Q_OBJECT

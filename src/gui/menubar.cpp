@@ -58,9 +58,9 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(mapper, SIGNAL(mapped(const QString &)), _parent, SLOT(openLink(const QString &)));
 
     connect(actionIssues, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(actionIssues, QString::fromAscii(APP_ISSUES_URL));
+    mapper->setMapping(actionIssues, APP_ISSUES_URL);
     connect(actionHome, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(actionHome, QString::fromAscii(APP_HOMEPAGE));
+    mapper->setMapping(actionHome, APP_HOMEPAGE);
 }
 
 /**

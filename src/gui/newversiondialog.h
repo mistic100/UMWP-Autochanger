@@ -1,12 +1,12 @@
 #ifndef NEWVERSIONDIALOG_H
 #define NEWVERSIONDIALOG_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include <QFile>
 #include <QNetworkReply>
 
-#include "main.h"
-#include "controller.h"
+#include "../main.h"
+#include "../controller.h"
 
 namespace Ui {
     class NewVersionDialog;

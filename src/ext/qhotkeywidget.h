@@ -1,7 +1,7 @@
 #ifndef QHOTKEYWIDGET_H
 #define QHOTKEYWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 #include "ui_qhotkeywidget.h"
 

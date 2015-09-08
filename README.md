@@ -27,7 +27,7 @@ The application is currently available in English and French. [A translation pag
 
 ### Compiling
 You can compile the application yourself with Qt Creator.  
-You will need Qt 4.8.4.
+You will need Qt 5.4.
 
 
 ### Branding

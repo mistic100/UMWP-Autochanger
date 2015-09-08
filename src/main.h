@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <windows.h>
+#include <qt_windows.h>
 #include <QtXml>
 #include <QString>
 #include <QVector>

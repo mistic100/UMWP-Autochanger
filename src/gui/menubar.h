@@ -1,12 +1,12 @@
 #ifndef MENUBAR_H
 #define MENUBAR_H
 
-#include <QAction>
-#include "ext/qtoolbarext.h"
-#include "ext/qwidgetblinker.h"
+#include <QtWidgets/QAction>
+#include "../ext/qtoolbarext.h"
+#include "../ext/qwidgetblinker.h"
 
-#include "main.h"
-#include "controller.h"
+#include "../main.h"
+#include "../controller.h"
 
 
 // cyclic reference

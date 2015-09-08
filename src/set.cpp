@@ -177,7 +177,7 @@ void Set::populateFilesRecur(const QString &_path, const int _level)
  */
 void Set::readCache()
 {
-    QFile file(QString::fromAscii(APP_CACHE_DIR) + m_uuid);
+    QFile file(APP_CACHE_DIR + m_uuid);
 
     if (file.exists() && file.open(QIODevice::ReadOnly))
     {
@@ -200,7 +200,7 @@ void Set::readCache()
  */
 void Set::writeCache() const
 {
-    QFile file(QString::fromAscii(APP_CACHE_DIR) + m_uuid);
+    QFile file(APP_CACHE_DIR + m_uuid);
 
     if (file.open(QIODevice::WriteOnly))
     {
@@ -220,7 +220,7 @@ void Set::writeCache() const
  */
 void Set::deleteCache() const
 {
-    QDir cache(QString::fromAscii(APP_CACHE_DIR));
+    QDir cache(APP_CACHE_DIR);
     QStringList files = cache.entryList(QStringList()<<"*"+m_uuid+"*", QDir::Files);
 
     foreach (QString file, files)

@@ -1,13 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include <QCloseEvent>
-#include <QStatusBar>
+#include <QtWidgets/QStatusBar>
 
-#include "main.h"
-#include "controller.h"
-#include "globalshortcut.h"
+#include "../main.h"
+#include "../controller.h"
+#include "../globalshortcut.h"
 #include "menubar.h"
 #include "trayicon.h"
 

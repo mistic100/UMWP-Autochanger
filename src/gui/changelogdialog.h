@@ -1,7 +1,7 @@
 #ifndef CHANGELOGDIALOG_H
 #define CHANGELOGDIALOG_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 #include <QFile>
 #include <QTextStream>
 #include <QDesktopServices>

@@ -1,9 +1,9 @@
 #ifndef QTOOLBAREXT_H
 #define QTOOLBAREXT_H
 
-#include <QToolBar>
-#include <QMenu>
-#include <QToolButton>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QToolButton>
 
 
 /**

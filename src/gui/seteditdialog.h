@@ -1,11 +1,11 @@
 #ifndef SETEDITDIALOG_H
 #define SETEDITDIALOG_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 
-#include "main.h"
-#include "set.h"
-#include "settings.h"
+#include "../main.h"
+#include "../set.h"
+#include "../settings.h"
 
 namespace Ui {
     class SetEditDialog;

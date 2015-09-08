@@ -1,10 +1,10 @@
 #ifndef TRAYMENU_H
 #define TRAYMENU_H
 
-#include <QSystemTrayIcon>
-#include <QAction>
+#include <QtWidgets/QSystemTrayIcon>
+#include <QtWidgets/QAction>
 
-#include "controller.h"
+#include "../controller.h"
 
 
 // cyclic reference

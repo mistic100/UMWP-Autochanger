@@ -1,10 +1,10 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QListWidget>
+#include <QtWidgets/QListWidget>
 
-#include "main.h"
-#include "controller.h"
+#include "../main.h"
+#include "../controller.h"
 
 /**
  * @brief The main widget of the software

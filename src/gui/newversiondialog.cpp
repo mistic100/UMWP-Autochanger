@@ -1,5 +1,5 @@
 #include <QNetworkAccessManager>
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include "newversiondialog.h"
 #include "ui_newversiondialog.h"
@@ -42,7 +42,7 @@ void NewVersionDialog::on_updateButton_clicked()
     ui->progressBar->setVisible(true);
     ui->buttonBox->setDisabled(true);
 
-    m_file.setFileName(QString::fromAscii(APP_INSTALLER_FILENAME));
+    m_file.setFileName(APP_INSTALLER_FILENAME);
 
     if (!m_file.open(QIODevice::WriteOnly))
     {

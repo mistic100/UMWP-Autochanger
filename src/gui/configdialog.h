@@ -1,10 +1,10 @@
 #ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 
-#include "main.h"
-#include "controller.h"
+#include "../main.h"
+#include "../controller.h"
 
 namespace Ui {
     class ConfigDialog;

@@ -1,11 +1,11 @@
 #ifndef PREVIEWDIALOG_H
 #define PREVIEWDIALOG_H
 
-#include <QDialog>
-#include <QGridLayout>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QGridLayout>
 
-#include "main.h"
-#include "controller.h"
+#include "../main.h"
+#include "../controller.h"
 
 
 /**

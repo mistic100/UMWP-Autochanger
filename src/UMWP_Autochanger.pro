@@ -1,4 +1,6 @@
-QT += core gui xml network
+QT += core gui widgets xml network
+
+DEFINES += NOMINMAX
 
 TARGET = UMWP_Autochanger
 TEMPLATE = app

@@ -61,7 +61,7 @@ void Controller::onNewVersion(const NewVersion _version)
  */
 void Controller::launchInstaller()
 {
-    QString path = QDir::currentPath() +"/"+ QString::fromAscii(APP_INSTALLER_FILENAME);
+    QString path = QDir::currentPath() +"/"+ APP_INSTALLER_FILENAME;
 
     if (QFile::exists(path))
     {

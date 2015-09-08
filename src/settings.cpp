@@ -115,7 +115,7 @@ bool Settings::load(QString _filename)
 {
     if (_filename.isEmpty())
     {
-        _filename = QString::fromAscii(APP_CONFIG_FILE);
+        _filename = APP_CONFIG_FILE;
     }
 
     // open xml file
@@ -310,7 +310,7 @@ bool Settings::save(QString _filename)
 {
     if (_filename.isEmpty())
     {
-        _filename = QString::fromAscii(APP_CONFIG_FILE);
+        _filename = APP_CONFIG_FILE;
     }
 
     // initialize domdocument

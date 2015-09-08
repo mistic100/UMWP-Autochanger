@@ -1,10 +1,10 @@
 #ifndef SETCONTEXTMENU_H
 #define SETCONTEXTMENU_H
 
-#include <QMenu>
+#include <QtWidgets/QMenu>
 
-#include "main.h"
-#include "controller.h"
+#include "../main.h"
+#include "../controller.h"
 #include "mainwindow.h"
 
 /**

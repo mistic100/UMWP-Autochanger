@@ -1,10 +1,10 @@
-#include <QPushButton>
-#include <QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLabel>
 #include <QPainter>
 #include <QDesktopServices>
-#include <QVBoxLayout>
-#include <QDialogButtonBox>
-#include <QMessageBox>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QMessageBox>
 #include <QFontMetrics>
 
 #include "previewdialog.h"

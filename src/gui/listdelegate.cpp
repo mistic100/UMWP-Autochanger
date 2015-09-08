@@ -1,5 +1,5 @@
 #include "listdelegate.h"
-#include "set.h"
+#include "../set.h"
 
 
 /**

@@ -1,4 +1,4 @@
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QLocale>
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
         logger.setLoggingLevel(QsLogging::TraceLevel);
 
         logger.addDestination(QsLogging::DestinationFactory::MakeFileDestination(
-                                  QString::fromAscii(APP_LOG_FILENAME),
+                                  APP_LOG_FILENAME,
                                   QsLogging::EnableLogRotation,
                                   QsLogging::MaxSizeBytes(1024*1024*5)
                                   ));

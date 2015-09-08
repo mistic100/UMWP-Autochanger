@@ -1,13 +1,13 @@
 #ifndef SCREENSDIALOG_H
 #define SCREENSDIALOG_H
 
-#include <QDialog>
-#include <QGridLayout>
-#include <QGraphicsScene>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGraphicsScene>
 
-#include "main.h"
-#include "controller.h"
-#include "environment.h"
+#include "../main.h"
+#include "../controller.h"
+#include "../environment.h"
 
 namespace Ui {
     class ScreensDialog;

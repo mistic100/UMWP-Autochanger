@@ -2,9 +2,9 @@
 #define LISTDELEGATE_H
 
 #include <QPainter>
-#include <QAbstractItemDelegate>
+#include <QtWidgets/QAbstractItemDelegate>
 
-#include "settings.h"
+#include "../settings.h"
 
 
 /**

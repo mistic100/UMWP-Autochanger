@@ -1,4 +1,4 @@
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include "seteditdialog.h"
 #include "ui_seteditdialog.h"

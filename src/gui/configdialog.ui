@@ -262,13 +262,13 @@
   <customwidget>
    <class>QHotKeyWidget</class>
    <extends>QWidget</extends>
-   <header>ext/qhotkeywidget.h</header>
+   <header>../ext/qhotkeywidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>QComboBoxExt</class>
    <extends>QComboBox</extends>
-   <header>ext/qcomboboxext.h</header>
+   <header>../ext/qcomboboxext.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
