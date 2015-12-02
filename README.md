@@ -2,8 +2,6 @@
 
 [![stable version](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=version)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php)
 [![downloads](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=downloads)](http://www.strangeplanet.fr/work/umwp-autochanger)
-[![Documentation](https://img.shields.io/badge/documentation-online-blue.svg)](http://www.strangeplanet.fr/work/umwp-autochanger#install)
-[![Gratipay](https://img.shields.io/gratipay/mistic100.svg)](https://gratipay.com/mistic100)
 
 UMWP Autochanger is a little tool for multi-monitors windows users. I has two main features :
 * randomly and periodically change the wallpaper of all your monitors,
