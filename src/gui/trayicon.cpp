@@ -10,7 +10,7 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     QSystemTrayIcon((QWidget*) _parent),
     m_ctrl(_ctrl)
 {
-    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setPause(bool)));
+    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged()));
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
@@ -25,7 +25,7 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
 
     connect(actionQuit,    SIGNAL(triggered()), _parent, SLOT(quit()));
     connect(m_actionHide,  SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
-    connect(m_actionPause, SIGNAL(triggered()), _parent, SLOT(startPause()));
+    connect(m_actionPause, SIGNAL(triggered()), m_ctrl,  SLOT(startPause()));
     connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
 
     setIcon(QIcon(":/images/icon.png"));
@@ -55,9 +55,9 @@ void TrayIcon::setHidden(bool _hide)
  * @brief Change "Pause" label
  * @param _pause
  */
-void TrayIcon::setPause(bool _pause)
+void TrayIcon::setStartPause(bool _start)
 {
-    if (!_pause)
+    if (_start)
     {
         m_actionPause->setText(tr("Pause"));
         setIcon(QIcon(":/images/icon.png"));

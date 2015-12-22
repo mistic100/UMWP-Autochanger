@@ -28,8 +28,8 @@ private:
 public:
     MenuBar(MainWindow* _parent, Controller* _ctrl);
     
-public slots:
-    void setPause(bool _pause);
+private slots:
+    void setStartPause(bool _start);
 };
 
 #endif // MENUBAR_H

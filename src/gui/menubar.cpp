@@ -13,7 +13,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     setMovable(false);
     setIconSize(QSize(20, 20));
 
-    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setPause(bool)));
+    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
 
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
@@ -44,7 +44,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionAdd,       SIGNAL(clicked()), _parent, SLOT(addSet()));
     connect(actionHide,      SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
     connect(actionRefresh,   SIGNAL(clicked()), m_ctrl,  SLOT(update()));
-    connect(m_actionPause,   SIGNAL(clicked()), _parent, SLOT(startPause()));
+    connect(m_actionPause,   SIGNAL(clicked()), m_ctrl,  SLOT(startPause()));
 
     connect(actionOptions,   SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
     connect(actionScreens,   SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
@@ -69,9 +69,9 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
  * @brief Start or stop "Pause" blinking
  * @param _pause
  */
-void MenuBar::setPause(bool _pause)
+void MenuBar::setStartPause(bool _start)
 {
-    if (!_pause)
+    if (_start)
     {
         m_pauseBlinker->stop();
         m_actionPause->setText(tr("Pause"));

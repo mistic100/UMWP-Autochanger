@@ -75,7 +75,7 @@ void Controller::launchInstaller()
  * @brief Pause or start the timer
  * @return bool - true if the timer is running
  */
-bool Controller::startPause()
+void Controller::startPause()
 {
     if (m_mainTimer->isActive())
     {
@@ -89,8 +89,6 @@ bool Controller::startPause()
     }
 
     emit startedPaused(m_mainTimer->isActive());
-
-    return m_mainTimer->isActive();
 }
 
 /**
@@ -100,10 +98,9 @@ void Controller::update()
 {
     QLOG_INFO() << "Update !";
 
-    // refresh timer interval
-    if (m_mainTimer->isActive()) {
-        m_mainTimer->start(m_settings->get("delay").toInt()*1000);
-    }
+    // restart timer
+    m_mainTimer->start(m_settings->get("delay").toInt()*1000);
+    emit startedPaused(true);
 
     // update config
     m_settings->updateSets();

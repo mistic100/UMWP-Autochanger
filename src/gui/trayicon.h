@@ -30,10 +30,10 @@ public:
     void setHidden(bool _hide);
 
 public slots:
-    void setPause(bool _pause);
     void onListChanged();
 
 private slots:
+    void setStartPause(bool _start);
     void onQuickClicked();
     void onActivated(QSystemTrayIcon::ActivationReason _reason);
 };

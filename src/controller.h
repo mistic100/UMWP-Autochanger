@@ -39,7 +39,6 @@ public:
     const QVector<QString> &files() const { return m_files; }
     Set*    currentSet() const          { return m_set; }
 
-    bool startPause();
     bool isPaused() const { return !m_mainTimer->isActive(); }
 
     void launchInstaller();
@@ -50,6 +49,7 @@ public:
 
 public slots:
     void update();
+    void startPause();
 
 private slots:
     void onNewVersion(const NewVersion _version);

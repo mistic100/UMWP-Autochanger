@@ -211,14 +211,6 @@ void MainWindow::toggleWindow(bool _forceHide)
 }
 
 /**
- * @brief Start or pause the timer
- */
-void MainWindow::startPause()
-{
-    bool run = m_ctrl->startPause();
-}
-
-/**
  * @brief Open dialog for directory selection
  */
 void MainWindow::addSet()
@@ -438,7 +430,7 @@ void MainWindow::onHotkey()
         break;
 
     case GlobalShortcut::STARTPAUSE:
-        startPause();
+        m_ctrl->startPause();
 
         if (!isVisible() && m_settings->get("show_notifications").toBool())
         {

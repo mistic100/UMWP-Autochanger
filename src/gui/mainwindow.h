@@ -51,7 +51,6 @@ public slots:
     void init();
     void quit();
     void addSet();
-    void startPause();
     void toggleWindow(bool _forceHide=false);
     void onHotkey();
 
