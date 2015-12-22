@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>ConfigDialog</name>
     <message>
@@ -34,7 +36,7 @@
     <message>
         <location filename="../../gui/configdialog.ui" line="164"/>
         <source>Mode :</source>
-        <translation>Режим</translation>
+        <translation>Режим:</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="63"/>
@@ -74,7 +76,7 @@
     <message>
         <location filename="../../gui/configdialog.ui" line="210"/>
         <source>Show/Hide :</source>
-        <translation>Показать/свернуть</translation>
+        <translation>Показать/свернуть:</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="220"/>
@@ -179,7 +181,7 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="191"/>
         <source>You must restart %1 to apply the new language.</source>
-        <translation>Вы должны перезапустить %1 чтобы язык сменился</translation>
+        <translation>Вы должны перезапустить %1 чтобы язык сменился.</translation>
     </message>
 </context>
 <context>
@@ -217,7 +219,7 @@
     <message>
         <location filename="../../gui/errorwidget.cpp" line="76"/>
         <source>An unknown error appened!</source>
-        <translation>Произошла неизвестная ошибка</translation>
+        <translation>Произошла неизвестная ошибка!</translation>
     </message>
     <message>
         <location filename="../../gui/errorwidget.cpp" line="87"/>
@@ -560,7 +562,7 @@
     <message>
         <location filename="../../gui/seteditdialog.ui" line="108"/>
         <source>Mode :</source>
-        <translation>Режим</translation>
+        <translation>Режим:</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.ui" line="46"/>
@@ -659,7 +661,7 @@
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="106"/>
         <source>Name can not be empty</source>
-        <translation>&quot;Имя&quot; не может быть пустым.</translation>
+        <translation>&quot;Имя&quot; не может быть пустым</translation>
     </message>
 </context>
 <context>
