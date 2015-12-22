@@ -1,6 +1,6 @@
 #define AppId "{401CCECB-FFCC-4AF3-846D-A535F59D0834}"
 #define AppName "UMWP Autochanger"
-#define AppVersion "2.0"
+#define AppVersion "2.1"
 #define AppPublisher "StrangePlanet"
 #define PublisherURL "http://www.strangeplanet.fr"
 #define ProjectURL "http://www.strangeplanet.fr/work/umwp-autochanger"
