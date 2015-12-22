@@ -37,10 +37,31 @@ Set* WallpaperGenerator::getRandomSet()
         return m_settings->activeSet(0);
     }
 
-    uniform_int<int> unif(0, total-1);
+    // build list of total nb of walls
+    QList<int> nbWalls;
+    int totalWalls = 0;
+    for (int i=0; i<total; i++)
+    {
+        nbWalls.append(totalWalls);
+        totalWalls+= m_settings->activeSet(i)->count();
+    }
+    nbWalls.append(totalWalls);
+
+    // generate random number between 0 and total nb of walls
+    uniform_int<int> unif(0, totalWalls-1);
     int counter = unif(m_randomEngine);
 
-    return m_settings->activeSet(counter);
+    // choose the set containing the generated number
+    for (int i=0; i<total; i++)
+    {
+        if (counter >= nbWalls.at(i) && counter < nbWalls.at(i+1))
+        {
+            return m_settings->activeSet(i);
+        }
+    }
+
+    // should never get here
+    return NULL;
 }
 
 /**
