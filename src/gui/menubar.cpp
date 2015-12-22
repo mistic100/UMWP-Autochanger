@@ -13,6 +13,8 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     setMovable(false);
     setIconSize(QSize(20, 20));
 
+    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setPause(bool)));
+
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
     QAction* actionScreens = menuConfig->addAction(QIcon(":/images/icons/w_monitor.png"), tr("Manage monitors"));

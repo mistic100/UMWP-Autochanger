@@ -216,8 +216,6 @@ void MainWindow::toggleWindow(bool _forceHide)
 void MainWindow::startPause()
 {
     bool run = m_ctrl->startPause();
-    m_menuBar->setPause(!run);
-    m_trayIcon->setPause(!run);
 }
 
 /**

@@ -10,6 +10,7 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     QSystemTrayIcon((QWidget*) _parent),
     m_ctrl(_ctrl)
 {
+    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setPause(bool)));
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged()));
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));

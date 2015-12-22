@@ -28,6 +28,7 @@ private:
 public:
     MenuBar(MainWindow* _parent, Controller* _ctrl);
     
+public slots:
     void setPause(bool _pause);
 };
 

@@ -56,6 +56,7 @@ private slots:
 
 signals:
     void listChanged(bool); // true to reset QListWidget selection
+    void startedPaused(bool);
     void wallpaperChanged();
     void newVersionAvailable();
 };

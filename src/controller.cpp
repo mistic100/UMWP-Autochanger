@@ -20,6 +20,7 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     m_set = NULL;
 
     m_mainTimer = new QTimer(this);
+    m_mainTimer->setInterval(m_settings->get("delay").toInt()*1000);
     connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
@@ -87,6 +88,8 @@ bool Controller::startPause()
         m_mainTimer->start();
     }
 
+    emit startedPaused(m_mainTimer->isActive());
+
     return m_mainTimer->isActive();
 }
 
@@ -97,8 +100,10 @@ void Controller::update()
 {
     QLOG_INFO() << "Update !";
 
-    // restart timer
-    m_mainTimer->start(m_settings->get("delay").toInt()*1000);
+    // refresh timer interval
+    if (m_mainTimer->isActive()) {
+        m_mainTimer->start(m_settings->get("delay").toInt()*1000);
+    }
 
     // update config
     m_settings->updateSets();

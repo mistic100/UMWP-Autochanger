@@ -28,9 +28,9 @@ public:
     TrayIcon(MainWindow* _parent, Controller* _ctrl);
 
     void setHidden(bool _hide);
-    void setPause(bool _pause);
 
 public slots:
+    void setPause(bool _pause);
     void onListChanged();
 
 private slots:
