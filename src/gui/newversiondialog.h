@@ -24,7 +24,7 @@ private:
     Ui::NewVersionDialog* ui;
     Controller* m_ctrl;
 
-    NewVersion      m_version;
+    UM::NewVersion  m_version;
 
     QFile           m_file;
     QNetworkReply*  m_reply;

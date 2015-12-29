@@ -8,6 +8,7 @@
 #include <QFontMetrics>
 
 #include "previewdialog.h"
+#include "../umutils.h"
 
 
 /**
@@ -29,12 +30,12 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
     mainLayout->addWidget(buttons);
     setLayout(mainLayout);
 
-    connect(m_ctrl, SIGNAL(wallpaperChanged()), this, SLOT(draw()));
+    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(draw()));
     draw();
 
     setWindowTitle(tr("Active files"));
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -71,7 +72,7 @@ void PreviewDialog::draw()
     pen.setWidth(2);
     pen.setColor(QColor(0, 160, 255));
 
-    int i = 0, height = 0;
+    int i = 0;
     for (QVector<QString>::const_iterator it=m_ctrl->files().constBegin(); it!=m_ctrl->files().constEnd(); ++it)
     {
         if ((*it).isEmpty())
@@ -84,6 +85,8 @@ void PreviewDialog::draw()
         QLabel* label = new QLabel(text);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);
+
+        m_layout->addWidget(label, 0, i);
 
         // resize image and add blue border
         QPixmap image = QPixmap(*it).scaledToWidth(width, Qt::FastTransformation);
@@ -101,21 +104,23 @@ void PreviewDialog::draw()
 
         connect(thumb, SIGNAL(clicked()), this, SLOT(onThumbnailClicked()));
 
-        // delete button
-        QPushButton* button = new QPushButton();
-        button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
-        button->setText(tr("Delete"));
-        button->setProperty("path", *it);
-        button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
-        connect(button, SIGNAL(clicked()), this, SLOT(onDeleteButtonClicked()));
-
-        m_layout->addWidget(label, 0, i);
         m_layout->addWidget(thumb, 1, i);
-        m_layout->addWidget(button, 2, i);
+
+        // delete button, only if wallpapers are not custom
+        if (m_ctrl->currentSet()->style() != UM::IM_CUSTOM)
+        {
+            QPushButton* button = new QPushButton();
+            button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
+            button->setText(tr("Delete"));
+            button->setProperty("path", *it);
+            button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+            connect(button, SIGNAL(clicked()), this, SLOT(onDeleteButtonClicked()));
+
+            m_layout->addWidget(button, 2, i);
+        }
 
         i++;
-        height = qMax(height, image.height());
     }
 }
 
@@ -147,7 +152,7 @@ void PreviewDialog::onDeleteButtonClicked()
     {
         QLOG_TRACE() << "Delete " << path;
 
-        m_ctrl->moveFileToTrash(path);
+        UM::moveFileToTrash(path);
         m_ctrl->update();
     }
 }

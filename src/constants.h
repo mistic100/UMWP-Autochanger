@@ -11,7 +11,7 @@
 
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_CACHE_DIR "cache/"
-#define APP_WALLPAPER_FILE "wallpaper.bmp"
+#define APP_WALLPAPER_FILE "umwp-wallpaper.bmp"
 #define APP_MAX_TRAVERSAL 3
 
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"

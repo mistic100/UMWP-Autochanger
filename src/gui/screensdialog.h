@@ -36,7 +36,7 @@ private:
 
     Controller* m_ctrl;
 
-    QVector<Monitor> m_monitors;
+    QVector<UM::Monitor> m_monitors;
 
     QList<ScreenThumbnail*> m_thumbs;
     QGraphicsScene* m_scene;

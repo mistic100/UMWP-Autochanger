@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <qt_windows.h>
-#include <QtXml>
+#include <QtCore>
 #include <QString>
 #include <QVector>
 #include <QsLog.h>
@@ -11,19 +11,15 @@
 
 
 namespace UM {
-    // types for wallpaper file
+    // wallpaper arrangment
     enum WALLPAPER
     {
         W_DESKTOP = 0,
         W_MONITOR = 1,
         W_NONE = 16
     };
-    enum BACKGROUND
-    {
-        BG_SOLID = 0,
-        BG_GRAD_HORZ = 1,
-        BG_GRAD_VERT = 2
-    };
+
+    // wallpaper layout
     enum IMAGE
     {
         IM_CENTER = 0,
@@ -31,42 +27,55 @@ namespace UM {
         IM_STRETCH = 2,
         IM_STRETCH_PROP = 3,
         IM_FILL = 4,
+        IM_CUSTOM = 15,
         IM_NONE = 16
     };
-    struct WP_MONITOR_FILE
-    {
-        BACKGROUND bgType;
-        COLORREF color1;
-        COLORREF color2;
-        IMAGE imgStyle;
-        wchar_t imgFile[260];
-    };
 
-    // other enums
+    // loop mode
     enum MODE
     {
-        RANDOM = 0,
-        SEQUENTIAL = 1,
-        NONE = 16
+        MODE_RANDOM = 0,
+        MODE_SEQUENTIAL = 1,
+        MODE_NONE = 16
     };
-}
 
-// helper for monitors config
-struct Monitor {
-    bool enabled;
-    COLORREF color;
-    Monitor() : enabled(true), color(0x00000000) {}
-};
+    // alignment
+    enum ALIGN
+    {
+        ALIGN_TOP_LEFT = 0,
+        ALIGN_TOP_CENTER = 1,
+        ALIGN_TOP_RIGHT = 2,
+        ALIGN_CENTER_LEFT = 3,
+        ALIGN_CENTER_CENTER = 4,
+        ALIGN_CENTER_RIGHT = 5,
+        ALIGN_BOTTOM_LEFT = 6,
+        ALIGN_BOTTOM_CENTER = 7,
+        ALIGN_BOTTOM_RIGHT = 8
+    };
+
+    // helper for monitors config
+    struct Monitor {
+        bool enabled;
+        COLORREF color;
+        Monitor() : enabled(true), color(0x00000000) {}
+    };
+
+    // Store data about new version
+    struct NewVersion {
+        QString code;
+        QString link;
+        QString hash;
+    };
+
+    // flags for dialog without help button
+    const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
+}
 
 Q_DECLARE_METATYPE(UM::WALLPAPER)
 Q_DECLARE_METATYPE(UM::IMAGE)
 Q_DECLARE_METATYPE(UM::MODE)
-
-// flags for dialog without help button
-const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
-
-// common functions
-void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value);
-void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value);
+Q_DECLARE_METATYPE(UM::ALIGN)
+Q_DECLARE_METATYPE(UM::Monitor)
+Q_DECLARE_METATYPE(UM::NewVersion)
 
 #endif // MAIN_H

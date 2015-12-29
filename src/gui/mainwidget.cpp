@@ -66,7 +66,7 @@ void MainWidget::onListChanged(bool _resetSel)
  * @brief Get numerical indexes of selected items
  * @return int[]
  */
-QList<int> MainWidget::getSelectedIndexes()
+QList<int> MainWidget::getSelectedIndexes() const
 {
     QList<QListWidgetItem*> items = selectedItems();
     QList<int> indexes;
@@ -78,6 +78,22 @@ QList<int> MainWidget::getSelectedIndexes()
 
     qSort(indexes);
     return indexes;
+}
+
+/**
+ * @brief Get selected sets
+ * @return Set*[]
+ */
+QList<Set*> MainWidget::getSelectedSets() const
+{
+    QList<Set*> sets;
+
+    foreach (const int index, getSelectedIndexes())
+    {
+        sets.append(m_settings->set(index));
+    }
+
+    return sets;
 }
 
 /**
@@ -97,7 +113,7 @@ void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelInd
  */
 void MainWidget::onContextMenu(const QPoint &_pos)
 {
-    QList<int> sets = getSelectedIndexes();
+    QList<Set*> sets = getSelectedSets();
     QPoint pos = mapToGlobal(_pos);
     ((MainWindow*)parent())->showContextMenu(sets, pos);
 }

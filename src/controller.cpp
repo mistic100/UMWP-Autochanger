@@ -1,5 +1,4 @@
-#include <iostream>
-#include <fstream>
+#include <QtConcurrentRun>
 
 #include "main.h"
 #include "controller.h"
@@ -22,6 +21,31 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     m_mainTimer = new QTimer(this);
     m_mainTimer->setInterval(m_settings->get("delay").toInt()*1000);
     connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(update()));
+
+    connect(&m_generatorWatcher, SIGNAL(finished()), this, SLOT(onGenerationDone()));
+}
+
+/**
+ * @brief Controller::~Controller
+ */
+Controller::~Controller()
+{
+    delete m_generator;
+}
+
+/**
+ * @brief Try to quit the app. If the WallpaperGenerator is running, try again in 500 ms
+ */
+void Controller::quit()
+{
+    if (m_generatorWatcher.isRunning())
+    {
+        QTimer::singleShot(500, this, SLOT(quit()));
+    }
+    else
+    {
+        qApp->quit();
+    }
 }
 
 /**
@@ -32,7 +56,7 @@ void Controller::checkVersion()
     if (m_settings->get("check_updates").toBool())
     {
         VersionChecker* checker = new VersionChecker();
-        connect(checker, SIGNAL(newVersionAvailable(const NewVersion)), this, SLOT(onNewVersion(const NewVersion)));
+        connect(checker, SIGNAL(newVersionAvailable(const UM::NewVersion)), this, SLOT(onNewVersion(const UM::NewVersion)));
 
         QThread* thread = new QThread(this);
         checker->moveToThread(thread);
@@ -51,7 +75,7 @@ void Controller::checkVersion()
  * @param string _version
  * @param string _link
  */
-void Controller::onNewVersion(const NewVersion _version)
+void Controller::onNewVersion(const UM::NewVersion _version)
 {
     m_enviro->setNewVersion(_version);
     emit newVersionAvailable();
@@ -67,7 +91,7 @@ void Controller::launchInstaller()
     if (QFile::exists(path))
     {
         QProcess::startDetached("\""+ path +"\" -delete-installer");
-        qApp->quit();
+        quit();
     }
 }
 
@@ -119,36 +143,21 @@ void Controller::update()
 
     QLOG_DEBUG() << "Current set:" << m_set->name() << "Type:" << m_set->type() << "Style:" << m_set->style();
 
-    m_files = m_generator->getFiles(m_set);
-    QLOG_DEBUG() << "Current files:" << m_files;
+    emit generationStarted();
 
-    QVector<QString> tempFiles = m_generator->adaptFiles(m_set, m_files);
-
-    QString wallpaper = m_generator->generateFile(m_set, tempFiles);
-
-    m_enviro->setWallpaper(wallpaper);
-
-    emit wallpaperChanged();
+    QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate, m_set);
+    m_generatorWatcher.setFuture(future);
 }
 
 /**
- * @brief Move a file to trash bin
- * @param string _filename
- * @return bool
+ * @brief Action once async wallpaper generation is done
  */
-bool Controller::moveFileToTrash(const QString &_filename)
+void Controller::onGenerationDone()
 {
-    wchar_t path[MAX_PATH];
-    memset(path, 0, sizeof(path));
-    int l = _filename.toWCharArray(path);
-    path[l] = '\0';
+    WallpaperGenerator::Result result = m_generatorWatcher.future().result();
 
-    SHFILEOPSTRUCT shfos = {0};
-    shfos.wFunc  = FO_DELETE;
-    shfos.pFrom  = path;
-    shfos.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
+    m_enviro->setWallpaper(result.wallpaper);
+    m_files = result.files;
 
-    int ret = SHFileOperation(&shfos);
-
-    return ret == 0;
+    emit generationFinished();
 }

@@ -11,7 +11,7 @@
  * @param Controller* _ctrl
  * @param int[] _sets
  */
-SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QList<int> &_sets) :
+SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QList<Set *> &_sets) :
     QMenu(_parent),
     m_ctrl(_ctrl),
     m_settings(_ctrl->settings()),
@@ -20,9 +20,9 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
     if (m_sets.size() > 0)
     {
         int nbActive = 0, nbInactive=0;
-        foreach (int i, m_sets)
+        foreach (Set* set, m_sets)
         {
-            if (m_settings->set(i)->isActive())
+            if (set->isActive())
                 nbActive++;
             else
                 nbInactive++;
@@ -61,7 +61,7 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
  */
 void SetContextMenu::editSets()
 {
-    SetEditDialog dialog(this, m_settings, m_sets);
+    SetEditDialog dialog(this, m_ctrl, m_sets);
 
     // need to unbind hotkeys to allow hotkeys input
     ((MainWindow*)parent())->clearHotkeys();
@@ -78,9 +78,9 @@ void SetContextMenu::editSets()
  */
 void SetContextMenu::openSets()
 {
-    foreach (int i, m_sets)
+    foreach (Set* set, m_sets)
     {
-        QDesktopServices::openUrl(QUrl("file:///" + m_settings->set(i)->path()));
+        QDesktopServices::openUrl(QUrl("file:///" + set->path()));
     }
 }
 
@@ -104,9 +104,9 @@ void SetContextMenu::deleteSets()
  */
 void SetContextMenu::clearCache()
 {
-    foreach (int i, m_sets)
+    foreach (Set* set, m_sets)
     {
-        m_settings->set(i)->deleteCache();
+        set->deleteCache();
     }
 }
 

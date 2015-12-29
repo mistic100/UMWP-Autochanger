@@ -1,6 +1,7 @@
-QT += core gui widgets xml network
+QT += core gui widgets xml network concurrent
 
 DEFINES += NOMINMAX
+CONFIG += c++11
 
 TARGET = UMWP_Autochanger
 TEMPLATE = app
@@ -11,7 +12,7 @@ include(QsLog/QsLog.pri)
 
 SOURCES += \
     ext/qglobalshortcut.cpp \
-    main.cpp\
+    main.cpp \
     set.cpp \
     controller.cpp \
     settings.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     gui/listdelegate.cpp \
     gui/mainwindow.cpp \
     gui/mainwidget.cpp \
+    gui/customstyledialog.cpp \
     gui/seteditdialog.cpp \
     gui/configdialog.cpp \
     gui/previewdialog.cpp \
@@ -27,7 +29,10 @@ SOURCES += \
     gui/trayicon.cpp \
     gui/setcontextmenu.cpp \
     gui/screensdialog.cpp \
-    wallpapergenerator.cpp
+    wallpapergenerator.cpp \
+    customlayoutgenerator.cpp \
+    gui/statusbar.cpp \
+    umutils.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -36,6 +41,7 @@ HEADERS += \
     ext/qwidgetblinker.h \
     ext/qcomboboxext.h \
     ext/qglobalshortcut.h \
+    ext/qlineeditcolor.h \
     constants.h \
     main.h \
     set.h \
@@ -43,11 +49,12 @@ HEADERS += \
     settings.h \
     environment.h \
     versionchecker.h \
-    listdelegate.h \
-    listproxystyle.h \
+    gui/listdelegate.h \
+    gui/listproxystyle.h \
     globalshortcut.h \
     gui/mainwindow.h \
     gui/mainwidget.h \
+    gui/customstyledialog.h \
     gui/seteditdialog.h \
     gui/configdialog.h \
     gui/previewdialog.h \
@@ -57,10 +64,15 @@ HEADERS += \
     gui/setcontextmenu.h \
     gui/screensdialog.h \
     wallpapergenerator.h \
-    gui/changelogdialog.h
+    gui/changelogdialog.h \
+    customlayout.h \
+    customlayoutgenerator.h \
+    ext/variable2dmatrix.h \
+    gui/statusbar.h \
+    umutils.h
 
 FORMS += \
-    ext/qhotkeywidget.ui \
+    gui/customstyledialog.ui \
     gui/seteditdialog.ui \
     gui/configdialog.ui \
     gui/newversiondialog.ui \

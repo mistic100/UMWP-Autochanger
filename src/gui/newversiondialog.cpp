@@ -17,7 +17,7 @@ NewVersionDialog::NewVersionDialog(QWidget* _parent, Controller* _ctrl) :
 {
     ui->setupUi(this);
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     m_version = m_ctrl->enviro()->newVersion();
 

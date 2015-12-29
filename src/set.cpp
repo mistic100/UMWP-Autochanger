@@ -20,17 +20,125 @@ Set::Set(const QString &_path, const QString &_name)
         m_path.append('\\');
     }
 
-    m_type = UM::W_MONITOR;
-    m_style = UM::IM_FILL;
-    m_mode = UM::RANDOM;
-    m_active = true;
-    m_valid = true;
-    m_lastModif = 0;
-    m_hotkey = 0;
-    m_current.index = 0;
-    m_current.file = "";
     m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 
+    init();
+}
+
+/**
+ * @brief Set::Set
+ * @param QDomElement _dom
+ */
+Set::Set(const QDomElement* _dom)
+{
+    m_path = _dom->text().trimmed();
+    m_name = _dom->attribute("name");
+    m_active = _dom->attribute("active").toInt();
+
+    if (!m_path.endsWith('\\'))
+    {
+        m_path.append('\\');
+    }
+
+    m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
+
+
+    // added in 1.3
+    if (_dom->hasAttribute("type"))
+    {
+        m_type = static_cast<UM::WALLPAPER>(_dom->attribute("type").toInt());
+        m_style = static_cast<UM::IMAGE>(_dom->attribute("style").toInt());
+    }
+
+    // added in 1.9
+    if (_dom->hasAttribute("mode"))
+    {
+        m_mode = static_cast<UM::MODE>(_dom->attribute("mode").toInt());
+    }
+
+    // 1.3 format
+    if (_dom->hasAttribute("hotkey_mod"))
+    {
+        m_hotkey = _dom->attribute("hotkey").toInt() + _dom->attribute("hotkey_mod").toInt();
+    }
+    // 1.4 format
+    else if (_dom->hasAttribute("hotkey"))
+    {
+        m_hotkey = _dom->attribute("hotkey").toInt();
+    }
+
+    // inner nodes
+    QDomNode node = _dom->firstChild();
+
+    while (!node.isNull())
+    {
+        if (node.isElement())
+        {
+            QDomElement element = node.toElement();
+
+            // added in 2.1
+            if (element.tagName() == "customLayout")
+            {
+                m_custLayout.rows = element.attribute("rows").toShort();
+                m_custLayout.cols = element.attribute("cols").toShort();
+                m_custLayout.minRows = element.attribute("minRows").toShort();
+                m_custLayout.minCols = element.attribute("minCols").toShort();
+                m_custLayout.maxRows = element.attribute("maxRows").toShort();
+                m_custLayout.maxCols = element.attribute("maxCols").toShort();
+                m_custLayout.mainEnabled = (bool) element.attribute("mainEnabled").toInt();
+                m_custLayout.mainRows = element.attribute("mainRows").toShort();
+                m_custLayout.mainCols = element.attribute("mainCols").toShort();
+                m_custLayout.mainPos = static_cast<UM::ALIGN>(element.attribute("mainPos").toInt());
+                m_custLayout.borderEnabled = (bool) element.attribute("borderEnabled").toInt();
+                m_custLayout.borderWidth = element.attribute("borderWidth").toShort();
+                m_custLayout.borderColor = (COLORREF) element.attribute("borderColor").toInt();
+            }
+        }
+
+        node = node.nextSibling();
+    }
+}
+
+/**
+ * @brief Write the set in a DOM element
+ * @param QDomElement _dom
+ * @param QDomDocument _document
+ */
+void Set::writeXml(QDomElement* _dom, QDomDocument* _document)
+{
+    _dom->setAttribute("name", m_name);
+    _dom->setAttribute("type", m_type);
+    _dom->setAttribute("style", m_style);
+    _dom->setAttribute("mode", m_mode);
+    _dom->setAttribute("active", m_active);
+    _dom->setAttribute("hotkey", m_hotkey);
+
+    _dom->appendChild(_document->createTextNode(m_path));
+
+    if (m_style == UM::IM_CUSTOM)
+    {
+        QDomElement layout = _document->createElement("customLayout");
+
+        layout.setAttribute("rows", m_custLayout.rows);
+        layout.setAttribute("cols", m_custLayout.cols);
+        layout.setAttribute("minRows", m_custLayout.minRows);
+        layout.setAttribute("minCols", m_custLayout.minCols);
+        layout.setAttribute("maxRows", m_custLayout.maxRows);
+        layout.setAttribute("maxCols", m_custLayout.maxCols);
+        layout.setAttribute("mainEnabled", m_custLayout.mainEnabled);
+        layout.setAttribute("mainRows", m_custLayout.mainRows);
+        layout.setAttribute("mainCols", m_custLayout.mainCols);
+        layout.setAttribute("mainPos", m_custLayout.mainPos);
+        layout.setAttribute("borderEnabled", m_custLayout.borderEnabled);
+        layout.setAttribute("borderWidth", m_custLayout.borderWidth);
+        layout.setAttribute("borderColor", (int) m_custLayout.borderColor);
+
+        _dom->appendChild(layout);
+    }
+}
+
+void Set::init()
+{
     readCache();
     check();
 

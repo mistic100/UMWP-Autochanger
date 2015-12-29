@@ -12,7 +12,7 @@
 Environment::Environment(Settings* _settings) :
     m_settings(_settings)
 {
-    qRegisterMetaType<NewVersion>("NewVersion");
+    qRegisterMetaType<UM::NewVersion>("UM::NewVersion");
 
     // LIST LANGUAGES
     QDirIterator it(":/lang");

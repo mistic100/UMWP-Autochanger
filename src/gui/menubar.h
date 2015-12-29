@@ -20,8 +20,6 @@ class MenuBar : public QToolBarExt
     Q_OBJECT
 
 private:
-    Controller*  m_ctrl;
-
     QToolButton* m_actionPause;
     QWidgetBlinker* m_pauseBlinker;
 

@@ -24,12 +24,14 @@ private:
     WallpaperGenerator* m_generator;
 
     QTimer*          m_mainTimer;
+    QFutureWatcher<WallpaperGenerator::Result> m_generatorWatcher;
 
     QVector<QString> m_files;
     Set*             m_set;
 
 public:
     Controller(Settings* _settings, Environment* _enviro);
+    ~Controller();
 
     void checkVersion();
 
@@ -45,19 +47,20 @@ public:
 
     void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
 
-    bool moveFileToTrash(const QString &_filename);
-
 public slots:
+    void quit();
     void update();
     void startPause();
 
 private slots:
-    void onNewVersion(const NewVersion _version);
+    void onNewVersion(const UM::NewVersion _version);
+    void onGenerationDone();
 
 signals:
+    void generationStarted();
+    void generationFinished();
     void listChanged(bool); // true to reset QListWidget selection
     void startedPaused(bool);
-    void wallpaperChanged();
     void newVersionAvailable();
 };
 

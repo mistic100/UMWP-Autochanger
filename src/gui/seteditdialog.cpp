@@ -1,5 +1,7 @@
 #include <QtWidgets/QMessageBox>
 
+#include "customstyledialog.h"
+
 #include "seteditdialog.h"
 #include "ui_seteditdialog.h"
 
@@ -10,17 +12,20 @@
  * @param Set* _set
  * @param Settings* _settings
  */
-SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<int> &_sets) :
+SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Set*> &_sets) :
     QDialog(_parent),
     ui(new Ui::SetEditDialog),
-    m_settings(_settings),
+    m_ctrl(_ctrl),
+    m_settings(_ctrl->settings()),
     m_sets(_sets)
 {
     ui->setupUi(this);
 
     setFixedSize(size());
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
+
+    m_custLayout = m_sets.at(0)->custLayout();
 
     ui->inputName->setFocus();
 
@@ -28,7 +33,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
     {
         ui->selectType->addItem(tr("[keep]"),  UM::W_NONE);
         ui->selectStyle->addItem(tr("[keep]"), UM::IM_NONE);
-        ui->selectMode->addItem(tr("[keep]"),  UM::NONE);
+        ui->selectMode->addItem(tr("[keep]"),  UM::MODE_NONE);
     }
 
     ui->selectType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
@@ -39,19 +44,21 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
     ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_custom.png"),       tr("Custom..."),            UM::IM_CUSTOM);
 
-    ui->selectMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::RANDOM);
-    ui->selectMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::SEQUENTIAL);
+    ui->selectMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
+    ui->selectMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
 
     if (m_sets.size() == 1)
     {
-        Set* set = m_settings->set(m_sets.at(0));
+        Set* set = m_sets.at(0);
 
         ui->inputName->setText(set->name());
         ui->selectType->setCurrentData(set->type());
         ui->selectStyle->setCurrentData(set->style());
         ui->selectMode->setCurrentData(set->mode());
         ui->inputHotkey->setHotkey(set->hotkey());
+        ui->styleConfig->setVisible(set->style() == UM::IM_CUSTOM);
     }
     else
     {
@@ -61,6 +68,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Settings* _settings, const QList<
         ui->selectStyle->setCurrentIndex(0);
         ui->selectMode->setCurrentIndex(0);
         ui->inputHotkey->setHotkey(QHotKeyWidget::KEEP_KEY);
+        ui->styleConfig->setVisible(false);
     }
 
     ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
@@ -135,21 +143,37 @@ void SetEditDialog::save()
     UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
     UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
 
-    if (m_sets.size() == 1)
-    {
-        m_settings->editSet(m_sets.at(0),
-                            ui->inputName->text(),
-                            type, style, mode,
-                            ui->inputHotkey->hotkey()
-                            );
-    }
-    else
-    {
-        m_settings->editSets(m_sets,
-                             type, style, mode,
-                             ui->inputHotkey->hotkey()
-                             );
-    }
+    m_settings->editSets(m_sets,
+                        ui->inputName->text(),
+                        type, style, mode,
+                        ui->inputHotkey->hotkey(),
+                        m_custLayout
+                        );
 
     QLOG_TRACE() << "Set " << ui->inputName->text() << " updated";
+}
+
+/**
+ * @brief Change "Configure" button visiblity depending on style
+ * @param data
+ */
+void SetEditDialog::on_selectStyle_currentDataChanged(QVariant data)
+{
+    UM::IMAGE style = static_cast<UM::IMAGE>(data.toInt());
+    ui->styleConfig->setVisible(style == UM::IM_CUSTOM);
+}
+
+/**
+ * @brief Open custom layout dialog
+ */
+void SetEditDialog::on_styleConfig_clicked()
+{
+    CustomStyleDialog dialog(this, m_ctrl);
+
+    dialog.setCustLayout(m_custLayout);
+
+    if (dialog.exec())
+    {
+        m_custLayout = dialog.getCustLayout();
+    }
 }

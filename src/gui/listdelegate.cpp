@@ -123,6 +123,9 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     case UM::IM_FILL:
         icon = QIcon(":/images/icons/im_fill.png");
         break;
+    case UM::IM_CUSTOM:
+        icon = QIcon(":/images/icons/im_custom.png");
+        break;
     }
     rect = baseRect.adjusted(0, 0, -2, 0);
     icon.paint(_painter, rect, Qt::AlignBottom|Qt::AlignRight);
@@ -131,10 +134,10 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     // MODE ICON
     switch (set->mode())
     {
-    case UM::RANDOM:
+    case UM::MODE_RANDOM:
         icon = QIcon(":/images/icons/mode_random.png");
         break;
-    case UM::SEQUENTIAL:
+    case UM::MODE_SEQUENTIAL:
         icon = QIcon(":/images/icons/mode_sequential.png");
         break;
     }
