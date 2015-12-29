@@ -2,12 +2,10 @@
 #define QHOTKEYWIDGET_H
 
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QPushButton>
 
-#include "ui_qhotkeywidget.h"
-
-namespace Ui {
-    class QHotKeyWidget;
-}
+#include "qlineedithotkey.h"
 
 
 /**
@@ -22,22 +20,31 @@ public:
     static const int NO_KEY = 0;
 
 private:
-    Ui::QHotKeyWidget* ui;
-
     int m_hotkey;
+    QLineEditHotkey* ui_key;
     
 public:
     QHotKeyWidget(QWidget* _parent = 0) :
-        QWidget(_parent),
-        ui(new Ui::QHotKeyWidget)
+        QWidget(_parent)
     {
-        ui->setupUi(this);
-        setHotkey(NO_KEY);
-    }
+        QHBoxLayout* layout = new QHBoxLayout(this);
+        layout->setMargin(0);
+        layout->setSpacing(0);
+        setLayout(layout);
 
-    ~QHotKeyWidget()
-    {
-        delete ui;
+        ui_key = new QLineEditHotkey(this);
+        layout->addWidget(ui_key);
+
+        QPushButton* erase = new QPushButton(this);
+        erase->setFlat(true);
+        erase->setIcon(QIcon("://images/icons/bullet_cross.png"));
+        erase->setToolTip(tr("Reset"));
+        layout->addWidget(erase);
+
+        connect(ui_key, SIGNAL(hotkeyChanged(int)), this, SLOT(onHotkeyChanged(int)));
+        connect(erase, SIGNAL(clicked()), this, SLOT(onEraseClicked()));
+
+        setHotkey(NO_KEY);
     }
 
     const int hotkey() const
@@ -49,23 +56,23 @@ public:
     {
         m_hotkey = _hotkey;
 
-        if (_hotkey == KEEP_KEY)
+        if (m_hotkey == KEEP_KEY)
         {
-            ui->key->setText(tr("[keep]"));
+            ui_key->setText(tr("[keep]"));
         }
         else
         {
-            ui->key->setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
+            ui_key->setText(QKeySequence(m_hotkey).toString(QKeySequence::NativeText));
         }
     }
 
 private slots:
-    void on_key_hotkeyChanged(const int _hotkey)
+    void onHotkeyChanged(const int _hotkey)
     {
         setHotkey(_hotkey);
     }
 
-    void on_pushButton_clicked()
+    void onEraseClicked()
     {
         setHotkey(0);
     }
