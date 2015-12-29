@@ -96,16 +96,11 @@ int main(int argc, char *argv[])
 
 
 /*
- * helpers for simple XML text nodes
+ * helper for simple XML text nodes
  */
-void setDomNodeValue(QDomDocument* _dom, QDomNode* _node, const QString &_value)
-{
-    _node->appendChild(_dom->createTextNode(_value));
-}
-
 void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value)
 {
     QDomElement element = _dom->createElement(_name);
-    setDomNodeValue(_dom, &element, _value);
+    element.appendChild(_dom->createTextNode(_value));
     _parent->appendChild(element);
 }

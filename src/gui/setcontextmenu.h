@@ -18,10 +18,10 @@ private:
     Controller* m_ctrl;
     Settings*   m_settings;
 
-    QList<int>  m_sets;
+    QList<Set*> m_sets;
 
 public:
-    SetContextMenu(MainWindow* _parent, Controller* _ctrl, const QList<int> &_sets);
+    SetContextMenu(MainWindow* _parent, Controller* _ctrl, const QList<Set*> &_sets);
 
 private slots:
     void editSets();

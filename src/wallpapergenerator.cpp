@@ -16,7 +16,18 @@ WallpaperGenerator::WallpaperGenerator(Controller* _ctrl) :
     m_enviro(_ctrl->enviro()),
     m_settings(_ctrl->settings())
 {
-    m_randomEngine.seed((unsigned int)time(NULL));
+    std::random_device rd;
+    m_randomEngine.seed(rd());
+
+    m_custGenerator = new CustomLayoutGenerator();
+}
+
+/**
+ * @brief WallpaperGenerator::~WallpaperGenerator
+ */
+WallpaperGenerator::~WallpaperGenerator()
+{
+    delete m_custGenerator;
 }
 
 /**
@@ -48,7 +59,7 @@ Set* WallpaperGenerator::getRandomSet()
     nbWalls.append(totalWalls);
 
     // generate random number between 0 and total nb of walls
-    uniform_int<int> unif(0, totalWalls-1);
+    std::uniform_int<int> unif(0, totalWalls-1);
     int counter = unif(m_randomEngine);
 
     // choose the set containing the generated number
@@ -104,6 +115,30 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
         {
             files.append(getNextFile(_set));
         }
+    }
+
+    if (_set->mode() == UM::SEQUENTIAL)
+    {
+        // save current file info
+        _set->writeCache();
+    }
+
+    return files;
+}
+
+QVector<QString> WallpaperGenerator::getFiles(Set* _set, int _nb)
+{
+    QVector<QString> files;
+
+    if (_set->mode() == UM::RANDOM)
+    {
+        for (int i=0; i<_nb; i++)
+            files.append(getRandomFile(_set, files));
+    }
+    else
+    {
+        for (int i=0; i<_nb; i++)
+            files.append(getNextFile(_set));
     }
 
     if (_set->mode() == UM::SEQUENTIAL)
@@ -174,7 +209,7 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QVector<QString> &_fi
         return _set->file(0);
     }
 
-    uniform_int<int> unif(0, total-1);
+    std::uniform_int<int> unif(0, total-1);
 
     // search a random unused file
     short loop = 10;
@@ -203,13 +238,13 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QVector<QString> &_fi
  * @param string[] _files
  * @return string[]
  */
-QVector<QString> WallpaperGenerator::adaptFiles(const Set* _set, const QVector<QString> &_files)
+QVector<QString> WallpaperGenerator::adaptFiles(Set* _set, const QVector<QString> &_files)
 {
     QVector<QString> newFiles;
 
     if (_set->type() == UM::W_DESKTOP)
     {
-        QRect rect = QRect(QPoint(), getDesktopEnabledRect().size());
+        QRect rect(QPoint(), getDesktopEnabledRect().size());
 
         newFiles.append(adaptFileToMonitor(_files.at(0), -1, rect, rect, _set));
     }
@@ -235,6 +270,115 @@ QVector<QString> WallpaperGenerator::adaptFiles(const Set* _set, const QVector<Q
 }
 
 /**
+ * @brief Get temporary files URI for custom layout set. Contains empty strings for disabled monitors.
+ * @param Set* _set
+ * @return string[]
+ */
+QVector<QString> WallpaperGenerator::getCustomFiles(Set* _set)
+{
+    QVector<QString> files;
+
+    if (_set->type() == UM::W_MONITOR)
+    {
+        for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
+        {
+            if (m_settings->monitor(i).enabled)
+            {
+                QRect rect(QPoint(), m_enviro->wpSize(i).size());
+                files.append(generateCustomFile(rect, _set));
+            }
+            else
+            {
+                files.append("");
+            }
+        }
+    }
+    else
+    {
+        QRect rect(QPoint(), getDesktopEnabledRect().size());
+        files.append(generateCustomFile(rect, _set));
+    }
+
+    return files;
+}
+
+/**
+ * @brief Generate one custom layout file in temp folder.
+ * @param QRect _scrRect
+ * @param Set* _set
+ * @return string
+ */
+QString WallpaperGenerator::generateCustomFile(const QRect &_scrRect, Set* _set)
+{
+    CustomLayout layout = _set->custLayout();
+    QList<QRect> rawBlocks = m_custGenerator->generate(layout);
+    QList<QRect> blocks;
+
+    // scale blocks to wallpaper size
+    double wRatio =  _scrRect.width() / (double) layout.cols;
+    double hRatio =  _scrRect.height() / (double) layout.rows;
+
+    foreach (QRect block, rawBlocks)
+    {
+        blocks.append(QRect(
+                          qRound(block.x() * wRatio),
+                          qRound(block.y() * hRatio),
+                          qRound(block.width() * wRatio),
+                          qRound(block.height() * hRatio)
+                          ));
+    }
+
+    QVector<QString> files = getFiles(_set, blocks.size());
+
+    QImage image(_scrRect.size(), QImage::Format_RGB32);
+    QPainter painter(&image);
+
+    // draw each block
+    for (int i=0, l=blocks.size(); i<l; i++)
+    {
+        QRect block = blocks.at(i);
+        QImage source(files.at(i));
+
+        source = source.scaled(block.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        QRect srcRect = QRect(QPoint(), source.size());
+
+        QRect zoneSource(
+                    (srcRect.width()-block.width()) / 2,
+                    (srcRect.height()-block.height()) / 2,
+                     block.width(),
+                     block.height()
+        );
+
+        painter.drawImage(block, source, zoneSource);
+    }
+
+    // draw borders
+    if (layout.borderEnabled)
+    {
+        QPen pen;
+        pen.setColor(QColor((QRgb) layout.borderColor));
+        pen.setWidth(layout.borderWidth);
+
+        painter.setPen(pen);
+        painter.setBrush(Qt::NoBrush);
+
+        foreach (QRect block, blocks)
+        {
+            painter.drawRect(block);
+        }
+    }
+
+    painter.end();
+
+    // save in temp folder
+    QString filename = getCustLayoutTempFilename(_scrRect, _set);
+
+    image.save(filename, 0, 100);
+
+    return filename;
+}
+
+/**
  * @brief Compute an image to fit in the monitor with a particular style, with cache management
  * @param string _file
  * @param int _idx
@@ -243,7 +387,7 @@ QVector<QString> WallpaperGenerator::adaptFiles(const Set* _set, const QVector<Q
  * @param Set* _set
  * @return string
  */
-QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, const QRect &_scrRect, const QRect &_wpRect, const Set* _set)
+QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, const QRect &_scrRect, const QRect &_wpRect, Set* _set)
 {
     QString key;
     if (_set->type() == UM::W_DESKTOP)
@@ -407,7 +551,7 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
  * @param string[] _files
  * @return string
  */
-QString WallpaperGenerator::generateFile(const Set *_set, const QVector<QString> &_files)
+QString WallpaperGenerator::generateFile(Set *_set, const QVector<QString> &_files)
 {
     QRect rect = m_enviro->wpSize(-1);
     QPoint offset = rect.topLeft();
@@ -486,11 +630,11 @@ QString WallpaperGenerator::generateFile(const Set *_set, const QVector<QString>
 
         painter2.end();
 
-        image2.save(filename, 0, 90);
+        image2.save(filename, 0, 100);
     }
     else
     {
-        image.save(filename, 0, 90);
+        image.save(filename, 0, 100);
     }
 
     return filename;
@@ -566,4 +710,22 @@ QString WallpaperGenerator::getCacheFilename(const QString &_file, const QRect &
             + _key2 + "-"
             + QString::number(_rect.width()) + "x" + QString::number(_rect.height())
             + ".jpg";
+}
+
+/**
+ * @brief Return a temp file path for a custom layout
+ * @param QRect _rect
+ * @param Set* _set
+ * @return string
+ */
+QString WallpaperGenerator::getCustLayoutTempFilename(const QRect &_rect, Set* _set)
+{
+    QString key = QString::number(_rect.top()) + QString::number(_rect.left()) + QString::number(_rect.width()) + QString::number(_rect.height());
+    uint32_t crc = crc32_1byte(key.toStdString().c_str(), key.size());
+
+    return QDir::toNativeSeparators(QDir::tempPath() + "/")
+            + "umwp-custom-"
+            + QString::number(crc, 16) + "-"
+            + _set->uuid()
+            + ".bmp";
 }

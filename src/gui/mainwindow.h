@@ -39,7 +39,7 @@ public:
     void defineHotkeys();
     void clearHotkeys();
 
-    void showContextMenu(const QList<int> &_sets, const QPoint &_pos);
+    void showContextMenu(const QList<Set*> &_sets, const QPoint &_pos);
 
 protected:
     void showEvent(QShowEvent* _event);

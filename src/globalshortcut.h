@@ -1,8 +1,9 @@
 #ifndef GLOBALSHORTCUT_H
 #define GLOBALSHORTCUT_H
 
-#include "ext/qglobalshortcut.h"
 #include <QHash>
+
+#include "ext/qglobalshortcut.h"
 
 
 /**

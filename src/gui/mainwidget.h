@@ -20,7 +20,8 @@ private:
 public:
     MainWidget(QWidget* _parent, Controller* _ctrl);
 
-    QList<int> getSelectedIndexes();
+    QList<int>  getSelectedIndexes() const;
+    QList<Set*> getSelectedSets() const;
 
 public slots:
     void onListChanged(bool _resetSel);

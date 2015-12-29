@@ -207,43 +207,7 @@ bool Settings::load(QString _filename)
                 // set node
                 if (setNode.tagName() == "set")
                 {
-                    QString path = setNode.text().trimmed();
-
-                    Set* set = new Set(path, setNode.attribute("name"));
-                    set->setActive(setNode.attribute("active").toInt());
-
-                    // added in 1.3
-                    if (setNode.hasAttribute("type"))
-                    {
-                        UM::WALLPAPER wp_type = static_cast<UM::WALLPAPER>(setNode.attribute("type").toInt());
-                        UM::IMAGE im_style = static_cast<UM::IMAGE>(setNode.attribute("style").toInt());
-                        set->setType(wp_type);
-                        set->setStyle(im_style);
-                    }
-
-                    // added in 1.9
-                    if (setNode.hasAttribute("mode"))
-                    {
-                        UM::MODE mode = static_cast<UM::MODE>(setNode.attribute("mode").toInt());
-                        set->setMode(mode);
-                    }
-
-                    // 1.3 format
-                    if (setNode.hasAttribute("hotkey_mod"))
-                    {
-                        set->setHotkey(
-                                    setNode.attribute("hotkey").toInt() +
-                                    setNode.attribute("hotkey_mod").toInt()
-                                    );
-                        updated = true;
-                    }
-                    // 1.4 format
-                    else if (setNode.hasAttribute("hotkey"))
-                    {
-                        set->setHotkey(setNode.attribute("hotkey").toInt());
-                    }
-
-                    m_sets.append(set);
+                    m_sets.append(new Set(&setNode));
                 }
 
                 setNode = setNode.nextSibling().toElement();
@@ -298,6 +262,11 @@ bool Settings::load(QString _filename)
         log();
     }
 
+    for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
+    {
+        (*it)->init();
+    }
+
     return true;
 }
 
@@ -350,13 +319,8 @@ bool Settings::save(QString _filename)
 
         // set node
         QDomElement setNode = dom.createElement("set");
-        setNode.setAttribute("name", set->name());
-        setNode.setAttribute("type", set->type());
-        setNode.setAttribute("style", set->style());
-        setNode.setAttribute("mode", set->mode());
-        setNode.setAttribute("active", set->isActive());
-        setNode.setAttribute("hotkey", set->hotkey());
-        setDomNodeValue(&dom, &setNode, set->path());
+
+        set->writeXml(&setNode, &dom);
 
         setsNode.appendChild(setNode);
     }
@@ -448,20 +412,15 @@ Set* Settings::addSet(const QString &_path, const QString &_name)
  * @brief Delete sets
  * @param int[] _sets
  */
-void Settings::deleteSets(const QList<int> &_sets)
+void Settings::deleteSets(const QList<Set*> &_sets)
 {
-    int offset = 0;
-    for (QList<int>::const_iterator i=_sets.constBegin(); i!=_sets.constEnd(); i++)
+    foreach (Set* set, _sets)
     {
-        int pos = *i-offset;
+        QLOG_DEBUG() << "Delete set: " << set->name();
 
-        QLOG_DEBUG() << "Delete set: " << m_sets.at(pos)->name();
-
-        m_sets.at(pos)->deleteCache();
-        delete m_sets.at(pos);
-        m_sets.remove(pos);
-
-        offset++;
+        set->deleteCache();
+        m_sets.removeAll(set);
+        delete set;
     }
 
     save();
@@ -484,13 +443,13 @@ void Settings::clearSets()
  * @brief Activate sets
  * @param int[] _sets
  */
-void Settings::activateSets(const QList<int> &_sets)
+void Settings::activateSets(const QList<Set*> &_sets)
 {
-    for (QList<int>::const_iterator i=_sets.constBegin(); i!=_sets.constEnd(); i++)
+    foreach(Set* set, _sets)
     {
-        m_sets.at(*i)->setActive(true);
+        set->setActive(true);
 
-        QLOG_DEBUG() << "Activate set: " << m_sets.at(*i)->name();
+        QLOG_DEBUG() << "Activate set: " << set->name();
     }
 
     save();
@@ -500,13 +459,13 @@ void Settings::activateSets(const QList<int> &_sets)
  * @brief Unactivate sets
  * @param int[] _sets
  */
-void Settings::unactivateSets(const QList<int> &_sets)
+void Settings::unactivateSets(const QList<Set*> &_sets)
 {
-    for (QList<int>::const_iterator i=_sets.constBegin(); i!=_sets.constEnd(); i++)
+    foreach(Set* set, _sets)
     {
-        m_sets.at(*i)->setActive(false);
+        set->setActive(false);
 
-        QLOG_DEBUG() << "Unactive set: " << m_sets.at(*i)->name();
+        QLOG_DEBUG() << "Unactive set: " << set->name();
     }
 
     save();
@@ -539,50 +498,25 @@ void Settings::setActiveSets(const QList<int> &_sets)
 }
 
 /**
- * @brief Edit a set
- * @param int _i - position in vector
- * @param string _name
- * @param UM::WALLPAPER _type
- * @param UM::IMAGE _style
- * @param UM::MODE _mode
- * @param int _hotkey
- */
-void Settings::editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey)
-{
-    if (_i < m_sets.size())
-    {
-        Set* set = m_sets.at(_i);
-
-        set->setName(_name);
-        set->setType(_type);
-        set->setStyle(_style);
-        set->setMode(_mode);
-        set->setHotkey(_hotkey);
-
-        QLOG_DEBUG() << "Edit set: " << set->name();
-
-        save();
-    }
-}
-
-/**
  * @brief Edit multiple sets
- * @param int[] _sets - positions in vector
+ * @param Set*[] _sets
+ * @param string _name - only if there is one set edited
  * @param UM::WALLPAPER _type
  * @param UM::IMAGE _style
  * @param UM::MODE _mode
  * @param int _hotkey
+ * @param CustomLayout _layout
  */
-void Settings::editSets(const QList<int> _sets, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey)
+void Settings::editSets(const QList<Set*> _sets, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey, const CustomLayout &_layout)
 {
-    foreach (int i, _sets)
+    foreach (Set* set, _sets)
     {
-        Set* set = m_sets.at(i);
-
+        if (_sets.size() == 1)     set->setName(_name);
         if (_type != UM::W_NONE)   set->setType(_type);
         if (_style != UM::IM_NONE) set->setStyle(_style);
         if (_mode != UM::NONE)     set->setMode(_mode);
         if (_hotkey != QHotKeyWidget::KEEP_KEY) set->setHotkey(_hotkey);
+        if (_style != UM::IM_NONE) set->setCustLayout(_layout);
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }

@@ -5,6 +5,8 @@
 
 #include "../main.h"
 #include "../set.h"
+#include "../customlayout.h"
+#include "../controller.h"
 #include "../settings.h"
 
 namespace Ui {
@@ -21,17 +23,23 @@ class SetEditDialog : public QDialog
 
 private:
     Ui::SetEditDialog *ui;
-    Settings* m_settings;
-    QList<int> m_sets;
+    Controller*  m_ctrl;
+    Settings*    m_settings;
+    QList<Set*>  m_sets;
+    CustomLayout m_custLayout;
 
 public:
-    SetEditDialog(QWidget* _parent, Settings* _settings, const QList<int> &_sets);
+    SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Set*> &_sets);
     ~SetEditDialog();
 
     void save();
 
 protected:
     void done(int result);
+
+private slots:
+    void on_selectStyle_currentDataChanged(QVariant data);
+    void on_styleConfig_clicked();
 };
 
 #endif // SETEDITDIALOG_H

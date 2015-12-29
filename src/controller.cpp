@@ -119,10 +119,21 @@ void Controller::update()
 
     QLOG_DEBUG() << "Current set:" << m_set->name() << "Type:" << m_set->type() << "Style:" << m_set->style();
 
-    m_files = m_generator->getFiles(m_set);
-    QLOG_DEBUG() << "Current files:" << m_files;
+    QVector<QString> tempFiles;
+    if (m_set->style() == UM::IM_CUSTOM)
+    {
+        m_files = m_generator->getCustomFiles(m_set);
+        QLOG_DEBUG() << "Current files:" << m_files;
 
-    QVector<QString> tempFiles = m_generator->adaptFiles(m_set, m_files);
+        tempFiles = m_files;
+    }
+    else
+    {
+        m_files = m_generator->getFiles(m_set);
+        QLOG_DEBUG() << "Current files:" << m_files;
+
+        tempFiles = m_generator->adaptFiles(m_set, m_files);
+    }
 
     QString wallpaper = m_generator->generateFile(m_set, tempFiles);
 

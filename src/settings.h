@@ -58,15 +58,14 @@ public:
     Set* addSet(const QString &_path);
     Set* addSet(const QString &_path, const QString &_name);
 
-    void deleteSets(const QList<int> &_sets);
+    void deleteSets(const QList<Set*> &_sets);
     void clearSets();
 
-    void activateSets(const QList<int> &_sets);
-    void unactivateSets(const QList<int> &_sets);
+    void activateSets(const QList<Set*> &_sets);
+    void unactivateSets(const QList<Set*> &_sets);
     void setActiveSets(const QList<int> &_sets);
 
-    void editSet(int _i, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey);
-    void editSets(const QList<int> _sets, UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey);
+    void editSets(const QList<Set*> _sets, const QString &_name, UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey, const CustomLayout &_layout);
     void moveSet(int _from, int _to);
 
 private:

@@ -2,6 +2,7 @@
 #define SET_H
 
 #include "main.h"
+#include "customlayout.h"
 
 
 /**
@@ -13,24 +14,27 @@ public:
     struct Current {
         QString file;
         int index;
+        Current() : file(""), index(0) {}
     };
 
 private:
     QString          m_path;
     QString          m_name;
-    UM::WALLPAPER    m_type;
-    UM::IMAGE        m_style;
-    UM::MODE         m_mode;
     QString          m_uuid;
-    bool             m_active;
-    bool             m_valid;
+    UM::WALLPAPER    m_type = UM::W_MONITOR;
+    UM::IMAGE        m_style = UM::IM_FILL;
+    UM::MODE         m_mode = UM::RANDOM;
+    bool             m_active = true;
+    bool             m_valid = true;
     QVector<QString> m_files;
     Current          m_current;
-    double           m_lastModif;
-    int              m_hotkey;
+    double           m_lastModif = 0;
+    int              m_hotkey = 0;
+    CustomLayout     m_custLayout;
 
 public:
     Set(const QString &_path, const QString &_name);
+    Set(const QDomElement* _dom);
 
     const QString       &path() const       { return m_path; }
     const QString       &name() const       { return m_name; }
@@ -43,6 +47,7 @@ public:
     const int           hotkey() const      { return m_hotkey; }
     const QString       uuid() const        { return m_uuid; }
     const Current       current() const     { return m_current; }
+    const CustomLayout  custLayout() const  { return m_custLayout; }
     const QString       file(int _i) const;
 
     void setActive(const bool _a)           { m_active=_a; }
@@ -52,7 +57,9 @@ public:
     void setMode(const UM::MODE _mode)      { m_mode=_mode; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
     void setCurrent(const Current &_curr)   { m_current=_curr; }
+    void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }
 
+    void   init();
     bool   check();
     double lastChange();
     void   populateFiles();
@@ -60,6 +67,8 @@ public:
     void readCache();
     void writeCache() const;
     void deleteCache() const;
+
+    void writeXml(QDomElement* _dom, QDomDocument *_document);
 
     const QString fullName() const;
     const QString hotkeyStr() const;

@@ -399,7 +399,7 @@ void MainWindow::openPreviewDialog()
  * @param int[]  _sets
  * @param QPoint _pos
  */
-void MainWindow::showContextMenu(const QList<int> &_sets, const QPoint &_pos)
+void MainWindow::showContextMenu(const QList<Set*> &_sets, const QPoint &_pos)
 {
     SetContextMenu menu(this, m_ctrl, _sets);
     menu.exec(_pos);
