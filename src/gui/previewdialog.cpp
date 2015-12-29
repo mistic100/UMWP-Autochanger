@@ -8,6 +8,7 @@
 #include <QFontMetrics>
 
 #include "previewdialog.h"
+#include "../umutils.h"
 
 
 /**
@@ -29,12 +30,12 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
     mainLayout->addWidget(buttons);
     setLayout(mainLayout);
 
-    connect(m_ctrl, SIGNAL(wallpaperChanged()), this, SLOT(draw()));
+    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(draw()));
     draw();
 
     setWindowTitle(tr("Active files"));
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -151,7 +152,7 @@ void PreviewDialog::onDeleteButtonClicked()
     {
         QLOG_TRACE() << "Delete " << path;
 
-        m_ctrl->moveFileToTrash(path);
+        UM::moveFileToTrash(path);
         m_ctrl->update();
     }
 }

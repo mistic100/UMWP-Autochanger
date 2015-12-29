@@ -134,10 +134,10 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     // MODE ICON
     switch (set->mode())
     {
-    case UM::RANDOM:
+    case UM::MODE_RANDOM:
         icon = QIcon(":/images/icons/mode_random.png");
         break;
-    case UM::SEQUENTIAL:
+    case UM::MODE_SEQUENTIAL:
         icon = QIcon(":/images/icons/mode_sequential.png");
         break;
     }

@@ -1,6 +1,8 @@
 #ifndef SET_H
 #define SET_H
 
+#include <QtXml>
+
 #include "main.h"
 #include "customlayout.h"
 
@@ -23,7 +25,7 @@ private:
     QString          m_uuid;
     UM::WALLPAPER    m_type = UM::W_MONITOR;
     UM::IMAGE        m_style = UM::IM_FILL;
-    UM::MODE         m_mode = UM::RANDOM;
+    UM::MODE         m_mode = UM::MODE_RANDOM;
     bool             m_active = true;
     bool             m_valid = true;
     QVector<QString> m_files;

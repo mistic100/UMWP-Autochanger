@@ -40,17 +40,7 @@ MainWindow::MainWindow(Controller* _ctrl) :
 
 
     // STATUS BAR
-    m_statusBar = new QStatusBar(this);
-
-    QString copyright = "<a href='" + QString(APP_HOMEPAGE) + "'>";
-    copyright+= QString(APP_NAME) + "</a>";
-    copyright+= " " + QString(APP_VERSION);
-
-    QLabel* statusLabel = new QLabel(copyright);
-    statusLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    statusLabel->setOpenExternalLinks(true);
-
-    m_statusBar->addPermanentWidget(statusLabel);
+    m_statusBar = new StatusBar(this, m_ctrl);
     setStatusBar(m_statusBar);
 
 
@@ -515,7 +505,7 @@ void MainWindow::quit()
 {
     if (!m_settings->get("close_warning").toBool())
     {
-        qApp->quit();
+        m_ctrl->quit();
         return;
     }
 
@@ -545,7 +535,7 @@ void MainWindow::quit()
 
     m_settings->save();
 
-    qApp->quit();
+    m_ctrl->quit();
 }
 
 /**
@@ -584,7 +574,7 @@ void MainWindow::closeEvent(QCloseEvent* _event)
     }
     else
     {
-        qApp->quit();
+        m_ctrl->quit();
     }
 }
 

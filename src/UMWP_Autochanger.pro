@@ -1,4 +1,4 @@
-QT += core gui widgets xml network
+QT += core gui widgets xml network concurrent
 
 DEFINES += NOMINMAX
 CONFIG += c++11
@@ -30,7 +30,9 @@ SOURCES += \
     gui/setcontextmenu.cpp \
     gui/screensdialog.cpp \
     wallpapergenerator.cpp \
-    customlayoutgenerator.cpp
+    customlayoutgenerator.cpp \
+    gui/statusbar.cpp \
+    umutils.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -65,7 +67,9 @@ HEADERS += \
     gui/changelogdialog.h \
     customlayout.h \
     customlayoutgenerator.h \
-    ext/variable2dmatrix.h
+    ext/variable2dmatrix.h \
+    gui/statusbar.h \
+    umutils.h
 
 FORMS += \
     gui/customstyledialog.ui \

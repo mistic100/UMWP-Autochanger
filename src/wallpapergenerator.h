@@ -11,7 +11,6 @@
 
 class Controller;
 
-
 /**
  * @brief Utility to select and process wallpaper files
  */
@@ -19,8 +18,13 @@ class WallpaperGenerator : public QObject
 {
     Q_OBJECT
 
+public:
+    struct Result {
+        QString wallpaper;
+        QVector<QString> files;
+    };
+
 private:
-    Controller*     m_ctrl;
     Environment*    m_enviro;
     Settings*       m_settings;
     CustomLayoutGenerator* m_custGenerator;
@@ -30,14 +34,15 @@ public:
     WallpaperGenerator(Controller* _ctrl);
     ~WallpaperGenerator();
 
+    Result generate(Set* _set);
     Set* getRandomSet();
+
+private:
     QVector<QString> getFiles(Set* _set);
     QVector<QString> getFiles(Set* _set, int _nb);
     QVector<QString> adaptFiles(Set* _set, const QVector<QString> &_files);
     QVector<QString> getCustomFiles(Set* _set);
     QString generateFile(Set* _set, const QVector<QString> &_files);
-
-private:
     QString getNextFile(Set* _set);
     QString getRandomFile(Set* _set, const QVector<QString> &_files);
     QString adaptFileToMonitor(const QString &_file, int _idx, const QRect &_scrRect, const QRect &_wpRect, Set* _set);

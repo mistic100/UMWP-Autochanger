@@ -93,14 +93,3 @@ int main(int argc, char *argv[])
 
     return ret;
 }
-
-
-/*
- * helper for simple XML text nodes
- */
-void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value)
-{
-    QDomElement element = _dom->createElement(_name);
-    element.appendChild(_dom->createTextNode(_value));
-    _parent->appendChild(element);
-}

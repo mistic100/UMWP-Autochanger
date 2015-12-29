@@ -27,7 +27,7 @@ ScreensDialog::ScreensDialog(QWidget* _parent, Controller* _ctrl) :
 
     init();
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     layout()->setSizeConstraint(QLayout::SetFixedSize);
 
@@ -53,7 +53,7 @@ void ScreensDialog::done(int result)
     if (result == QDialog::Accepted)
     {
         bool one = false;
-        foreach (Monitor mon, m_monitors) one|= mon.enabled;
+        foreach (UM::Monitor mon, m_monitors) one|= mon.enabled;
 
         if (!one)
         {

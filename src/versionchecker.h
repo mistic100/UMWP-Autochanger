@@ -32,7 +32,7 @@ private slots:
     {
         if (_reply->error() == QNetworkReply::NoError)
         {
-            NewVersion version;
+            UM::NewVersion version;
             version.code = _reply->readLine().trimmed();
             version.link = _reply->readLine().trimmed();
             version.hash = _reply->readLine().trimmed();
@@ -51,7 +51,7 @@ private slots:
     }
     
 signals:
-    void newVersionAvailable(const NewVersion);
+    void newVersionAvailable(const UM::NewVersion);
     void finished();
     
 };

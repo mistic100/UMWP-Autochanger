@@ -23,7 +23,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
 
     setFixedSize(size());
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     m_custLayout = m_sets.at(0)->custLayout();
 
@@ -33,7 +33,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
     {
         ui->selectType->addItem(tr("[keep]"),  UM::W_NONE);
         ui->selectStyle->addItem(tr("[keep]"), UM::IM_NONE);
-        ui->selectMode->addItem(tr("[keep]"),  UM::NONE);
+        ui->selectMode->addItem(tr("[keep]"),  UM::MODE_NONE);
     }
 
     ui->selectType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
@@ -46,8 +46,8 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
     ui->selectStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_custom.png"),       tr("Custom..."),            UM::IM_CUSTOM);
 
-    ui->selectMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::RANDOM);
-    ui->selectMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::SEQUENTIAL);
+    ui->selectMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
+    ui->selectMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
 
     if (m_sets.size() == 1)
     {

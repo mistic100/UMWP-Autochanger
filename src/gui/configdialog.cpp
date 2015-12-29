@@ -20,7 +20,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     setFixedSize(size());
 
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     ui->tabWidget->setCurrentIndex(0);
 
@@ -71,8 +71,8 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionStyle->setCurrentData(m_settings->get("default_style"));
 
     // mode
-    ui->optionMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::RANDOM);
-    ui->optionMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::SEQUENTIAL);
+    ui->optionMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
+    ui->optionMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
     ui->optionMode->setCurrentData(m_settings->get("default_mode"));
 
     QLOG_TRACE() << "ConfigDialog openned";

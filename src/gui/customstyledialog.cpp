@@ -25,7 +25,7 @@ CustomStyleDialog::CustomStyleDialog(QWidget* _parent, Controller* _ctrl) :
     m_generator = new CustomLayoutGenerator();
 
     setFixedSize(size());
-    setWindowFlags(SimpleDialogFlag);
+    setWindowFlags(UM::SimpleDialogFlag);
 
     m_rowsSpins.append(ui->maxRows);
     m_rowsSpins.append(ui->minRows);

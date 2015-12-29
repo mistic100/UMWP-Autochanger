@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <qt_windows.h>
-#include <QtXml>
+#include <QtCore>
 #include <QString>
 #include <QVector>
 #include <QsLog.h>
@@ -34,9 +34,9 @@ namespace UM {
     // loop mode
     enum MODE
     {
-        RANDOM = 0,
-        SEQUENTIAL = 1,
-        NONE = 16
+        MODE_RANDOM = 0,
+        MODE_SEQUENTIAL = 1,
+        MODE_NONE = 16
     };
 
     // alignment
@@ -52,23 +52,30 @@ namespace UM {
         ALIGN_BOTTOM_CENTER = 7,
         ALIGN_BOTTOM_RIGHT = 8
     };
-}
 
-// helper for monitors config
-struct Monitor {
-    bool enabled;
-    COLORREF color;
-    Monitor() : enabled(true), color(0x00000000) {}
-};
+    // helper for monitors config
+    struct Monitor {
+        bool enabled;
+        COLORREF color;
+        Monitor() : enabled(true), color(0x00000000) {}
+    };
+
+    // Store data about new version
+    struct NewVersion {
+        QString code;
+        QString link;
+        QString hash;
+    };
+
+    // flags for dialog without help button
+    const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
+}
 
 Q_DECLARE_METATYPE(UM::WALLPAPER)
 Q_DECLARE_METATYPE(UM::IMAGE)
 Q_DECLARE_METATYPE(UM::MODE)
-
-// flags for dialog without help button
-const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
-
-// common functions
-void addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value);
+Q_DECLARE_METATYPE(UM::ALIGN)
+Q_DECLARE_METATYPE(UM::Monitor)
+Q_DECLARE_METATYPE(UM::NewVersion)
 
 #endif // MAIN_H

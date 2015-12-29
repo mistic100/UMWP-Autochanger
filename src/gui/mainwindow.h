@@ -10,6 +10,7 @@
 #include "../globalshortcut.h"
 #include "menubar.h"
 #include "trayicon.h"
+#include "statusbar.h"
 
 
 /**
@@ -20,11 +21,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    Controller*     m_ctrl;
-    Settings*       m_settings;
-    Environment*    m_enviro;
+    Controller*  m_ctrl;
+    Settings*    m_settings;
+    Environment* m_enviro;
 
-    QStatusBar* m_statusBar;
+    StatusBar*  m_statusBar;
     MenuBar*    m_menuBar;
     TrayIcon*   m_trayIcon;
 

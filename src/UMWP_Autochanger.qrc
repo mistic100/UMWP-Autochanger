@@ -52,5 +52,6 @@
         <file>lang/ru_RU/help.htm</file>
         <file>lang/ru_RU/main.qm</file>
         <file>lang/ru_RU/changelog.htm</file>
+        <file>images/loader.gif</file>
     </qresource>
 </RCC>

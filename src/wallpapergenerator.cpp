@@ -12,7 +12,6 @@
  */
 WallpaperGenerator::WallpaperGenerator(Controller* _ctrl) :
     QObject(_ctrl),
-    m_ctrl(_ctrl),
     m_enviro(_ctrl->enviro()),
     m_settings(_ctrl->settings())
 {
@@ -28,6 +27,33 @@ WallpaperGenerator::WallpaperGenerator(Controller* _ctrl) :
 WallpaperGenerator::~WallpaperGenerator()
 {
     delete m_custGenerator;
+}
+
+/**
+ * @brief Main generation task. Called asynchronously from Controller
+ * @param Set* _set
+ * @return Result
+ */
+WallpaperGenerator::Result WallpaperGenerator::generate(Set* _set)
+{
+    QVector<QString> files;
+    if (_set->style() == UM::IM_CUSTOM)
+    {
+        files = getCustomFiles(_set);
+        QLOG_DEBUG() << "Current files:" << files;
+    }
+    else
+    {
+        files = getFiles(_set);
+        QLOG_DEBUG() << "Current files:" << files;
+
+        files = adaptFiles(_set, files);
+    }
+
+    return WallpaperGenerator::Result{
+        generateFile(_set, files),
+        files
+    };
 }
 
 /**
@@ -90,7 +116,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
         {
             if (m_settings->monitor(i).enabled)
             {
-                if (_set->mode() == UM::RANDOM)
+                if (_set->mode() == UM::MODE_RANDOM)
                 {
                     files.append(getRandomFile(_set, files));
                 }
@@ -107,7 +133,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
     }
     else
     {
-        if (_set->mode() == UM::RANDOM)
+        if (_set->mode() == UM::MODE_RANDOM)
         {
             files.append(getRandomFile(_set, files));
         }
@@ -117,7 +143,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
         }
     }
 
-    if (_set->mode() == UM::SEQUENTIAL)
+    if (_set->mode() == UM::MODE_SEQUENTIAL)
     {
         // save current file info
         _set->writeCache();
@@ -130,7 +156,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set, int _nb)
 {
     QVector<QString> files;
 
-    if (_set->mode() == UM::RANDOM)
+    if (_set->mode() == UM::MODE_RANDOM)
     {
         for (int i=0; i<_nb; i++)
             files.append(getRandomFile(_set, files));
@@ -141,7 +167,7 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set, int _nb)
             files.append(getNextFile(_set));
     }
 
-    if (_set->mode() == UM::SEQUENTIAL)
+    if (_set->mode() == UM::MODE_SEQUENTIAL)
     {
         // save current file info
         _set->writeCache();
@@ -679,7 +705,7 @@ QString WallpaperGenerator::getDesktopWallpaperKey(UM::IMAGE _style)
     for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
     {
         QRect screen = m_enviro->wpSize(i);
-        Monitor monitor = m_settings->monitor(i);
+        UM::Monitor monitor = m_settings->monitor(i);
 
         str+= QString::number(screen.left());
         str+= QString::number(screen.top());

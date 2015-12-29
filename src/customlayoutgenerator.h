@@ -2,6 +2,7 @@
 #define CUSTOMLAYOUTGENERATOR_H
 
 #include <random>
+#include <QRect>
 
 #include "main.h"
 #include "customlayout.h"

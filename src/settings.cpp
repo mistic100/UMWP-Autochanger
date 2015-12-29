@@ -1,5 +1,6 @@
 #include "settings.h"
 #include "ext/qhotkeywidget.h"
+#include "umutils.h"
 
 
 /**
@@ -19,7 +20,7 @@ Settings::Settings()
     m_options["show_notifications"] = true;
     m_options["last_dir"] = QDir::homePath();
     m_options["language"] = QLocale::system().name();
-    m_options["default_mode"] = UM::RANDOM;
+    m_options["default_mode"] = UM::MODE_RANDOM;
     m_options["default_type"] = UM::W_MONITOR;
     m_options["default_style"] = UM::IM_STRETCH_PROP;
     m_options["changelog_shown"] = "0.0.0";
@@ -62,7 +63,7 @@ const int Settings::nbEnabledMonitors() const
 {
     int n = 0;
 
-    foreach (Monitor mon, m_monitors)
+    foreach (UM::Monitor mon, m_monitors)
     {
         if (mon.enabled) n++;
     }
@@ -143,7 +144,7 @@ bool Settings::load(QString _filename)
     QDomElement settingsNode = dom.documentElement().firstChild().toElement();
 
     int newHotkey = 0;
-    UM::MODE newMode = UM::NONE;
+    UM::MODE newMode = UM::MODE_NONE;
     bool updated = false;
 
     while (!settingsNode.isNull())
@@ -163,7 +164,7 @@ bool Settings::load(QString _filename)
                 // migration to 1.9
                 else if (configNode.tagName() == "mode")
                 {
-                    newMode = configNode.text() == "random" ? UM::RANDOM : UM::SEQUENTIAL;
+                    newMode = configNode.text() == "random" ? UM::MODE_RANDOM : UM::MODE_SEQUENTIAL;
                     m_options["default_mode"] = newMode;
                 }
                 else if (m_options.contains(configNode.tagName()))
@@ -222,7 +223,7 @@ bool Settings::load(QString _filename)
 
             while (!monNode.isNull())
             {
-                Monitor mon;
+                UM::Monitor mon;
                 mon.enabled = (bool) monNode.attribute("enabled").toInt();
                 mon.color = (COLORREF) monNode.attribute("color").toInt();
 
@@ -244,7 +245,7 @@ bool Settings::load(QString _filename)
         updated = true;
     }
 
-    if (newMode != UM::NONE)
+    if (newMode != UM::MODE_NONE)
     {
         QLOG_INFO() << "Need to update modes";
         upgradeMode(newMode);
@@ -295,7 +296,7 @@ bool Settings::save(QString _filename)
 
     for (QHash<QString, QVariant>::const_iterator it = m_options.constBegin(); it != m_options.constEnd(); ++it)
     {
-        addSimpleTextNode(&dom, &configNode, it.key(), it.value().toString());
+        UM::addSimpleTextNode(&dom, &configNode, it.key(), it.value().toString());
     }
 
     mainNode.appendChild(configNode);
@@ -305,7 +306,7 @@ bool Settings::save(QString _filename)
 
     for (QHash<QString, int>::const_iterator it = m_hotkeys.constBegin(); it != m_hotkeys.constEnd(); ++it)
     {
-        addSimpleTextNode(&dom, &hotkeysNode, it.key(), QString::number(it.value()));
+        UM::addSimpleTextNode(&dom, &hotkeysNode, it.key(), QString::number(it.value()));
     }
 
     mainNode.appendChild(hotkeysNode);
@@ -330,9 +331,9 @@ bool Settings::save(QString _filename)
     // monitors node
     QDomElement monsNode = dom.createElement("monitors");
 
-    for (QVector<Monitor>::const_iterator it = m_monitors.constBegin(); it != m_monitors.constEnd(); ++it)
+    for (QVector<UM::Monitor>::const_iterator it = m_monitors.constBegin(); it != m_monitors.constEnd(); ++it)
     {
-        Monitor mon = *it;
+        UM::Monitor mon = *it;
 
         // monitor node
         QDomElement monNode = dom.createElement("monitor");
@@ -514,7 +515,7 @@ void Settings::editSets(const QList<Set*> _sets, const QString &_name, const UM:
         if (_sets.size() == 1)     set->setName(_name);
         if (_type != UM::W_NONE)   set->setType(_type);
         if (_style != UM::IM_NONE) set->setStyle(_style);
-        if (_mode != UM::NONE)     set->setMode(_mode);
+        if (_mode != UM::MODE_NONE)set->setMode(_mode);
         if (_hotkey != QHotKeyWidget::KEEP_KEY) set->setHotkey(_hotkey);
         if (_style != UM::IM_NONE) set->setCustLayout(_layout);
 

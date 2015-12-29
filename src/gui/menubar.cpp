@@ -7,13 +7,12 @@
  * @param Controller* _ctrl
  */
 MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
-    QToolBarExt((QWidget*) _parent),
-    m_ctrl(_ctrl)
+    QToolBarExt((QWidget*) _parent)
 {
     setMovable(false);
     setIconSize(QSize(20, 20));
 
-    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
+    connect(_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
 
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
@@ -43,8 +42,8 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionQuit,      SIGNAL(clicked()), _parent, SLOT(quit()));
     connect(actionAdd,       SIGNAL(clicked()), _parent, SLOT(addSet()));
     connect(actionHide,      SIGNAL(clicked()), _parent, SLOT(toggleWindow()));
-    connect(actionRefresh,   SIGNAL(clicked()), m_ctrl,  SLOT(update()));
-    connect(m_actionPause,   SIGNAL(clicked()), m_ctrl,  SLOT(startPause()));
+    connect(actionRefresh,   SIGNAL(clicked()), _ctrl,   SLOT(update()));
+    connect(m_actionPause,   SIGNAL(clicked()), _ctrl,   SLOT(startPause()));
 
     connect(actionOptions,   SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
     connect(actionScreens,   SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
