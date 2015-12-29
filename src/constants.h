@@ -21,6 +21,7 @@
 #define APP_INSTALLER_FILENAME "installer.exe"
 #define APP_LOG_FILENAME "debug.log"
 
+#define APP_MAX_APP_RUNNING_MESSAGE_COUNT 3
 #define APP_MIN_WIDTH 450
 #define APP_MIN_HEIGHT 250
 

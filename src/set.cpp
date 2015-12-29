@@ -91,7 +91,7 @@ Set::Set(const QDomElement* _dom)
                 m_custLayout.mainPos = static_cast<UM::ALIGN>(element.attribute("mainPos").toInt());
                 m_custLayout.borderEnabled = (bool) element.attribute("borderEnabled").toInt();
                 m_custLayout.borderWidth = element.attribute("borderWidth").toShort();
-                m_custLayout.borderColor = (COLORREF) element.attribute("borderColor").toInt();
+                m_custLayout.borderColor = element.attribute("borderColor").toInt();
             }
         }
 
@@ -104,7 +104,7 @@ Set::Set(const QDomElement* _dom)
  * @param QDomElement _dom
  * @param QDomDocument _document
  */
-void Set::writeXml(QDomElement* _dom, QDomDocument* _document)
+void Set::writeXml(QDomElement* _dom, QDomDocument* _document) const
 {
     _dom->setAttribute("name", m_name);
     _dom->setAttribute("type", m_type);
@@ -131,7 +131,7 @@ void Set::writeXml(QDomElement* _dom, QDomDocument* _document)
         layout.setAttribute("mainPos", m_custLayout.mainPos);
         layout.setAttribute("borderEnabled", m_custLayout.borderEnabled);
         layout.setAttribute("borderWidth", m_custLayout.borderWidth);
-        layout.setAttribute("borderColor", (int) m_custLayout.borderColor);
+        layout.setAttribute("borderColor", m_custLayout.borderColor);
 
         _dom->appendChild(layout);
     }
@@ -264,7 +264,7 @@ void Set::populateFilesRecur(const QString &_path, const int _level)
                                       QDir::Name | QDir::DirsLast | QDir::IgnoreCase
                                       );
 
-    foreach (QString path, files)
+    foreach (const QString path, files)
     {
         if (QFileInfo(_path + path).isDir())
         {

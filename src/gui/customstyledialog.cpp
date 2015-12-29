@@ -89,7 +89,7 @@ void CustomStyleDialog::setCustLayout(const CustomLayout &_layout)
 
     ui->borderEnabled->setChecked(_layout.borderEnabled);
     ui->borderWidth->setValue(_layout.borderWidth);
-    ui->borderColor->setColor(QColor((QRgb) _layout.borderColor));
+    ui->borderColor->setColor(QColor(_layout.borderColor));
 
     on_rows_valueChanged(_layout.rows);
     on_cols_valueChanged(_layout.cols);
@@ -117,7 +117,7 @@ CustomLayout CustomStyleDialog::getCustLayout() const
 
     layout.borderEnabled = ui->borderEnabled->isChecked();
     layout.borderWidth = ui->borderWidth->value();
-    layout.borderColor = (COLORREF) ui->borderColor->getColor().rgb();
+    layout.borderColor = ui->borderColor->getColor().rgb();
 
     return layout;
 }
@@ -169,8 +169,7 @@ void CustomStyleDialog::on_previewButton_clicked()
     std::random_shuffle(colors.begin(), colors.end());
 
     int i = 0;
-
-    foreach (QRect rect, rects)
+    foreach (const QRect rect, rects)
     {
         QRect sceneRect(
                     qRound(rect.x() / (double) layout.cols * size.width()),

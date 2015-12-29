@@ -2,32 +2,31 @@
 #include "ext/qhotkeywidget.h"
 #include "umutils.h"
 
-
 /**
  * @brief Settings::Settings
  */
 Settings::Settings()
 {
     // default configuration
-    m_options["window_width"] = 440;
-    m_options["window_height"] = 240;
-    m_options["delay"] = 60;
-    m_options["minimize"] = true;
-    m_options["check_updates"] = true;
-    m_options["msgcount"] = 0;
-    m_options["close_warning"] = true;
-    m_options["use_hotkeys"] = false;
-    m_options["show_notifications"] = true;
-    m_options["last_dir"] = QDir::homePath();
-    m_options["language"] = QLocale::system().name();
-    m_options["default_mode"] = UM::MODE_RANDOM;
-    m_options["default_type"] = UM::W_MONITOR;
-    m_options["default_style"] = UM::IM_STRETCH_PROP;
-    m_options["changelog_shown"] = "0.0.0";
+    m_options[UM::CONF::window_width] = APP_MIN_WIDTH;
+    m_options[UM::CONF::window_height] = APP_MIN_HEIGHT;
+    m_options[UM::CONF::delay] = 60;
+    m_options[UM::CONF::minimize] = true;
+    m_options[UM::CONF::check_updates] = true;
+    m_options[UM::CONF::msgcount] = 0;
+    m_options[UM::CONF::close_warning] = true;
+    m_options[UM::CONF::use_hotkeys] = false;
+    m_options[UM::CONF::show_notifications] = true;
+    m_options[UM::CONF::last_dir] = QDir::homePath();
+    m_options[UM::CONF::language] = QLocale::system().name();
+    m_options[UM::CONF::default_mode] = UM::MODE_RANDOM;
+    m_options[UM::CONF::default_type] = UM::W_MONITOR;
+    m_options[UM::CONF::default_style] = UM::IM_STRETCH_PROP;
+    m_options[UM::CONF::changelog_shown] = "0.0.0";
 
-    m_hotkeys["refresh"] = 0;
-    m_hotkeys["startpause"] = 0;
-    m_hotkeys["showhide"] = 0;
+    m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
+    m_hotkeys[UM::CONF::HOTKEY::startpause] = 0;
+    m_hotkeys[UM::CONF::HOTKEY::showhide] = 0;
 }
 
 /**
@@ -44,7 +43,10 @@ Settings::~Settings()
  */
 const QSize Settings::windowSize() const
 {
-    return QSize(m_options["window_width"].toInt(), m_options["window_height"].toInt());
+    return QSize(
+            m_options[UM::CONF::window_width].toInt(),
+            m_options[UM::CONF::window_height].toInt()
+            );
 }
 
 /**
@@ -52,8 +54,8 @@ const QSize Settings::windowSize() const
  */
 void Settings::setWindowSize(const QSize &_size)
 {
-    m_options["window_width"] = _size.width();
-    m_options["window_height"] = _size.height();
+    m_options[UM::CONF::window_width] = _size.width();
+    m_options[UM::CONF::window_height] = _size.height();
 }
 
 /**
@@ -63,20 +65,12 @@ const int Settings::nbEnabledMonitors() const
 {
     int n = 0;
 
-    foreach (UM::Monitor mon, m_monitors)
+    foreach (const UM::Monitor mon, m_monitors)
     {
         if (mon.enabled) n++;
     }
 
     return n;
-}
-
-/**
- * @brief Increment tray tooltip count
- */
-void Settings::incrementMsgCount()
-{
-    m_options["msgcount"] = m_options["msgcount"].toInt()+1;
 }
 
 /**
@@ -165,7 +159,7 @@ bool Settings::load(QString _filename)
                 else if (configNode.tagName() == "mode")
                 {
                     newMode = configNode.text() == "random" ? UM::MODE_RANDOM : UM::MODE_SEQUENTIAL;
-                    m_options["default_mode"] = newMode;
+                    m_options[UM::CONF::default_mode] = newMode;
                 }
                 else if (m_options.contains(configNode.tagName()))
                 {
@@ -225,7 +219,7 @@ bool Settings::load(QString _filename)
             {
                 UM::Monitor mon;
                 mon.enabled = (bool) monNode.attribute("enabled").toInt();
-                mon.color = (COLORREF) monNode.attribute("color").toInt();
+                mon.color = monNode.attribute("color").toInt();
 
                 m_monitors.append(mon);
 
@@ -263,9 +257,9 @@ bool Settings::load(QString _filename)
         log();
     }
 
-    for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
+    foreach (Set* set, m_sets)
     {
-        (*it)->init();
+        set->init();
     }
 
     return true;
@@ -314,10 +308,8 @@ bool Settings::save(QString _filename)
     // sets node
     QDomElement setsNode = dom.createElement("sets");
 
-    for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
+    foreach (const Set* set, m_sets)
     {
-        Set* set = *it;
-
         // set node
         QDomElement setNode = dom.createElement("set");
 
@@ -331,10 +323,8 @@ bool Settings::save(QString _filename)
     // monitors node
     QDomElement monsNode = dom.createElement("monitors");
 
-    for (QVector<UM::Monitor>::const_iterator it = m_monitors.constBegin(); it != m_monitors.constEnd(); ++it)
+    foreach (const UM::Monitor mon, m_monitors)
     {
-        UM::Monitor mon = *it;
-
         // monitor node
         QDomElement monNode = dom.createElement("monitor");
         monNode.setAttribute("enabled", mon.enabled);
@@ -373,17 +363,6 @@ bool Settings::save(QString _filename)
  */
 Set* Settings::addSet(const QString &_path)
 {
-    return addSet(_path, "");
-}
-
-/**
- * @brief Add a new set
- * @param string _path
- * @param string _name
- * @return Set*
- */
-Set* Settings::addSet(const QString &_path, const QString &_name)
-{
     QLOG_DEBUG() << "New set: " << _path;
 
     QDir dir = QDir(_path);
@@ -393,15 +372,11 @@ Set* Settings::addSet(const QString &_path, const QString &_name)
         return NULL;
     }
 
-    Set* set = new Set(_path, _name);
-    if (_name.isEmpty())
-    {
-        set->setName(dir.dirName());
-    }
+    Set* set = new Set(_path, dir.dirName());
 
-    set->setMode(static_cast<UM::MODE>(m_options["default_mode"].toInt()));
-    set->setStyle(static_cast<UM::IMAGE>(m_options["default_style"].toInt()));
-    set->setType(static_cast<UM::WALLPAPER>(m_options["default_type"].toInt()));
+    set->setMode(static_cast<UM::MODE>(m_options[UM::CONF::default_mode].toInt()));
+    set->setStyle(static_cast<UM::IMAGE>(m_options[UM::CONF::default_style].toInt()));
+    set->setType(static_cast<UM::WALLPAPER>(m_options[UM::CONF::default_type].toInt()));
 
     m_sets.append(set);
     save();
@@ -476,19 +451,24 @@ void Settings::unactivateSets(const QList<Set*> &_sets)
  * @brief Activate only some sets
  * @param int[] _sets
  */
-void Settings::setActiveSets(const QList<int> &_sets)
+void Settings::setActiveSets(const QList<Set*> &_sets)
 {
-    for (int i=0, l=nbSets(); i<l; i++)
+    foreach(Set* set, m_sets)
     {
-        m_sets.at(i)->setActive(_sets.contains(i));
+        set->setActive(false);
+    }
+
+    foreach(Set* set, _sets)
+    {
+        set->setActive(true);
     }
 
     if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
     {
         QList<QString> sets;
-        for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
+        foreach (const Set* set, m_sets)
         {
-            sets.append((*it)->name()+", "+((*it)->isActive()?"active":"inactive"));
+            sets.append(set->name()+", "+(set->isActive()?"active":"inactive"));
         }
 
         QLOG_DEBUG() << "Change sets state:";
@@ -508,16 +488,16 @@ void Settings::setActiveSets(const QList<int> &_sets)
  * @param int _hotkey
  * @param CustomLayout _layout
  */
-void Settings::editSets(const QList<Set*> _sets, const QString &_name, const UM::WALLPAPER _type, const UM::IMAGE _style, const UM::MODE _mode, const int _hotkey, const CustomLayout &_layout)
+void Settings::editSets(const QList<Set*> _sets, const Set &_data)
 {
     foreach (Set* set, _sets)
     {
-        if (_sets.size() == 1)     set->setName(_name);
-        if (_type != UM::W_NONE)   set->setType(_type);
-        if (_style != UM::IM_NONE) set->setStyle(_style);
-        if (_mode != UM::MODE_NONE)set->setMode(_mode);
-        if (_hotkey != QHotKeyWidget::KEEP_KEY) set->setHotkey(_hotkey);
-        if (_style != UM::IM_NONE) set->setCustLayout(_layout);
+        if (_sets.size() == 1)            set->setName(_data.name());
+        if (_data.type() != UM::W_NONE)   set->setType(_data.type());
+        if (_data.style() != UM::IM_NONE) set->setStyle(_data.style());
+        if (_data.mode() != UM::MODE_NONE)set->setMode(_data.mode());
+        if (_data.hotkey() != QHotKeyWidget::KEEP_KEY) set->setHotkey(_data.hotkey());
+        if (_data.style() != UM::IM_NONE) set->setCustLayout(_data.custLayout());
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }
@@ -554,9 +534,8 @@ void Settings::moveSet(int _from, int _to)
  */
 void Settings::updateSets()
 {
-    for (QVector<Set*>::iterator it=m_sets.begin(); it!=m_sets.end(); ++it)
+    foreach (Set* set, m_sets)
     {
-        Set* set = *it;
         if (set->check())
         {
             set->populateFiles();
@@ -573,9 +552,8 @@ Set* Settings::activeSet(int _i, bool _withFiles) const
 {
     QVector<Set*> activeSets;
 
-    for (QVector<Set*>::const_iterator it=m_sets.constBegin(); it!=m_sets.constEnd(); ++it)
+    foreach (Set* set, m_sets)
     {
-        Set* set = *it;
         if (set->isActive() && set->isValid() && (!_withFiles || set->count()>0))
         {
             activeSets.append(set);
@@ -594,9 +572,8 @@ int const Settings::nbActiveSets(bool _withFiles) const
 {
     int totalSets = 0;
 
-    for (QVector<Set*>::const_iterator it=m_sets.constBegin(); it!=m_sets.constEnd(); ++it)
+    foreach (const Set* set, m_sets)
     {
-        Set* set = *it;
         if (set->isActive() && set->isValid() && (!_withFiles || set->count()>0))
         {
             totalSets++;
@@ -631,17 +608,15 @@ void Settings::upgradeHotkeys(int WinMod)
     }
 
     int key = Qt::Key_1;
-    for (QVector<Set*>::const_iterator it=m_sets.constBegin(); it!=m_sets.constEnd(); ++it)
+    foreach (Set* set, m_sets)
     {
-        (*it)->setHotkey(key + QtMod);
+        set->setHotkey(key + QtMod);
+
         key++;
-        if (key > Qt::Key_9)
-        {
-            break;
-        }
+        if (key > Qt::Key_9) break;
     }
 
-    m_options["use_hotkeys"] = true;
+    m_options[UM::CONF::use_hotkeys] = true;
 }
 
 /**

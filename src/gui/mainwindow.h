@@ -42,6 +42,9 @@ public:
 
     void showContextMenu(const QList<Set*> &_sets, const QPoint &_pos);
 
+private:
+    void init();
+
 protected:
     void showEvent(QShowEvent* _event);
     void resizeEvent(QResizeEvent* _event);
@@ -49,7 +52,6 @@ protected:
     bool eventFilter(QObject*, QEvent* _event);
 
 public slots:
-    void init();
     void quit();
     void addSet();
     void toggleWindow(bool _forceHide=false);
@@ -63,7 +65,6 @@ public slots:
     void openPreviewDialog();
     void openExportDialog();
     void openImportDialog();
-    void openLink(const QString &_link);
 
     void onNewVersion();
     void openNewVersionDialog();

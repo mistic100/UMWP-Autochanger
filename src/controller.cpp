@@ -19,7 +19,6 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     m_set = NULL;
 
     m_mainTimer = new QTimer(this);
-    m_mainTimer->setInterval(m_settings->get("delay").toInt()*1000);
     connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(update()));
 
     connect(&m_generatorWatcher, SIGNAL(finished()), this, SLOT(onGenerationDone()));
@@ -53,7 +52,7 @@ void Controller::quit()
  */
 void Controller::checkVersion()
 {
-    if (m_settings->get("check_updates").toBool())
+    if (m_settings->param(UM::CONF::check_updates).toBool())
     {
         VersionChecker* checker = new VersionChecker();
         connect(checker, SIGNAL(newVersionAvailable(const UM::NewVersion)), this, SLOT(onNewVersion(const UM::NewVersion)));
@@ -86,7 +85,7 @@ void Controller::onNewVersion(const UM::NewVersion _version)
  */
 void Controller::launchInstaller()
 {
-    QString path = QDir::currentPath() +"/"+ APP_INSTALLER_FILENAME;
+    QString path = QDir::toNativeSeparators(QDir::currentPath() +"/"+ APP_INSTALLER_FILENAME);
 
     if (QFile::exists(path))
     {
@@ -99,7 +98,7 @@ void Controller::launchInstaller()
  * @brief Pause or start the timer
  * @return bool - true if the timer is running
  */
-void Controller::startPause()
+bool Controller::startPause()
 {
     if (m_mainTimer->isActive())
     {
@@ -113,6 +112,7 @@ void Controller::startPause()
     }
 
     emit startedPaused(m_mainTimer->isActive());
+    return m_mainTimer->isActive();
 }
 
 /**
@@ -123,7 +123,7 @@ void Controller::update()
     QLOG_INFO() << "Update !";
 
     // restart timer
-    m_mainTimer->start(m_settings->get("delay").toInt()*1000);
+    m_mainTimer->start(m_settings->param(UM::CONF::delay).toInt()*1000);
     emit startedPaused(true);
 
     // update config
@@ -132,20 +132,9 @@ void Controller::update()
     emit listChanged(false);
     m_files.clear();
 
-    // get random files
-    m_set = m_generator->getRandomSet();
-
-    if (m_set == NULL)
-    {
-        QLOG_WARN() << "No active set";
-        return;
-    }
-
-    QLOG_DEBUG() << "Current set:" << m_set->name() << "Type:" << m_set->type() << "Style:" << m_set->style();
-
     emit generationStarted();
 
-    QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate, m_set);
+    QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate);
     m_generatorWatcher.setFuture(future);
 }
 
@@ -156,8 +145,126 @@ void Controller::onGenerationDone()
 {
     WallpaperGenerator::Result result = m_generatorWatcher.future().result();
 
-    m_enviro->setWallpaper(result.wallpaper);
-    m_files = result.files;
+    if (result.set != NULL)
+    {
+        m_set = result.set;
+        m_files = result.files;
+    }
 
     emit generationFinished();
+}
+
+/**
+ * @brief Move a set
+ * @param int _from
+ * @param int _to
+ */
+void Controller::moveSet(int _from, int _to)
+{
+    m_settings->moveSet(_from, _to);
+
+    emit listChanged(true);
+}
+
+/**
+ * @brief Add a new set
+ * @param string _dirname
+ */
+void Controller::addSet(const QString &_dirname)
+{
+    QDir dir(_dirname);
+    dir.cdUp();
+    m_settings->setParam(UM::CONF::last_dir, dir.absolutePath());
+
+    m_settings->addSet(QString(_dirname).replace('/', '\\'));
+
+    emit listChanged(true);
+}
+
+/**
+ * @brief Load config from file
+ * @param string _file
+ * @return bool
+ */
+bool Controller::loadConfig(const QString &_file)
+{
+    if (m_settings->load(_file))
+    {
+        m_enviro->checkSettings();
+        m_settings->save();
+
+        emit listChanged(true);
+        update();
+
+        return true;
+    }
+    else
+    {
+        QLOG_ERROR() << "Invalid settings file";
+
+        return false;
+    }
+}
+
+/**
+ * @brief Change which sets are active
+ * @param int[] _idx
+ */
+void Controller::setActiveSets(const QList<int> &_idx)
+{
+    QList<Set*> sets;
+
+    foreach (const int i, _idx)
+    {
+        sets.append(m_settings->set(i));
+    }
+
+    m_settings->setActiveSets(sets);
+
+    update();
+}
+
+/**
+ * @brief Delete sets
+ * @param Set*[] _sets
+ */
+void Controller::deleteSets(const QList<Set*> &_sets)
+{
+    m_settings->deleteSets(_sets);
+
+    emit listChanged(true);
+}
+
+/**
+ * @brief Activate sets
+ * @param Set*[] _sets
+ */
+void Controller::activateSets(const QList<Set*> &_sets)
+{
+    m_settings->activateSets(_sets);
+
+    emit listChanged(false);
+}
+
+/**
+ * @brief Deactivate sets
+ * @param Set*[] _sets
+ */
+void Controller::unactivateSets(const QList<Set*> &_sets)
+{
+    m_settings->unactivateSets(_sets);
+
+    emit listChanged(false);
+}
+
+/**
+ * @brief Edit sets
+ * @param Set*[] _sets
+ * @param Set _data
+ */
+void Controller::editSets(const QList<Set*> &_sets, const Set _data)
+{
+    m_settings->editSets(_sets, _data);
+
+    emit listChanged(false);
 }

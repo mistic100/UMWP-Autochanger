@@ -20,7 +20,7 @@ class WallpaperGenerator : public QObject
 
 public:
     struct Result {
-        QString wallpaper;
+        Set* set;
         QVector<QString> files;
     };
 
@@ -34,10 +34,10 @@ public:
     WallpaperGenerator(Controller* _ctrl);
     ~WallpaperGenerator();
 
-    Result generate(Set* _set);
-    Set* getRandomSet();
+    Result generate();
 
 private:
+    Set* getRandomSet();
     QVector<QString> getFiles(Set* _set);
     QVector<QString> getFiles(Set* _set, int _nb);
     QVector<QString> adaptFiles(Set* _set, const QVector<QString> &_files);
@@ -51,7 +51,6 @@ private:
     QString getDesktopWallpaperKey(UM::IMAGE _style);
     QString getCacheFilename(const QString &_file, const QRect &_rect, const QString &_key1, const QString &_key2);
     QString getCustLayoutTempFilename(const QRect &_rect, Set* _set);
-
 };
 
 #endif // WALLPAPERGENERATOR_H

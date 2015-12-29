@@ -65,18 +65,15 @@ void Environment::log()
 /**
  * @brief Read monitors config from default file or UltraMon API
  */
-bool Environment::refreshMonitors()
+void Environment::refreshMonitors()
 {
-    if (!queryMonitors(m_wpSizes))
-    {
-        return false;
-    }
-
+    queryMonitors();
     checkSettings();
-
-    return true;
 }
 
+/**
+ * Callback for EnumDisplayMonitors
+ */
 BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM dwData)
 {
     MONITORINFO mi;
@@ -94,19 +91,20 @@ BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM dwData)
  * @param QRect[] _sizes
  * @return bool
  */
-bool Environment::queryMonitors(QHash<int, QRect> &_sizes)
+void Environment::queryMonitors()
 {
-    _sizes.clear();
+    m_wpSizes.clear();
 
     QList<RECT> monitors;
     EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, reinterpret_cast<LPARAM>(&monitors));
 
-    if (monitors.size() > 0) {
+    if (monitors.size() > 0)
+    {
         int i=0, minX=0, maxX=0, minY=0, maxY=0;
 
-        foreach (RECT rect, monitors)
+        foreach (const RECT rect, monitors)
         {
-            _sizes.insert(i++, QRect(
+            m_wpSizes.insert(i++, QRect(
                              rect.left,
                              rect.top,
                              rect.right-rect.left,
@@ -120,15 +118,17 @@ bool Environment::queryMonitors(QHash<int, QRect> &_sizes)
         }
 
         // store whole desktop size with its top-left-most position
-        _sizes.insert(-1, QRect(minX, minY, maxX-minX, maxY-minY));
+        m_wpSizes.insert(-1, QRect(minX, minY, maxX-minX, maxY-minY));
+    }
+    else
+    {
+        QLOG_FATAL()<<"Unable to query monitors";
     }
 
     if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
     {
         log();
     }
-
-    return _sizes.size() > 0;
 }
 
 /**
@@ -164,7 +164,7 @@ void Environment::setWallpaper(const QString &_file)
     {
         if (!SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, (PVOID)_file.toStdWString().c_str(), SPIF_UPDATEINIFILE | SPIF_SENDCHANGE))
         {
-            result = 1L;
+            result = ERROR_FILE_NOT_FOUND;
         }
     }
 

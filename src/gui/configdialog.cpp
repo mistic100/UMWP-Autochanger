@@ -25,29 +25,30 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->tabWidget->setCurrentIndex(0);
 
     // checkboxes
-    ui->optionMinimize->setChecked(         m_settings->get("minimize").toBool());
-    ui->optionCheckUpdates->setChecked(     m_settings->get("check_updates").toBool());
+    ui->optionMinimize->setChecked(         m_settings->param(UM::CONF::minimize).toBool());
+    ui->optionCheckUpdates->setChecked(     m_settings->param(UM::CONF::check_updates).toBool());
     ui->optionAutostart->setChecked(        m_enviro->isAutostart());
-    ui->optionUseHotkeys->setChecked(       m_settings->get("use_hotkeys").toBool());
-    ui->optionShowNotifications->setChecked(m_settings->get("show_notifications").toBool());
+    ui->optionUseHotkeys->setChecked(       m_settings->param(UM::CONF::use_hotkeys).toBool());
+    ui->optionShowNotifications->setChecked(m_settings->param(UM::CONF::show_notifications).toBool());
 
     ui->optionAutostart->setDisabled(!m_enviro->canAddShortcut());
 
     // hotkeys
-    ui->hotkeyRefresh->setDisabled(     !m_settings->get("use_hotkeys").toBool());
-    ui->hotkeyShowHide->setDisabled(    !m_settings->get("use_hotkeys").toBool());
-    ui->hotkeyStartPause->setDisabled(  !m_settings->get("use_hotkeys").toBool());
+    bool useHotkeys = m_settings->param(UM::CONF::use_hotkeys).toBool();
+    ui->hotkeyRefresh->setDisabled(!useHotkeys);
+    ui->hotkeyShowHide->setDisabled(!useHotkeys);
+    ui->hotkeyStartPause->setDisabled(!useHotkeys);
 
-    ui->hotkeyRefresh->setHotkey(   m_settings->hotkey("refresh"));
-    ui->hotkeyShowHide->setHotkey(  m_settings->hotkey("showhide"));
-    ui->hotkeyStartPause->setHotkey(m_settings->hotkey("startpause"));
+    ui->hotkeyRefresh->setHotkey(   m_settings->hotkey(UM::CONF::HOTKEY::refresh));
+    ui->hotkeyShowHide->setHotkey(  m_settings->hotkey(UM::CONF::HOTKEY::showhide));
+    ui->hotkeyStartPause->setHotkey(m_settings->hotkey(UM::CONF::HOTKEY::startpause));
 
     // delay
-    QTime time = QTime(0, 0, 0).addSecs(m_settings->get("delay").toInt());
+    QTime time = QTime(0, 0, 0).addSecs(m_settings->param(UM::CONF::delay).toInt());
     ui->optionDelay->setTime(time);
 
     // languages
-    foreach (QString lang, m_enviro->languages())
+    foreach (const QString lang, m_enviro->languages())
     {
         ui->optionLang->addItem(
                     QIcon(":/lang/" + lang + "/flag"),
@@ -55,12 +56,12 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
                     lang
         );
     }
-    ui->optionLang->setCurrentData(m_settings->get("language"));
+    ui->optionLang->setCurrentData(m_settings->param(UM::CONF::language));
 
     // type
     ui->optionType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
     ui->optionType->addItem(QIcon(":/images/icons/w_desktop.png"), tr("One image for the whole desktop"), UM::W_DESKTOP);
-    ui->optionType->setCurrentData(m_settings->get("default_type"));
+    ui->optionType->setCurrentData(m_settings->param(UM::CONF::default_type));
 
     // style
     ui->optionStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
@@ -68,12 +69,12 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
-    ui->optionStyle->setCurrentData(m_settings->get("default_style"));
+    ui->optionStyle->setCurrentData(m_settings->param(UM::CONF::default_style));
 
     // mode
     ui->optionMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
     ui->optionMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
-    ui->optionMode->setCurrentData(m_settings->get("default_mode"));
+    ui->optionMode->setCurrentData(m_settings->param(UM::CONF::default_mode));
 
     QLOG_TRACE() << "ConfigDialog openned";
 }
@@ -180,26 +181,26 @@ void ConfigDialog::save()
     int langIndex = ui->optionLang->currentIndex();
     QVariant lang = ui->optionLang->itemData(langIndex);
 
-    if (lang != m_settings->get("language"))
+    if (lang != m_settings->param(UM::CONF::language))
     {
         QMessageBox::warning(this, tr("Language changed"),
                              tr("You must restart %1 to apply the new language.").arg(APP_NAME),
                              QMessageBox::Ok, QMessageBox::Ok);
     }
 
-    m_settings->setOpt("delay",                 delay);
-    m_settings->setOpt("language",              lang);
-    m_settings->setOpt("default_mode",          ui->optionMode->currentData());
-    m_settings->setOpt("default_type",          ui->optionType->currentData());
-    m_settings->setOpt("default_style",         ui->optionStyle->currentData());
-    m_settings->setOpt("minimize",              ui->optionMinimize->isChecked());
-    m_settings->setOpt("check_updates",         ui->optionCheckUpdates->isChecked());
-    m_settings->setOpt("use_hotkeys",           ui->optionUseHotkeys->isChecked());
-    m_settings->setOpt("show_notifications",    ui->optionShowNotifications->isChecked());
+    m_settings->setParam(UM::CONF::delay,                 delay);
+    m_settings->setParam(UM::CONF::language,              lang);
+    m_settings->setParam(UM::CONF::default_mode,          ui->optionMode->currentData());
+    m_settings->setParam(UM::CONF::default_type,          ui->optionType->currentData());
+    m_settings->setParam(UM::CONF::default_style,         ui->optionStyle->currentData());
+    m_settings->setParam(UM::CONF::minimize,              ui->optionMinimize->isChecked());
+    m_settings->setParam(UM::CONF::check_updates,         ui->optionCheckUpdates->isChecked());
+    m_settings->setParam(UM::CONF::use_hotkeys,           ui->optionUseHotkeys->isChecked());
+    m_settings->setParam(UM::CONF::show_notifications,    ui->optionShowNotifications->isChecked());
 
-    m_settings->setHotkey("refresh",    ui->hotkeyRefresh->hotkey());
-    m_settings->setHotkey("showhide",   ui->hotkeyShowHide->hotkey());
-    m_settings->setHotkey("startpause", ui->hotkeyStartPause->hotkey());
+    m_settings->setHotkey(UM::CONF::HOTKEY::refresh,    ui->hotkeyRefresh->hotkey());
+    m_settings->setHotkey(UM::CONF::HOTKEY::showhide,   ui->hotkeyShowHide->hotkey());
+    m_settings->setHotkey(UM::CONF::HOTKEY::startpause, ui->hotkeyStartPause->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {

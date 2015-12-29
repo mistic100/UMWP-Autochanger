@@ -150,7 +150,7 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     // HOTKEY
     int hkWidth = 0;
 
-    if (m_settings->get("use_hotkeys").toBool() && set->hotkey() > 0)
+    if (m_settings->param(UM::CONF::use_hotkeys).toBool() && set->hotkey() > 0)
     {
         rect = baseRect.adjusted(0, 3, -23, 0);
         _painter->setFont(QFont("Calibri", 9, -1, true));

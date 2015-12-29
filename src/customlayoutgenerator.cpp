@@ -76,7 +76,7 @@ QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
 
     // compute the surface occupied by all pool items
     int poolSurface = 0;
-    foreach (QRect block, pool)
+    foreach (const QRect block, pool)
         poolSurface+= block.width() * block.height();
 
     // compute how many times each item must be duplicated in the pool
@@ -84,7 +84,7 @@ QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
     int nbPool = poolSurface==0 ? 0 : qCeil(totalSurface / poolSurface);
 
     // actually duplicate the items
-    foreach (QRect block, pool)
+    foreach (const QRect block, pool)
         for (int k=0; k<nbPool; k++)
             pool.append(block);
 

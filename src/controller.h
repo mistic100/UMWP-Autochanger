@@ -34,23 +34,27 @@ public:
     ~Controller();
 
     void checkVersion();
+    void launchInstaller();
 
     Settings*       settings() const    { return m_settings; }
     Environment*    enviro() const      { return m_enviro; }
 
-    const QVector<QString> &files() const { return m_files; }
-    Set*    currentSet() const          { return m_set; }
-
-    bool isPaused() const { return !m_mainTimer->isActive(); }
-
-    void launchInstaller();
-
-    void emitListChanged(bool _resetSel=false) { emit listChanged(_resetSel); }
+    const QVector<QString> &currentFiles() const { return m_files; }
+    Set* currentSet() const { return m_set; }
 
 public slots:
     void quit();
     void update();
-    void startPause();
+    bool startPause();
+
+    void editSets(const QList<Set*> &_sets, const Set _data);
+    void moveSet(int _from, int _to);
+    void addSet(const QString &_dirname);
+    bool loadConfig(const QString &_file);
+    void setActiveSets(const QList<int> &_idx);
+    void deleteSets(const QList<Set*> &_sets);
+    void activateSets(const QList<Set*> &_sets);
+    void unactivateSets(const QList<Set*> &_sets);
 
 private slots:
     void onNewVersion(const UM::NewVersion _version);

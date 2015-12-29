@@ -71,7 +71,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->styleConfig->setVisible(false);
     }
 
-    ui->inputHotkey->setDisabled(!m_settings->get("use_hotkeys").toBool());
+    ui->inputHotkey->setDisabled(!m_settings->param(UM::CONF::use_hotkeys).toBool());
 
     QLOG_TRACE() << "SetEditDialog openned";
 }
@@ -98,15 +98,15 @@ void SetEditDialog::done(int result)
 
         if (hotkey > QHotKeyWidget::NO_KEY)
         {
-            if (hotkey == m_settings->hotkey("refresh"))
+            if (hotkey == m_settings->hotkey(UM::CONF::HOTKEY::refresh))
             {
                 error = tr("Hotkey already used for \"%1\"").arg(tr("Refresh"));
             }
-            else if (hotkey == m_settings->hotkey("startpause"))
+            else if (hotkey == m_settings->hotkey(UM::CONF::HOTKEY::startpause))
             {
                 error = tr("Hotkey already used for \"%1\"").arg(tr("Start/Pause"));
             }
-            else if (hotkey == m_settings->hotkey("showhide"))
+            else if (hotkey == m_settings->hotkey(UM::CONF::HOTKEY::showhide))
             {
                 error = tr("Hotkey already used for \"%1\"").arg(tr("Show/Hide"));
             }
@@ -137,20 +137,20 @@ void SetEditDialog::done(int result)
  * @brief Save changes in Settings object
  * @param int index
  */
-void SetEditDialog::save()
+const Set SetEditDialog::result()
 {
     UM::WALLPAPER type = static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt());
     UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
     UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
 
-    m_settings->editSets(m_sets,
-                        ui->inputName->text(),
-                        type, style, mode,
-                        ui->inputHotkey->hotkey(),
-                        m_custLayout
-                        );
+    Set result("", ui->inputName->text());
+    result.setType(type);
+    result.setStyle(style);
+    result.setMode(mode);
+    result.setHotkey(ui->inputHotkey->hotkey());
+    result.setCustLayout(m_custLayout);
 
-    QLOG_TRACE() << "Set " << ui->inputName->text() << " updated";
+    return result;
 }
 
 /**

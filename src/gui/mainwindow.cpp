@@ -3,7 +3,6 @@
 #include <QtWidgets/QLabel>
 #include <QFile>
 #include <QtWidgets/QFileDialog>
-#include <QDesktopServices>
 
 #include "mainwindow.h"
 #include "mainwidget.h"
@@ -52,6 +51,8 @@ MainWindow::MainWindow(Controller* _ctrl) :
     // TRAY ICON
     m_trayIcon = new TrayIcon(this, m_ctrl);
     m_trayIcon->show();
+
+    init();
 }
 
 /**
@@ -74,7 +75,7 @@ void MainWindow::init()
 
     // window is hidden by default if the config is not empty
     if (m_settings->nbSets()>0 &&
-        m_settings->get("minimize").toBool()
+        m_settings->param(UM::CONF::minimize).toBool()
     ) {
         toggleWindow(true);
     }
@@ -82,9 +83,9 @@ void MainWindow::init()
     {
         show();
 
-        if (QString(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
+        if (QString(APP_VERSION).compare(m_settings->param(UM::CONF::changelog_shown).toString()) > 0)
         {
-            m_settings->setOpt("changelog_shown", APP_VERSION);
+            m_settings->setParam(UM::CONF::changelog_shown, APP_VERSION);
 
             if (m_settings->nbSets()>0) // do not show changelog at first startup
             {
@@ -112,7 +113,7 @@ void MainWindow::defineHotkeys()
 {
     clearHotkeys();
 
-    if (m_settings->get("use_hotkeys").toBool())
+    if (m_settings->param(UM::CONF::use_hotkeys).toBool())
     {
         QLOG_TRACE() << "Create global hotkeys";
 
@@ -122,11 +123,11 @@ void MainWindow::defineHotkeys()
 
         for (int i=0, l=m_settings->nbSets(); i<l; i++)
         {
-            Set* pSet = m_settings->set(i);
+            Set* set = m_settings->set(i);
 
-            if (pSet->hotkey())
+            if (set->hotkey())
             {
-                mergedHotkeys[pSet->hotkey()].append(i);
+                mergedHotkeys[set->hotkey()].append(i);
             }
         }
 
@@ -134,6 +135,7 @@ void MainWindow::defineHotkeys()
         {
             shortcut = new GlobalShortcut();
             shortcut->setShortcut(QKeySequence(it.key()));
+            shortcut->setType(GlobalShortcut::SETS);
             shortcut->setSets(it.value());
             connect(shortcut, SIGNAL(activated()), this, SLOT(onHotkey()));
             m_shortcuts.append(shortcut);
@@ -141,9 +143,9 @@ void MainWindow::defineHotkeys()
 
         // main hotkeys
         QHash<GlobalShortcut::Type, int> otherHotkeys;
-        otherHotkeys.insert(GlobalShortcut::REFRESH, m_settings->hotkey("refresh"));
-        otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_settings->hotkey("startpause"));
-        otherHotkeys.insert(GlobalShortcut::SHOWHIDE, m_settings->hotkey("showhide"));
+        otherHotkeys.insert(GlobalShortcut::REFRESH, m_settings->hotkey(UM::CONF::HOTKEY::refresh));
+        otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_settings->hotkey(UM::CONF::HOTKEY::startpause));
+        otherHotkeys.insert(GlobalShortcut::SHOWHIDE, m_settings->hotkey(UM::CONF::HOTKEY::showhide));
 
         for (QHash<GlobalShortcut::Type, int>::Iterator it=otherHotkeys.begin(); it!=otherHotkeys.end(); ++it)
         {
@@ -169,11 +171,11 @@ void MainWindow::toggleWindow(bool _forceHide)
     {
         hide();
 
-        if (m_settings->get("show_notifications").toBool() &&
-            m_settings->get("msgcount").toInt() < 3)
+        if (m_settings->param(UM::CONF::show_notifications).toBool() &&
+            m_settings->param(UM::CONF::msgcount).toInt() < APP_MAX_APP_RUNNING_MESSAGE_COUNT)
         {
             m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
-            m_settings->incrementMsgCount();
+            m_settings->setParam(UM::CONF::msgcount, m_settings->param(UM::CONF::msgcount).toInt() + 1);
         }
 
         if (!_forceHide)
@@ -192,9 +194,9 @@ void MainWindow::toggleWindow(bool _forceHide)
 
         m_trayIcon->setHidden(false);
 
-        if (QString(APP_VERSION).compare(m_settings->get("changelog_shown").toString()) > 0)
+        if (QString(APP_VERSION).compare(m_settings->param(UM::CONF::changelog_shown).toString()) > 0)
         {
-            m_settings->setOpt("changelog_shown", APP_VERSION);
+            m_settings->setParam(UM::CONF::changelog_shown, APP_VERSION);
             openChangelogDialog();
         }
     }
@@ -206,17 +208,11 @@ void MainWindow::toggleWindow(bool _forceHide)
 void MainWindow::addSet()
 {
     QString dirname = QFileDialog::getExistingDirectory(this, tr("Add set"),
-                                                        m_settings->get("last_dir").toString());
+                                                        m_settings->param(UM::CONF::last_dir).toString());
 
     if (!dirname.isEmpty())
     {
-        QDir dir(dirname);
-        dir.cdUp();
-        m_settings->setOpt("last_dir", dir.absolutePath());
-
-        dirname.replace('/', '\\');
-        m_settings->addSet(dirname);
-        m_ctrl->emitListChanged(true);
+        m_ctrl->addSet(dirname);
     }
 }
 
@@ -282,17 +278,8 @@ void MainWindow::openImportDialog()
 
     QLOG_TRACE() << "Import config from \""+ filename +"\"";
 
-    if (m_settings->load(filename))
+    if (!m_ctrl->loadConfig(filename))
     {
-        m_enviro->checkSettings();
-        m_settings->save();
-
-        m_ctrl->emitListChanged(true);
-        m_ctrl->update();
-    }
-    else
-    {
-        QLOG_ERROR() << "Invalid settings file";
         QMessageBox::critical(this, tr("Error"), tr("Invalid settings file"), QMessageBox::Ok);
     }
 }
@@ -373,7 +360,7 @@ void MainWindow::openAboutDialog()
  */
 void MainWindow::openPreviewDialog()
 {
-    if (m_ctrl->files().isEmpty())
+    if (m_ctrl->currentFiles().isEmpty())
     {
         QMessageBox::warning(this, tr("Error"), tr("No active files"), QMessageBox::Ok);
     }
@@ -396,15 +383,6 @@ void MainWindow::showContextMenu(const QList<Set*> &_sets, const QPoint &_pos)
 }
 
 /**
- * @brief Open a web page
- * @param string _link
- */
-void MainWindow::openLink(const QString &_link)
-{
-    QDesktopServices::openUrl(QUrl(_link));
-}
-
-/**
  * @brief Perform action on hotkey hit
  */
 void MainWindow::onHotkey()
@@ -420,11 +398,12 @@ void MainWindow::onHotkey()
         break;
 
     case GlobalShortcut::STARTPAUSE:
-        m_ctrl->startPause();
+    {
+        bool running = m_ctrl->startPause();
 
-        if (!isVisible() && m_settings->get("show_notifications").toBool())
+        if (!isVisible() && m_settings->param(UM::CONF::show_notifications).toBool())
         {
-            if (!m_ctrl->isPaused())
+            if (!running)
             {
                 m_trayIcon->showMessage(APP_NAME, tr("Paused"));
             }
@@ -434,17 +413,17 @@ void MainWindow::onHotkey()
             }
         }
         break;
+    }
 
     case GlobalShortcut::SHOWHIDE:
         toggleWindow();
         break;
 
     case GlobalShortcut::SETS:
-        m_settings->setActiveSets(shortcut->sets());
-        m_ctrl->emitListChanged();
-        m_ctrl->update();
+    {
+        m_ctrl->setActiveSets(shortcut->sets());
 
-        if (!isVisible() && m_settings->get("show_notifications").toBool())
+        if (!isVisible() && m_settings->param(UM::CONF::show_notifications).toBool())
         {
             QString setsName;
             for (int i=0, l=m_settings->nbActiveSets(); i<l; i++)
@@ -458,6 +437,7 @@ void MainWindow::onHotkey()
             m_trayIcon->showMessage(APP_NAME, tr("Current sets : %1").arg(setsName));
         }
         break;
+    }
     }
 }
 
@@ -503,7 +483,7 @@ void MainWindow::openNewVersionDialog()
  */
 void MainWindow::quit()
 {
-    if (!m_settings->get("close_warning").toBool())
+    if (!m_settings->param(UM::CONF::close_warning).toBool())
     {
         m_ctrl->quit();
         return;
@@ -521,7 +501,7 @@ void MainWindow::quit()
 
     if (ret == QMessageBox::Discard)
     {
-        m_settings->setOpt("close_warning", false);
+        m_settings->setParam(UM::CONF::close_warning, false);
     }
     else if (ret == QMessageBox::Cancel)
     {

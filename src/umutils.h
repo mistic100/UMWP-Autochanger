@@ -6,6 +6,9 @@
 #include "main.h"
 
 
+/**
+ * @brief Collection of utilities
+ */
 namespace UM
 {
     bool moveFileToTrash(const QString &_filename);

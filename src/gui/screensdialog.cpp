@@ -53,7 +53,7 @@ void ScreensDialog::done(int result)
     if (result == QDialog::Accepted)
     {
         bool one = false;
-        foreach (UM::Monitor mon, m_monitors) one|= mon.enabled;
+        foreach (const UM::Monitor mon, m_monitors) one|= mon.enabled;
 
         if (!one)
         {
@@ -152,7 +152,7 @@ void ScreensDialog::updateScreen(int _i)
 {
     ScreenThumbnail* thumb = m_thumbs.at(_i);
 
-    QColor color((QRgb) m_monitors[_i].color);
+    QColor color(m_monitors[_i].color);
 
     if (m_monitors[_i].enabled)
     {
@@ -239,12 +239,12 @@ bool ScreensDialog::eventFilter(QObject*, QEvent* _event)
  */
 void ScreensDialog::on_color_clicked()
 {
-    QColor color = QColorDialog::getColor(QColor((QRgb) m_monitors[m_currentScreen].color),
+    QColor color = QColorDialog::getColor(QColor(m_monitors[m_currentScreen].color),
                                           this, tr("Change color"));
 
     if (color.isValid())
     {
-        m_monitors[m_currentScreen].color = (COLORREF) color.rgb();
+        m_monitors[m_currentScreen].color = color.rgb();
 
         updateScreen(m_currentScreen);
     }

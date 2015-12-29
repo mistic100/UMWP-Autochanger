@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     Environment enviro(&settings);
 
-    QString language = settings.get("language").toString();
+    QString language = settings.param(UM::CONF::language).toString();
 
     // default translations
     QTranslator qtTranslator;
@@ -76,7 +76,6 @@ int main(int argc, char *argv[])
     Controller ctrl(&settings, &enviro);
 
     MainWindow window(&ctrl);
-    window.init();
 
     ctrl.checkVersion();
 

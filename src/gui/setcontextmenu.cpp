@@ -20,7 +20,7 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
     if (m_sets.size() > 0)
     {
         int nbActive = 0, nbInactive=0;
-        foreach (Set* set, m_sets)
+        foreach (const Set* set, m_sets)
         {
             if (set->isActive())
                 nbActive++;
@@ -28,15 +28,16 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
                 nbInactive++;
         }
 
+        // using fuctors to pass arguments without creating own methods
         if (nbActive >= nbInactive)
         {
             QAction* actionUnactivate = addAction(QIcon(":/images/icons/disable.png"), tr("Disable"));
-            connect(actionUnactivate, SIGNAL(triggered()), this, SLOT(unactivateSets()));
+            connect(actionUnactivate, &QAction::triggered, this, [this]{ m_ctrl->unactivateSets(m_sets); });
         }
         else
         {
             QAction* actionActivate = addAction(QIcon(":/images/icons/enable.png"), tr("Enable"));
-            connect(actionActivate, SIGNAL(triggered()), this, SLOT(activateSets()));
+            connect(actionActivate, &QAction::triggered, this, [this]{ m_ctrl->activateSets(m_sets); });
         }
 
         addSeparator();
@@ -67,8 +68,7 @@ void SetContextMenu::editSets()
     ((MainWindow*)parent())->clearHotkeys();
     if (dialog.exec())
     {
-        dialog.save();
-        m_ctrl->emitListChanged();
+        m_ctrl->editSets(m_sets, dialog.result());
     }
     ((MainWindow*)parent())->defineHotkeys();
 }
@@ -78,7 +78,7 @@ void SetContextMenu::editSets()
  */
 void SetContextMenu::openSets()
 {
-    foreach (Set* set, m_sets)
+    foreach (const Set* set, m_sets)
     {
         QDesktopServices::openUrl(QUrl("file:///" + set->path()));
     }
@@ -94,8 +94,7 @@ void SetContextMenu::deleteSets()
 
     if (ret == QMessageBox::Ok)
     {
-        m_settings->deleteSets(m_sets);
-        m_ctrl->emitListChanged(true);
+        m_ctrl->deleteSets(m_sets);
     }
 }
 
@@ -108,22 +107,4 @@ void SetContextMenu::clearCache()
     {
         set->deleteCache();
     }
-}
-
-/**
- * @brief Activate selected sets
- */
-void SetContextMenu::activateSets()
-{
-    m_settings->activateSets(m_sets);
-    m_ctrl->emitListChanged();
-}
-
-/**
- * @brief Unactivate selected sets
- */
-void SetContextMenu::unactivateSets()
-{
-    m_settings->unactivateSets(m_sets);
-    m_ctrl->emitListChanged();
 }

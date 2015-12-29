@@ -1,3 +1,5 @@
+#include <QDesktopServices>
+
 #include "menubar.h"
 #include "mainwindow.h"
 
@@ -54,14 +56,9 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionAbout,     SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
     connect(actionFiles,     SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
 
-    // use signal mapper for all buttons oppening a web page
-    QSignalMapper* mapper = new QSignalMapper(this);
-    connect(mapper, SIGNAL(mapped(const QString &)), _parent, SLOT(openLink(const QString &)));
-
-    connect(actionIssues, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(actionIssues, APP_ISSUES_URL);
-    connect(actionHome, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(actionHome, APP_HOMEPAGE);
+    // use functors to map URLS to open
+    connect(actionIssues, &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_ISSUES_URL)); });
+    connect(actionHome,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_HOMEPAGE)); });
 }
 
 /**

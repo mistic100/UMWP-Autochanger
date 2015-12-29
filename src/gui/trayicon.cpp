@@ -104,9 +104,7 @@ void TrayIcon::onQuickClicked()
     QAction* action = (QAction*)(QObject::sender());
     int idx = action->data().toInt();
 
-    m_ctrl->settings()->setActiveSets(QList<int>()<<idx);
-    m_ctrl->emitListChanged();
-    m_ctrl->update();
+    m_ctrl->setActiveSets(QList<int>()<<idx);
 }
 
 /**

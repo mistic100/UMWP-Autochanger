@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <QString>
 #include <QVector>
+#include <QColor>
 #include <QsLog.h>
 
 #include "constants.h"
@@ -56,8 +57,8 @@ namespace UM {
     // helper for monitors config
     struct Monitor {
         bool enabled;
-        COLORREF color;
-        Monitor() : enabled(true), color(0x00000000) {}
+        QRgb color;
+        Monitor() : enabled(true), color(Qt::black) {}
     };
 
     // Store data about new version
@@ -69,6 +70,31 @@ namespace UM {
 
     // flags for dialog without help button
     const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
+
+    // config keys
+    namespace CONF {
+        const QString window_width = "window_width";
+        const QString window_height = "window_height";
+        const QString delay = "delay";
+        const QString minimize = "minimize";
+        const QString check_updates = "check_updates";
+        const QString msgcount = "msgcount";
+        const QString close_warning = "close_warning";
+        const QString use_hotkeys = "use_hotkeys";
+        const QString show_notifications = "show_notifications";
+        const QString last_dir = "last_dir";
+        const QString language = "language";
+        const QString default_mode = "default_mode";
+        const QString default_type = "default_type";
+        const QString default_style = "default_style";
+        const QString changelog_shown = "changelog_shown";
+
+        namespace HOTKEY {
+            const QString refresh = "refresh";
+            const QString startpause = "startpause";
+            const QString showhide = "showhide";
+        }
+    }
 }
 
 Q_DECLARE_METATYPE(UM::WALLPAPER)

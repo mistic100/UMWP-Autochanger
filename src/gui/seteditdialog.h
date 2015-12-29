@@ -32,7 +32,7 @@ public:
     SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Set*> &_sets);
     ~SetEditDialog();
 
-    void save();
+    const Set result();
 
 protected:
     void done(int result);

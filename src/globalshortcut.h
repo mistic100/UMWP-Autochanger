@@ -29,7 +29,7 @@ private:
 public:
     GlobalShortcut(QObject* _parent = 0) : QGlobalShortcut(_parent), m_type(NOOP) {}
 
-    void setSets(const QList<int> &_ai)            { m_sets =_ai; m_type = SETS; }
+    void setSets(const QList<int> &_ai)            { m_sets =_ai; }
     void setType(const GlobalShortcut::Type _type) { m_type = _type; }
 
     const QList<int>           sets() const { return m_sets; }

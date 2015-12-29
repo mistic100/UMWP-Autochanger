@@ -20,7 +20,7 @@ struct CustomLayout {
     UM::ALIGN mainPos;
     bool borderEnabled;
     short borderWidth;
-    COLORREF borderColor;
+    QRgb borderColor;
 
     CustomLayout() :
         rows(4),
@@ -35,7 +35,7 @@ struct CustomLayout {
         mainPos(UM::ALIGN_CENTER_CENTER),
         borderEnabled(true),
         borderWidth(3),
-        borderColor(0x000000)
+        borderColor(Qt::black)
     {}
 };
 

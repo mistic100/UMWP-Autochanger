@@ -73,15 +73,15 @@ void PreviewDialog::draw()
     pen.setColor(QColor(0, 160, 255));
 
     int i = 0;
-    for (QVector<QString>::const_iterator it=m_ctrl->files().constBegin(); it!=m_ctrl->files().constEnd(); ++it)
+    foreach (const QString file, m_ctrl->currentFiles())
     {
-        if ((*it).isEmpty())
+        if (file.isEmpty())
         {
             continue;
         }
 
         // label with filename
-        QString text = fontMetrics().elidedText(QFileInfo(*it).fileName(), Qt::ElideRight, width);
+        QString text = fontMetrics().elidedText(QFileInfo(file).fileName(), Qt::ElideRight, width);
         QLabel* label = new QLabel(text);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);
@@ -89,7 +89,7 @@ void PreviewDialog::draw()
         m_layout->addWidget(label, 0, i);
 
         // resize image and add blue border
-        QPixmap image = QPixmap(*it).scaledToWidth(width, Qt::FastTransformation);
+        QPixmap image = QPixmap(file).scaledToWidth(width, Qt::FastTransformation);
         QPainter painter(&image);
         painter.setPen(pen);
         painter.drawRect(image.rect().adjusted(1, 1, -1, -1));
@@ -99,7 +99,7 @@ void PreviewDialog::draw()
         thumb->setIcon(image);
         thumb->setIconSize(image.size());
         thumb->setStyleSheet("border:none;");
-        thumb->setProperty("path", *it);
+        thumb->setProperty("path", file);
         thumb->setCursor(Qt::PointingHandCursor);
 
         connect(thumb, SIGNAL(clicked()), this, SLOT(onThumbnailClicked()));
@@ -112,7 +112,7 @@ void PreviewDialog::draw()
             QPushButton* button = new QPushButton();
             button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
             button->setText(tr("Delete"));
-            button->setProperty("path", *it);
+            button->setProperty("path", file);
             button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
             connect(button, SIGNAL(clicked()), this, SLOT(onDeleteButtonClicked()));

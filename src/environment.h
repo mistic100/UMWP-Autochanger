@@ -24,19 +24,19 @@ public:
 
     // main methods
     void log();
-    bool refreshMonitors();
+    void refreshMonitors();
     void checkSettings();
     void setWallpaper(const QString &_file);
 
     // getters
-    const QString       shortcutPath() const            { return m_shortcutPath; }
-    const int           nbMonitors() const              { return m_wpSizes.size()-1; }
-    const QRect         wpSize(int _i) const            { return m_wpSizes.value(_i); }
-    const UM::NewVersion newVersion() const             { return m_newVersion; }
-    const QList<QString> &languages() const             { return m_languages; }
+    const QString        shortcutPath() const { return m_shortcutPath; }
+    const int            nbMonitors() const   { return qMax(0, m_wpSizes.size()-1); }
+    const QRect          wpSize(int _i) const { return m_wpSizes.value(_i); }
+    const UM::NewVersion newVersion() const   { return m_newVersion; }
+    const QList<QString> &languages() const   { return m_languages; }
 
     // setters
-    void setNewVersion(const UM::NewVersion &_version)  { m_newVersion = _version; }
+    void setNewVersion(const UM::NewVersion &_version) { m_newVersion = _version; }
 
     // shortcut
     const bool isAutostart() const;
@@ -45,7 +45,7 @@ public:
     void deleteShortcut();
 
 private:
-    bool queryMonitors(QHash<int, QRect> &_sizes);
+    void queryMonitors();
 };
 
 #endif // ENVIRONMENT_H

@@ -103,8 +103,7 @@ QList<Set*> MainWidget::getSelectedSets() const
  */
 void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
-    m_settings->moveSet(from, to);
-    m_ctrl->emitListChanged(true);
+    m_ctrl->moveSet(from, to);
 }
 
 /**

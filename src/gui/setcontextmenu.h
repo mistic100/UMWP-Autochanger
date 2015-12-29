@@ -28,8 +28,6 @@ private slots:
     void openSets();
     void deleteSets();
     void clearCache();
-    void activateSets();
-    void unactivateSets();
 };
 
 #endif // SETCONTEXTMENU_H
