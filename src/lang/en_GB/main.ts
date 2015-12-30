@@ -5,7 +5,7 @@
     <name>ChangelogDialog</name>
     <message>
         <location filename="../../gui/changelogdialog.ui" line="14"/>
-        <location filename="../../gui/changelogdialog.h" line="60"/>
+        <location filename="../../gui/changelogdialog.h" line="61"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,134 +194,142 @@
     </message>
 </context>
 <context>
-    <name>CustomStyleDialog</name>
+    <name>CustomLayoutDialog</name>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="17"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="17"/>
         <source>Custom Layout Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="26"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="26"/>
         <source>Grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="45"/>
-        <location filename="../../gui/customstyledialog.ui" line="180"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="45"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="180"/>
         <source>Rows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="62"/>
-        <location filename="../../gui/customstyledialog.ui" line="197"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="62"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="197"/>
         <source>Columns</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="76"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="76"/>
         <source>Tiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="92"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="92"/>
         <source>Minimum rows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="99"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="99"/>
         <source>Minimum columns</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="116"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="116"/>
         <source>Maximum rows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="123"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="123"/>
         <source>Maximum columns</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="161"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="161"/>
         <source>Fixed tile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="204"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="204"/>
         <source>Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="232"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="232"/>
         <source>Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="244"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="244"/>
         <source>(Borders are not displayed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="263"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="263"/>
         <source>Border</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.ui" line="282"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="282"/>
         <source>px</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="37"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="37"/>
         <source>Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="38"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="38"/>
         <source>Top-Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="39"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="39"/>
         <source>Top-Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="40"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="40"/>
         <source>Top-Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="41"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="41"/>
         <source>Center-Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="42"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="42"/>
         <source>Center-Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="43"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="43"/>
         <source>Bottom-Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="44"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="44"/>
         <source>Bottom-Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customstyledialog.cpp" line="45"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="45"/>
         <source>Bottom-Right</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>MainWidget</name>
+    <name>HelpDialog</name>
     <message>
-        <location filename="../../gui/mainwidget.cpp" line="60"/>
+        <location filename="../../gui/helpdialog.h" line="49"/>
+        <source>User guide</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainList</name>
+    <message>
+        <location filename="../../gui/mainlist.cpp" line="60"/>
         <source>This set doesn&apos;t exist on the disk anymore</source>
         <translation type="unfinished"></translation>
     </message>
@@ -329,96 +337,90 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="524"/>
+        <location filename="../../gui/mainwindow.cpp" line="456"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="285"/>
+        <location filename="../../gui/mainwindow.cpp" line="269"/>
         <source>Import configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="267"/>
+        <location filename="../../gui/mainwindow.cpp" line="251"/>
         <source>Export configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="367"/>
+        <location filename="../../gui/mainwindow.cpp" line="315"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="269"/>
-        <location filename="../../gui/mainwindow.cpp" line="287"/>
+        <location filename="../../gui/mainwindow.cpp" line="253"/>
+        <location filename="../../gui/mainwindow.cpp" line="271"/>
         <source>XML files (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="218"/>
+        <location filename="../../gui/mainwindow.cpp" line="208"/>
         <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="306"/>
-        <location filename="../../gui/mainwindow.cpp" line="388"/>
+        <location filename="../../gui/mainwindow.cpp" line="281"/>
+        <location filename="../../gui/mainwindow.cpp" line="336"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="306"/>
+        <location filename="../../gui/mainwindow.cpp" line="281"/>
         <source>Invalid settings file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="340"/>
-        <location filename="../../gui/mainwindow.cpp" line="342"/>
-        <source>User guide</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/mainwindow.cpp" line="371"/>
+        <location filename="../../gui/mainwindow.cpp" line="319"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="388"/>
+        <location filename="../../gui/mainwindow.cpp" line="336"/>
         <source>No active files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="439"/>
+        <location filename="../../gui/mainwindow.cpp" line="368"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="443"/>
+        <location filename="../../gui/mainwindow.cpp" line="372"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="468"/>
+        <location filename="../../gui/mainwindow.cpp" line="397"/>
         <source>Current sets : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="482"/>
-        <location filename="../../gui/mainwindow.cpp" line="493"/>
+        <location filename="../../gui/mainwindow.cpp" line="412"/>
+        <location filename="../../gui/mainwindow.cpp" line="423"/>
         <source>A new version is available : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="528"/>
+        <location filename="../../gui/mainwindow.cpp" line="460"/>
         <source>Close and don&apos;t show this message again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="185"/>
+        <location filename="../../gui/mainwindow.cpp" line="182"/>
         <source>%1 is still running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="525"/>
+        <location filename="../../gui/mainwindow.cpp" line="457"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -426,88 +428,88 @@
 <context>
     <name>MenuBar</name>
     <message>
-        <location filename="../../gui/menubar.cpp" line="19"/>
+        <location filename="../../gui/menubar.cpp" line="20"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="20"/>
+        <location filename="../../gui/menubar.cpp" line="21"/>
         <source>Manage monitors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="22"/>
+        <location filename="../../gui/menubar.cpp" line="23"/>
         <source>Import configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="23"/>
+        <location filename="../../gui/menubar.cpp" line="24"/>
         <source>Export configuration file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="39"/>
+        <location filename="../../gui/menubar.cpp" line="40"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="27"/>
+        <location filename="../../gui/menubar.cpp" line="28"/>
         <source>Active files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="26"/>
+        <location filename="../../gui/menubar.cpp" line="27"/>
         <source>User guide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="29"/>
+        <location filename="../../gui/menubar.cpp" line="30"/>
         <source>Report a bug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="30"/>
+        <location filename="../../gui/menubar.cpp" line="31"/>
         <source>Homepage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="31"/>
+        <location filename="../../gui/menubar.cpp" line="32"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="33"/>
+        <location filename="../../gui/menubar.cpp" line="34"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="34"/>
+        <location filename="../../gui/menubar.cpp" line="35"/>
         <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="35"/>
-        <location filename="../../gui/menubar.cpp" line="77"/>
+        <location filename="../../gui/menubar.cpp" line="36"/>
+        <location filename="../../gui/menubar.cpp" line="73"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="36"/>
+        <location filename="../../gui/menubar.cpp" line="37"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="37"/>
+        <location filename="../../gui/menubar.cpp" line="38"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="38"/>
+        <location filename="../../gui/menubar.cpp" line="39"/>
         <source>Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="82"/>
+        <location filename="../../gui/menubar.cpp" line="78"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -548,7 +550,7 @@
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="35"/>
+        <location filename="../../gui/previewdialog.cpp" line="34"/>
         <source>Active files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -593,12 +595,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/screensdialog.ui" line="23"/>
+        <location filename="../../gui/screensdialog.ui" line="26"/>
         <source>Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/screensdialog.ui" line="46"/>
+        <location filename="../../gui/screensdialog.ui" line="49"/>
         <location filename="../../gui/screensdialog.cpp" line="243"/>
         <source>Change color</source>
         <translation type="unfinished"></translation>
@@ -617,43 +619,43 @@
 <context>
     <name>SetContextMenu</name>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="55"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="57"/>
         <source>Add set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="33"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="35"/>
         <source>Disable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="38"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="40"/>
         <source>Enable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="43"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="45"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="44"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="46"/>
         <source>Open directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="47"/>
-        <location filename="../../gui/setcontextmenu.cpp" line="92"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="49"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="93"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="45"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="47"/>
         <source>Clear cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/setcontextmenu.cpp" line="92"/>
+        <location filename="../../gui/setcontextmenu.cpp" line="93"/>
         <source>Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -696,96 +698,96 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="39"/>
+        <location filename="../../gui/seteditdialog.cpp" line="36"/>
         <source>One image for each monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="40"/>
+        <location filename="../../gui/seteditdialog.cpp" line="37"/>
         <source>One image for the whole desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="42"/>
+        <location filename="../../gui/seteditdialog.cpp" line="39"/>
         <source>Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="43"/>
+        <location filename="../../gui/seteditdialog.cpp" line="40"/>
         <source>Tile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="44"/>
+        <location filename="../../gui/seteditdialog.cpp" line="41"/>
         <source>Stretch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="45"/>
+        <location filename="../../gui/seteditdialog.cpp" line="42"/>
         <source>Strecth proportional</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="46"/>
+        <location filename="../../gui/seteditdialog.cpp" line="43"/>
         <source>Fill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="47"/>
+        <location filename="../../gui/seteditdialog.cpp" line="44"/>
         <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="49"/>
+        <location filename="../../gui/seteditdialog.cpp" line="46"/>
         <source>Random</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="50"/>
+        <location filename="../../gui/seteditdialog.cpp" line="47"/>
         <source>Sequential</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="65"/>
+        <location filename="../../gui/seteditdialog.cpp" line="62"/>
         <source>[multiple sets]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="103"/>
+        <location filename="../../gui/seteditdialog.cpp" line="102"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="107"/>
+        <location filename="../../gui/seteditdialog.cpp" line="106"/>
         <source>Start/Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="111"/>
+        <location filename="../../gui/seteditdialog.cpp" line="110"/>
         <source>Show/Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="123"/>
+        <location filename="../../gui/seteditdialog.cpp" line="122"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="103"/>
-        <location filename="../../gui/seteditdialog.cpp" line="107"/>
-        <location filename="../../gui/seteditdialog.cpp" line="111"/>
+        <location filename="../../gui/seteditdialog.cpp" line="102"/>
+        <location filename="../../gui/seteditdialog.cpp" line="106"/>
+        <location filename="../../gui/seteditdialog.cpp" line="110"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="34"/>
-        <location filename="../../gui/seteditdialog.cpp" line="35"/>
-        <location filename="../../gui/seteditdialog.cpp" line="36"/>
+        <location filename="../../gui/seteditdialog.cpp" line="31"/>
+        <location filename="../../gui/seteditdialog.cpp" line="32"/>
+        <location filename="../../gui/seteditdialog.cpp" line="33"/>
         <source>[keep]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="117"/>
+        <location filename="../../gui/seteditdialog.cpp" line="116"/>
         <source>Name can not be empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -793,39 +795,39 @@
 <context>
     <name>TrayIcon</name>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="19"/>
-        <location filename="../../gui/trayicon.cpp" line="62"/>
+        <location filename="../../gui/trayicon.cpp" line="20"/>
+        <location filename="../../gui/trayicon.cpp" line="63"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="20"/>
+        <location filename="../../gui/trayicon.cpp" line="21"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="21"/>
-        <location filename="../../gui/trayicon.cpp" line="50"/>
+        <location filename="../../gui/trayicon.cpp" line="22"/>
+        <location filename="../../gui/trayicon.cpp" line="51"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="22"/>
+        <location filename="../../gui/trayicon.cpp" line="23"/>
         <source>Quick switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="24"/>
+        <location filename="../../gui/trayicon.cpp" line="25"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="46"/>
+        <location filename="../../gui/trayicon.cpp" line="47"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/trayicon.cpp" line="67"/>
+        <location filename="../../gui/trayicon.cpp" line="68"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
