@@ -45,7 +45,7 @@ private:
     QString generateFile(Set* _set, const QVector<QString> &_files);
     QString getNextFile(Set* _set);
     QString getRandomFile(Set* _set, const QVector<QString> &_files);
-    QString adaptFileToMonitor(const QString &_file, int _idx, const QRect &_scrRect, const QRect &_wpRect, Set* _set);
+    QString adaptFileToMonitor(const QString &_file, int _idx, Set* _set);
     QString generateCustomFile(const QRect &_scrRect, Set* _set);
     QRect   getDesktopEnabledRect();
     QString getDesktopWallpaperKey(UM::IMAGE _style);

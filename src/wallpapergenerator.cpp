@@ -291,9 +291,7 @@ QVector<QString> WallpaperGenerator::adaptFiles(Set* _set, const QVector<QString
 
     if (_set->type() == UM::W_DESKTOP)
     {
-        QRect rect(QPoint(), getDesktopEnabledRect().size());
-
-        newFiles.append(adaptFileToMonitor(_files.at(0), -1, rect, rect, _set));
+        newFiles.append(adaptFileToMonitor(_files.at(0), -1, _set));
     }
     else
     {
@@ -301,10 +299,7 @@ QVector<QString> WallpaperGenerator::adaptFiles(Set* _set, const QVector<QString
         {
             if (!_files.at(i).isEmpty())
             {
-                QRect scrRect = m_enviro->wpSize(i);
-                QRect wpRect(QPoint(), scrRect.size());
-
-                newFiles.append(adaptFileToMonitor(_files.at(i), i, scrRect, wpRect, _set));
+                newFiles.append(adaptFileToMonitor(_files.at(i), i, _set));
             }
             else
             {
@@ -435,20 +430,26 @@ QString WallpaperGenerator::generateCustomFile(const QRect &_scrRect, Set* _set)
  * @param Set* _set
  * @return string
  */
-QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, const QRect &_scrRect, const QRect &_wpRect, Set* _set)
+QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, Set* _set)
 {
     QString key;
+    QRect wpRect;
+
     if (_set->type() == UM::W_DESKTOP)
     {
         key = getDesktopWallpaperKey(_set->style());
+
+        wpRect.setSize(getDesktopEnabledRect().size());
     }
     else
     {
         key = QString::number(_set->style());
         key+= QString::number(m_settings->monitor(_idx).color);
+
+        wpRect.setSize(m_enviro->wpSize(_idx).size());
     }
 
-    QString cachePath = getCacheFilename(_file, _scrRect, key, _set->uuid());
+    QString cachePath = getCacheFilename(_file, wpRect, key, _set->uuid());
 
     if (QFile::exists(cachePath))
     {
@@ -456,9 +457,9 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     }
 
     QImage source(_file);
-    QRect srcRect = QRect(QPoint(), source.size());
+    QRect srcRect(QPoint(), source.size());
 
-    QLOG_DEBUG() << "Resizing image. Screen:" << _scrRect << "WP:" << _wpRect << "Image:" << srcRect;
+    QLOG_DEBUG() << "Resizing image. Screen:" << wpRect.size() << "Image:" << srcRect.size();
 
     if (_set->style() == UM::IM_STRETCH) // stretching is done when generating the final wallpaper
     {
@@ -466,7 +467,7 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     }
     else if (_set->style() == UM::IM_CENTER || _set->style() == UM::IM_TILE) // for tile and center styles, compare the sizes
     {
-        if (qAbs(srcRect.width() - _wpRect.width()) < 5 && qAbs(srcRect.height() - _wpRect.height()) < 5)
+        if (qAbs(srcRect.width() - wpRect.width()) < 5 && qAbs(srcRect.height() - wpRect.height()) < 5)
         {
             return _file;
         }
@@ -474,7 +475,7 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     else // for every other styles, compare the ratios
     {
         double imageRatio = (double)srcRect.width() / srcRect.height();
-        double screenRatio = (double)_wpRect.width() / _wpRect.height();
+        double screenRatio = (double)wpRect.width() / wpRect.height();
 
         if (qAbs(imageRatio - screenRatio) < 0.02)
         {
@@ -482,7 +483,7 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
         }
     }
 
-    QImage image(_scrRect.size(), QImage::Format_RGB32);
+    QImage image(wpRect.size(), QImage::Format_RGB32);
     QPainter painter(&image);
 
     // draw background color of enabled monitors
@@ -490,12 +491,14 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     {
         image.fill(Qt::black);
 
+        QPoint offset = getDesktopEnabledRect().topLeft();
+
         for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
         {
             if (m_settings->monitor(i).enabled)
             {
                 QColor color(m_settings->monitor(i).color);
-                QRect rect = m_enviro->wpSize(i).translated(-_scrRect.topLeft());
+                QRect rect = m_enviro->wpSize(i).translated(-offset);
 
                 painter.setBrush(QBrush(color));
                 painter.drawRect(rect);
@@ -514,10 +517,10 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     case UM::IM_CENTER:
     {
         QRect zoneTarget(0, 0,
-                   qMin(_wpRect.width(), srcRect.width()),
-                   qMin(_wpRect.height(), srcRect.height())
-        );
-        zoneTarget.moveCenter(_wpRect.center());
+                         qMin(wpRect.width(), srcRect.width()),
+                         qMin(wpRect.height(), srcRect.height())
+                         );
+        zoneTarget.moveCenter(wpRect.center());
 
         QRect zoneSource = zoneTarget;
         zoneSource.moveCenter(srcRect.center());
@@ -528,41 +531,40 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     }
     case UM::IM_TILE:
     {
-        QPoint pos = _wpRect.topLeft();
+        QPoint pos(0,0);
 
         do {
             painter.drawImage(pos, source);
 
             pos.rx()+= srcRect.width();
 
-            if (!_wpRect.contains(pos))
+            if (!wpRect.contains(pos))
             {
-                pos.setX(_wpRect.left());
+                pos.setX(0);
                 pos.ry()+= srcRect.height();
             }
         }
-        while (_wpRect.contains(pos));
+        while (wpRect.contains(pos));
 
         break;
     }
     case UM::IM_STRETCH:
     {
-        source = source.scaled(_wpRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        painter.drawImage(_wpRect.topLeft(), source);
+        source = source.scaled(wpRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        painter.drawImage(QPoint(), source);
         break;
     }
     case UM::IM_STRETCH_PROP:
     {
-        source = source.scaled(_wpRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        source = source.scaled(wpRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         srcRect = QRect(QPoint(), source.size());
 
         QRect zoneTarget(
-                    (_wpRect.width()-srcRect.width()) / 2,
-                    (_wpRect.height()-srcRect.height()) / 2,
+                    (wpRect.width()-srcRect.width()) / 2,
+                    (wpRect.height()-srcRect.height()) / 2,
                      srcRect.width(),
                      srcRect.height()
-        );
-        zoneTarget.translate(_wpRect.topLeft());
+                    );
 
         painter.drawImage(zoneTarget, source, srcRect);
 
@@ -570,17 +572,17 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, c
     }
     case UM::IM_FILL:
     {
-        source = source.scaled(_wpRect.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        source = source.scaled(wpRect.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
         srcRect = QRect(QPoint(), source.size());
 
         QRect zoneSource(
-                    (srcRect.width()-_wpRect.width()) / 2,
-                    (srcRect.height()-_wpRect.height()) / 2,
-                     _wpRect.width(),
-                     _wpRect.height()
-        );
+                    (srcRect.width()-wpRect.width()) / 2,
+                    (srcRect.height()-wpRect.height()) / 2,
+                     wpRect.width(),
+                     wpRect.height()
+                    );
 
-        painter.drawImage(_wpRect, source, zoneSource);
+        painter.drawImage(wpRect, source, zoneSource);
 
         break;
     }
@@ -608,6 +610,7 @@ QString WallpaperGenerator::generateFile(Set *_set, const QVector<QString> &_fil
     QPainter painter(&image);
     image.fill(Qt::black);
 
+    // draw each image
     if (_set->type() == UM::W_DESKTOP)
     {
         QImage source(_files.at(0));
@@ -651,7 +654,8 @@ QString WallpaperGenerator::generateFile(Set *_set, const QVector<QString> &_fil
     QString filename = QDir::toNativeSeparators(QDir::tempPath() + "/" + APP_WALLPAPER_FILE);
 
     // shift the tile if desktop origin is not at wallpaper origin
-    if (offset != QPoint(0,0))
+    // only for Windows 7/8
+    if (offset != QPoint(0,0) && QSysInfo::WindowsVersion < QSysInfo::WV_WINDOWS10)
     {
         QImage image2(rect.size(), QImage::Format_RGB32);
         QPainter painter2(&image2);
