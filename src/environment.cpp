@@ -5,17 +5,32 @@
 #include "environment.h"
 
 
+QString Environment::APPDATA_DIR = "";
+
 /**
  * @brief Environment::Environment
  * @param Settings* _settings
  */
-Environment::Environment(Settings* _settings) :
-    m_settings(_settings)
+Environment::Environment()
 {
     qRegisterMetaType<UM::NewVersion>("UM::NewVersion");
 
+    // DETECT IF THE APP IS INSTALLED
+    QDir dirHelper;
+    m_isPortable = !dirHelper.exists(APP_UNINSTALLER_FILENAME);
+
+    // CREATE CACHE DIR
+    Environment::APPDATA_DIR = getAppDataFolder();
+
+    QLOG_DEBUG() << "== APPDATA" << Environment::APPDATA_DIR;
+
+    if (!dirHelper.exists(Environment::APPDATA_DIR + APP_CACHE_DIR))
+    {
+        dirHelper.mkpath(Environment::APPDATA_DIR + APP_CACHE_DIR);
+    }
+
     // LIST LANGUAGES
-    QDirIterator it(":/lang");
+    QDirIterator it(":/lang", QDir::Dirs);
     while (it.hasNext())
     {
         it.next();
@@ -63,15 +78,6 @@ void Environment::log()
 }
 
 /**
- * @brief Read monitors config from default file or UltraMon API
- */
-void Environment::refreshMonitors()
-{
-    queryMonitors();
-    checkSettings();
-}
-
-/**
  * Callback for EnumDisplayMonitors
  */
 BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM dwData)
@@ -91,7 +97,7 @@ BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM dwData)
  * @param QRect[] _sizes
  * @return bool
  */
-void Environment::queryMonitors()
+void Environment::refreshMonitors()
 {
     m_wpSizes.clear();
 
@@ -129,14 +135,6 @@ void Environment::queryMonitors()
     {
         log();
     }
-}
-
-/**
- * @brief Ensure that the settings are coherent with some environnement params
- */
-void Environment::checkSettings()
-{
-    m_settings->setNbMonitors(nbMonitors());
 }
 
 /**
@@ -229,5 +227,21 @@ void Environment::deleteShortcut()
         QLOG_TRACE() << "Remove shortcut";
 
         QFile::remove(m_shortcutPath);
+    }
+}
+
+/**
+ * @brief Return the application data location depending portability or not
+ * @return string
+ */
+const QString Environment::getAppDataFolder() const
+{
+    if (m_isPortable)
+    {
+        return QDir::toNativeSeparators(QDir::currentPath() + "/");
+    }
+    else
+    {
+        return QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/");
     }
 }

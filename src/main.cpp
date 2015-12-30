@@ -45,19 +45,12 @@ int main(int argc, char *argv[])
 
     QLOG_TRACE() << "Starting =================================================";
 
-    // create cache dir
-    QDir dirHelper;
-    if (!dirHelper.exists(APP_CACHE_DIR))
-    {
-        dirHelper.mkdir(APP_CACHE_DIR);
-    }
-
 
     // init
-    Settings settings;
-    settings.load();
+    Environment enviro;
 
-    Environment enviro(&settings);
+    Settings settings(&enviro);
+    settings.load();
 
     QString language = settings.param(UM::CONF::language).toString();
 
@@ -70,7 +63,6 @@ int main(int argc, char *argv[])
     QTranslator appTranslator;
     appTranslator.load(":/lang/" + language + "/main");
     app.installTranslator(&appTranslator);
-
 
     // core
     Controller ctrl(&settings, &enviro);

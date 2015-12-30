@@ -778,7 +778,7 @@ QString WallpaperGenerator::getCustLayoutTempFilename(const QRect &_rect, Set* _
     uint32_t crc = crc32_1byte(key.toStdString().c_str(), key.size());
 
     return QDir::toNativeSeparators(QDir::tempPath() + "/")
-            + "umwp-custom-"
+            + APP_CUSTOM_PREFIX
             + QString::number(crc, 16) + "-"
             + _set->uuid()
             + ".bmp";

@@ -5,7 +5,8 @@
 /**
  * @brief Settings::Settings
  */
-Settings::Settings()
+Settings::Settings(Environment* _enviro) :
+    m_enviro(_enviro)
 {
     // default configuration
     m_options[UM::CONF::window_width] = APP_MIN_WIDTH;
@@ -37,6 +38,17 @@ Settings::~Settings()
     clearSets(); // clear memory but do not save changes !
 }
 
+/**
+ * @brief Ensure that the settings are coherent with some environnement params
+ */
+void Settings::check()
+{
+    int size = m_enviro->nbMonitors();
+    if (size > m_monitors.size())
+    {
+        m_monitors.resize(size);
+    }
+}
 
 /**
  * @brief Get saved window size
@@ -110,7 +122,12 @@ bool Settings::load(QString _filename)
 {
     if (_filename.isEmpty())
     {
-        _filename = APP_CONFIG_FILE;
+        if (!m_enviro->isPortable() && !QFile(Environment::APPDATA_DIR + APP_CONFIG_FILE).exists() && QFile(APP_CONFIG_FILE).exists())
+        {
+            moveAppData();
+        }
+
+        _filename = Environment::APPDATA_DIR + APP_CONFIG_FILE;
     }
 
     // open xml file
@@ -274,7 +291,7 @@ bool Settings::save(QString _filename)
 {
     if (_filename.isEmpty())
     {
-        _filename = APP_CONFIG_FILE;
+        _filename = Environment::APPDATA_DIR + APP_CONFIG_FILE;
     }
 
     // initialize domdocument
@@ -630,4 +647,13 @@ void Settings::upgradeMode(UM::MODE _mode)
     {
         set->setMode(_mode);
     }
+}
+
+/**
+ * @brief Move app data to Local/Data if installed version, migration to 2.1
+ */
+void Settings::moveAppData()
+{
+    QFile::copy(APP_CONFIG_FILE, Environment::APPDATA_DIR + APP_CONFIG_FILE);
+    QDir(APP_CACHE_DIR).removeRecursively();
 }

@@ -37,11 +37,11 @@ public:
     void checkVersion();
     void launchInstaller();
 
-    Settings* settings() const    { return m_settings; }
-    Environment* enviro() const      { return m_enviro; }
+    Settings* settings() const { return m_settings; }
+    Environment* enviro() const { return m_enviro; }
 
     const QVector<QString> &currentFiles() const { return m_files; }
-    const Set* currentSet() const                { return m_set; }
+    const Set* currentSet() const { return m_set; }
 
 public slots:
     void quit();

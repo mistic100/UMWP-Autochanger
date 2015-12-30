@@ -85,7 +85,7 @@ void Controller::onNewVersion(const UM::NewVersion _version)
  */
 void Controller::launchInstaller()
 {
-    QString path = QDir::toNativeSeparators(QDir::currentPath() +"/"+ APP_INSTALLER_FILENAME);
+    QString path = QDir::toNativeSeparators(Environment::APPDATA_DIR + APP_INSTALLER_FILENAME);
 
     if (QFile::exists(path))
     {
@@ -127,9 +127,12 @@ void Controller::update()
     emit startedPaused(true);
 
     // update config
-    m_settings->updateSets();
     m_enviro->refreshMonitors();
+    m_settings->check();
+
+    m_settings->updateSets();
     emit listChanged(false);
+
     m_files.clear();
 
     emit generationStarted();
@@ -190,7 +193,7 @@ bool Controller::loadConfig(const QString &_file)
 {
     if (m_settings->load(_file))
     {
-        m_enviro->checkSettings();
+        m_settings->check();
         m_settings->save();
 
         emit listChanged(true);
