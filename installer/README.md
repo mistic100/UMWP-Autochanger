@@ -7,6 +7,7 @@ Put these files in `data` directory before running `setup.iss` or `package.bat`:
 * msvcp120.dll
 * msvcr120.dll
 * Qt5Core.dll
+* Qt5Concurrent.dll
 * Qt5Gui.dll
 * Qt5Network.dll
 * Qt5Widgets.dll

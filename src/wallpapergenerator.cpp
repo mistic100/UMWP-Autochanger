@@ -758,7 +758,7 @@ QString WallpaperGenerator::getCacheFilename(const QString &_file, const QRect &
     uint32_t crc1 = crc32_1byte(_file.toStdString().c_str(), _file.size());
     uint32_t crc2 = crc32_1byte(_key1.toStdString().c_str(), _key1.size());
 
-    return QDir::toNativeSeparators(QFileInfo(APP_CACHE_DIR).absoluteFilePath()+"/")
+    return QDir::toNativeSeparators(Environment::APPDATA_DIR + APP_CACHE_DIR + "/")
             + QString::number(crc1, 16) + "-"
             + QString::number(crc2, 16) + "-"
             + _key2 + "-"
