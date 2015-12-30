@@ -373,6 +373,7 @@ Set* Settings::addSet(const QString &_path)
     }
 
     Set* set = new Set(_path, dir.dirName());
+    set->init();
 
     set->setMode(static_cast<UM::MODE>(m_options[UM::CONF::default_mode].toInt()));
     set->setStyle(static_cast<UM::IMAGE>(m_options[UM::CONF::default_style].toInt()));

@@ -1,10 +1,6 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QSize>
-#include <QHash>
-#include <QVariant>
-
 #include "main.h"
 #include "set.h"
 
@@ -16,9 +12,9 @@ class Settings
 {
 private:
     QHash<QString, QVariant> m_options; // configurable options
-    QHash<QString, int>      m_hotkeys;
-    QVector<UM::Monitor>     m_monitors;
-    QVector<Set*>            m_sets; // list of wallpaper sets
+    QHash<QString, int> m_hotkeys;
+    QVector<UM::Monitor> m_monitors;
+    QVector<Set*> m_sets; // list of wallpaper sets
 
 public:
     Settings();

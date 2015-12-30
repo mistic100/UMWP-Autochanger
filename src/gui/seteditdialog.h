@@ -1,7 +1,7 @@
 #ifndef SETEDITDIALOG_H
 #define SETEDITDIALOG_H
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 
 #include "../main.h"
 #include "../set.h"
@@ -23,9 +23,11 @@ class SetEditDialog : public QDialog
 
 private:
     Ui::SetEditDialog *ui;
-    Controller*  m_ctrl;
-    Settings*    m_settings;
-    QList<Set*>  m_sets;
+
+    Controller* m_ctrl;
+    Settings* m_settings;
+
+    QList<Set*> m_sets;
     CustomLayout m_custLayout;
 
 public:

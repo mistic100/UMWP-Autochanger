@@ -31,3 +31,19 @@ void UM::addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString 
     element.appendChild(_dom->createTextNode(_value));
     _parent->appendChild(element);
 }
+
+/**
+ * @brief Return a scaled copy of a rectangle
+ * @param QRect _rect
+ * @param float _ratio
+ * @return QRect
+ */
+QRect UM::scaledRect(const QRect &_rect, float _xRatio, float _yRatio)
+{
+    return QRect(
+                _rect.left() * _xRatio,
+                _rect.top() * _yRatio,
+                _rect.width() * _xRatio,
+                _rect.height() * _yRatio
+    );
+}

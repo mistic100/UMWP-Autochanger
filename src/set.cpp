@@ -4,7 +4,6 @@
 
 static const QStringList FILES_FILTER = QStringList()<<"*.jpeg"<<"*.jpg"<<"*.bmp"<<"*.png"<<"*.gif";
 
-
 /**
  * @brief Set::Set
  * @param string _path
@@ -21,8 +20,6 @@ Set::Set(const QString &_path, const QString &_name)
     }
 
     m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
-
-    init();
 }
 
 /**

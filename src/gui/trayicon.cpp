@@ -10,7 +10,8 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     QSystemTrayIcon((QWidget*) _parent),
     m_ctrl(_ctrl)
 {
-    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
+    connect(_parent, SIGNAL(showHidden(bool)), this, SLOT(onWindowShown(bool)));
+    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(onStartPause(bool)));
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged()));
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
@@ -39,9 +40,9 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
  * @brief Change "Hide" label
  * @param _hide
  */
-void TrayIcon::setHidden(bool _hide)
+void TrayIcon::onWindowShown(bool _visible)
 {
-    if (_hide)
+    if (!_visible)
     {
         m_actionHide->setText(tr("Show"));
     }
@@ -55,7 +56,7 @@ void TrayIcon::setHidden(bool _hide)
  * @brief Change "Pause" label
  * @param _pause
  */
-void TrayIcon::setStartPause(bool _start)
+void TrayIcon::onStartPause(bool _start)
 {
     if (_start)
     {

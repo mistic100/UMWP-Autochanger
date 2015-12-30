@@ -1,7 +1,7 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QtWidgets/QListWidget>
+#include <QListWidget>
 
 #include "../main.h"
 #include "../controller.h"
@@ -9,18 +9,18 @@
 /**
  * @brief The main widget of the software
  */
-class MainWidget : public QListWidget
+class MainList : public QListWidget
 {
     Q_OBJECT
 
 private:
-    Controller*     m_ctrl;
-    Settings*       m_settings;
+    Controller* m_ctrl;
+    Settings* m_settings;
     
 public:
-    MainWidget(QWidget* _parent, Controller* _ctrl);
+    MainList(QWidget* _parent, Controller* _ctrl);
 
-    QList<int>  getSelectedIndexes() const;
+    QList<int> getSelectedIndexes() const;
     QList<Set*> getSelectedSets() const;
 
 public slots:

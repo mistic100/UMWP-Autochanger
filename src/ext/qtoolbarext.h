@@ -1,9 +1,9 @@
 #ifndef QTOOLBAREXT_H
 #define QTOOLBAREXT_H
 
-#include <QtWidgets/QToolBar>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QToolButton>
+#include <QToolBar>
+#include <QMenu>
+#include <QToolButton>
 
 
 /**
@@ -57,7 +57,8 @@ public:
      * @brief Add a menu with text and icon
      */
     QToolButton* addMenu(const QIcon &_icon, const QString &_text, QMenu* _menu,
-                         Qt::ToolButtonStyle _style = Qt::ToolButtonTextBesideIcon, QToolButton::ToolButtonPopupMode _mode = QToolButton::InstantPopup)
+                         Qt::ToolButtonStyle _style = Qt::ToolButtonTextBesideIcon,
+                         QToolButton::ToolButtonPopupMode _mode = QToolButton::InstantPopup)
     {
         QToolButton* button = addButton(_icon, _text, _style);
         button->setMenu(_menu);

@@ -4,6 +4,7 @@
 #include <QHash>
 #include <cassert>
 
+
 template<typename T>
 /**
  * @brief A 2D matrix whose dimensions can be variable (defined at execution time)

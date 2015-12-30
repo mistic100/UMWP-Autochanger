@@ -1,7 +1,7 @@
 #ifndef MENUBAR_H
 #define MENUBAR_H
 
-#include <QtWidgets/QAction>
+#include <QAction>
 #include "../ext/qtoolbarext.h"
 #include "../ext/qwidgetblinker.h"
 

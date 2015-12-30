@@ -1,7 +1,7 @@
 #ifndef NEWVERSIONDIALOG_H
 #define NEWVERSIONDIALOG_H
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 #include <QFile>
 #include <QNetworkReply>
 
@@ -22,12 +22,12 @@ class NewVersionDialog : public QDialog
 
 private:
     Ui::NewVersionDialog* ui;
+
     Controller* m_ctrl;
 
-    UM::NewVersion  m_version;
-
-    QFile           m_file;
-    QNetworkReply*  m_reply;
+    UM::NewVersion m_version;
+    QFile  m_file;
+    QNetworkReply* m_reply;
     
 public:
     NewVersionDialog(QWidget* _parent, Controller* _ctrl);

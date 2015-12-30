@@ -2,8 +2,13 @@
 
 #include "statusbar.h"
 
-StatusBar::StatusBar(MainWindow* _parent, Controller* _ctrl) :
-    QStatusBar((QWidget*) _parent)
+/**
+ * @brief Main window status bar
+ * @param QWidget* _parent
+ * @param Controller* _ctrl
+ */
+StatusBar::StatusBar(QWidget* _parent, Controller* _ctrl) :
+    QStatusBar(_parent)
 {
     QString copyright = "<a href='" + QString(APP_HOMEPAGE) + "'>";
     copyright+= QString(APP_NAME) + "</a>";
@@ -14,7 +19,7 @@ StatusBar::StatusBar(MainWindow* _parent, Controller* _ctrl) :
     statusLabel->setOpenExternalLinks(true);
     addPermanentWidget(statusLabel);
 
-    QMovie* loader = new QMovie("://images/loader.gif");
+    QMovie* loader = new QMovie(":/images/loader.gif");
     m_loaderLabel = new QLabel();
     m_loaderLabel->setMovie(loader);
     addWidget(m_loaderLabel);
@@ -25,12 +30,18 @@ StatusBar::StatusBar(MainWindow* _parent, Controller* _ctrl) :
     hideLoader();
 }
 
+/**
+ * @brief Show the loader
+ */
 void StatusBar::showLoader()
 {
     m_loaderLabel->show();
     m_loaderLabel->movie()->start();
 }
 
+/**
+ * @brief Hide the loader
+ */
 void StatusBar::hideLoader()
 {
     m_loaderLabel->movie()->stop();

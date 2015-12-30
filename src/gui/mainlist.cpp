@@ -1,17 +1,17 @@
-#include "mainwidget.h"
-#include "mainwindow.h"
+#include "mainlist.h"
 #include "../set.h"
 #include "listdelegate.h"
 #include "listproxystyle.h"
 #include "seteditdialog.h"
+#include "setcontextmenu.h"
 
 
 /**
- * @brief MainWidget::MainWidget
+ * @brief MainList::MainList
  * @param QWidget* _parent
  * @param Controller* _ctrl
  */
-MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) :
+MainList::MainList(QWidget* _parent, Controller* _ctrl) :
     QListWidget(_parent),
     m_ctrl(_ctrl),
     m_settings(_ctrl->settings())
@@ -36,7 +36,7 @@ MainWidget::MainWidget(QWidget* _parent, Controller* _ctrl) :
  * @brief Update list widget contents
  * @param bool _resetSel - force reset of user selection
  */
-void MainWidget::onListChanged(bool _resetSel)
+void MainList::onListChanged(bool _resetSel)
 {
     QList<int> indexes;
 
@@ -66,7 +66,7 @@ void MainWidget::onListChanged(bool _resetSel)
  * @brief Get numerical indexes of selected items
  * @return int[]
  */
-QList<int> MainWidget::getSelectedIndexes() const
+QList<int> MainList::getSelectedIndexes() const
 {
     QList<QListWidgetItem*> items = selectedItems();
     QList<int> indexes;
@@ -84,7 +84,7 @@ QList<int> MainWidget::getSelectedIndexes() const
  * @brief Get selected sets
  * @return Set*[]
  */
-QList<Set*> MainWidget::getSelectedSets() const
+QList<Set*> MainList::getSelectedSets() const
 {
     QList<Set*> sets;
 
@@ -101,7 +101,7 @@ QList<Set*> MainWidget::getSelectedSets() const
  * @param int from
  * @param int to
  */
-void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
+void MainList::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
     m_ctrl->moveSet(from, to);
 }
@@ -110,9 +110,11 @@ void MainWidget::onItemMoved(const QModelIndex &, int from, int, const QModelInd
  * @brief Right click on list
  * @param QPoint _pos
  */
-void MainWidget::onContextMenu(const QPoint &_pos)
+void MainList::onContextMenu(const QPoint &_pos)
 {
     QList<Set*> sets = getSelectedSets();
     QPoint pos = mapToGlobal(_pos);
-    ((MainWindow*)parent())->showContextMenu(sets, pos);
+
+    SetContextMenu menu((QWidget*) parent(), m_ctrl, sets);
+    menu.exec(pos);
 }

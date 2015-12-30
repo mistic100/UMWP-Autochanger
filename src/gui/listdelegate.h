@@ -2,7 +2,7 @@
 #define LISTDELEGATE_H
 
 #include <QPainter>
-#include <QtWidgets/QAbstractItemDelegate>
+#include <QAbstractItemDelegate>
 
 #include "../settings.h"
 
@@ -18,8 +18,8 @@ private:
 public:
     ListDelegate(QObject* _parent, Settings* _settings);
 
-    void    paint(QPainter* _painter, const QStyleOptionViewItem &_option, const QModelIndex &_index) const;
-    QSize   sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
+    void paint(QPainter* _painter, const QStyleOptionViewItem &_option, const QModelIndex &_index) const;
+    QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
 #endif // LISTDELEGATE_H

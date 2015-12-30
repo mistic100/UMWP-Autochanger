@@ -17,10 +17,11 @@ SOURCES += \
     controller.cpp \
     settings.cpp \
     environment.cpp \
+    wallpapergenerator.cpp \
+    umutils.cpp \
+    customlayoutgenerator.cpp \
     gui/listdelegate.cpp \
     gui/mainwindow.cpp \
-    gui/mainwidget.cpp \
-    gui/customstyledialog.cpp \
     gui/seteditdialog.cpp \
     gui/configdialog.cpp \
     gui/previewdialog.cpp \
@@ -29,10 +30,9 @@ SOURCES += \
     gui/trayicon.cpp \
     gui/setcontextmenu.cpp \
     gui/screensdialog.cpp \
-    wallpapergenerator.cpp \
-    customlayoutgenerator.cpp \
     gui/statusbar.cpp \
-    umutils.cpp
+    gui/mainlist.cpp \
+    gui/customlayoutdialog.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -42,6 +42,7 @@ HEADERS += \
     ext/qcomboboxext.h \
     ext/qglobalshortcut.h \
     ext/qlineeditcolor.h \
+    ext/variable2dmatrix.h \
     constants.h \
     main.h \
     set.h \
@@ -49,12 +50,14 @@ HEADERS += \
     settings.h \
     environment.h \
     versionchecker.h \
+    globalshortcut.h \
+    wallpapergenerator.h \
+    customlayout.h \
+    customlayoutgenerator.h \
+    umutils.h \
     gui/listdelegate.h \
     gui/listproxystyle.h \
-    globalshortcut.h \
     gui/mainwindow.h \
-    gui/mainwidget.h \
-    gui/customstyledialog.h \
     gui/seteditdialog.h \
     gui/configdialog.h \
     gui/previewdialog.h \
@@ -63,28 +66,27 @@ HEADERS += \
     gui/trayicon.h \
     gui/setcontextmenu.h \
     gui/screensdialog.h \
-    wallpapergenerator.h \
     gui/changelogdialog.h \
-    customlayout.h \
-    customlayoutgenerator.h \
-    ext/variable2dmatrix.h \
     gui/statusbar.h \
-    umutils.h
+    gui/helpdialog.h \
+    gui/mainlist.h \
+    gui/customlayoutdialog.h
 
 FORMS += \
-    gui/customstyledialog.ui \
     gui/seteditdialog.ui \
     gui/configdialog.ui \
     gui/newversiondialog.ui \
     gui/screensdialog.ui \
-    gui/changelogdialog.ui
+    gui/changelogdialog.ui \
+    gui/customlayoutdialog.ui
 
 RESOURCES += \
     UMWP_Autochanger.qrc
 
 TRANSLATIONS += \
     lang/en_GB/main.ts \
-    lang/fr_FR/main.ts
+    lang/fr_FR/main.ts \
+    lang/ru_RU/main.ts
 
 OTHER_FILES += \
     UMWP_Autochanger.rc

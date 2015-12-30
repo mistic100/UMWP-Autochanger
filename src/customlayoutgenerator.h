@@ -2,7 +2,6 @@
 #define CUSTOMLAYOUTGENERATOR_H
 
 #include <random>
-#include <QRect>
 
 #include "main.h"
 #include "customlayout.h"
@@ -15,11 +14,10 @@
 class CustomLayoutGenerator
 {
 private:
-    CustomLayout           m_conf;
-    QList<QRect>           m_blocks;
-    Variable2DMatrix<int>  m_matrix;
-
-    std::mt19937           m_randomEngine; // mersenne_twister
+    CustomLayout m_conf;
+    QList<QRect> m_blocks;
+    Variable2DMatrix<int> m_matrix;
+    std::mt19937 m_randomEngine; // mersenne_twister
 
 public:
     CustomLayoutGenerator();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CustomStyleDialog</class>
- <widget class="QDialog" name="CustomStyleDialog">
+ <class>CustomLayoutDialog</class>
+ <widget class="QDialog" name="CustomLayoutDialog">
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -321,7 +321,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>CustomStyleDialog</receiver>
+   <receiver>CustomLayoutDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -337,7 +337,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>CustomStyleDialog</receiver>
+   <receiver>CustomLayoutDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

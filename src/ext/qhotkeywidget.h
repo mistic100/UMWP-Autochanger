@@ -1,9 +1,9 @@
 #ifndef QHOTKEYWIDGET_H
 #define QHOTKEYWIDGET_H
 
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QPushButton>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QPushButton>
 
 #include "qlineedithotkey.h"
 
@@ -37,7 +37,7 @@ public:
 
         QPushButton* erase = new QPushButton(this);
         erase->setFlat(true);
-        erase->setIcon(QIcon("://images/icons/bullet_cross.png"));
+        erase->setIcon(QIcon(":/images/icons/bullet_cross.png"));
         erase->setToolTip(tr("Reset"));
         layout->addWidget(erase);
 

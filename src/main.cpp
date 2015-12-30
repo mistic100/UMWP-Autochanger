@@ -1,4 +1,4 @@
-#include <QtWidgets/QApplication>
+#include <QApplication>
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QLocale>

@@ -1,5 +1,5 @@
 #include <QNetworkAccessManager>
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
 
 #include "newversiondialog.h"
 #include "ui_newversiondialog.h"

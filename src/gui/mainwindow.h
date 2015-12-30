@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtWidgets/QMainWindow>
+#include <QMainWindow>
 #include <QCloseEvent>
-#include <QtWidgets/QStatusBar>
+#include <QStatusBar>
 
 #include "../main.h"
 #include "../controller.h"
@@ -14,24 +14,22 @@
 
 
 /**
- * @brief The main window containing the main widget
+ * @brief The app main window
  */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 private:
-    Controller*  m_ctrl;
-    Settings*    m_settings;
+    Controller* m_ctrl;
+    Settings* m_settings;
     Environment* m_enviro;
 
-    StatusBar*  m_statusBar;
-    MenuBar*    m_menuBar;
-    TrayIcon*   m_trayIcon;
+    StatusBar* m_statusBar;
+    MenuBar* m_menuBar;
+    TrayIcon* m_trayIcon;
 
     QList<GlobalShortcut*> m_shortcuts;
-
-    bool m_altPressed;
 
 public:
     MainWindow(Controller* _ctrl);
@@ -40,8 +38,6 @@ public:
     void defineHotkeys();
     void clearHotkeys();
 
-    void showContextMenu(const QList<Set*> &_sets, const QPoint &_pos);
-
 private:
     void init();
 
@@ -49,7 +45,6 @@ protected:
     void showEvent(QShowEvent* _event);
     void resizeEvent(QResizeEvent* _event);
     void closeEvent(QCloseEvent* _event);
-    bool eventFilter(QObject*, QEvent* _event);
 
 public slots:
     void quit();
@@ -69,7 +64,8 @@ public slots:
     void onNewVersion();
     void openNewVersionDialog();
 
-    void slotAltPressed();
+signals:
+    void showHidden(bool);
 };
 
 #endif // MAINWINDOW_H

@@ -19,15 +19,16 @@ class Controller : public QObject
     Q_OBJECT
 
 private:
-    Settings*        m_settings;
-    Environment*     m_enviro;
-    WallpaperGenerator* m_generator;
+    Settings* m_settings;
+    Environment* m_enviro;
 
-    QTimer*          m_mainTimer;
+    QTimer* m_mainTimer;
+
+    WallpaperGenerator* m_generator;
     QFutureWatcher<WallpaperGenerator::Result> m_generatorWatcher;
 
     QVector<QString> m_files;
-    Set*             m_set;
+    Set* m_set;
 
 public:
     Controller(Settings* _settings, Environment* _enviro);
@@ -36,18 +37,18 @@ public:
     void checkVersion();
     void launchInstaller();
 
-    Settings*       settings() const    { return m_settings; }
-    Environment*    enviro() const      { return m_enviro; }
+    Settings* settings() const    { return m_settings; }
+    Environment* enviro() const      { return m_enviro; }
 
     const QVector<QString> &currentFiles() const { return m_files; }
-    Set* currentSet() const { return m_set; }
+    const Set* currentSet() const                { return m_set; }
 
 public slots:
     void quit();
     void update();
     bool startPause();
 
-    void editSets(const QList<Set*> &_sets, const Set _data);
+    void editSets(const QList<Set*> &_sets, const Set &_data);
     void moveSet(int _from, int _to);
     void addSet(const QString &_dirname);
     bool loadConfig(const QString &_file);

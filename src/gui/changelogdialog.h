@@ -1,11 +1,12 @@
 #ifndef CHANGELOGDIALOG_H
 #define CHANGELOGDIALOG_H
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 #include <QFile>
 #include <QTextStream>
 #include <QDesktopServices>
 
+#include "../settings.h"
 #include "ui_changelogdialog.h"
 
 namespace Ui {
@@ -24,30 +25,30 @@ private:
     Ui::ChangelogDialog *ui;
 
 public:
-    ChangelogDialog(QWidget* _parent = 0) :
+    ChangelogDialog(QWidget* _parent, Settings* _settings) :
         QDialog(_parent),
         ui(new Ui::ChangelogDialog)
     {
         ui->setupUi(this);
 
-        QFile file;
-        QString lang = QLocale::system().name().section('_', 0, 0);
-        if (lang.compare("fr")==0)
-        {
-            file.setFileName(":/lang/fr_FR/changelog.htm");
-        }
-        else
-        {
-            file.setFileName(":/lang/en_GB/changelog.htm");
-        }
-
         QString text;
+
+        // Append CSS file
         text.append("<style>");
-        text.append("* { font-family: \"Arial\", sans-serif; font-size: 12px; }");
-        text.append("p { font-size:14px; }");
-        text.append("dt { font-weight:bold; color:#4078C0; font-size:16px; }");
-        text.append("dd { margin:0 0 2em 0; }");
+
+        QFile cssFile(":/lang/changelog.css");
+
+        cssFile.open(QIODevice::ReadOnly);
+        QTextStream cssContent(&cssFile);
+        cssContent.setCodec("UTF-8");
+        text.append(cssContent.readAll());
+        cssFile.close();
+
         text.append("</style>");
+
+        // Append HTML file
+        QString lang = _settings->param(UM::CONF::language).toString();
+        QFile file(":/lang/" + lang + "/changelog.htm");
 
         file.open(QIODevice::ReadOnly);
         QTextStream content(&file);

@@ -2,8 +2,8 @@
 #define LISTPROXYSTYLE_H
 
 #include <QPainter>
-#include <QtWidgets/QProxyStyle>
-#include <QtWidgets/QStyleOption>
+#include <QProxyStyle>
+#include <QStyleOption>
 
 
 /**

@@ -1,8 +1,8 @@
 #ifndef TRAYMENU_H
 #define TRAYMENU_H
 
-#include <QtWidgets/QSystemTrayIcon>
-#include <QtWidgets/QAction>
+#include <QSystemTrayIcon>
+#include <QAction>
 
 #include "../controller.h"
 
@@ -22,20 +22,19 @@ private:
 
     QAction* m_actionHide;
     QAction* m_actionPause;
-    QMenu*   m_quickMenu;
+    QMenu* m_quickMenu;
 
 public:
     TrayIcon(MainWindow* _parent, Controller* _ctrl);
-
-    void setHidden(bool _hide);
 
 public slots:
     void onListChanged();
 
 private slots:
-    void setStartPause(bool _start);
+    void onStartPause(bool _start);
     void onQuickClicked();
     void onActivated(QSystemTrayIcon::ActivationReason _reason);
+    void onWindowShown(bool _visible);
 };
 
 #endif // TRAYMENU_H

@@ -1,8 +1,6 @@
 #ifndef SET_H
 #define SET_H
 
-#include <QtXml>
-
 #include "main.h"
 #include "customlayout.h"
 
@@ -35,6 +33,7 @@ private:
     CustomLayout     m_custLayout;
 
 public:
+    Set() {} // only used for temp items
     Set(const QString &_path, const QString &_name);
     Set(const QDomElement* _dom);
 
@@ -61,10 +60,10 @@ public:
     void setCurrent(const Current &_curr)   { m_current=_curr; }
     void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }
 
-    void   init();
-    bool   check();
+    void init();
+    bool check();
     double lastChange();
-    void   populateFiles();
+    void populateFiles();
 
     void readCache();
     void writeCache() const;
@@ -77,8 +76,8 @@ public:
     const int fileIndex(const QString &_file) const { return m_files.indexOf(_file); }
 
 private:
-    double  lastChangeRecur(const QString &_child, const int _level=0);
-    void    populateFilesRecur(const QString &_child, const int _level=0);
+    double lastChangeRecur(const QString &_child, const int _level=0);
+    void populateFilesRecur(const QString &_child, const int _level=0);
 };
 
 #endif // SET_H

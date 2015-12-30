@@ -1,27 +1,18 @@
 #ifndef SCREENSDIALOG_H
 #define SCREENSDIALOG_H
 
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGraphicsScene>
+#include <QDialog>
+#include <QGridLayout>
+#include <QGraphicsScene>
 
 #include "../main.h"
 #include "../controller.h"
 #include "../environment.h"
+#include "../settings.h"
 
 namespace Ui {
     class ScreensDialog;
 }
-
-
-/**
- * @brief Store monitor rect and text together
- */
-struct ScreenThumbnail
-{
-    QGraphicsRectItem* rect;
-    QGraphicsSimpleTextItem* text;
-};
 
 
 /**
@@ -32,18 +23,29 @@ class ScreensDialog : public QDialog
     Q_OBJECT
 
 private:
+    /**
+     * @brief Store monitor UI elements
+     */
+    struct ScreenThumbnail
+    {
+        QGraphicsRectItem* rect;
+        QGraphicsSimpleTextItem* text;
+    };
+
+private:
     Ui::ScreensDialog* ui;
 
     Controller* m_ctrl;
+    Settings* m_settings;
+    Environment* m_enviro;
 
     QVector<UM::Monitor> m_monitors;
-
     QList<ScreenThumbnail*> m_thumbs;
     QGraphicsScene* m_scene;
 
     QRect m_viewport;
-    float m_ratio;
-    int m_currentScreen;
+    float m_ratio = 0.0;
+    int m_currentScreen = -1;
     
 public:
     ScreensDialog(QWidget* _parent, Controller* _ctrl);
@@ -53,11 +55,10 @@ public:
 
 private:
     void init();
+
     void addScreen(int _i, const QRect &_screen);
     void updateScreen(int _i);
     void selectScreen(int _i);
-
-    QRect scaledRect(const QRect &_rect, float _ratio);
 
 protected:
     void done(int result);

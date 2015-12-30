@@ -1,7 +1,7 @@
 #include "../customlayoutgenerator.h"
 
-#include "customstyledialog.h"
-#include "ui_customstyledialog.h"
+#include "customlayoutdialog.h"
+#include "ui_customlayoutdialog.h"
 
 // 20 random colors generated with mistic100/RandomColor.php
 static const QStringList COLORS = QStringList()
@@ -11,13 +11,13 @@ static const QStringList COLORS = QStringList()
         <<"#f9ed9a"<<"#b2fcae"<<"#a4f9e8"<<"#abfcca"<<"#a7e3f2"<<"#f7c9ff";
 
 /**
- * @brief CustomStyleDialog::CustomStyleDialog
+ * @brief CustomLayoutDialog::CustomLayoutDialog
  * @param QWidget* _parent
  * @param Controller* _ctrl
  */
-CustomStyleDialog::CustomStyleDialog(QWidget* _parent, Controller* _ctrl) :
+CustomLayoutDialog::CustomLayoutDialog(QWidget* _parent, Controller* _ctrl) :
     QDialog(_parent),
-    ui(new Ui::CustomStyleDialog),
+    ui(new Ui::CustomLayoutDialog),
     m_ctrl(_ctrl)
 {
     ui->setupUi(this);
@@ -46,9 +46,9 @@ CustomStyleDialog::CustomStyleDialog(QWidget* _parent, Controller* _ctrl) :
 }
 
 /**
- * @brief CustomStyleDialog::~CustomStyleDialog
+ * @brief CustomLayoutDialog::~CustomLayoutDialog
  */
-CustomStyleDialog::~CustomStyleDialog()
+CustomLayoutDialog::~CustomLayoutDialog()
 {
     delete ui;
     delete m_generator;
@@ -58,7 +58,7 @@ CustomStyleDialog::~CustomStyleDialog()
  * @brief Init the graphics view on show event
  * The view must be rendered to query its size
  */
-void CustomStyleDialog::showEvent(QShowEvent*)
+void CustomLayoutDialog::showEvent(QShowEvent*)
 {
     QRect rect(QPoint(0, 0), ui->view->size());
 
@@ -73,7 +73,7 @@ void CustomStyleDialog::showEvent(QShowEvent*)
  * @brief Set the custom layout config
  * @param CustomLayout _layout
  */
-void CustomStyleDialog::setCustLayout(const CustomLayout &_layout)
+void CustomLayoutDialog::setCustLayout(const CustomLayout &_layout)
 {
     ui->rows->setValue(_layout.rows);
     ui->cols->setValue(_layout.cols);
@@ -99,7 +99,7 @@ void CustomStyleDialog::setCustLayout(const CustomLayout &_layout)
  * @brief Returns a new custom layout config
  * @return CustomLayout
  */
-CustomLayout CustomStyleDialog::getCustLayout() const
+CustomLayout CustomLayoutDialog::getCustLayout() const
 {
     CustomLayout layout;
 
@@ -126,7 +126,7 @@ CustomLayout CustomStyleDialog::getCustLayout() const
  * @brief Change rows spinners bounds when the main one changes
  * @param int _val
  */
-void CustomStyleDialog::on_rows_valueChanged(int _val)
+void CustomLayoutDialog::on_rows_valueChanged(int _val)
 {
     foreach (QSpinBox* spinBox, m_rowsSpins)
     {
@@ -142,7 +142,7 @@ void CustomStyleDialog::on_rows_valueChanged(int _val)
  * @brief Change cols spinners bounds when the main one changes
  * @param int _val
  */
-void CustomStyleDialog::on_cols_valueChanged(int _val)
+void CustomLayoutDialog::on_cols_valueChanged(int _val)
 {
     foreach (QSpinBox* spinBox, m_colsSpins)
     {
@@ -157,7 +157,7 @@ void CustomStyleDialog::on_cols_valueChanged(int _val)
 /**
  * @brief Render the preview
  */
-void CustomStyleDialog::on_previewButton_clicked()
+void CustomLayoutDialog::on_previewButton_clicked()
 {
     CustomLayout layout = getCustLayout();
     QList<QRect> rects = m_generator->generate(layout);

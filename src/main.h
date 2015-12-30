@@ -5,7 +5,12 @@
 #include <QtCore>
 #include <QString>
 #include <QVector>
+#include <QSize>
+#include <QHash>
+#include <QVariant>
 #include <QColor>
+#include <QRect>
+#include <QtXml>
 #include <QsLog.h>
 
 #include "constants.h"

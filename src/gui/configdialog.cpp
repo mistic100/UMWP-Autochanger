@@ -1,4 +1,4 @@
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
 
 #include "configdialog.h"
 #include "ui_configdialog.h"
@@ -19,7 +19,6 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->setupUi(this);
 
     setFixedSize(size());
-
     setWindowFlags(UM::SimpleDialogFlag);
 
     ui->tabWidget->setCurrentIndex(0);

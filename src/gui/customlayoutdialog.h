@@ -1,9 +1,9 @@
-#ifndef CUSTOMSTYLEDIALOG_H
-#define CUSTOMSTYLEDIALOG_H
+#ifndef CustomLayoutDialog_H
+#define CustomLayoutDialog_H
 
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QGraphicsScene>
+#include <QDialog>
+#include <QSpinBox>
+#include <QGraphicsScene>
 #include <QShowEvent>
 
 #include "../main.h"
@@ -13,29 +13,29 @@
 
 
 namespace Ui {
-    class CustomStyleDialog;
+    class CustomLayoutDialog;
 }
 
 /**
  * @brief Dialog used to configure and preview the custom layout
  */
-class CustomStyleDialog : public QDialog
+class CustomLayoutDialog : public QDialog
 {
     Q_OBJECT
 
 private:
-    Ui::CustomStyleDialog* ui;
+    Ui::CustomLayoutDialog* ui;
     QGraphicsScene* m_scene;
 
-    Controller*            m_ctrl;
+    Controller* m_ctrl;
     CustomLayoutGenerator* m_generator;
 
     QList<QSpinBox*> m_rowsSpins;
     QList<QSpinBox*> m_colsSpins;
 
 public:
-    CustomStyleDialog(QWidget* _parent, Controller* _ctrl);
-    ~CustomStyleDialog();
+    CustomLayoutDialog(QWidget* _parent, Controller* _ctrl);
+    ~CustomLayoutDialog();
 
     void setCustLayout(const CustomLayout &_layout);
     CustomLayout getCustLayout() const;
@@ -49,4 +49,4 @@ private slots:
     void on_previewButton_clicked();
 };
 
-#endif // CUSTOMSTYLEDIALOG_H
+#endif // CustomLayoutDialog_H

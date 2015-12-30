@@ -4,6 +4,7 @@
 
 #include "setcontextmenu.h"
 #include "seteditdialog.h"
+#include "mainwindow.h"
 
 /**
  * @brief SetContextMenu::SetContextMenu
@@ -11,7 +12,7 @@
  * @param Controller* _ctrl
  * @param int[] _sets
  */
-SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QList<Set *> &_sets) :
+SetContextMenu::SetContextMenu(QWidget *_parent, Controller *_ctrl, const QList<Set *> &_sets) :
     QMenu(_parent),
     m_ctrl(_ctrl),
     m_settings(_ctrl->settings()),
@@ -54,7 +55,7 @@ SetContextMenu::SetContextMenu(MainWindow* _parent, Controller *_ctrl, const QLi
     }
 
     QAction* actionAdd = addAction(QIcon(":/images/icons/add_color.png"), tr("Add set"));
-    connect(actionAdd, SIGNAL(triggered()), _parent, SLOT(addSet()));
+    connect(actionAdd, SIGNAL(triggered()), (MainWindow*) _parent, SLOT(addSet()));
 }
 
 /**

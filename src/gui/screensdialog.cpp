@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QColorDialog>
 
+#include "../umutils.h"
 #include "screensdialog.h"
 #include "ui_screensdialog.h"
 
@@ -16,20 +17,19 @@ ScreensDialog::ScreensDialog(QWidget* _parent, Controller* _ctrl) :
     QDialog(_parent),
     ui(new Ui::ScreensDialog),
     m_ctrl(_ctrl),
-    m_currentScreen(-1)
+    m_settings(_ctrl->settings()),
+    m_enviro(_ctrl->enviro())
 {
     ui->setupUi(this);
 
-    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+    setWindowFlags(UM::SimpleDialogFlag);
+
+    for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
     {
-        m_monitors.append(m_ctrl->settings()->monitor(i));
+        m_monitors.append(m_settings->monitor(i));
     }
 
     init();
-
-    setWindowFlags(UM::SimpleDialogFlag);
-
-    layout()->setSizeConstraint(QLayout::SetFixedSize);
 
     QLOG_TRACE() << "ScreensDialog openned";
 }
@@ -77,14 +77,14 @@ void ScreensDialog::done(int result)
  */
 void ScreensDialog::save()
 {
-    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+    for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
     {
-        m_ctrl->settings()->setMonitor(i, m_monitors[i]);
+        m_settings->setMonitor(i, m_monitors[i]);
     }
 
-    m_ctrl->settings()->save();
+    m_settings->save();
 
-    QLOG_TRACE() << "Configuration updated";
+    QLOG_TRACE() << "Monitors configuration updated";
 }
 
 /**
@@ -92,8 +92,8 @@ void ScreensDialog::save()
  */
 void ScreensDialog::init()
 {
-    m_ratio = 400.f/m_ctrl->enviro()->wpSize(-1).width();
-    m_viewport = scaledRect(m_ctrl->enviro()->wpSize(-1), m_ratio);
+    m_ratio = 400.f/m_enviro->wpSize(-1).width();
+    m_viewport = UM::scaledRect(m_enviro->wpSize(-1), m_ratio, m_ratio);
 
     QRect rect(QPoint(0, 0), m_viewport.size());
 
@@ -102,9 +102,9 @@ void ScreensDialog::init()
     m_scene->setSceneRect(rect);
     m_scene->addRect(rect, Qt::NoPen, QBrush(Qt::gray));
 
-    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+    for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
     {
-        addScreen(i, m_ctrl->enviro()->wpSize(i));
+        addScreen(i, m_enviro->wpSize(i));
     }
 
     ui->view->setScene(m_scene);
@@ -117,7 +117,7 @@ void ScreensDialog::init()
  */
 void ScreensDialog::addScreen(int _i, const QRect &_screen)
 {
-    QRect scaled = scaledRect(_screen, m_ratio);
+    QRect scaled = UM::scaledRect(_screen, m_ratio, m_ratio);
     scaled.translate(-m_viewport.left()+5, -m_viewport.top()+5);
     scaled.setWidth(scaled.width()-10);
     scaled.setHeight(scaled.height()-10);
@@ -259,20 +259,4 @@ void ScreensDialog::on_enabled_clicked(bool _enabled)
     m_monitors[m_currentScreen].enabled = _enabled;
 
     updateScreen(m_currentScreen);
-}
-
-/**
- * @brief Return a scaled copy of a rectangle
- * @param QRect _rect
- * @param float _ratio
- * @return QRect
- */
-QRect ScreensDialog::scaledRect(const QRect &_rect, float _ratio)
-{
-    return QRect(
-                _rect.left()  *_ratio,
-                _rect.top()   *_ratio,
-                _rect.width() *_ratio,
-                _rect.height()*_ratio
-    );
 }

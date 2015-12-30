@@ -1,10 +1,10 @@
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QLabel>
+#include <QPushButton>
+#include <QLabel>
 #include <QPainter>
 #include <QDesktopServices>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QMessageBox>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QMessageBox>
 #include <QFontMetrics>
 
 #include "previewdialog.h"
@@ -28,16 +28,15 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
 
     mainLayout->addLayout(m_layout);
     mainLayout->addWidget(buttons);
+    mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+
     setLayout(mainLayout);
-
-    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(draw()));
-    draw();
-
     setWindowTitle(tr("Active files"));
-
     setWindowFlags(UM::SimpleDialogFlag);
 
-    mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(draw()));
+
+    draw();
 
     QLOG_TRACE() << "PreviewDialog openned";
 }
@@ -55,7 +54,7 @@ void PreviewDialog::draw()
         delete item;
     }
 
-    // rare case but generates segfault
+    // rare case
     if (m_ctrl->currentSet() == NULL)
     {
         return;

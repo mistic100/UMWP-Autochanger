@@ -1,8 +1,8 @@
 #ifndef PREVIEWDIALOG_H
 #define PREVIEWDIALOG_H
 
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QGridLayout>
+#include <QDialog>
+#include <QGridLayout>
 
 #include "../main.h"
 #include "../controller.h"
@@ -17,6 +17,7 @@ class PreviewDialog : public QDialog
 
 private:
     Controller* m_ctrl;
+
     QGridLayout* m_layout;
     
 public:

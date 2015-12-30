@@ -1,17 +1,17 @@
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QLabel>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QLabel>
 #include <QFile>
-#include <QtWidgets/QFileDialog>
+#include <QFileDialog>
 
 #include "mainwindow.h"
-#include "mainwidget.h"
+#include "mainlist.h"
 #include "configdialog.h"
 #include "screensdialog.h"
 #include "previewdialog.h"
 #include "newversiondialog.h"
-#include "setcontextmenu.h"
 #include "changelogdialog.h"
+#include "helpdialog.h"
 
 
 /**
@@ -24,33 +24,28 @@ MainWindow::MainWindow(Controller* _ctrl) :
     m_settings(_ctrl->settings()),
     m_enviro(_ctrl->enviro())
 {
-    m_altPressed = false;
-    installEventFilter(this);
-
-    setMinimumSize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
-
-    connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(onNewVersion()));
-
-
     // WINDOW PROPERTIES
-    setWindowFlags(Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
+    if (QSysInfo::WindowsVersion < QSysInfo::WV_WINDOWS10)
+    { // for some reason, this disable the close button on W10
+        setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
+    }
     setWindowTitle(APP_NAME);
     setWindowIcon(QPixmap(":/images/icon.png"));
-
+    setMinimumSize(APP_MIN_WIDTH, APP_MIN_HEIGHT);
 
     // STATUS BAR
     m_statusBar = new StatusBar(this, m_ctrl);
     setStatusBar(m_statusBar);
 
-
     // MENUBAR
     m_menuBar = new MenuBar(this, m_ctrl);
     addToolBar(m_menuBar);
 
-
     // TRAY ICON
     m_trayIcon = new TrayIcon(this, m_ctrl);
     m_trayIcon->show();
+
+    connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(onNewVersion()));
 
     init();
 }
@@ -64,16 +59,18 @@ MainWindow::~MainWindow()
 }
 
 /**
- * @brief Display error on main widget depending on app state
+ * @brief Display error or main list depending on app state
  */
 void MainWindow::init()
 {
-    MainWidget* widget = new MainWidget(this, m_ctrl);
+    // TODO : critical errors
+
+    MainList* widget = new MainList(this, m_ctrl);
 
     setCentralWidget(widget);
     resize(m_settings->windowSize());
 
-    // window is hidden by default if the config is not empty
+    // the window is hidden by default if the config is not empty
     if (m_settings->nbSets()>0 &&
         m_settings->param(UM::CONF::minimize).toBool()
     ) {
@@ -169,21 +166,22 @@ void MainWindow::toggleWindow(bool _forceHide)
 {
     if (_forceHide || isVisible())
     {
-        hide();
-
-        if (m_settings->param(UM::CONF::show_notifications).toBool() &&
-            m_settings->param(UM::CONF::msgcount).toInt() < APP_MAX_APP_RUNNING_MESSAGE_COUNT)
-        {
-            m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
-            m_settings->setParam(UM::CONF::msgcount, m_settings->param(UM::CONF::msgcount).toInt() + 1);
-        }
-
         if (!_forceHide)
         {
             m_settings->setWindowSize(size());
         }
 
-        m_trayIcon->setHidden(true);
+        hide();
+
+        emit showHidden(false);
+
+        if (!_forceHide &&
+            m_settings->param(UM::CONF::show_notifications).toBool() &&
+            m_settings->param(UM::CONF::msgcount).toInt() < APP_MAX_APP_RUNNING_MESSAGE_COUNT)
+        {
+            m_trayIcon->showMessage(APP_NAME, tr("%1 is still running").arg(APP_NAME));
+            m_settings->setParam(UM::CONF::msgcount, m_settings->param(UM::CONF::msgcount).toInt() + 1);
+        }
     }
     else
     {
@@ -192,7 +190,7 @@ void MainWindow::toggleWindow(bool _forceHide)
         setFocus();
         activateWindow();
 
-        m_trayIcon->setHidden(false);
+        emit showHidden(true);
 
         if (QString(APP_VERSION).compare(m_settings->param(UM::CONF::changelog_shown).toString()) > 0)
         {
@@ -289,34 +287,7 @@ void MainWindow::openImportDialog()
  */
 void MainWindow::openHelpDialog()
 {
-    QFile file;
-    QString lang = QLocale::system().name().section('_', 0, 0);
-    if (lang.compare("fr")==0)
-    {
-        file.setFileName(":/lang/fr_FR/help.htm");
-    }
-    else
-    {
-        file.setFileName(":/lang/en_GB/help.htm");
-    }
-
-    QString text;
-    text.append("<style>");
-    text.append("dt { font-weight:bold; }");
-    text.append("dd { margin:0 0 1em 1em; }");
-    text.append("</style>");
-
-    file.open(QIODevice::ReadOnly);
-    QTextStream content(&file);
-    content.setCodec("UTF-8");
-    text.append(content.readAll());
-    file.close();
-
-    QMessageBox dialog(this);
-    dialog.setIcon(QMessageBox::Information);
-    dialog.setWindowTitle(tr("User guide"));
-    dialog.setText(text);
-    dialog.setWindowTitle(tr("User guide"));
+    HelpDialog dialog(this, m_settings);
     dialog.exec();
 }
 
@@ -325,7 +296,7 @@ void MainWindow::openHelpDialog()
  */
 void MainWindow::openChangelogDialog()
 {
-    ChangelogDialog dialog(this);
+    ChangelogDialog dialog(this, m_settings);
     dialog.exec();
 }
 
@@ -369,17 +340,6 @@ void MainWindow::openPreviewDialog()
         PreviewDialog dialog(this, m_ctrl);
         dialog.exec();
     }
-}
-
-/**
- * @brief Show the sets context menu
- * @param int[]  _sets
- * @param QPoint _pos
- */
-void MainWindow::showContextMenu(const QList<Set*> &_sets, const QPoint &_pos)
-{
-    SetContextMenu menu(this, m_ctrl, _sets);
-    menu.exec(_pos);
 }
 
 /**
@@ -453,7 +413,7 @@ void MainWindow::onNewVersion()
     statusLabel->setFlat(true);
     statusLabel->setStyleSheet("QPushButton { color : red; } QPushButton:flat:pressed { border: none; }");
     statusLabel->setCursor(Qt::PointingHandCursor);
-    m_statusBar->insertPermanentWidget(0, statusLabel);
+    m_statusBar->addPermanentWidget(statusLabel);
 
     connect(statusLabel, SIGNAL(clicked()), this, SLOT(openNewVersionDialog()));
 
@@ -461,6 +421,7 @@ void MainWindow::onNewVersion()
     {
         // tray tootlip
         m_trayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(_version));
+        connect(m_trayIcon, SIGNAL(messageClicked()), this, SLOT(toggleWindow()));
     }
     else
     {
@@ -485,6 +446,7 @@ void MainWindow::quit()
 {
     if (!m_settings->param(UM::CONF::close_warning).toBool())
     {
+        m_settings->save();
         m_ctrl->quit();
         return;
     }
@@ -514,7 +476,6 @@ void MainWindow::quit()
     }
 
     m_settings->save();
-
     m_ctrl->quit();
 }
 
@@ -545,40 +506,8 @@ void MainWindow::resizeEvent(QResizeEvent* _event)
  */
 void MainWindow::closeEvent(QCloseEvent* _event)
 {
-    if (_event && !m_altPressed)
-    {
-        _event->ignore();
-        toggleWindow();
+    toggleWindow();
 
-        QMainWindow::closeEvent(_event);
-    }
-    else
-    {
-        m_ctrl->quit();
-    }
-}
-
-/**
- * @brief catch Alt press to allow Alt-F4
- * @param QEvent* _event
- * @return bool
- */
-bool MainWindow::eventFilter(QObject*, QEvent* _event)
-{
-    if (_event->type() == QEvent::ShortcutOverride)
-    {
-        if (((QKeyEvent*) _event)->modifiers() == Qt::AltModifier)
-        {
-            m_altPressed = true;
-            QTimer::singleShot(300, this, SLOT(slotAltPressed()));
-            return false;
-        }
-    }
-
-    return QMainWindow::event(_event);
-}
-
-void MainWindow::slotAltPressed()
-{
-    m_altPressed = false;
+    _event->ignore();
+    QMainWindow::closeEvent(_event);
 }

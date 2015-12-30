@@ -48,20 +48,23 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
     QLOG_DEBUG() << "Current set:" << set->name() << "Type:" << set->type() << "Style:" << set->style();
 
     QVector<QString> files;
+    QVector<QString> tempFiles;
     if (set->style() == UM::IM_CUSTOM)
     {
         files = getCustomFiles(set);
         QLOG_DEBUG() << "Current files:" << files;
+
+        tempFiles = files;
     }
     else
     {
         files = getFiles(set);
         QLOG_DEBUG() << "Current files:" << files;
 
-        files = adaptFiles(set, files);
+        tempFiles = adaptFiles(set, files);
     }
 
-    QString filepath = generateFile(set, files);
+    QString filepath = generateFile(set, tempFiles);
 
     m_enviro->setWallpaper(filepath);
 

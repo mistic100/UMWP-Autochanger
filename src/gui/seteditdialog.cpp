@@ -1,6 +1,6 @@
-#include <QtWidgets/QMessageBox>
+#include <QMessageBox>
 
-#include "customstyledialog.h"
+#include "customlayoutdialog.h"
 
 #include "seteditdialog.h"
 #include "ui_seteditdialog.h"
@@ -22,12 +22,9 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
     ui->setupUi(this);
 
     setFixedSize(size());
-
     setWindowFlags(UM::SimpleDialogFlag);
 
     m_custLayout = m_sets.at(0)->custLayout();
-
-    ui->inputName->setFocus();
 
     if (m_sets.size() > 1)
     {
@@ -72,6 +69,8 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
     }
 
     ui->inputHotkey->setDisabled(!m_settings->param(UM::CONF::use_hotkeys).toBool());
+
+    ui->inputName->setFocus();
 
     QLOG_TRACE() << "SetEditDialog openned";
 }
@@ -143,7 +142,8 @@ const Set SetEditDialog::result()
     UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
     UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
 
-    Set result("", ui->inputName->text());
+    Set result;
+    result.setName(ui->inputName->text());
     result.setType(type);
     result.setStyle(style);
     result.setMode(mode);
@@ -168,7 +168,7 @@ void SetEditDialog::on_selectStyle_currentDataChanged(QVariant data)
  */
 void SetEditDialog::on_styleConfig_clicked()
 {
-    CustomStyleDialog dialog(this, m_ctrl);
+    CustomLayoutDialog dialog(this, m_ctrl);
 
     dialog.setCustLayout(m_custLayout);
 

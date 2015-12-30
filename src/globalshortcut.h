@@ -1,8 +1,6 @@
 #ifndef GLOBALSHORTCUT_H
 #define GLOBALSHORTCUT_H
 
-#include <QHash>
-
 #include "ext/qglobalshortcut.h"
 
 
@@ -23,16 +21,16 @@ public:
     };
 
 private:
-    QList<int>              m_sets;
-    GlobalShortcut::Type    m_type;
+    QList<int> m_sets;
+    GlobalShortcut::Type m_type;
 
 public:
     GlobalShortcut(QObject* _parent = 0) : QGlobalShortcut(_parent), m_type(NOOP) {}
 
-    void setSets(const QList<int> &_ai)            { m_sets =_ai; }
+    void setSets(const QList<int> &_ai) { m_sets =_ai; }
     void setType(const GlobalShortcut::Type _type) { m_type = _type; }
 
-    const QList<int>           sets() const { return m_sets; }
+    const QList<int> sets() const { return m_sets; }
     const GlobalShortcut::Type type() const { return m_type; }
 };
 

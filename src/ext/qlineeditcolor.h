@@ -1,7 +1,7 @@
 #ifndef QLINEEDITCOLOR
 #define QLINEEDITCOLOR
 
-#include <QtWidgets/QLineEdit>
+#include <QLineEdit>
 #include <QColorDialog>
 #include <QEvent>
 
@@ -59,9 +59,16 @@ public:
      * @brief Get the selected color
      * @return QColor
      */
-    QColor getColor() const {
+    QColor getColor() const
+    {
         return m_color;
     }
+
+signals:
+    /**
+     * @brief Emitted when the user changes the color
+     */
+    void colorChanged(QColor);
 
 private:
     /**
@@ -103,12 +110,6 @@ private:
             return QColor(Qt::white);
         }
     }
-
-signals:
-    /**
-     * @brief Emitted when the user changes the color
-     */
-    void colorChanged(QColor);
 };
 
 #endif // QLINEEDITCOLOR

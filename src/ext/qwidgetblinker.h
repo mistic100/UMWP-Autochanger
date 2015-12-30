@@ -1,7 +1,7 @@
 #ifndef QWIDGETBLINKER_H
 #define QWIDGETBLINKER_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 #include <QTimeLine>
 #include <QEvent>
 

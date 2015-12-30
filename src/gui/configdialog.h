@@ -1,7 +1,7 @@
 #ifndef CONFIGDIALOG_H
 #define CONFIGDIALOG_H
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 
 #include "../main.h"
 #include "../controller.h"
@@ -21,9 +21,9 @@ class ConfigDialog : public QDialog
 private:
     Ui::ConfigDialog* ui;
 
-    Controller*     m_ctrl;
-    Settings*       m_settings;
-    Environment*    m_enviro;
+    Controller* m_ctrl;
+    Settings* m_settings;
+    Environment* m_enviro;
     
 public:
     ConfigDialog(QWidget* _parent, Controller* _ctrl);

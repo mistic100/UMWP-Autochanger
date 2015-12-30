@@ -2,7 +2,7 @@
 
 #include "main.h"
 #include "controller.h"
-#include "gui/mainwidget.h"
+#include "gui/mainlist.h"
 
 
 /**
@@ -262,7 +262,7 @@ void Controller::unactivateSets(const QList<Set*> &_sets)
  * @param Set*[] _sets
  * @param Set _data
  */
-void Controller::editSets(const QList<Set*> &_sets, const Set _data)
+void Controller::editSets(const QList<Set*> &_sets, const Set &_data)
 {
     m_settings->editSets(_sets, _data);
 

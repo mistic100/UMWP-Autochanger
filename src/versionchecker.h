@@ -1,7 +1,6 @@
 #ifndef VERSIONCHECKER_H
 #define VERSIONCHECKER_H
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
@@ -53,7 +52,6 @@ private slots:
 signals:
     void newVersionAvailable(const UM::NewVersion);
     void finished();
-    
 };
 
 #endif // VERSIONCHECKER_H
