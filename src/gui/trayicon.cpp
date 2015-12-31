@@ -1,3 +1,5 @@
+#include <QMenu>
+
 #include "trayicon.h"
 #include "mainwindow.h"
 

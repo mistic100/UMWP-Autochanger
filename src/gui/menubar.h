@@ -2,7 +2,7 @@
 #define MENUBAR_H
 
 #include <QAction>
-#include "../ext/qtoolbarext.h"
+#include <QToolBar>
 #include "../ext/qwidgetblinker.h"
 
 #include "../main.h"
@@ -15,16 +15,19 @@ class MainWindow;
 /**
  * @brief Menubar of the main window
  */
-class MenuBar : public QToolBarExt
+class MenuBar : public QToolBar
 {
     Q_OBJECT
 
 private:
-    QToolButton* m_actionPause;
+    QAction* m_actionPause;
     QWidgetBlinker* m_pauseBlinker;
 
 public:
     MenuBar(MainWindow* _parent, Controller* _ctrl);
+
+private:
+    QAction* addMenu(const QIcon &_icon, const QString &_text, QMenu* _menu);
 
 private slots:
     void setStartPause(bool _start);

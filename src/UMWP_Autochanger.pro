@@ -36,7 +36,6 @@ SOURCES += \
 
 HEADERS += \
     ext/qlineedithotkey.h \
-    ext/qtoolbarext.h \
     ext/qhotkeywidget.h \
     ext/qwidgetblinker.h \
     ext/qcomboboxext.h \
