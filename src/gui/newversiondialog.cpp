@@ -42,7 +42,7 @@ void NewVersionDialog::on_updateButton_clicked()
     ui->progressBar->setVisible(true);
     ui->buttonBox->setDisabled(true);
 
-    m_file.setFileName(Environment::APPDATA_DIR + APP_INSTALLER_FILENAME);
+    m_file.setFileName(QDir::toNativeSeparators(QDir::tempPath() + "/" + APP_INSTALLER_FILENAME));
 
     if (!m_file.open(QIODevice::WriteOnly))
     {

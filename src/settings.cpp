@@ -236,7 +236,7 @@ bool Settings::load(QString _filename)
             {
                 UM::Monitor mon;
                 mon.enabled = (bool) monNode.attribute("enabled").toInt();
-                mon.color = monNode.attribute("color").toInt();
+                mon.color = monNode.attribute("color").toUInt();
 
                 m_monitors.append(mon);
 
@@ -345,7 +345,7 @@ bool Settings::save(QString _filename)
         // monitor node
         QDomElement monNode = dom.createElement("monitor");
         monNode.setAttribute("enabled", mon.enabled);
-        monNode.setAttribute("color", (int)mon.color);
+        monNode.setAttribute("color", mon.color);
 
         monsNode.appendChild(monNode);
     }

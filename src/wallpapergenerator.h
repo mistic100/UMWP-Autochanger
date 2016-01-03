@@ -52,8 +52,8 @@ private:
     QString getRandomFile(Set* _set, const QVector<QString> &_files);
 
     // custom generation
-    QVector<QString> getCustomFiles(Set* _set);
-    QString generateCustomFile(const QRect &_scrRect, Set* _set);
+    QVector<QString> getCustomFiles(Set* _set, QVector<QString> &_srcFiles);
+    QString generateCustomFile(int _idx, Set* _set, QVector<QString> &_srcFiles);
 
     // standard generation
     QString adaptFileToMonitor(const QString &_file, int _idx, Set* _set);
@@ -65,7 +65,7 @@ private:
     // cache keys
     QString getDesktopWallpaperKey(UM::IMAGE _style);
     QString getCacheFilename(const QString &_file, const QRect &_rect, const QString &_key1, const QString &_key2);
-    QString getCustLayoutTempFilename(const QRect &_rect, Set* _set);
+    QString getCustLayoutTempFilename(int _idx, Set* _set);
 };
 
 #endif // WALLPAPERGENERATOR_H

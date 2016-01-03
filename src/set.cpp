@@ -90,7 +90,7 @@ Set::Set(const QDomElement* _dom)
                 m_custLayout.mainPos = static_cast<UM::ALIGN>(element.attribute("mainPos").toInt());
                 m_custLayout.borderEnabled = (bool) element.attribute("borderEnabled").toInt();
                 m_custLayout.borderWidth = element.attribute("borderWidth").toShort();
-                m_custLayout.borderColor = element.attribute("borderColor").toInt();
+                m_custLayout.borderColor = element.attribute("borderColor").toUInt();
             }
         }
 

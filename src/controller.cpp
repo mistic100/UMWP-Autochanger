@@ -85,12 +85,16 @@ void Controller::onNewVersion(const UM::NewVersion _version)
  */
 void Controller::launchInstaller()
 {
-    QString path = QDir::toNativeSeparators(Environment::APPDATA_DIR + APP_INSTALLER_FILENAME);
+    QString path = QDir::toNativeSeparators(QDir::tempPath() + "/" + APP_INSTALLER_FILENAME);
 
     if (QFile::exists(path))
     {
         QProcess::startDetached("\""+ path +"\" -delete-installer");
         quit();
+    }
+    else
+    {
+        QLOG_ERROR()<<"Installer file not found";
     }
 }
 

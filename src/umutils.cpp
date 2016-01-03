@@ -47,3 +47,17 @@ QRect UM::scaledRect(const QRect &_rect, float _xRatio, float _yRatio)
                 _rect.height() * _yRatio
     );
 }
+
+/**
+ * @brief Get borders of a rect
+ * @param QRect _rect
+ * @return QLine[]
+ */
+QList<QLine> UM::rectBorders(const QRect &_rect)
+{
+    return QList<QLine>()
+            <<QLine(_rect.topLeft(), _rect.topRight())
+            <<QLine(_rect.topRight(), _rect.bottomRight())
+            <<QLine(_rect.bottomLeft(), _rect.bottomRight())
+            <<QLine(_rect.topLeft(), _rect.bottomLeft());
+}

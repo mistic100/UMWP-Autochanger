@@ -4,6 +4,7 @@
 #include "controller.h"
 #include "wallpapergenerator.h"
 #include "lib/Crc32.h"
+#include "umutils.h"
 
 
 /**
@@ -51,18 +52,17 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
     QVector<QString> tempFiles;
     if (set->style() == UM::IM_CUSTOM)
     {
-        files = getCustomFiles(set);
-        QLOG_DEBUG() << "Current files:" << files;
-
-        tempFiles = files;
+        tempFiles = getCustomFiles(set, files);
     }
     else
     {
-        files = getFiles(set);
-        QLOG_DEBUG() << "Current files:" << files;
+        tempFiles = getFiles(set);
+        files+= tempFiles;
 
-        tempFiles = adaptFiles(set, files);
+        tempFiles = adaptFiles(set, tempFiles);
     }
+
+    QLOG_DEBUG() << "Current files:" << files;
 
     QString filepath = generateFile(set, tempFiles);
 
@@ -125,7 +125,18 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
 {
     QVector<QString> files;
 
-    if (_set->type() == UM::W_MONITOR)
+    if (_set->type() == UM::W_DESKTOP)
+    {
+        if (_set->mode() == UM::MODE_RANDOM)
+        {
+            files.append(getRandomFile(_set, files));
+        }
+        else
+        {
+            files.append(getNextFile(_set));
+        }
+    }
+    else
     {
         for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
         {
@@ -144,17 +155,6 @@ QVector<QString> WallpaperGenerator::getFiles(Set* _set)
             {
                 files.append("");
             }
-        }
-    }
-    else
-    {
-        if (_set->mode() == UM::MODE_RANDOM)
-        {
-            files.append(getRandomFile(_set, files));
-        }
-        else
-        {
-            files.append(getNextFile(_set));
         }
     }
 
@@ -319,29 +319,27 @@ QVector<QString> WallpaperGenerator::adaptFiles(Set* _set, const QVector<QString
  * @param Set* _set
  * @return string[]
  */
-QVector<QString> WallpaperGenerator::getCustomFiles(Set* _set)
+QVector<QString> WallpaperGenerator::getCustomFiles(Set* _set, QVector<QString> &_srcFiles)
 {
     QVector<QString> files;
 
-    if (_set->type() == UM::W_MONITOR)
+    if (_set->type() == UM::W_DESKTOP)
+    {
+        files.append(generateCustomFile(-1, _set, _srcFiles));
+    }
+    else
     {
         for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
         {
             if (m_settings->monitor(i).enabled)
             {
-                QRect rect(QPoint(), m_enviro->wpSize(i).size());
-                files.append(generateCustomFile(rect, _set));
+                files.append(generateCustomFile(i, _set, _srcFiles));
             }
             else
             {
                 files.append("");
             }
         }
-    }
-    else
-    {
-        QRect rect(QPoint(), getDesktopEnabledRect().size());
-        files.append(generateCustomFile(rect, _set));
     }
 
     return files;
@@ -353,15 +351,25 @@ QVector<QString> WallpaperGenerator::getCustomFiles(Set* _set)
  * @param Set* _set
  * @return string
  */
-QString WallpaperGenerator::generateCustomFile(const QRect &_scrRect, Set* _set)
+QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QString> &_srcFiles)
 {
+    QRect scrRect;
+    if (_set->type() == UM::W_DESKTOP)
+    {
+        scrRect = QRect(QPoint(), getDesktopEnabledRect().size());
+    }
+    else
+    {
+        scrRect = QRect(QPoint(), m_enviro->wpSize(_idx).size());
+    }
+
     CustomLayout layout = _set->custLayout();
     QList<QRect> rawBlocks = m_custGenerator->generate(layout);
     QList<QRect> blocks;
 
     // scale blocks to wallpaper size
-    double wRatio =  _scrRect.width() / (double) layout.cols;
-    double hRatio =  _scrRect.height() / (double) layout.rows;
+    double wRatio =  scrRect.width() / (double) layout.cols;
+    double hRatio =  scrRect.height() / (double) layout.rows;
 
     foreach (const QRect block, rawBlocks)
     {
@@ -375,8 +383,9 @@ QString WallpaperGenerator::generateCustomFile(const QRect &_scrRect, Set* _set)
 
     // get necessary files from set
     QVector<QString> files = getFiles(_set, blocks.size());
+    _srcFiles+= files;
 
-    QImage image(_scrRect.size(), QImage::Format_RGB32);
+    QImage image(scrRect.size(), QImage::Format_RGB32);
     QPainter painter(&image);
 
     // draw each block
@@ -410,14 +419,30 @@ QString WallpaperGenerator::generateCustomFile(const QRect &_scrRect, Set* _set)
 
         foreach (const QRect block, blocks)
         {
-            painter.drawRect(block);
+            foreach (const QLine line, UM::rectBorders(block))
+            {
+                QLOG_DEBUG()<<line;
+                if (
+                        (line.x1()==0 && line.x2()==0) ||
+                        (line.x1()==scrRect.width() && line.x2()==scrRect.width()) ||
+                        (line.y1()==0 && line.y2()==0) ||
+                        (line.y1()==scrRect.height()-1 && line.y2()==scrRect.height()-1)
+                        )
+                {
+                    // do not draw extreme borders
+                }
+                else
+                {
+                    painter.drawLine(line);
+                }
+            }
         }
     }
 
     painter.end();
 
     // save in temp folder
-    QString filename = getCustLayoutTempFilename(_scrRect, _set);
+    QString filename = getCustLayoutTempFilename(_idx, _set);
 
     image.save(filename, 0, 100);
 
@@ -772,14 +797,11 @@ QString WallpaperGenerator::getCacheFilename(const QString &_file, const QRect &
  * @param Set* _set
  * @return string
  */
-QString WallpaperGenerator::getCustLayoutTempFilename(const QRect &_rect, Set* _set)
+QString WallpaperGenerator::getCustLayoutTempFilename(int _idx, Set* _set)
 {
-    QString key = QString::number(_rect.top()) + QString::number(_rect.left()) + QString::number(_rect.width()) + QString::number(_rect.height());
-    uint32_t crc = crc32_1byte(key.toStdString().c_str(), key.size());
-
     return QDir::toNativeSeparators(QDir::tempPath() + "/")
             + APP_CUSTOM_PREFIX
-            + QString::number(crc, 16) + "-"
-            + _set->uuid()
+            + _set->uuid() + "-"
+            + QString::number(_idx)
             + ".bmp";
 }

@@ -62,7 +62,11 @@ void PreviewDialog::draw()
 
     // width of the thumbnail
     int width = 150;
-    if (m_ctrl->currentSet()->type() == UM::W_DESKTOP)
+    if (m_ctrl->currentSet()->style() == UM::IM_CUSTOM)
+    {
+        width = 100;
+    }
+    else if (m_ctrl->currentSet()->type() == UM::W_DESKTOP)
     {
         width*= m_ctrl->settings()->nbEnabledMonitors();
     }
@@ -71,21 +75,13 @@ void PreviewDialog::draw()
     pen.setWidth(2);
     pen.setColor(QColor(0, 160, 255));
 
-    int i = 0;
+    int col = 0; int row = 0;
     foreach (const QString file, m_ctrl->currentFiles())
     {
         if (file.isEmpty())
         {
             continue;
         }
-
-        // label with filename
-        QString text = fontMetrics().elidedText(QFileInfo(file).fileName(), Qt::ElideRight, width);
-        QLabel* label = new QLabel(text);
-        label->setTextInteractionFlags(Qt::TextSelectableByMouse);
-        label->setCursor(Qt::IBeamCursor);
-
-        m_layout->addWidget(label, 0, i);
 
         // resize image and add blue border
         QPixmap image = QPixmap(file).scaledToWidth(width, Qt::FastTransformation);
@@ -103,23 +99,33 @@ void PreviewDialog::draw()
 
         connect(thumb, SIGNAL(clicked()), this, SLOT(onThumbnailClicked()));
 
-        m_layout->addWidget(thumb, 1, i);
+        m_layout->addWidget(thumb, row, col, Qt::AlignBottom);
 
-        // delete button, only if wallpapers are not custom
-        if (m_ctrl->currentSet()->style() != UM::IM_CUSTOM)
+        // label with filename
+        QString text = fontMetrics().elidedText(QFileInfo(file).fileName(), Qt::ElideRight, width);
+        QLabel* label = new QLabel(text);
+        label->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        label->setCursor(Qt::IBeamCursor);
+
+        m_layout->addWidget(label, row+1, col);
+
+        // delete button
+        QPushButton* button = new QPushButton();
+        button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
+        button->setText(tr("Delete"));
+        button->setProperty("path", file);
+        button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
+        connect(button, SIGNAL(clicked()), this, SLOT(onDeleteButtonClicked()));
+
+        m_layout->addWidget(button, row+2, col);
+
+        col++;
+        if (col > 5)
         {
-            QPushButton* button = new QPushButton();
-            button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
-            button->setText(tr("Delete"));
-            button->setProperty("path", file);
-            button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
-            connect(button, SIGNAL(clicked()), this, SLOT(onDeleteButtonClicked()));
-
-            m_layout->addWidget(button, 2, i);
+            col = 0;
+            row+= 3;
         }
-
-        i++;
     }
 }
 
