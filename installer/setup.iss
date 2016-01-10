@@ -63,14 +63,22 @@ Name: "{userstartup}\{#AppName}"; Filename: "{app}\{#AppExeName}"; Tasks: autost
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [InstallDelete]
-Type: filesandordirs; Name: "{app}\cache";
 Type: files; Name: "{app}\debug.log";
 Type: files; Name: "{app}\readme.txt";
 Type: files; Name: "{app}\QxtCore.dll";
 Type: files; Name: "{app}\QxtGui.dll";
+Type: files; Name: "{app}\msvcp100.dll";
+Type: files; Name: "{app}\msvcr100.dll";
+Type: files; Name: "{app}\QtCore4.dll";
+Type: files; Name: "{app}\QtGui4.dll";
+Type: files; Name: "{app}\QtNetwork4.dll";
+Type: files; Name: "{app}\QtXml4.dll";
+Type: files; Name: "{app}\imageformats\qgif4.dll";
+Type: files; Name: "{app}\imageformats\qjpeg4.dll";
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\cache";
+Type: filesandordirs; Name: "{localappdata}\{#AppName}\cache";
 Type: files; Name: "{app}\debug.log";
 Type: files; Name: "{app}\installer.exe";
 
@@ -84,6 +92,7 @@ begin
         if MsgBox(ExpandConstant('{cm:DeleteSettings}'), mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
           begin
              DelTree(ExpandConstant('{app}\{#SettingsFile}'), False, True, False);
+             DelTree(ExpandConstant('{localappdata}\{#AppName}\{#SettingsFile}'), False, True, False);
           end
       end;
   end;

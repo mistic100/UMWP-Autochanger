@@ -57,7 +57,14 @@ void MainList::onListChanged(bool _resetSel)
 
         if (!m_settings->set(i)->isValid())
         {
-            item->setToolTip(tr("This set doesn't exist on the disk anymore"));
+            if (m_settings->set(i)->count() == 0)
+            {
+                item->setToolTip(tr("This set does not have any image files."));
+            }
+            else
+            {
+                item->setToolTip(tr("This set does not exist on the disk anymore."));
+            }
         }
     }
 }

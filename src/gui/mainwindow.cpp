@@ -25,10 +25,6 @@ MainWindow::MainWindow(Controller* _ctrl) :
     m_enviro(_ctrl->enviro())
 {
     // WINDOW PROPERTIES
-    if (QSysInfo::WindowsVersion < QSysInfo::WV_WINDOWS10)
-    { // for some reason, this disable the close button on W10
-        setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
-    }
     setWindowTitle(APP_NAME);
     setWindowIcon(QPixmap(":/images/icon.png"));
     setMinimumSize(APP_MIN_WIDTH, APP_MIN_HEIGHT);

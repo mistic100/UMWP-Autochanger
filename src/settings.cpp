@@ -555,10 +555,8 @@ void Settings::updateSets()
 {
     foreach (Set* set, m_sets)
     {
-        if (set->check())
-        {
-            set->populateFiles();
-        }
+        set->populateFiles();
+        set->check();
     }
 }
 

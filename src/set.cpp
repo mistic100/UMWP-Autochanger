@@ -139,12 +139,8 @@ void Set::writeXml(QDomElement* _dom, QDomDocument* _document) const
 void Set::init()
 {
     readCache();
+    populateFiles();
     check();
-
-    if (m_valid)
-    {
-        populateFiles();
-    }
 }
 
 /**
@@ -189,6 +185,7 @@ const QString Set::file(int _i) const
 bool Set::check()
 {
     m_valid = QDir(m_path).exists();
+    m_valid&= m_files.length() > 0;
     return m_valid;
 }
 
@@ -236,6 +233,11 @@ double Set::lastChangeRecur(const QString &_path, const int _level)
  */
 void Set::populateFiles()
 {
+    if (!QDir(m_path).exists())
+    {
+        return;
+    }
+
     double date = lastChange();
     if (date <= m_lastModif)
     {
