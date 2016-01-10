@@ -43,6 +43,8 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
                               addMenu(QIcon(":/images/icons/config.png"), tr("Configuration"), menuConfig);
                               addMenu(QIcon(":/images/icons/help.png"),   tr("Help"), menuHelp);
 
+    actionAdd->setShortcut(QKeySequence("Ctrl+N"));
+
     m_pauseBlinker = new QWidgetBlinker(widgetForAction(m_actionPause));
 
     connect(actionQuit,      SIGNAL(triggered()), _parent, SLOT(quit()));

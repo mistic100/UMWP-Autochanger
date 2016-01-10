@@ -3,7 +3,6 @@
 #include <QDesktopServices>
 
 #include "setcontextmenu.h"
-#include "seteditdialog.h"
 #include "mainwindow.h"
 
 /**
@@ -48,30 +47,14 @@ SetContextMenu::SetContextMenu(QWidget *_parent, Controller *_ctrl, const QList<
         addSeparator();
         QAction* actionDelete = addAction(QIcon(":/images/icons/delete.png"), tr("Delete"));
 
-        connect(actionEdit,   SIGNAL(triggered()), this, SLOT(editSets()));
+        connect(actionEdit,   &QAction::triggered, this, [this]{ ((MainWindow*) parent())->editSets(m_sets); });
         connect(actionOpen,   SIGNAL(triggered()), this, SLOT(openSets()));
         connect(actionClear,  SIGNAL(triggered()), this, SLOT(clearCache()));
-        connect(actionDelete, SIGNAL(triggered()), this, SLOT(deleteSets()));
+        connect(actionDelete, &QAction::triggered, this, [this]{ ((MainWindow*) parent())->deleteSets(m_sets); });
     }
 
     QAction* actionAdd = addAction(QIcon(":/images/icons/add_color.png"), tr("Add set"));
-    connect(actionAdd, SIGNAL(triggered()), (MainWindow*) _parent, SLOT(addSet()));
-}
-
-/**
- * @brief Open set edit dialog
- */
-void SetContextMenu::editSets()
-{
-    SetEditDialog dialog(this, m_ctrl, m_sets);
-
-    // need to unbind hotkeys to allow hotkeys input
-    ((MainWindow*)parent())->clearHotkeys();
-    if (dialog.exec())
-    {
-        m_ctrl->editSets(m_sets, dialog.result());
-    }
-    ((MainWindow*)parent())->defineHotkeys();
+    connect(actionAdd, SIGNAL(triggered()), (MainWindow*) parent(), SLOT(addSet()));
 }
 
 /**
@@ -82,20 +65,6 @@ void SetContextMenu::openSets()
     foreach (const Set* set, m_sets)
     {
         QDesktopServices::openUrl(QUrl("file:///" + set->path()));
-    }
-}
-
-/**
- * @brief Open confirmation to delete selected sets
- */
-void SetContextMenu::deleteSets()
-{
-    int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
-                                   QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
-
-    if (ret == QMessageBox::Ok)
-    {
-        m_ctrl->deleteSets(m_sets);
     }
 }
 

@@ -48,9 +48,12 @@ protected:
 
 public slots:
     void quit();
-    void addSet();
     void toggleWindow(bool _forceHide=false);
     void onHotkey();
+
+    void addSet();
+    void editSets(const QList<Set *> _sets);
+    void deleteSets(const QList<Set*> _sets);
 
     void openConfigDialog();
     void openScreensDialog();

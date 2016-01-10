@@ -4,6 +4,7 @@
 #include "listproxystyle.h"
 #include "seteditdialog.h"
 #include "setcontextmenu.h"
+#include "mainwindow.h"
 
 
 /**
@@ -28,6 +29,10 @@ MainList::MainList(QWidget* _parent, Controller* _ctrl) :
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenu(QPoint)));
+
+    connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked(QListWidgetItem*)));
+
+    installEventFilter(this);
 
     onListChanged(true);
 }
@@ -114,6 +119,15 @@ void MainList::onItemMoved(const QModelIndex &, int from, int, const QModelIndex
 }
 
 /**
+ * @brief Edit double clicked set
+ */
+void MainList::onItemDoubleClicked(QListWidgetItem*)
+{
+    QList<Set*> sets = getSelectedSets();
+    ((MainWindow*) parent())->editSets(sets);
+}
+
+/**
  * @brief Right click on list
  * @param QPoint _pos
  */
@@ -124,4 +138,27 @@ void MainList::onContextMenu(const QPoint &_pos)
 
     SetContextMenu menu((QWidget*) parent(), m_ctrl, sets);
     menu.exec(pos);
+}
+
+/**
+ * @brief Delete sets whene DEL key is pressed
+ * @param QObject* _target
+ * @param Qevent* _event
+ * @return bool
+ */
+bool MainList::eventFilter(QObject* _target, QEvent* _event)
+{
+    if (_event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent* key = (QKeyEvent*) _event;
+        if (key->key() == Qt::Key_Delete && key->modifiers() ==Qt::NoModifier)
+        {
+            QList<Set*> sets = getSelectedSets();
+            ((MainWindow*) parent())->deleteSets(sets);
+
+            return true;
+        }
+    }
+
+    return QListWidget::eventFilter(_target, _event);
 }

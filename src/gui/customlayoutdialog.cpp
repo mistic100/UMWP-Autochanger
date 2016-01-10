@@ -201,14 +201,14 @@ void CustomLayoutDialog::renderPreview()
                         qRound(block.height() * hRatio)
                         );
 
-            if (qAbs(newBlock.x() + newBlock.width() - size.width()) <= 2)
+            if (qAbs(newBlock.left() - size.width()) <= 2)
             {
-                newBlock.setWidth(size.width());
+                newBlock.setLeft(size.width());
             }
 
-            if (qAbs(newBlock.y() + newBlock.height() - size.height()) <= 2)
+            if (qAbs(newBlock.bottom() - size.height()) <= 2)
             {
-                newBlock.setHeight(size.height());
+                newBlock.setBottom(size.height());
             }
 
             blocks.append(newBlock);

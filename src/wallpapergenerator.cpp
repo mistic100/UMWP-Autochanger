@@ -380,14 +380,14 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
                     qRound(block.height() * hRatio)
                     );
 
-        if (qAbs(newBlock.x() + newBlock.width() - scrRect.width()) <= 2)
+        if (qAbs(newBlock.left() - scrRect.width()) <= 2)
         {
-            newBlock.setWidth(scrRect.width());
+            newBlock.setLeft(scrRect.width());
         }
 
-        if (qAbs(newBlock.y() + newBlock.height() - scrRect.height()) <= 2)
+        if (qAbs(newBlock.bottom() - scrRect.height()) <= 2)
         {
-            newBlock.setHeight(scrRect.height());
+            newBlock.setBottom(scrRect.height());
         }
 
         blocks.append(newBlock);

@@ -12,6 +12,7 @@
 #include "newversiondialog.h"
 #include "changelogdialog.h"
 #include "helpdialog.h"
+#include "seteditdialog.h"
 
 
 /**
@@ -207,6 +208,36 @@ void MainWindow::addSet()
     if (!dirname.isEmpty())
     {
         m_ctrl->addSet(dirname);
+    }
+}
+
+/**
+ * @brief Open set edit dialog
+ */
+void MainWindow::editSets(const QList<Set*> _sets)
+{
+    SetEditDialog dialog(this, m_ctrl, _sets);
+
+    // need to unbind hotkeys to allow hotkeys input
+    clearHotkeys();
+    if (dialog.exec())
+    {
+        m_ctrl->editSets(_sets, dialog.result());
+    }
+    defineHotkeys();
+}
+
+/**
+ * @brief Open confirmation to delete sets
+ */
+void MainWindow::deleteSets(const QList<Set*> _sets)
+{
+    int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
+                                   QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
+
+    if (ret == QMessageBox::Ok)
+    {
+        m_ctrl->deleteSets(_sets);
     }
 }
 

@@ -23,11 +23,15 @@ public:
     QList<int> getSelectedIndexes() const;
     QList<Set*> getSelectedSets() const;
 
+protected:
+    bool eventFilter(QObject* _target, QEvent* _event);
+
 public slots:
     void onListChanged(bool _resetSel);
 
 private slots:
     void onItemMoved(const QModelIndex &, int _from, int, const QModelIndex &, int _to);
+    void onItemDoubleClicked(QListWidgetItem*);
     void onContextMenu(const QPoint &_pos);
 };
 
