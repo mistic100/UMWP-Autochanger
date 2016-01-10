@@ -16,6 +16,15 @@ CustomLayoutGenerator::CustomLayoutGenerator()
  */
 QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
 {
+    if (_conf.cols < 1 || _conf.rows < 1 ||
+            _conf.minCols > _conf.cols || _conf.maxCols > _conf.cols || _conf.minCols > _conf.maxCols ||
+            _conf.minRows > _conf.rows || _conf.maxRows > _conf.rows || _conf.minRows > _conf.maxRows ||
+            _conf.mainCols > _conf.cols || _conf.mainRows > _conf.rows
+            )
+    {
+        throw std::logic_error("Dimensions out of bounds");
+    }
+
     m_conf = _conf;
 
     m_matrix = Variable2DMatrix<int>(m_conf.cols, m_conf.rows);

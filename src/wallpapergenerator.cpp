@@ -373,12 +373,24 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
 
     foreach (const QRect block, rawBlocks)
     {
-        blocks.append(QRect(
-                          qRound(block.x() * wRatio),
-                          qRound(block.y() * hRatio),
-                          qRound(block.width() * wRatio),
-                          qRound(block.height() * hRatio)
-                          ));
+        QRect newBlock(
+                    qRound(block.x() * wRatio),
+                    qRound(block.y() * hRatio),
+                    qRound(block.width() * wRatio),
+                    qRound(block.height() * hRatio)
+                    );
+
+        if (qAbs(newBlock.x() + newBlock.width() - scrRect.width()) <= 2)
+        {
+            newBlock.setWidth(scrRect.width());
+        }
+
+        if (qAbs(newBlock.y() + newBlock.height() - scrRect.height()) <= 2)
+        {
+            newBlock.setHeight(scrRect.height());
+        }
+
+        blocks.append(newBlock);
     }
 
     // get necessary files from set
@@ -413,18 +425,15 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
         QPen pen;
         pen.setColor(QColor(layout.borderColor));
         pen.setWidth(layout.borderWidth);
-
         painter.setPen(pen);
-        painter.setBrush(Qt::NoBrush);
 
         foreach (const QRect block, blocks)
         {
             foreach (const QLine line, UM::rectBorders(block))
             {
-                QLOG_DEBUG()<<line;
                 if (
                         (line.x1()==0 && line.x2()==0) ||
-                        (line.x1()==scrRect.width() && line.x2()==scrRect.width()) ||
+                        (line.x1()==scrRect.width()-1 && line.x2()==scrRect.width()-1) ||
                         (line.y1()==0 && line.y2()==0) ||
                         (line.y1()==scrRect.height()-1 && line.y2()==scrRect.height()-1)
                         )

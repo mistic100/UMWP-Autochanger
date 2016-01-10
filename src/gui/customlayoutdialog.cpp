@@ -1,4 +1,5 @@
 #include "../customlayoutgenerator.h"
+#include "../umutils.h"
 
 #include "customlayoutdialog.h"
 #include "ui_customlayoutdialog.h"
@@ -21,28 +22,25 @@ CustomLayoutDialog::CustomLayoutDialog(QWidget* _parent, Controller* _ctrl) :
     m_ctrl(_ctrl)
 {
     ui->setupUi(this);
+    ui_mainPosition = new QButtonGroupExt(this);
 
-    m_generator = new CustomLayoutGenerator();
+    ui->tileRows->setHandleMovementMode(QxtSpanSlider::NoCrossing);
+    ui->tileCols->setHandleMovementMode(QxtSpanSlider::NoCrossing);
+
+    ui_mainPosition->addButton(ui->positionTopLeft,         UM::ALIGN_TOP_LEFT);
+    ui_mainPosition->addButton(ui->positionTopCenter,       UM::ALIGN_TOP_CENTER);
+    ui_mainPosition->addButton(ui->positionTopRight,        UM::ALIGN_TOP_RIGHT);
+    ui_mainPosition->addButton(ui->positionCenterLeft,      UM::ALIGN_CENTER_LEFT);
+    ui_mainPosition->addButton(ui->positionCenterCenter,    UM::ALIGN_CENTER_CENTER);
+    ui_mainPosition->addButton(ui->positionCenterRight,     UM::ALIGN_CENTER_RIGHT);
+    ui_mainPosition->addButton(ui->positionBottomLeft,      UM::ALIGN_BOTTOM_LEFT);
+    ui_mainPosition->addButton(ui->positionBottomCenter,    UM::ALIGN_BOTTOM_CENTER);
+    ui_mainPosition->addButton(ui->positionBottomRight,     UM::ALIGN_BOTTOM_RIGHT);
 
     setFixedSize(size());
     setWindowFlags(UM::SimpleDialogFlag);
 
-    m_rowsSpins.append(ui->maxRows);
-    m_rowsSpins.append(ui->minRows);
-    m_rowsSpins.append(ui->mainRows);
-    m_colsSpins.append(ui->maxCols);
-    m_colsSpins.append(ui->minCols);
-    m_colsSpins.append(ui->mainCols);
-
-    ui->mainPos->addItem(tr("Center"),        UM::ALIGN_CENTER_CENTER);
-    ui->mainPos->addItem(tr("Top-Left"),      UM::ALIGN_TOP_LEFT);
-    ui->mainPos->addItem(tr("Top-Center"),    UM::ALIGN_TOP_CENTER);
-    ui->mainPos->addItem(tr("Top-Right"),     UM::ALIGN_TOP_RIGHT);
-    ui->mainPos->addItem(tr("Center-Left"),   UM::ALIGN_CENTER_LEFT);
-    ui->mainPos->addItem(tr("Center-Right"),  UM::ALIGN_CENTER_RIGHT);
-    ui->mainPos->addItem(tr("Bottom-Left"),   UM::ALIGN_BOTTOM_LEFT);
-    ui->mainPos->addItem(tr("Bottom-Center"), UM::ALIGN_BOTTOM_CENTER);
-    ui->mainPos->addItem(tr("Bottom-Right"),  UM::ALIGN_BOTTOM_RIGHT);
+    m_generator = new CustomLayoutGenerator();
 }
 
 /**
@@ -66,7 +64,32 @@ void CustomLayoutDialog::showEvent(QShowEvent*)
     m_scene->setSceneRect(rect);
     ui->view->setScene(m_scene);
 
-    on_previewButton_clicked();
+    connect(ui->rows,           SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->cols,           SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->tileCols,       SIGNAL(spanChanged(int,int)),   this, SLOT(renderPreview()));
+    connect(ui->tileRows,       SIGNAL(spanChanged(int,int)),   this, SLOT(renderPreview()));
+    connect(ui->mainEnabled,    SIGNAL(toggled(bool)),          this, SLOT(renderPreview()));
+    connect(ui_mainPosition,    SIGNAL(buttonClicked(int)),     this, SLOT(renderPreview()));
+    connect(ui->mainCols,       SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->mainRows,       SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->borderEnabled,  SIGNAL(toggled(bool)),          this, SLOT(renderPreview()));
+    connect(ui->borderWidth,    SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->borderColor,    SIGNAL(colorChanged(QColor)),   this, SLOT(renderPreview()));
+
+    ui->view->installEventFilter(this);
+
+    renderPreview();
+}
+
+bool CustomLayoutDialog::eventFilter(QObject* _target, QEvent* _event)
+{
+    if (_target == ui->view && _event->type() == QEvent::MouseButtonPress)
+    {
+        renderPreview();
+        return true;
+    }
+
+    return QDialog::eventFilter(_target, _event);
 }
 
 /**
@@ -77,15 +100,13 @@ void CustomLayoutDialog::setCustLayout(const CustomLayout &_layout)
 {
     ui->rows->setValue(_layout.rows);
     ui->cols->setValue(_layout.cols);
-    ui->minRows->setValue(_layout.minRows);
-    ui->minCols->setValue(_layout.minCols);
-    ui->maxRows->setValue(_layout.maxRows);
-    ui->maxCols->setValue(_layout.maxCols);
+    ui->tileRows->setSpan(_layout.minRows, _layout.maxRows);
+    ui->tileCols->setSpan(_layout.minCols, _layout.maxCols);
 
     ui->mainEnabled->setChecked(_layout.mainEnabled);
     ui->mainRows->setValue(_layout.mainRows);
     ui->mainCols->setValue(_layout.mainCols);
-    ui->mainPos->setCurrentData(_layout.mainPos);
+    ui_mainPosition->setCheckedId(_layout.mainPos);
 
     ui->borderEnabled->setChecked(_layout.borderEnabled);
     ui->borderWidth->setValue(_layout.borderWidth);
@@ -105,15 +126,15 @@ CustomLayout CustomLayoutDialog::getCustLayout() const
 
     layout.rows = ui->rows->value();
     layout.cols = ui->cols->value();
-    layout.minRows = ui->minRows->value();
-    layout.minCols = ui->minCols->value();
-    layout.maxRows = ui->maxRows->value();
-    layout.maxCols = ui->maxCols->value();
+    layout.minRows = ui->tileRows->lowerValue();
+    layout.maxRows = ui->tileRows->upperValue();
+    layout.minCols = ui->tileCols->lowerValue();
+    layout.maxCols = ui->tileCols->upperValue();
 
     layout.mainEnabled = ui->mainEnabled->isChecked();
     layout.mainRows = ui->mainRows->value();
     layout.mainCols = ui->mainCols->value();
-    layout.mainPos = static_cast<UM::ALIGN>(ui->mainPos->currentData().toInt());
+    layout.mainPos = static_cast<UM::ALIGN>(ui_mainPosition->checkedId());
 
     layout.borderEnabled = ui->borderEnabled->isChecked();
     layout.borderWidth = ui->borderWidth->value();
@@ -128,14 +149,12 @@ CustomLayout CustomLayoutDialog::getCustLayout() const
  */
 void CustomLayoutDialog::on_rows_valueChanged(int _val)
 {
-    foreach (QSpinBox* spinBox, m_rowsSpins)
-    {
-        spinBox->setMaximum(_val);
-        if (spinBox->value() > _val)
-        {
-            spinBox->setValue(_val);
-        }
-    }
+    ui->tileRows->setMaximum(_val);
+    ui->mainRows->setMaximum(_val);
+    ui->tileRows->setDisabled(_val==1);
+    ui->mainRows->setDisabled(_val==1);
+    ui->tileRowsMaxLabel->setText(QString::number(_val));
+    ui->mainRowsMaxLabel->setText(QString::number(_val));
 }
 
 /**
@@ -144,45 +163,109 @@ void CustomLayoutDialog::on_rows_valueChanged(int _val)
  */
 void CustomLayoutDialog::on_cols_valueChanged(int _val)
 {
-    foreach (QSpinBox* spinBox, m_colsSpins)
-    {
-        spinBox->setMaximum(_val);
-        if (spinBox->value() > _val)
-        {
-            spinBox->setValue(_val);
-        }
-    }
+    ui->tileCols->setMaximum(_val);
+    ui->mainCols->setMaximum(_val);
+    ui->tileCols->setDisabled(_val==1);
+    ui->mainCols->setDisabled(_val==1);
+    ui->tileColsMaxLabel->setText(QString::number(_val));
+    ui->mainColsMaxLabel->setText(QString::number(_val));
 }
 
 /**
  * @brief Render the preview
  */
-void CustomLayoutDialog::on_previewButton_clicked()
+void CustomLayoutDialog::renderPreview()
 {
-    CustomLayout layout = getCustLayout();
-    QList<QRect> rects = m_generator->generate(layout);
+    try {
+        CustomLayout layout = getCustLayout();
+        QList<QRect> rawBlocks = m_generator->generate(layout);
 
-    QSize size = ui->view->size();
-    m_scene->clear();
+        m_scene->clear();
 
-    QStringList colors(COLORS);
-    std::random_shuffle(colors.begin(), colors.end());
+        QStringList colors(COLORS);
+        std::random_shuffle(colors.begin(), colors.end());
 
-    int i = 0;
-    foreach (const QRect rect, rects)
-    {
-        QRect sceneRect(
-                    qRound(rect.x() / (double) layout.cols * size.width()),
-                    qRound(rect.y() / (double) layout.rows * size.height()),
-                    qRound(rect.width() / (double) layout.cols * size.width()),
-                    qRound(rect.height() / (double) layout.rows * size.height())
-                    );
+        QSize size = ui->view->size();
+        QList<QRect> blocks;
 
-        m_scene->addRect(sceneRect, Qt::NoPen, QBrush(QColor(colors.at(i))));
+        // scale blocks to wallpaper size
+        double wRatio =  size.width() / (double) layout.cols;
+        double hRatio =  size.height() / (double) layout.rows;
 
-        i++;
-        if (i == colors.size()) i = 0;
+        foreach (const QRect block, rawBlocks)
+        {
+            QRect newBlock(
+                        qRound(block.x() * wRatio),
+                        qRound(block.y() * hRatio),
+                        qRound(block.width() * wRatio),
+                        qRound(block.height() * hRatio)
+                        );
+
+            if (qAbs(newBlock.x() + newBlock.width() - size.width()) <= 2)
+            {
+                newBlock.setWidth(size.width());
+            }
+
+            if (qAbs(newBlock.y() + newBlock.height() - size.height()) <= 2)
+            {
+                newBlock.setHeight(size.height());
+            }
+
+            blocks.append(newBlock);
+        }
+
+        // draw blocks
+        int i = 0;
+        foreach (const QRect block, blocks)
+        {
+            m_scene->addRect(block, Qt::NoPen, QBrush(QColor(colors.at(i))));
+
+            i++;
+            if (i == colors.size()) i = 0;
+        }
+
+        // draw borders
+        if (layout.borderEnabled)
+        {
+            // get border width for the view
+            int monitorWidth = size.width();
+            for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+            {
+                if (m_ctrl->settings()->monitor(i).enabled)
+                {
+                    monitorWidth = m_ctrl->enviro()->wpSize(i).width();
+                    break;
+                }
+            }
+
+            QPen pen;
+            pen.setColor(QColor(layout.borderColor));
+            pen.setWidth(qRound((double) layout.borderWidth * size.width() / monitorWidth));
+
+            foreach (const QRect block, blocks)
+            {
+                foreach (const QLine line, UM::rectBorders(block))
+                {
+                    if (
+                            (line.x1()==0 && line.x2()==0) ||
+                            (line.x1()==size.width()-1 && line.x2()==size.width()-1) ||
+                            (line.y1()==0 && line.y2()==0) ||
+                            (line.y1()==size.height()-1 && line.y2()==size.height()-1)
+                            )
+                    {
+                        // do not draw extreme borders
+                    }
+                    else
+                    {
+                        m_scene->addLine(line, pen);
+                    }
+                }
+            }
+        }
+
+        ui->view->update();
     }
-
-    ui->view->update();
+    catch(const std::exception) {
+        // do not update the view
+    }
 }

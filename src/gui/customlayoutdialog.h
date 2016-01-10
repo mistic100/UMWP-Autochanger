@@ -2,7 +2,6 @@
 #define CustomLayoutDialog_H
 
 #include <QDialog>
-#include <QSpinBox>
 #include <QGraphicsScene>
 #include <QShowEvent>
 
@@ -10,6 +9,7 @@
 #include "../controller.h"
 #include "../customlayout.h"
 #include "../customlayoutgenerator.h"
+#include "../ext/qbuttongroupext.h"
 
 
 namespace Ui {
@@ -25,13 +25,11 @@ class CustomLayoutDialog : public QDialog
 
 private:
     Ui::CustomLayoutDialog* ui;
+    QButtonGroupExt* ui_mainPosition;
     QGraphicsScene* m_scene;
 
     Controller* m_ctrl;
     CustomLayoutGenerator* m_generator;
-
-    QList<QSpinBox*> m_rowsSpins;
-    QList<QSpinBox*> m_colsSpins;
 
 public:
     CustomLayoutDialog(QWidget* _parent, Controller* _ctrl);
@@ -42,11 +40,12 @@ public:
 
 protected:
     void showEvent(QShowEvent*);
+    bool eventFilter(QObject* _target, QEvent* _event);
 
 private slots:
+    void renderPreview();
     void on_rows_valueChanged(int _val);
     void on_cols_valueChanged(int _val);
-    void on_previewButton_clicked();
 };
 
 #endif // CustomLayoutDialog_H

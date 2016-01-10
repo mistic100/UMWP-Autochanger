@@ -515,7 +515,8 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
         if (_data.style() != UM::IM_NONE) set->setStyle(_data.style());
         if (_data.mode() != UM::MODE_NONE)set->setMode(_data.mode());
         if (_data.hotkey() != QHotKeyWidget::KEEP_KEY) set->setHotkey(_data.hotkey());
-        if (_data.style() != UM::IM_NONE) set->setCustLayout(_data.custLayout());
+        if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
+                                       else set->setCustLayout(CustomLayout());
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }

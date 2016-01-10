@@ -9,14 +9,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
+    <width>280</width>
     <height>180</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Properties</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1,0">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
    <item row="7" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">

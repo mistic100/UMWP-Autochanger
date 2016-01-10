@@ -32,7 +32,8 @@ SOURCES += \
     gui/screensdialog.cpp \
     gui/statusbar.cpp \
     gui/mainlist.cpp \
-    gui/customlayoutdialog.cpp
+    gui/customlayoutdialog.cpp \
+    ext/qxtspanslider.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -69,7 +70,9 @@ HEADERS += \
     gui/statusbar.h \
     gui/helpdialog.h \
     gui/mainlist.h \
-    gui/customlayoutdialog.h
+    gui/customlayoutdialog.h \
+    ext/qxtspanslider.h \
+    ext/qbuttongroupext.h
 
 FORMS += \
     gui/seteditdialog.ui \
