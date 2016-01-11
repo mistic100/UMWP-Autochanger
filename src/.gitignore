@@ -1,2 +1,3 @@
 /*.user
 /QsLog/build-QsLogShared
+/lang/**/*.qm

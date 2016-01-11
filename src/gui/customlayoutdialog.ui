@@ -260,7 +260,7 @@
          <string>Position</string>
         </property>
         <property name="styleSheet">
-         <string notr="true">#positionWidget { background-image: url(:/images/icons/monitor-bg.png); }</string>
+         <string notr="true">#positionWidget { background-image: url(:/images/monitor-bg.png); }</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
          <property name="leftMargin">
