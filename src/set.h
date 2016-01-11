@@ -69,7 +69,7 @@ public:
     void writeCache() const;
     void deleteCache() const;
 
-    void writeXml(QDomElement* _dom, QDomDocument *_document) const;
+    void writeXml(QXmlStreamWriter *_writer) const;
 
     const QString fullName() const;
     const QString hotkeyStr() const;

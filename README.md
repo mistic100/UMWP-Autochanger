@@ -1,6 +1,6 @@
 # Ultimate Monitor Wallpaper Autochanger
 
-[![stable version](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=version)](http://www.strangeplanet.fr/work/umwp-autochanger/download.php)
+[![stable version](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=version)](http://www.strangeplanet.fr/work/umwp-autochanger)
 [![downloads](http://www.strangeplanet.fr/work/umwp-autochanger/badge.php?what=downloads)](http://www.strangeplanet.fr/work/umwp-autochanger)
 
 UMWP Autochanger is a little tool for multi-monitors windows users. I has two main features :

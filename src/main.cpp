@@ -11,6 +11,7 @@
 #include "settings.h"
 #include "environment.h"
 
+extern Q_CORE_EXPORT QBasicAtomicInt qt_qhash_seed;
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,10 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
+
+    // lock QHash seed in order to have a deterministic attributes order in the XML settings file
+    qputenv("QT_HASH_SEED", "0");
+    qt_qhash_seed.store(0);
 
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);

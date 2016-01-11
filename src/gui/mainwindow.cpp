@@ -356,7 +356,7 @@ void MainWindow::openAboutDialog()
 {
     QString text = "<h3>" + QString(APP_FILEDESCRIPTION) + " " + QString(APP_VERSION) + "</h3>";
     text+= "Created by Damien \"Mistic\" Sorel.<br>";
-    text+= "&copy; 2013-2015 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    text+= "&copy; 2013-2016 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     text+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
 
     QMessageBox dialog;

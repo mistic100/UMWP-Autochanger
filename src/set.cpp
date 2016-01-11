@@ -30,17 +30,11 @@ Set::Set(const QString &_path, const QString &_name)
  */
 Set::Set(const QDomElement* _dom)
 {
+    // before 2.1
     m_path = _dom->text().trimmed();
+
     m_name = _dom->attribute("name");
-    m_active = _dom->attribute("active").toInt();
-
-    if (!m_path.endsWith('\\'))
-    {
-        m_path.append('\\');
-    }
-
-    m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
-
+    m_active = (bool) _dom->attribute("active").toInt();
 
     // added in 1.3
     if (_dom->hasAttribute("type"))
@@ -55,12 +49,12 @@ Set::Set(const QDomElement* _dom)
         m_mode = static_cast<UM::MODE>(_dom->attribute("mode").toInt());
     }
 
-    // 1.3 format
+    // before 1.4 format
     if (_dom->hasAttribute("hotkey_mod"))
     {
         m_hotkey = _dom->attribute("hotkey").toInt() + _dom->attribute("hotkey_mod").toInt();
     }
-    // 1.4 format
+    // since 1.4 format
     else if (_dom->hasAttribute("hotkey"))
     {
         m_hotkey = _dom->attribute("hotkey").toInt();
@@ -76,7 +70,12 @@ Set::Set(const QDomElement* _dom)
             QDomElement element = node.toElement();
 
             // added in 2.1
-            if (element.tagName() == "customLayout")
+            if (element.tagName() == "path")
+            {
+                m_path = element.text().trimmed();
+            }
+            // added in 2.1
+            else if (element.tagName() == "customLayout")
             {
                 m_custLayout.rows = element.attribute("rows").toShort();
                 m_custLayout.cols = element.attribute("cols").toShort();
@@ -96,6 +95,18 @@ Set::Set(const QDomElement* _dom)
 
         node = node.nextSibling();
     }
+
+    if (m_path.isEmpty())
+    {
+        throw std::logic_error("Set has no path defined");
+    }
+
+    if (!m_path.endsWith('\\'))
+    {
+        m_path.append('\\');
+    }
+
+    m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
 }
 
 /**
@@ -103,37 +114,41 @@ Set::Set(const QDomElement* _dom)
  * @param QDomElement _dom
  * @param QDomDocument _document
  */
-void Set::writeXml(QDomElement* _dom, QDomDocument* _document) const
+void Set::writeXml(QXmlStreamWriter* _writer) const
 {
-    _dom->setAttribute("name", m_name);
-    _dom->setAttribute("type", m_type);
-    _dom->setAttribute("style", m_style);
-    _dom->setAttribute("mode", m_mode);
-    _dom->setAttribute("active", m_active);
-    _dom->setAttribute("hotkey", m_hotkey);
+    _writer->writeStartElement("set");
 
-    _dom->appendChild(_document->createTextNode(m_path));
+    _writer->writeAttribute("name", m_name);
+    _writer->writeAttribute("type", QString::number(m_type));
+    _writer->writeAttribute("style", QString::number(m_style));
+    _writer->writeAttribute("mode", QString::number(m_mode));
+    _writer->writeAttribute("active", QString::number(m_active));
+    _writer->writeAttribute("hotkey", QString::number(m_hotkey));
+
+    _writer->writeTextElement("path", m_path);
 
     if (m_style == UM::IM_CUSTOM)
     {
-        QDomElement layout = _document->createElement("customLayout");
+        _writer->writeStartElement("customLayout");
 
-        layout.setAttribute("rows", m_custLayout.rows);
-        layout.setAttribute("cols", m_custLayout.cols);
-        layout.setAttribute("minRows", m_custLayout.minRows);
-        layout.setAttribute("minCols", m_custLayout.minCols);
-        layout.setAttribute("maxRows", m_custLayout.maxRows);
-        layout.setAttribute("maxCols", m_custLayout.maxCols);
-        layout.setAttribute("mainEnabled", m_custLayout.mainEnabled);
-        layout.setAttribute("mainRows", m_custLayout.mainRows);
-        layout.setAttribute("mainCols", m_custLayout.mainCols);
-        layout.setAttribute("mainPos", m_custLayout.mainPos);
-        layout.setAttribute("borderEnabled", m_custLayout.borderEnabled);
-        layout.setAttribute("borderWidth", m_custLayout.borderWidth);
-        layout.setAttribute("borderColor", m_custLayout.borderColor);
+        _writer->writeAttribute("rows", QString::number(m_custLayout.rows));
+        _writer->writeAttribute("cols", QString::number(m_custLayout.cols));
+        _writer->writeAttribute("minRows", QString::number(m_custLayout.minRows));
+        _writer->writeAttribute("minCols", QString::number(m_custLayout.minCols));
+        _writer->writeAttribute("maxRows", QString::number(m_custLayout.maxRows));
+        _writer->writeAttribute("maxCols", QString::number(m_custLayout.maxCols));
+        _writer->writeAttribute("mainEnabled", QString::number(m_custLayout.mainEnabled));
+        _writer->writeAttribute("mainRows", QString::number(m_custLayout.mainRows));
+        _writer->writeAttribute("mainCols", QString::number(m_custLayout.mainCols));
+        _writer->writeAttribute("mainPos", QString::number(m_custLayout.mainPos));
+        _writer->writeAttribute("borderEnabled", QString::number(m_custLayout.borderEnabled));
+        _writer->writeAttribute("borderWidth", QString::number(m_custLayout.borderWidth));
+        _writer->writeAttribute("borderColor", QString::number(m_custLayout.borderColor));
 
-        _dom->appendChild(layout);
+        _writer->writeEndElement();
     }
+
+    _writer->writeEndElement();
 }
 
 void Set::init()

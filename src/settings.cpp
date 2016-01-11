@@ -219,7 +219,12 @@ bool Settings::load(QString _filename)
                 // set node
                 if (setNode.tagName() == "set")
                 {
-                    m_sets.append(new Set(&setNode));
+                    try {
+                        m_sets.append(new Set(&setNode));
+                    }
+                    catch(const std::exception &e) {
+                        QLOG_ERROR()<<e.what();
+                    }
                 }
 
                 setNode = setNode.nextSibling().toElement();
@@ -294,83 +299,78 @@ bool Settings::save(QString _filename)
         _filename = Environment::APPDATA_DIR + APP_CONFIG_FILE;
     }
 
-    // initialize domdocument
-    QDomDocument dom;
-    QDomProcessingInstruction header = dom.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\"");
-    dom.appendChild(header);
+    // open file
+    QFile file(_filename);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        QLOG_ERROR() << "Unable to save config file";
+        return false;
+    }
+
+    // initialize document
+    QXmlStreamWriter writer(&file);
+    writer.setAutoFormattingIndent(2);
+    writer.setAutoFormatting(true);
+    writer.setCodec("UTF-8");
+    writer.writeStartDocument();
 
     // settings node
-    QDomElement mainNode = dom.createElement("settings");
+    writer.writeStartElement("settings");
 
     // config node
-    QDomElement configNode = dom.createElement("config");
+    writer.writeStartElement("config");
 
     for (QHash<QString, QVariant>::const_iterator it = m_options.constBegin(); it != m_options.constEnd(); ++it)
     {
-        UM::addSimpleTextNode(&dom, &configNode, it.key(), it.value().toString());
+        writer.writeTextElement(it.key(), it.value().toString());
     }
 
-    mainNode.appendChild(configNode);
+    writer.writeEndElement();
 
     // hotkeys node
-    QDomElement hotkeysNode = dom.createElement("hotkeys");
+    writer.writeStartElement("hotkeys");
 
     for (QHash<QString, int>::const_iterator it = m_hotkeys.constBegin(); it != m_hotkeys.constEnd(); ++it)
     {
-        UM::addSimpleTextNode(&dom, &hotkeysNode, it.key(), QString::number(it.value()));
+        writer.writeTextElement(it.key(), QString::number(it.value()));
     }
 
-    mainNode.appendChild(hotkeysNode);
+    writer.writeEndElement();
 
     // sets node
-    QDomElement setsNode = dom.createElement("sets");
+    writer.writeStartElement("sets");
 
     foreach (const Set* set, m_sets)
     {
-        // set node
-        QDomElement setNode = dom.createElement("set");
-
-        set->writeXml(&setNode, &dom);
-
-        setsNode.appendChild(setNode);
+        set->writeXml(&writer);
     }
 
-    mainNode.appendChild(setsNode);
+    writer.writeEndElement();
 
     // monitors node
-    QDomElement monsNode = dom.createElement("monitors");
+    writer.writeStartElement("monitors");
 
     foreach (const UM::Monitor mon, m_monitors)
     {
-        // monitor node
-        QDomElement monNode = dom.createElement("monitor");
-        monNode.setAttribute("enabled", mon.enabled);
-        monNode.setAttribute("color", mon.color);
-
-        monsNode.appendChild(monNode);
+        writer.writeStartElement("monitor");
+        writer.writeAttribute("enabled", QString::number(mon.enabled));
+        writer.writeAttribute("color", QString::number(mon.color));
+        writer.writeEndElement();
     }
 
-    mainNode.appendChild(monsNode);
+    writer.writeEndElement();
 
-    dom.appendChild(mainNode);
+    // settings node
+    writer.writeEndElement();
 
-    // save file
-    QFile file(_filename);
-    if (file.open(QIODevice::WriteOnly))
-    {
-        QTextStream stream(&file);
-        dom.save(stream, 2);
+    writer.writeEndDocument();
 
-        file.close();
+    // close file
+    file.close();
 
-        QLOG_TRACE() << "Config file saved";
+    QLOG_TRACE() << "Config file saved";
 
-        return true;
-    }
-
-    QLOG_ERROR() << "Unable to save config file";
-
-    return false;
+    return true;
 }
 
 /**

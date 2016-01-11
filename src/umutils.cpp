@@ -22,16 +22,6 @@ bool UM::moveFileToTrash(const QString &_filename)
     return ret == 0;
 }
 
-/*
- * helper for simple XML text nodes
- */
-void UM::addSimpleTextNode(QDomDocument* _dom, QDomNode* _parent, const QString &_name, const QString &_value)
-{
-    QDomElement element = _dom->createElement(_name);
-    element.appendChild(_dom->createTextNode(_value));
-    _parent->appendChild(element);
-}
-
 /**
  * @brief Return a scaled copy of a rectangle
  * @param QRect _rect
