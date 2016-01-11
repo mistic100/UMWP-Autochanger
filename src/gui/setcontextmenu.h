@@ -22,9 +22,6 @@ private:
 public:
     SetContextMenu(QWidget* _parent, Controller* _ctrl, const QList<Set*> &_sets);
 
-private slots:
-    void openSets();
-    void clearCache();
 };
 
 #endif // SETCONTEXTMENU_H

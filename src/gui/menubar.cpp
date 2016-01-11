@@ -25,6 +25,8 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
                              menuConfig->addSeparator();
     QAction* actionImport =  menuConfig->addAction(QIcon(":/images/icons/import.png"), tr("Import configuration file"));
     QAction* actionExport =  menuConfig->addAction(QIcon(":/images/icons/export.png"), tr("Export configuration file"));
+                             menuConfig->addSeparator();
+    QAction* actionClear =   menuConfig->addAction(QIcon(":/images/icons/clear.png"), tr("Clear cache"));
 
     QMenu* menuHelp = new QMenu();
     QAction* actionHelp =   menuHelp->addAction(QIcon(":/images/icons/help_color.png"), tr("User guide"));
@@ -57,6 +59,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionScreens,   SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
     connect(actionImport,    SIGNAL(triggered()), _parent, SLOT(openImportDialog()));
     connect(actionExport,    SIGNAL(triggered()), _parent, SLOT(openExportDialog()));
+    connect(actionClear,     SIGNAL(triggered()), _parent, SLOT(clearCache()));
 
     connect(actionHelp,      SIGNAL(triggered()), _parent, SLOT(openHelpDialog()));
     connect(actionAbout,     SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
