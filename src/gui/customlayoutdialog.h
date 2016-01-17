@@ -46,6 +46,7 @@ private slots:
     void renderPreview();
     void on_rows_valueChanged(int _val);
     void on_cols_valueChanged(int _val);
+    void on_borderWidth_valueChanged(int _val);
 };
 
 #endif // CustomLayoutDialog_H

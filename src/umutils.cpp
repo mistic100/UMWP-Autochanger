@@ -31,10 +31,10 @@ bool UM::moveFileToTrash(const QString &_filename)
 QRect UM::scaledRect(const QRect &_rect, float _xRatio, float _yRatio)
 {
     return QRect(
-                _rect.left() * _xRatio,
-                _rect.top() * _yRatio,
-                _rect.width() * _xRatio,
-                _rect.height() * _yRatio
+                qRound(_rect.left() * _xRatio),
+                qRound(_rect.top() * _yRatio),
+                qRound(_rect.width() * _xRatio),
+                qRound(_rect.height() * _yRatio)
     );
 }
 

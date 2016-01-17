@@ -7,11 +7,7 @@ UMWP Autochanger is a little tool for multi-monitors windows users. I has two ma
 * randomly and periodically change the wallpaper of all your monitors,
 * manage sets of wallpapers, allowing you to quickly change which images are used.
 
-Version       : 2.0  
-Release date  : 28/06/2015  
-Author        : Damien "Mistic" Sorel  
-Website       : http://www.strangeplanet.fr/work/umwp-autochanger  
-License       : GNU General Public License Version 3
+[Documentation](http://www.strangeplanet.fr/work/umwp-autochanger#help)
 
 ![screenshot](http://www.strangeplanet.fr/work/umwp-autochanger/src/screenshot-main.png)
 
@@ -30,3 +26,7 @@ You will need Qt 5.4.
 
 ### Branding
 UMWP originally meant **UltraMon Wallpaper**. When I removed UltraMon dependency in version 2 I searched a new name that match with the acronym. And I came with **Ultimate Monitor Wallpaper**, which is very pompous !
+
+
+### License
+UMWP Autochanger is released under GNU General Public License Version 3.

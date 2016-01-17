@@ -21,7 +21,7 @@
 #define APP_VERSION_URL "http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
 #define APP_ISSUES_URL "https://github.com/mistic100/UMWP-Autochanger/issues"
 
-#define APP_INSTALLER_SIZE 5000000
+#define APP_INSTALLER_SIZE 6000000
 #define APP_MAX_TRAVERSAL 3
 #define APP_MAX_APP_RUNNING_MESSAGE_COUNT 3
 #define APP_MIN_WIDTH 450

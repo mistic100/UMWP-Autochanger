@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>ChangelogDialog</name>
     <message>
@@ -199,46 +201,51 @@
         <translation>Настройки изменённой раскладки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="550"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="570"/>
         <source>Grid</source>
         <translation>Сетка</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="133"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="453"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="574"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="153"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="473"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="594"/>
         <source>Rows</source>
         <translation>Строки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="50"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="41"/>
+        <source>Screen border</source>
+        <translation>Монитор границу</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="57"/>
         <source>Width</source>
         <translation>Ширина</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="94"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="101"/>
         <source>Color</source>
         <translation>Цвет</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="192"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="484"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="605"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="212"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="504"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="625"/>
         <source>Columns</source>
         <translation>Колонки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="260"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="280"/>
         <source>Position</source>
         <translation>Положение</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="432"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="452"/>
         <source>Tiles</source>
         <translation>Плитка</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="107"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="127"/>
         <source>Fixed tile</source>
         <translation>Фиксированная плитка</translation>
     </message>

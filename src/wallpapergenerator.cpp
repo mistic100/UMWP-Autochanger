@@ -375,14 +375,14 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
     {
         QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
-        if (qAbs(newBlock.left() - scrRect.width()) <= 2)
+        if (qAbs(newBlock.left() - scrRect.width()) <= 3)
         {
-            newBlock.setLeft(scrRect.width());
+            newBlock.setLeft(scrRect.width()-1);
         }
 
-        if (qAbs(newBlock.bottom() - scrRect.height()) <= 2)
+        if (qAbs(newBlock.bottom() - scrRect.height()) <= 3)
         {
-            newBlock.setBottom(scrRect.height());
+            newBlock.setBottom(scrRect.height()-1);
         }
 
         blocks.append(newBlock);
@@ -419,6 +419,7 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
     {
         QPen pen;
         pen.setColor(QColor(layout.borderColor));
+        pen.setJoinStyle(Qt::MiterJoin);
         pen.setWidth(layout.borderWidth);
         painter.setPen(pen);
 
@@ -440,6 +441,13 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
                     painter.drawLine(line);
                 }
             }
+        }
+
+        if (layout.borderScreenEnabled)
+        {
+            QRect borderRect(pen.width()/2, pen.width()/2, scrRect.width()-pen.width(), scrRect.height()-pen.width());
+            painter.setBrush(Qt::NoBrush);
+            painter.drawRect(borderRect);
         }
     }
 

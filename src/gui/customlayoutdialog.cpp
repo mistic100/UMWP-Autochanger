@@ -73,6 +73,7 @@ void CustomLayoutDialog::showEvent(QShowEvent*)
     connect(ui->mainCols,       SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->mainRows,       SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->borderEnabled,  SIGNAL(toggled(bool)),          this, SLOT(renderPreview()));
+    connect(ui->borderScreenEnabled, SIGNAL(toggled(bool)),     this, SLOT(renderPreview()));
     connect(ui->borderWidth,    SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->borderColor,    SIGNAL(colorChanged(QColor)),   this, SLOT(renderPreview()));
 
@@ -109,11 +110,13 @@ void CustomLayoutDialog::setCustLayout(const CustomLayout &_layout)
     ui_mainPosition->setCheckedId(_layout.mainPos);
 
     ui->borderEnabled->setChecked(_layout.borderEnabled);
+    ui->borderScreenEnabled->setChecked(_layout.borderScreenEnabled);
     ui->borderWidth->setValue(_layout.borderWidth);
     ui->borderColor->setColor(QColor(_layout.borderColor));
 
     on_rows_valueChanged(_layout.rows);
     on_cols_valueChanged(_layout.cols);
+    on_borderWidth_valueChanged(_layout.borderWidth);
 }
 
 /**
@@ -132,6 +135,7 @@ CustomLayout CustomLayoutDialog::getCustLayout() const
     layout.maxCols = ui->tileCols->upperValue();
 
     layout.mainEnabled = ui->mainEnabled->isChecked();
+    layout.borderScreenEnabled = ui->borderScreenEnabled->isChecked();
     layout.mainRows = ui->mainRows->value();
     layout.mainCols = ui->mainCols->value();
     layout.mainPos = static_cast<UM::ALIGN>(ui_mainPosition->checkedId());
@@ -172,6 +176,15 @@ void CustomLayoutDialog::on_cols_valueChanged(int _val)
 }
 
 /**
+ * @brief Update border width label
+ * @param _val
+ */
+void CustomLayoutDialog::on_borderWidth_valueChanged(int _val)
+{
+    ui->borderWidthLabel->setText(QString::number(_val));
+}
+
+/**
  * @brief Render the preview
  */
 void CustomLayoutDialog::renderPreview()
@@ -196,17 +209,23 @@ void CustomLayoutDialog::renderPreview()
         {
             QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
-            if (qAbs(newBlock.left() - size.width()) <= 2)
+            if (qAbs(newBlock.left() - size.width()) <= 3)
             {
-                newBlock.setLeft(size.width());
+                newBlock.setLeft(size.width()-1);
             }
 
-            if (qAbs(newBlock.bottom() - size.height()) <= 2)
+            if (qAbs(newBlock.bottom() - size.height()) <= 3)
             {
-                newBlock.setBottom(size.height());
+                newBlock.setBottom(size.height()-1);
             }
 
             blocks.append(newBlock);
+        }
+
+        // draw background the same color of borders
+        if (layout.borderEnabled)
+        {
+            m_scene->addRect(QRect(QPoint(0, 0), size), Qt::NoPen, QBrush(QColor(layout.borderColor)));
         }
 
         // draw blocks
@@ -235,6 +254,7 @@ void CustomLayoutDialog::renderPreview()
 
             QPen pen;
             pen.setColor(QColor(layout.borderColor));
+            pen.setJoinStyle(Qt::MiterJoin);
             pen.setWidth(qRound((double) layout.borderWidth * size.width() / monitorWidth));
 
             foreach (const QRect block, blocks)
@@ -255,6 +275,12 @@ void CustomLayoutDialog::renderPreview()
                         m_scene->addLine(line, pen);
                     }
                 }
+            }
+
+            if (layout.borderScreenEnabled)
+            {
+                QRect borderRect(pen.width()/2, pen.width()/2, size.width()-pen.width()-2, size.height()-pen.width()-2);
+                m_scene->addRect(borderRect, pen, Qt::NoBrush);
             }
         }
 

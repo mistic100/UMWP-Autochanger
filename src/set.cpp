@@ -88,6 +88,7 @@ Set::Set(const QDomElement* _dom)
                 m_custLayout.mainCols = element.attribute("mainCols").toShort();
                 m_custLayout.mainPos = static_cast<UM::ALIGN>(element.attribute("mainPos").toInt());
                 m_custLayout.borderEnabled = (bool) element.attribute("borderEnabled").toInt();
+                m_custLayout.borderScreenEnabled = (bool) element.attribute("borderScreenEnabled").toInt();
                 m_custLayout.borderWidth = element.attribute("borderWidth").toShort();
                 m_custLayout.borderColor = element.attribute("borderColor").toUInt();
             }
@@ -142,6 +143,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
         _writer->writeAttribute("mainCols", QString::number(m_custLayout.mainCols));
         _writer->writeAttribute("mainPos", QString::number(m_custLayout.mainPos));
         _writer->writeAttribute("borderEnabled", QString::number(m_custLayout.borderEnabled));
+        _writer->writeAttribute("borderScreenEnabled", QString::number(m_custLayout.borderScreenEnabled));
         _writer->writeAttribute("borderWidth", QString::number(m_custLayout.borderWidth));
         _writer->writeAttribute("borderColor", QString::number(m_custLayout.borderColor));
 
