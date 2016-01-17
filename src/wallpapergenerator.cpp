@@ -373,12 +373,7 @@ QString WallpaperGenerator::generateCustomFile(int _idx, Set* _set, QVector<QStr
 
     foreach (const QRect block, rawBlocks)
     {
-        QRect newBlock(
-                    qRound(block.x() * wRatio),
-                    qRound(block.y() * hRatio),
-                    qRound(block.width() * wRatio),
-                    qRound(block.height() * hRatio)
-                    );
+        QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
         if (qAbs(newBlock.left() - scrRect.width()) <= 2)
         {

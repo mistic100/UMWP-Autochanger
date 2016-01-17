@@ -510,13 +510,13 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
 {
     foreach (Set* set, _sets)
     {
-        if (_sets.size() == 1)            set->setName(_data.name());
-        if (_data.type() != UM::W_NONE)   set->setType(_data.type());
+        if (_sets.size() == 1) set->setName(_data.name());
+        if (_data.type() != UM::W_NONE) set->setType(_data.type());
         if (_data.style() != UM::IM_NONE) set->setStyle(_data.style());
-        if (_data.mode() != UM::MODE_NONE)set->setMode(_data.mode());
+        if (_data.mode() != UM::MODE_NONE) set->setMode(_data.mode());
         if (_data.hotkey() != QHotKeyWidget::KEEP_KEY) set->setHotkey(_data.hotkey());
         if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
-                                       else set->setCustLayout(CustomLayout());
+        else if (_data.style() != UM::IM_NONE) set->setCustLayout(CustomLayout());
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }

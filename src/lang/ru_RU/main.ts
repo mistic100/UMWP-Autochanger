@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>ChangelogDialog</name>
     <message>
@@ -215,12 +213,12 @@
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="50"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Ширина</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="94"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="192"/>
@@ -228,6 +226,11 @@
         <location filename="../../gui/customlayoutdialog.ui" line="605"/>
         <source>Columns</source>
         <translation>Колонки</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="260"/>
+        <source>Position</source>
+        <translation>Положение</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="432"/>
@@ -238,11 +241,6 @@
         <location filename="../../gui/customlayoutdialog.ui" line="107"/>
         <source>Fixed tile</source>
         <translation>Фиксированная плитка</translation>
-    </message>
-    <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="260"/>
-        <source>Position</source>
-        <translation>Положение</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="26"/>
@@ -263,7 +261,7 @@
     <message>
         <location filename="../../gui/mainlist.cpp" line="67"/>
         <source>This set does not have any image files.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этом наборе нет изображений.</translation>
     </message>
     <message>
         <location filename="../../gui/mainlist.cpp" line="71"/>

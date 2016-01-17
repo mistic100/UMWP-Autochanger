@@ -194,12 +194,7 @@ void CustomLayoutDialog::renderPreview()
 
         foreach (const QRect block, rawBlocks)
         {
-            QRect newBlock(
-                        qRound(block.x() * wRatio),
-                        qRound(block.y() * hRatio),
-                        qRound(block.width() * wRatio),
-                        qRound(block.height() * hRatio)
-                        );
+            QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
             if (qAbs(newBlock.left() - size.width()) <= 2)
             {
