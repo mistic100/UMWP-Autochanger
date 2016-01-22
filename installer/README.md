@@ -4,8 +4,7 @@
 Put these files in `data` directory before running `setup.iss` or `package.bat`:
 
 * UMWP Autochanger.exe (with a space, not an underscore)
-* msvcp120.dll
-* msvcr120.dll
+* redist/vcredist_x86.exe ([Visual C++ 2013 Redistributable x86](https://www.microsoft.com/en-US/download/details.aspx?id=40784))
 * Qt5Core.dll
 * Qt5Concurrent.dll
 * Qt5Gui.dll

@@ -1,4 +1,4 @@
 /build-*
 /old
 /installer/data/**/*.dll
-/installer/data/*.exe
+/installer/data/**/*.exe
