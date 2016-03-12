@@ -150,12 +150,12 @@ void Environment::setWallpaper(const QString &_file)
 
     if (result == ERROR_SUCCESS)
     {
-        result = regKey.SetKeyValue(L"WallpaperStyle", L"0");
+        result = regKey.SetStringValue(L"WallpaperStyle", L"0");
     }
 
     if (result == ERROR_SUCCESS)
     {
-        result = regKey.SetKeyValue(L"TileWallpaper", L"1");
+        result = regKey.SetStringValue(L"TileWallpaper", L"1");
     }
 
     if (result == ERROR_SUCCESS)
