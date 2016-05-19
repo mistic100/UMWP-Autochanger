@@ -98,6 +98,7 @@ namespace UM {
             const QString refresh = "refresh";
             const QString startpause = "startpause";
             const QString showhide = "showhide";
+            const QString delay = "delay";
         }
     }
 }

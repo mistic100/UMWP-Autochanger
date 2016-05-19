@@ -28,6 +28,7 @@ Settings::Settings(Environment* _enviro) :
     m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
     m_hotkeys[UM::CONF::HOTKEY::startpause] = 0;
     m_hotkeys[UM::CONF::HOTKEY::showhide] = 0;
+    m_hotkeys[UM::CONF::HOTKEY::delay] = 0;
 }
 
 /**

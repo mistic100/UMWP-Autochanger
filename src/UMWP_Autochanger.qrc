@@ -41,19 +41,15 @@
         <file>images/icons/w_monitor.png</file>
         <file>images/icons/todo.png</file>
         <file>lang/en_GB/flag.png</file>
-        <file>lang/en_GB/help.htm</file>
         <file>lang/en_GB/main.qm</file>
         <file>lang/en_GB/changelog.htm</file>
         <file>lang/fr_FR/flag.png</file>
-        <file>lang/fr_FR/help.htm</file>
         <file>lang/fr_FR/main.qm</file>
         <file>lang/fr_FR/changelog.htm</file>
         <file>lang/ru_RU/flag.png</file>
-        <file>lang/ru_RU/help.htm</file>
         <file>lang/ru_RU/main.qm</file>
         <file>lang/ru_RU/changelog.htm</file>
         <file>images/loader.gif</file>
-        <file>lang/help.css</file>
         <file>lang/changelog.css</file>
         <file>images/monitor-bg.png</file>
     </qresource>

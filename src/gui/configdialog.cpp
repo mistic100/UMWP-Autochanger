@@ -41,6 +41,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->hotkeyRefresh->setHotkey(   m_settings->hotkey(UM::CONF::HOTKEY::refresh));
     ui->hotkeyShowHide->setHotkey(  m_settings->hotkey(UM::CONF::HOTKEY::showhide));
     ui->hotkeyStartPause->setHotkey(m_settings->hotkey(UM::CONF::HOTKEY::startpause));
+    ui->hotkeyDelay->setHotkey(     m_settings->hotkey(UM::CONF::HOTKEY::delay));
 
     // delay
     QTime time = QTime(0, 0, 0).addSecs(m_settings->param(UM::CONF::delay).toInt());
@@ -101,6 +102,7 @@ void ConfigDialog::done(int result)
         requestHotkeys.insert(tr("Refresh"), ui->hotkeyRefresh);
         requestHotkeys.insert(tr("Show/Hide"), ui->hotkeyShowHide);
         requestHotkeys.insert(tr("Start/Pause"), ui->hotkeyStartPause);
+        requestHotkeys.insert(tr("Change delay"), ui->hotkeyDelay);
 
         for (QHash<QString, QHotKeyWidget*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
         {
@@ -200,6 +202,7 @@ void ConfigDialog::save()
     m_settings->setHotkey(UM::CONF::HOTKEY::refresh,    ui->hotkeyRefresh->hotkey());
     m_settings->setHotkey(UM::CONF::HOTKEY::showhide,   ui->hotkeyShowHide->hotkey());
     m_settings->setHotkey(UM::CONF::HOTKEY::startpause, ui->hotkeyStartPause->hotkey());
+    m_settings->setHotkey(UM::CONF::HOTKEY::delay,      ui->hotkeyDelay->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {
@@ -224,4 +227,5 @@ void ConfigDialog::on_optionUseHotkeys_toggled(bool checked)
     ui->hotkeyRefresh->setDisabled(!checked);
     ui->hotkeyShowHide->setDisabled(!checked);
     ui->hotkeyStartPause->setDisabled(!checked);
+    ui->hotkeyDelay->setDisabled(!checked);
 }

@@ -49,23 +49,23 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     m_pauseBlinker = new QWidgetBlinker(widgetForAction(m_actionPause));
 
-    connect(actionQuit,      SIGNAL(triggered()), _parent, SLOT(quit()));
-    connect(actionAdd,       SIGNAL(triggered()), _parent, SLOT(addSet()));
-    connect(actionHide,      SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
-    connect(actionRefresh,   SIGNAL(triggered()), _ctrl,   SLOT(update()));
-    connect(m_actionPause,   SIGNAL(triggered()), _ctrl,   SLOT(startPause()));
+    connect(actionQuit,    SIGNAL(triggered()), _parent, SLOT(quit()));
+    connect(actionAdd,     SIGNAL(triggered()), _parent, SLOT(addSet()));
+    connect(actionHide,    SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
+    connect(actionRefresh, SIGNAL(triggered()), _ctrl,   SLOT(update()));
+    connect(m_actionPause, SIGNAL(triggered()), _ctrl,   SLOT(startPause()));
 
-    connect(actionOptions,   SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
-    connect(actionScreens,   SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
-    connect(actionImport,    SIGNAL(triggered()), _parent, SLOT(openImportDialog()));
-    connect(actionExport,    SIGNAL(triggered()), _parent, SLOT(openExportDialog()));
-    connect(actionClear,     SIGNAL(triggered()), _parent, SLOT(clearCache()));
+    connect(actionOptions, SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
+    connect(actionScreens, SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
+    connect(actionImport,  SIGNAL(triggered()), _parent, SLOT(openImportDialog()));
+    connect(actionExport,  SIGNAL(triggered()), _parent, SLOT(openExportDialog()));
+    connect(actionClear,   SIGNAL(triggered()), _parent, SLOT(clearCache()));
 
-    connect(actionHelp,      SIGNAL(triggered()), _parent, SLOT(openHelpDialog()));
-    connect(actionAbout,     SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
-    connect(actionFiles,     SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
+    connect(actionAbout,   SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
+    connect(actionFiles,   SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
 
     // use functors to map URLS to open
+    connect(actionHelp,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_DOCUMENTATION_URL)); });
     connect(actionIssues, &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_ISSUES_URL)); });
     connect(actionHome,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_HOMEPAGE)); });
 }

@@ -11,8 +11,8 @@
 #include "previewdialog.h"
 #include "newversiondialog.h"
 #include "changelogdialog.h"
-#include "helpdialog.h"
 #include "seteditdialog.h"
+#include "delaydialog.h"
 
 
 /**
@@ -137,9 +137,10 @@ void MainWindow::defineHotkeys()
 
         // main hotkeys
         QHash<GlobalShortcut::Type, int> otherHotkeys;
-        otherHotkeys.insert(GlobalShortcut::REFRESH, m_settings->hotkey(UM::CONF::HOTKEY::refresh));
+        otherHotkeys.insert(GlobalShortcut::REFRESH,    m_settings->hotkey(UM::CONF::HOTKEY::refresh));
         otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_settings->hotkey(UM::CONF::HOTKEY::startpause));
-        otherHotkeys.insert(GlobalShortcut::SHOWHIDE, m_settings->hotkey(UM::CONF::HOTKEY::showhide));
+        otherHotkeys.insert(GlobalShortcut::SHOWHIDE,   m_settings->hotkey(UM::CONF::HOTKEY::showhide));
+        otherHotkeys.insert(GlobalShortcut::DELAY,      m_settings->hotkey(UM::CONF::HOTKEY::delay));
 
         for (QHash<GlobalShortcut::Type, int>::Iterator it=otherHotkeys.begin(); it!=otherHotkeys.end(); ++it)
         {
@@ -275,6 +276,7 @@ void MainWindow::openConfigDialog()
     if (dialog.exec())
     {
         dialog.save();
+        m_ctrl->update();
     }
     defineHotkeys();
 }
@@ -289,6 +291,7 @@ void MainWindow::openScreensDialog()
     if (dialog.exec())
     {
         dialog.save();
+        m_ctrl->update();
     }
 }
 
@@ -332,21 +335,25 @@ void MainWindow::openImportDialog()
 }
 
 /**
- * @brief Open help dialog
- */
-void MainWindow::openHelpDialog()
-{
-    HelpDialog dialog(this, m_settings);
-    dialog.exec();
-}
-
-/**
  * @brief Open changelog dialog
  */
 void MainWindow::openChangelogDialog()
 {
     ChangelogDialog dialog(this, m_settings);
     dialog.exec();
+}
+
+/**
+ * @brief Open delay dialog
+ */
+void MainWindow::openDelayDialog()
+{
+    DelayDialog dialog(this, m_settings);
+    if (dialog.exec())
+    {
+        dialog.save();
+        m_ctrl->update();
+    }
 }
 
 /**
@@ -406,6 +413,14 @@ void MainWindow::onHotkey()
         m_ctrl->update();
         break;
 
+    case GlobalShortcut::SHOWHIDE:
+        toggleWindow();
+        break;
+
+    case GlobalShortcut::DELAY:
+        openDelayDialog();
+        break;
+
     case GlobalShortcut::STARTPAUSE:
     {
         bool running = m_ctrl->startPause();
@@ -423,10 +438,6 @@ void MainWindow::onHotkey()
         }
         break;
     }
-
-    case GlobalShortcut::SHOWHIDE:
-        toggleWindow();
-        break;
 
     case GlobalShortcut::SETS:
     {

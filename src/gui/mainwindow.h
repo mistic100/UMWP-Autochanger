@@ -59,12 +59,12 @@ public slots:
 
     void openConfigDialog();
     void openScreensDialog();
-    void openHelpDialog();
     void openAboutDialog();
     void openChangelogDialog();
     void openPreviewDialog();
     void openExportDialog();
     void openImportDialog();
+    void openDelayDialog();
 
     void onNewVersion();
     void openNewVersionDialog();

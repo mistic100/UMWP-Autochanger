@@ -12,6 +12,7 @@ include(QsLog/QsLog.pri)
 
 SOURCES += \
     ext/qglobalshortcut.cpp \
+    ext/qxtspanslider.cpp \
     main.cpp \
     set.cpp \
     controller.cpp \
@@ -33,7 +34,7 @@ SOURCES += \
     gui/statusbar.cpp \
     gui/mainlist.cpp \
     gui/customlayoutdialog.cpp \
-    ext/qxtspanslider.cpp
+    gui/delaydialog.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -43,6 +44,8 @@ HEADERS += \
     ext/qglobalshortcut.h \
     ext/qlineeditcolor.h \
     ext/variable2dmatrix.h \
+    ext/qxtspanslider.h \
+    ext/qbuttongroupext.h \
     constants.h \
     main.h \
     set.h \
@@ -68,11 +71,9 @@ HEADERS += \
     gui/screensdialog.h \
     gui/changelogdialog.h \
     gui/statusbar.h \
-    gui/helpdialog.h \
     gui/mainlist.h \
     gui/customlayoutdialog.h \
-    ext/qxtspanslider.h \
-    ext/qbuttongroupext.h
+    gui/delaydialog.h
 
 FORMS += \
     gui/seteditdialog.ui \
@@ -80,7 +81,8 @@ FORMS += \
     gui/newversiondialog.ui \
     gui/screensdialog.ui \
     gui/changelogdialog.ui \
-    gui/customlayoutdialog.ui
+    gui/customlayoutdialog.ui \
+    gui/delaydialog.ui
 
 RESOURCES += \
     UMWP_Autochanger.qrc

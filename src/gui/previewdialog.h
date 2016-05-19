@@ -9,7 +9,7 @@
 
 
 /**
- * @brief Little dialog used to display current files as thumbnails
+ * @brief Dialog used to display current files as thumbnails
  */
 class PreviewDialog : public QDialog
 {

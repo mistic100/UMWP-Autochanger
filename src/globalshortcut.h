@@ -17,7 +17,8 @@ public:
         SETS,
         STARTPAUSE,
         REFRESH,
-        SHOWHIDE
+        SHOWHIDE,
+        DELAY
     };
 
 private:

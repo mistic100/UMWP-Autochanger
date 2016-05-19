@@ -2,8 +2,8 @@
 #define VERSION_H
 
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "2.1.0"
-#define APP_VERSION_DW 2,1,0
+#define APP_VERSION "2.1.1"
+#define APP_VERSION_DW 2,1,1
 #define APP_COMPANYNAME "StrangePlanet"
 #define APP_FILEDESCRIPTION "Ultimate Monitor Wallpaper Autochanger"
 #define APP_LEGALCOPYRIGHT "Copyright (c) 2013-2016 StrangePlanet"
@@ -18,6 +18,7 @@
 #define APP_LOG_FILENAME "debug.log"
 
 #define APP_HOMEPAGE "http://www.strangeplanet.fr/work/umwp-autochanger"
+#define APP_DOCUMENTATION_URL "http://www.strangeplanet.fr/work/umwp-autochanger/#help"
 #define APP_VERSION_URL "http://www.strangeplanet.fr/work/umwp-autochanger/last-version.txt"
 #define APP_ISSUES_URL "https://github.com/mistic100/UMWP-Autochanger/issues"
 

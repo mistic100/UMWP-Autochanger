@@ -16,7 +16,7 @@ UMWP Autochanger is a little tool for multi-monitors windows users. I has two ma
 
 
 ### Translation
-The application is currently available in English and French. [A translation page](https://www.transifex.com/projects/p/umwp-autochanger) has been created on Transifex, feel free to register and contribute.
+The application is currently available in English, French and Russian. [A translation page](https://www.transifex.com/projects/p/umwp-autochanger) has been created on Transifex, feel free to register and contribute.
 
 
 ### Compiling
