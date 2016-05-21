@@ -52,5 +52,6 @@
         <file>images/loader.gif</file>
         <file>lang/changelog.css</file>
         <file>images/monitor-bg.png</file>
+        <file>images/icons/bullet_yellow.png</file>
     </qresource>
 </RCC>

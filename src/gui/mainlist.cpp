@@ -17,7 +17,7 @@ MainList::MainList(QWidget* _parent, Controller* _ctrl) :
     m_ctrl(_ctrl),
     m_settings(_ctrl->settings())
 {
-    setItemDelegate(new ListDelegate(this, m_ctrl->settings()));
+    setItemDelegate(new ListDelegate(this, m_ctrl));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
     setDragDropMode(QAbstractItemView::InternalMove);
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -27,9 +27,9 @@ MainList::MainList(QWidget* _parent, Controller* _ctrl) :
             this, SLOT(onItemMoved(QModelIndex,int,int,QModelIndex,int)));
 
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
+    connect(m_ctrl, &Controller::generationFinished, this, [this]{ viewport()->update(); });
 
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onContextMenu(QPoint)));
-
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),  this, SLOT(onContextMenu(QPoint)));
     connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked(QListWidgetItem*)));
 
     installEventFilter(this);
@@ -151,7 +151,7 @@ bool MainList::eventFilter(QObject* _target, QEvent* _event)
     if (_event->type() == QEvent::KeyPress)
     {
         QKeyEvent* key = (QKeyEvent*) _event;
-        if (key->key() == Qt::Key_Delete && key->modifiers() ==Qt::NoModifier)
+        if (key->key() == Qt::Key_Delete && key->modifiers() == Qt::NoModifier)
         {
             QList<Set*> sets = getSelectedSets();
             ((MainWindow*) parent())->deleteSets(sets);

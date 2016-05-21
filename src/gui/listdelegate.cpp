@@ -7,9 +7,10 @@
  * @param QObject* _parent
  * @param Settings* _settings
  */
-ListDelegate::ListDelegate(QObject* _parent, Settings* _settings) :
+ListDelegate::ListDelegate(QObject* _parent, Controller *_ctrl) :
     QAbstractItemDelegate(_parent),
-    m_settings(_settings)
+    m_ctrl(_ctrl),
+    m_settings(_ctrl->settings())
 {}
 
 /**
@@ -76,15 +77,23 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     // STATE ICON
     QIcon icon;
 
-    switch (set->isActive())
+    if (set == m_ctrl->currentSet())
     {
-    case true:
-        icon = QIcon(":/images/icons/bullet_green.png");
-        break;
-    case false:
-        icon = QIcon(":/images/icons/bullet_red.png");
-        break;
+        icon = QIcon(":/images/icons/bullet_yellow.png");
     }
+    else
+    {
+        switch (set->isActive())
+        {
+        case true:
+            icon = QIcon(":/images/icons/bullet_green.png");
+            break;
+        case false:
+            icon = QIcon(":/images/icons/bullet_red.png");
+            break;
+        }
+    }
+
     rect = baseRect.adjusted(2, 0, 0, 0);
     icon.paint(_painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
 
