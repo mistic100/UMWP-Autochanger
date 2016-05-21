@@ -49,6 +49,12 @@ Set::Set(const QDomElement* _dom)
         m_mode = static_cast<UM::MODE>(_dom->attribute("mode").toInt());
     }
 
+    // added in 2.1.1
+    if (_dom->hasAttribute("frequency"))
+    {
+        m_frequency = _dom->attribute("frequency").toDouble();
+    }
+
     // before 1.4 format
     if (_dom->hasAttribute("hotkey_mod"))
     {
@@ -125,6 +131,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
     _writer->writeAttribute("mode", QString::number(m_mode));
     _writer->writeAttribute("active", QString::number(m_active));
     _writer->writeAttribute("hotkey", QString::number(m_hotkey));
+    _writer->writeAttribute("frequency", QString::number(m_frequency));
 
     _writer->writeTextElement("path", m_path);
 

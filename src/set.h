@@ -24,6 +24,7 @@ private:
     UM::WALLPAPER    m_type = UM::W_MONITOR;
     UM::IMAGE        m_style = UM::IM_FILL;
     UM::MODE         m_mode = UM::MODE_RANDOM;
+    double           m_frequency = 1.0;
     bool             m_active = true;
     bool             m_valid = true;
     QVector<QString> m_files;
@@ -42,6 +43,7 @@ public:
     const UM::WALLPAPER type() const        { return m_type; }
     const UM::IMAGE     style() const       { return m_style; }
     const UM::MODE      mode() const        { return m_mode; }
+    const double        frequency() const   { return m_frequency; }
     const int           count() const       { return m_files.size(); }
     const bool          isActive() const    { return m_active; }
     const bool          isValid() const     { return m_valid; }
@@ -56,6 +58,7 @@ public:
     void setType(const UM::WALLPAPER _type) { m_type=_type; }
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setMode(const UM::MODE _mode)      { m_mode=_mode; }
+    void setFrequency(const double _freq)   { m_frequency=_freq; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
     void setCurrent(const Current &_curr)   { m_current=_curr; }
     void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }

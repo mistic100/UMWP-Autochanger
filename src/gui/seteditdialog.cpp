@@ -55,6 +55,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->selectStyle->setCurrentData(set->style());
         ui->selectMode->setCurrentData(set->mode());
         ui->inputHotkey->setHotkey(set->hotkey());
+        ui->inputFreq->setValue(set->frequency());
         ui->styleConfig->setVisible(set->style() == UM::IM_CUSTOM);
     }
     else
@@ -65,6 +66,9 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->selectStyle->setCurrentIndex(0);
         ui->selectMode->setCurrentIndex(0);
         ui->inputHotkey->setHotkey(QHotKeyWidget::KEEP_KEY);
+        ui->inputFreq->setMinimum(0);
+        ui->inputFreq->setValue(0);
+        ui->inputFreq->setSpecialValueText(tr("[keep]"));
         ui->styleConfig->setVisible(false);
     }
 
@@ -149,6 +153,7 @@ const Set SetEditDialog::result()
     result.setMode(mode);
     result.setHotkey(ui->inputHotkey->hotkey());
     result.setCustLayout(m_custLayout);
+    result.setFrequency(ui->inputFreq->value());
 
     return result;
 }

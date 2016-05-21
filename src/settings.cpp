@@ -500,12 +500,7 @@ void Settings::setActiveSets(const QList<Set*> &_sets)
 /**
  * @brief Edit multiple sets
  * @param Set*[] _sets
- * @param string _name - only if there is one set edited
- * @param UM::WALLPAPER _type
- * @param UM::IMAGE _style
- * @param UM::MODE _mode
- * @param int _hotkey
- * @param CustomLayout _layout
+ * @param Set _data
  */
 void Settings::editSets(const QList<Set*> _sets, const Set &_data)
 {
@@ -516,6 +511,7 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
         if (_data.style() != UM::IM_NONE) set->setStyle(_data.style());
         if (_data.mode() != UM::MODE_NONE) set->setMode(_data.mode());
         if (_data.hotkey() != QHotKeyWidget::KEEP_KEY) set->setHotkey(_data.hotkey());
+        if (_data.frequency() != 0) set->setFrequency(_data.frequency());
         if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
         else if (_data.style() != UM::IM_NONE) set->setCustLayout(CustomLayout());
 

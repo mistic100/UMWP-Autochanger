@@ -77,34 +77,33 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
  */
 Set* WallpaperGenerator::getRandomSet()
 {
-    int total = m_settings->nbActiveSets(true);
+    int nbSets = m_settings->nbActiveSets(true);
 
-    if (total == 0)
+    if (nbSets == 0)
     {
         return NULL;
     }
 
-    if (total == 1)
+    if (nbSets == 1)
     {
         return m_settings->activeSet(0, true);
     }
 
     // build list of total nb of walls
-    QList<int> nbWalls;
-    int totalWalls = 0;
-    for (int i=0; i<total; i++)
+    QList<int> nbWalls({0});
+    for (int i=0; i<nbSets; i++)
     {
-        nbWalls.append(totalWalls);
-        totalWalls+= m_settings->activeSet(i, true)->count();
+        Set* set = m_settings->activeSet(i, true);
+        int setWeight = qRound(set->count() * set->frequency());
+        nbWalls.append(nbWalls.last() + setWeight);
     }
-    nbWalls.append(totalWalls);
 
     // generate random number between 0 and total nb of walls
-    std::uniform_int<int> unif(0, totalWalls-1);
+    std::uniform_int<int> unif(0, nbWalls.last()-1);
     int counter = unif(m_randomEngine);
 
     // choose the set containing the generated number
-    for (int i=0; i<total; i++)
+    for (int i=0; i<nbSets; i++)
     {
         if (counter >= nbWalls.at(i) && counter < nbWalls.at(i+1))
         {
