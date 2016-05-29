@@ -18,6 +18,8 @@ DelayDialog::DelayDialog(QWidget* _parent, Settings* _settings) :
 
     setFixedSize(size());
     setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint);
+    raise();
+    activateWindow();
 
     QTime time = QTime(0, 0, 0).addSecs(m_settings->param(UM::CONF::delay).toInt());
     ui->optionDelay->setTime(time);

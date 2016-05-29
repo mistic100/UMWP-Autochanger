@@ -348,11 +348,21 @@ void MainWindow::openChangelogDialog()
  */
 void MainWindow::openDelayDialog()
 {
-    DelayDialog dialog(this, m_settings);
-    if (dialog.exec())
+    DelayDialog* existingDialog = findChild<DelayDialog*>();
+
+    if (existingDialog != NULL)
     {
-        dialog.save();
-        m_ctrl->update();
+        existingDialog->raise();
+        existingDialog->activateWindow();
+    }
+    else
+    {
+        DelayDialog dialog(this, m_settings);
+        if (dialog.exec())
+        {
+            dialog.save();
+            m_ctrl->update();
+        }
     }
 }
 
