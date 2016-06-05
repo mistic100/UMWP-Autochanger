@@ -16,7 +16,13 @@
   <property name="windowTitle">
    <string>Properties</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
+   <item row="0" column="1" colspan="3">
+    <widget class="QLineEdit" name="inputName"/>
+   </item>
+   <item row="6" column="1" colspan="3">
+    <widget class="QHotKeyWidget" name="inputHotkey" native="true"/>
+   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
@@ -103,7 +109,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="2">
+   <item row="7" column="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -116,13 +122,10 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="QHotKeyWidget" name="inputHotkey" native="true"/>
-   </item>
-   <item row="5" column="1" colspan="2">
+   <item row="5" column="1" colspan="3">
     <widget class="QComboBoxExt" name="selectMode"/>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item row="2" column="1" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
      <item>
       <widget class="QComboBoxExt" name="selectStyle">
@@ -143,19 +146,30 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1" colspan="2">
+   <item row="1" column="1" colspan="3">
     <widget class="QComboBoxExt" name="selectType"/>
    </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLineEdit" name="inputName"/>
-   </item>
-   <item row="9" column="0" colspan="3">
+   <item row="9" column="0" colspan="4">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QPushButton" name="freqHelp">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../UMWP_Autochanger.qrc">
+       <normaloff>:/images/icons/help_color.png</normaloff>:/images/icons/help_color.png</iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -174,7 +188,9 @@
    <header>../ext/qcomboboxext.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../UMWP_Autochanger.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

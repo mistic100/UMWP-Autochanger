@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QToolTip>
 
 #include "customlayoutdialog.h"
 
@@ -181,4 +182,12 @@ void SetEditDialog::on_styleConfig_clicked()
     {
         m_custLayout = dialog.getCustLayout();
     }
+}
+
+/**
+ * @brief Click on help button
+ */
+void SetEditDialog::on_freqHelp_clicked()
+{
+    QToolTip::showText(QCursor::pos(), tr("The frequency is the chance of this set to be randomly selected among others.<br><u>Note:</u> at equal frequency, a set with more images has higher chance to be selected."), this);
 }

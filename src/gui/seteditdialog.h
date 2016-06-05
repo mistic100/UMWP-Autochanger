@@ -42,6 +42,7 @@ protected:
 private slots:
     void on_selectStyle_currentDataChanged(QVariant data);
     void on_styleConfig_clicked();
+    void on_freqHelp_clicked();
 };
 
 #endif // SETEDITDIALOG_H
