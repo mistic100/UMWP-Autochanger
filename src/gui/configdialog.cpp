@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "configdialog.h"
 #include "ui_configdialog.h"
@@ -57,6 +58,19 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
         );
     }
     ui->optionLang->setCurrentData(m_settings->param(UM::CONF::language));
+
+    // file opener
+    QString opener = m_settings->param(UM::CONF::open_program).toString();
+    ui->optionOpenProgram->addItem(tr("Default viewer"), "default");
+    ui->optionOpenProgram->addItem(tr("Select program..."), "select");
+    if (!opener.isEmpty())
+    {
+        ui->optionOpenProgram->addItem(QFileInfo(opener).fileName(), opener);
+        ui->optionOpenProgram->setCurrentData(opener);
+    }
+    else {
+        ui->optionOpenProgram->setCurrentData("default");
+    }
 
     // type
     ui->optionType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
@@ -179,9 +193,7 @@ void ConfigDialog::save()
     QTime time = ui->optionDelay->time();
     int delay = time.hour()*3600 + time.minute()*60 + time.second();
 
-    int langIndex = ui->optionLang->currentIndex();
-    QVariant lang = ui->optionLang->itemData(langIndex);
-
+    QVariant lang = ui->optionLang->currentData();
     if (lang != m_settings->param(UM::CONF::language))
     {
         QMessageBox::warning(this, tr("Language changed"),
@@ -189,8 +201,15 @@ void ConfigDialog::save()
                              QMessageBox::Ok, QMessageBox::Ok);
     }
 
+    QString opener = ui->optionOpenProgram->currentData().toString();
+    if (opener == "default" || opener == "select")
+    {
+        opener = "";
+    }
+
     m_settings->setParam(UM::CONF::delay,                 delay);
     m_settings->setParam(UM::CONF::language,              lang);
+    m_settings->setParam(UM::CONF::open_program,          opener);
     m_settings->setParam(UM::CONF::default_mode,          ui->optionMode->currentData());
     m_settings->setParam(UM::CONF::default_type,          ui->optionType->currentData());
     m_settings->setParam(UM::CONF::default_style,         ui->optionStyle->currentData());
@@ -220,12 +239,45 @@ void ConfigDialog::save()
 
 /**
  * @brief Disable hotkeys field
- * @param bool checked
+ * @param bool _checked
  */
-void ConfigDialog::on_optionUseHotkeys_toggled(bool checked)
+void ConfigDialog::on_optionUseHotkeys_toggled(bool _checked)
 {
-    ui->hotkeyRefresh->setDisabled(!checked);
-    ui->hotkeyShowHide->setDisabled(!checked);
-    ui->hotkeyStartPause->setDisabled(!checked);
-    ui->hotkeyDelay->setDisabled(!checked);
+    ui->hotkeyRefresh->setDisabled(!_checked);
+    ui->hotkeyShowHide->setDisabled(!_checked);
+    ui->hotkeyStartPause->setDisabled(!_checked);
+    ui->hotkeyDelay->setDisabled(!_checked);
+}
+
+/**
+ * @brief Choose open program
+ */
+void ConfigDialog::on_optionOpenProgram_currentIndexChanged(int)
+{
+    if (ui->optionOpenProgram->currentData().toString() == "select")
+    {
+        QString opener = QFileDialog::getOpenFileName(this, tr("Select program..."), getenv("PROGRAMFILES"), tr("Executables (*.exe)"));
+
+        if (!opener.isEmpty())
+        {
+            if (ui->optionOpenProgram->count() == 3)
+            {
+                ui->optionOpenProgram->removeItem(2);
+            }
+
+            ui->optionOpenProgram->addItem(QFileInfo(opener).fileName(), opener);
+            ui->optionOpenProgram->setCurrentIndex(2);
+        }
+        else
+        {
+            if (ui->optionOpenProgram->count() == 3)
+            {
+                ui->optionOpenProgram->setCurrentIndex(2);
+            }
+            else
+            {
+                ui->optionOpenProgram->setCurrentData("default");
+            }
+        }
+    }
 }

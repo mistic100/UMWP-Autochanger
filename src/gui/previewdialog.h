@@ -6,6 +6,7 @@
 
 #include "../main.h"
 #include "../controller.h"
+#include "../settings.h"
 
 
 /**
@@ -17,6 +18,7 @@ class PreviewDialog : public QDialog
 
 private:
     Controller* m_ctrl;
+    Settings*   m_settings;
 
     QGridLayout* m_layout;
     

@@ -18,22 +18,22 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="98"/>
+        <location filename="../../gui/configdialog.ui" line="44"/>
         <source>Language :</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="37"/>
+        <location filename="../../gui/configdialog.ui" line="57"/>
         <source>Delay :</source>
         <translation>Задержка:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="74"/>
+        <location filename="../../gui/configdialog.ui" line="79"/>
         <source>Minimize on startup</source>
         <translation>Сворачивать при запуске</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="81"/>
+        <location filename="../../gui/configdialog.ui" line="86"/>
         <source>Check updates</source>
         <translation>Проверить обновления</translation>
     </message>
@@ -43,164 +43,185 @@
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="161"/>
+        <location filename="../../gui/configdialog.ui" line="168"/>
         <source>Mode :</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="60"/>
+        <location filename="../../gui/configdialog.ui" line="72"/>
         <source>Start with Windows</source>
         <translation>Запускать вместе с Windows</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="67"/>
+        <location filename="../../gui/configdialog.ui" line="93"/>
         <source>Show notifications</source>
         <translation>Показывать уведомления</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="109"/>
+        <location filename="../../gui/configdialog.ui" line="102"/>
+        <source>Open files with :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.ui" line="116"/>
         <source>Defaults</source>
         <translation>По-умолчанию</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="115"/>
+        <location filename="../../gui/configdialog.ui" line="122"/>
         <source>Style :</source>
         <translation>Стиль:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="138"/>
+        <location filename="../../gui/configdialog.ui" line="145"/>
         <source>Type :</source>
         <translation>Тип:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="174"/>
+        <location filename="../../gui/configdialog.ui" line="181"/>
         <source>Defaults settings for new sets.</source>
         <translation>Настройки по-умолчанию для новых наборов.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="182"/>
+        <location filename="../../gui/configdialog.ui" line="189"/>
         <source>Hotkeys</source>
         <translation>Горячие клавиши</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="207"/>
+        <location filename="../../gui/configdialog.ui" line="214"/>
         <source>Show/Hide :</source>
         <translation>Показать/свернуть:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="217"/>
+        <location filename="../../gui/configdialog.ui" line="224"/>
         <source>Refresh :</source>
         <translation>Обновить:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="247"/>
+        <location filename="../../gui/configdialog.ui" line="254"/>
         <source>Change delay :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="197"/>
+        <location filename="../../gui/configdialog.ui" line="204"/>
         <source>Start/Pause :</source>
         <translation>Старт/Пауза:</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="227"/>
+        <location filename="../../gui/configdialog.ui" line="234"/>
         <source>Use hotkeys</source>
         <translation>Использовать горячие клавиши</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="62"/>
+        <location filename="../../gui/configdialog.cpp" line="64"/>
+        <source>Default viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="65"/>
+        <location filename="../../gui/configdialog.cpp" line="259"/>
+        <source>Select program...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="76"/>
         <source>One image for each monitor</source>
         <translation>Одно изображение для каждого монитора</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="63"/>
+        <location filename="../../gui/configdialog.cpp" line="77"/>
         <source>One image for the whole desktop</source>
         <translation>Одно изображение на целый рабочий стол</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="67"/>
+        <location filename="../../gui/configdialog.cpp" line="81"/>
         <source>Center</source>
         <translation>Центр</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="68"/>
+        <location filename="../../gui/configdialog.cpp" line="82"/>
         <source>Tile</source>
         <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="69"/>
+        <location filename="../../gui/configdialog.cpp" line="83"/>
         <source>Stretch</source>
         <translation>Растянуть</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="70"/>
+        <location filename="../../gui/configdialog.cpp" line="84"/>
         <source>Strecth proportional</source>
         <translation>Пропорционально растянуть</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="71"/>
+        <location filename="../../gui/configdialog.cpp" line="85"/>
         <source>Fill</source>
         <translation>Заполнить</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="75"/>
+        <location filename="../../gui/configdialog.cpp" line="89"/>
         <source>Random</source>
         <translation>Произвольно</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="76"/>
+        <location filename="../../gui/configdialog.cpp" line="90"/>
         <source>Sequential</source>
         <translation>Последовательно</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="102"/>
+        <location filename="../../gui/configdialog.cpp" line="116"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="103"/>
+        <location filename="../../gui/configdialog.cpp" line="117"/>
         <source>Show/Hide</source>
         <translation>Показать/Свернуть</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="104"/>
+        <location filename="../../gui/configdialog.cpp" line="118"/>
         <source>Start/Pause</source>
         <translation>Старт/Пауза</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="105"/>
+        <location filename="../../gui/configdialog.cpp" line="119"/>
         <source>Change delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="123"/>
+        <location filename="../../gui/configdialog.cpp" line="137"/>
         <source>Hotkey for &quot;%1&quot; already used for &quot;%2&quot;</source>
         <translation>Горячая клавиша &quot;%1&quot; уже назначена для &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="141"/>
+        <location filename="../../gui/configdialog.cpp" line="155"/>
         <source>Hotkey for &quot;%1&quot; already used for set &quot;%2&quot;</source>
         <translation>Горячая клавиша &quot;%1&quot; уже назначена для набора &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="154"/>
+        <location filename="../../gui/configdialog.cpp" line="168"/>
         <source>Delay can not be lower than 10 seconds</source>
         <translation>Задержка не может быть меньше 10 секунд</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="161"/>
+        <location filename="../../gui/configdialog.cpp" line="175"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="187"/>
+        <location filename="../../gui/configdialog.cpp" line="199"/>
         <source>Language changed</source>
         <translation>Язык изменён</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="188"/>
+        <location filename="../../gui/configdialog.cpp" line="200"/>
         <source>You must restart %1 to apply the new language.</source>
         <translation>Вы должны перезапустить %1 чтобы язык сменился.</translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.cpp" line="259"/>
+        <source>Executables (*.exe)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -544,18 +565,18 @@
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="34"/>
+        <location filename="../../gui/previewdialog.cpp" line="35"/>
         <source>Active files</source>
         <translation>Активные файлы</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="115"/>
-        <location filename="../../gui/previewdialog.cpp" line="153"/>
+        <location filename="../../gui/previewdialog.cpp" line="116"/>
+        <location filename="../../gui/previewdialog.cpp" line="163"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="153"/>
+        <location filename="../../gui/previewdialog.cpp" line="163"/>
         <source>Are you sure?</source>
         <translation>Вы уверены?</translation>
     </message>

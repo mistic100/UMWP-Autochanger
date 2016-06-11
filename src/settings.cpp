@@ -24,6 +24,7 @@ Settings::Settings(Environment* _enviro) :
     m_options[UM::CONF::default_type] = UM::W_MONITOR;
     m_options[UM::CONF::default_style] = UM::IM_STRETCH_PROP;
     m_options[UM::CONF::changelog_shown] = "0.0.0";
+    m_options[UM::CONF::open_program] = "";
 
     m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
     m_hotkeys[UM::CONF::HOTKEY::startpause] = 0;

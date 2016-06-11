@@ -18,7 +18,8 @@
  */
 PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
     QDialog(_parent),
-    m_ctrl(_ctrl)
+    m_ctrl(_ctrl),
+    m_settings(_ctrl->settings())
 {
     QVBoxLayout* mainLayout = new QVBoxLayout();
     m_layout = new QGridLayout();
@@ -139,7 +140,16 @@ void PreviewDialog::onThumbnailClicked()
 
     QLOG_TRACE() << "Open " << path;
 
-    QDesktopServices::openUrl(QUrl("file:///"+ path));
+    QString opener = m_settings->param(UM::CONF::open_program).toString();
+
+    if (opener.isEmpty())
+    {
+        QDesktopServices::openUrl(QUrl("file:///"+ path));
+    }
+    else
+    {
+        QProcess::startDetached(opener, QStringList() << path);
+    }
 }
 
 /**

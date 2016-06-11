@@ -93,6 +93,7 @@ namespace UM {
         const QString default_type = "default_type";
         const QString default_style = "default_style";
         const QString changelog_shown = "changelog_shown";
+        const QString open_program = "open_program";
 
         namespace HOTKEY {
             const QString refresh = "refresh";
