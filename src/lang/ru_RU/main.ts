@@ -100,7 +100,7 @@
     <message>
         <location filename="../../gui/configdialog.ui" line="254"/>
         <source>Change delay :</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить задержку:</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="204"/>
@@ -115,13 +115,13 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="64"/>
         <source>Default viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Просмотрщик по-умолчанию</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="65"/>
         <location filename="../../gui/configdialog.cpp" line="259"/>
         <source>Select program...</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать программу</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="76"/>
@@ -176,7 +176,7 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="117"/>
         <source>Show/Hide</source>
-        <translation>Показать/Свернуть</translation>
+        <translation>Показать/Скрыть</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="118"/>
@@ -186,7 +186,7 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="119"/>
         <source>Change delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить задержку</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="137"/>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="259"/>
         <source>Executables (*.exe)</source>
-        <translation type="unfinished"></translation>
+        <translation>Приложения (*.exe)</translation>
     </message>
 </context>
 <context>
@@ -229,12 +229,12 @@
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="17"/>
         <source>Custom Layout Configuration</source>
-        <translation>Настройки изменённой раскладки</translation>
+        <translation>Настройки &quot;Особой&quot; раскладки</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="452"/>
         <source>Tiles size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер плитки</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="570"/>
@@ -251,7 +251,7 @@
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="117"/>
         <source>Screen border</source>
-        <translation>Монитор границу</translation>
+        <translation>Рамка экрана</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="50"/>
@@ -276,10 +276,6 @@
         <translation>Положение</translation>
     </message>
     <message>
-        <source>Tiles</source>
-        <translation type="vanished">Плитка</translation>
-    </message>
-    <message>
         <location filename="../../gui/customlayoutdialog.ui" line="127"/>
         <source>Fixed tile</source>
         <translation>Фиксированная плитка</translation>
@@ -295,30 +291,23 @@
     <message>
         <location filename="../../gui/delaydialog.ui" line="14"/>
         <source>Change delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить задержку</translation>
     </message>
     <message>
         <location filename="../../gui/delaydialog.ui" line="43"/>
         <source>Delay :</source>
-        <translation type="unfinished">Задержка:</translation>
+        <translation>Задержка:</translation>
     </message>
     <message>
         <location filename="../../gui/delaydialog.cpp" line="51"/>
         <location filename="../../gui/delaydialog.cpp" line="52"/>
         <source>Delay can not be lower than 10 seconds</source>
-        <translation type="unfinished">Задержка не может быть меньше 10 секунд</translation>
+        <translation>Задержка не может быть меньше 10 секунд</translation>
     </message>
     <message>
         <location filename="../../gui/delaydialog.cpp" line="52"/>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
-    </message>
-</context>
-<context>
-    <name>HelpDialog</name>
-    <message>
-        <source>User guide</source>
-        <translation type="vanished">Инструкция пользователя</translation>
+        <translation>Ошибка</translation>
     </message>
 </context>
 <context>
@@ -516,7 +505,7 @@
     <message>
         <location filename="../../gui/menubar.cpp" line="43"/>
         <source>Hide</source>
-        <translation>Свернуть</translation>
+        <translation>Скрыть</translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="45"/>
@@ -673,7 +662,7 @@
     <message>
         <location filename="../../gui/seteditdialog.ui" line="29"/>
         <source>Frequency :</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота:</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.ui" line="72"/>
@@ -743,7 +732,7 @@
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="45"/>
         <source>Custom...</source>
-        <translation>Изменить...</translation>
+        <translation>Особая...</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="47"/>
@@ -783,7 +772,8 @@
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="192"/>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;u&gt;Note:&lt;/u&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Частота - вероятность случайного выбора.
+&lt;br&gt;&lt;u&gt;Примечание:&lt;/u&gt; имея одинаковую &quot;частоту&quot;, набор с бОльшим количеством изображений имеет бОльшую вероятность быть выбранным.</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="107"/>
