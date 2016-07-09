@@ -73,7 +73,8 @@ HEADERS += \
     gui/statusbar.h \
     gui/mainlist.h \
     gui/customlayoutdialog.h \
-    gui/delaydialog.h
+    gui/delaydialog.h \
+    gui/previewwidget.h
 
 FORMS += \
     gui/seteditdialog.ui \

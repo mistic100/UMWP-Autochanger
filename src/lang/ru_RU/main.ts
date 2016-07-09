@@ -43,6 +43,11 @@
         <translation>Общее</translation>
     </message>
     <message>
+        <location filename="../../gui/configdialog.ui" line="102"/>
+        <source>File editor :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../gui/configdialog.ui" line="168"/>
         <source>Mode :</source>
         <translation>Режим:</translation>
@@ -56,11 +61,6 @@
         <location filename="../../gui/configdialog.ui" line="93"/>
         <source>Show notifications</source>
         <translation>Показывать уведомления</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="102"/>
-        <source>Open files with :</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="116"/>
@@ -565,18 +565,17 @@
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="35"/>
+        <location filename="../../gui/previewdialog.cpp" line="32"/>
         <source>Active files</source>
         <translation>Активные файлы</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="116"/>
-        <location filename="../../gui/previewdialog.cpp" line="163"/>
+        <location filename="../../gui/previewdialog.cpp" line="125"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="163"/>
+        <location filename="../../gui/previewdialog.cpp" line="125"/>
         <source>Are you sure?</source>
         <translation>Вы уверены?</translation>
     </message>

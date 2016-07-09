@@ -28,9 +28,10 @@ public:
 public slots:
     void draw();
 
-private slots:
-    void onThumbnailClicked();
-    void onDeleteButtonClicked();
+    void onThumbnailClicked(const QString &_path);
+    void onDeleteButtonClicked(const QString &_path);
+    void onEditButtonClicked(const QString &_path);
+    void onOpenButtonClicked(const QString &_path);
 };
 
 #endif // PREVIEWDIALOG_H

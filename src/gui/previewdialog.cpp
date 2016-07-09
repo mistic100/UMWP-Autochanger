@@ -1,13 +1,10 @@
-#include <QPushButton>
-#include <QLabel>
-#include <QPainter>
 #include <QDesktopServices>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QMessageBox>
-#include <QFontMetrics>
 
 #include "previewdialog.h"
+#include "previewwidget.h"
 #include "../umutils.h"
 
 
@@ -72,102 +69,77 @@ void PreviewDialog::draw()
         width*= m_ctrl->settings()->nbEnabledMonitors();
     }
 
-    QPen pen(Qt::SolidLine);
-    pen.setWidth(2);
-    pen.setColor(QColor(0, 160, 255));
+    bool showEdit = !m_settings->param(UM::CONF::open_program).toString().isEmpty();
 
     int col = 0; int row = 0;
-    foreach (const QString file, m_ctrl->currentFiles())
+    foreach (QString file, m_ctrl->currentFiles())
     {
         if (file.isEmpty())
         {
             continue;
         }
 
-        // resize image and add blue border
-        QPixmap image = QPixmap(file).scaledToWidth(width, Qt::FastTransformation);
-        QPainter painter(&image);
-        painter.setPen(pen);
-        painter.drawRect(image.rect().adjusted(1, 1, -1, -1));
+        PreviewWidget* widget = new PreviewWidget(file, width, showEdit, this);
 
-        // thumbnail in a button
-        QPushButton* thumb = new QPushButton();
-        thumb->setIcon(image);
-        thumb->setIconSize(image.size());
-        thumb->setStyleSheet("border:none;");
-        thumb->setProperty("path", file);
-        thumb->setCursor(Qt::PointingHandCursor);
-
-        connect(thumb, SIGNAL(clicked()), this, SLOT(onThumbnailClicked()));
-
-        m_layout->addWidget(thumb, row, col, Qt::AlignBottom);
-
-        // label with filename
-        QString text = fontMetrics().elidedText(QFileInfo(file).fileName(), Qt::ElideRight, width);
-        QLabel* label = new QLabel(text);
-        label->setTextInteractionFlags(Qt::TextSelectableByMouse);
-        label->setCursor(Qt::IBeamCursor);
-
-        m_layout->addWidget(label, row+1, col);
-
-        // delete button
-        QPushButton* button = new QPushButton();
-        button->setIcon(QIcon(":/images/icons/bullet_cross.png"));
-        button->setText(tr("Delete"));
-        button->setProperty("path", file);
-        button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
-        connect(button, SIGNAL(clicked()), this, SLOT(onDeleteButtonClicked()));
-
-        m_layout->addWidget(button, row+2, col);
+        m_layout->addWidget(widget, row, col);
 
         col++;
         if (col > 5)
         {
             col = 0;
-            row+= 3;
+            row+= 1;
         }
     }
 }
 
 /**
  * @brief Open image file with default application
+ * @param string _path
  */
-void PreviewDialog::onThumbnailClicked()
+void PreviewDialog::onThumbnailClicked(const QString &_path)
 {
-    QWidget* thumb = (QWidget*)QObject::sender();
-    QString path = thumb->property("path").toString();
+    QLOG_TRACE() << "Open " << _path;
 
-    QLOG_TRACE() << "Open " << path;
+    QDesktopServices::openUrl(QUrl("file:///"+ _path));
+}
+
+/**
+ * @brief Open image file with custom application
+ * @param string _path
+ */
+void PreviewDialog::onEditButtonClicked(const QString &_path)
+{
+    QLOG_TRACE() << "Edit " << _path;
 
     QString opener = m_settings->param(UM::CONF::open_program).toString();
 
-    if (opener.isEmpty())
-    {
-        QDesktopServices::openUrl(QUrl("file:///"+ path));
-    }
-    else
-    {
-        QProcess::startDetached(opener, QStringList() << path);
-    }
+    QProcess::startDetached(opener, QStringList() << _path);
 }
 
 /**
  * @brief Delete image file and refresh wallpaper
+ * @param string _path
  */
-void PreviewDialog::onDeleteButtonClicked()
+void PreviewDialog::onDeleteButtonClicked(const QString &_path)
 {
-    QWidget* button = (QWidget*)QObject::sender();
-    QString path = button->property("path").toString();
-
     int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
                                    QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
 
     if (ret == QMessageBox::Ok)
     {
-        QLOG_TRACE() << "Delete " << path;
+        QLOG_TRACE() << "Delete " << _path;
 
-        UM::moveFileToTrash(path);
+        UM::moveFileToTrash(_path);
         m_ctrl->update();
     }
+}
+
+/**
+ * @brief Open file explorer with file selected
+ * @param string _path
+ */
+void PreviewDialog::onOpenButtonClicked(const QString &_path)
+{
+    QString command = Environment::EXPLORER_PATH + " /select," + _path;
+    QProcess::startDetached(command);
 }

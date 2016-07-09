@@ -11,6 +11,7 @@ class Environment
 {
 public:
     static QString APPDATA_DIR;
+    static QString EXPLORER_PATH;
 
 private:
     QString m_shortcutPath;

@@ -1,4 +1,5 @@
 /build-*
 /old
-/installer/data/**/*.dll
-/installer/data/**/*.exe
+/installer/**/*.dll
+/installer/**/*.exe
+/installer/**/*.zip

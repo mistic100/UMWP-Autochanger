@@ -6,6 +6,7 @@
 
 
 QString Environment::APPDATA_DIR = "";
+QString Environment::EXPLORER_PATH = "";
 
 /**
  * @brief Environment::Environment
@@ -22,11 +23,18 @@ Environment::Environment()
     // CREATE CACHE DIR
     Environment::APPDATA_DIR = getAppDataFolder();
 
-    QLOG_DEBUG() << "== APPDATA" << Environment::APPDATA_DIR;
-
-    if (!dirHelper.exists(Environment::APPDATA_DIR + APP_CACHE_DIR))
+    if (!Environment::APPDATA_DIR.isEmpty())
     {
-        dirHelper.mkpath(Environment::APPDATA_DIR + APP_CACHE_DIR);
+        QLOG_DEBUG() << "== APPDATA" << Environment::APPDATA_DIR;
+
+        if (!dirHelper.exists(Environment::APPDATA_DIR + APP_CACHE_DIR))
+        {
+            dirHelper.mkpath(Environment::APPDATA_DIR + APP_CACHE_DIR);
+        }
+    }
+    else
+    {
+        QLOG_FATAL() << "Cannot cache directory";
     }
 
     // LIST LANGUAGES
@@ -54,10 +62,23 @@ Environment::Environment()
     }
     else
     {
-        QLOG_FATAL() << "Something went really wrong!";
+        QLOG_FATAL() << "Cannot read FOLDERID_Startup";
     }
 
     CoTaskMemFree(value);
+
+    // LOCATE EXPLORER.exe
+    char* value2 = getenv("windir");
+
+    if (value2 != NULL)
+    {
+        Environment::EXPLORER_PATH = QString::fromLatin1(value2);
+        Environment::EXPLORER_PATH.append("\\explorer.exe");
+    }
+    else
+    {
+        QLOG_FATAL() << "Something went really wrong!";
+    }
 }
 
 /**

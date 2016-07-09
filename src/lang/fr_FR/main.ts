@@ -43,6 +43,11 @@
         <translation>Général</translation>
     </message>
     <message>
+        <location filename="../../gui/configdialog.ui" line="102"/>
+        <source>File editor :</source>
+        <translation>Editeur d&apos;images :</translation>
+    </message>
+    <message>
         <location filename="../../gui/configdialog.ui" line="168"/>
         <source>Mode :</source>
         <translation>Mode :</translation>
@@ -58,9 +63,8 @@
         <translation>Afficher les notifications</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="102"/>
         <source>Open files with :</source>
-        <translation>Lecteur d&apos;images :</translation>
+        <translation type="vanished">Lecteur d&apos;images :</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="116"/>
@@ -565,18 +569,17 @@
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="35"/>
+        <location filename="../../gui/previewdialog.cpp" line="32"/>
         <source>Active files</source>
         <translation>Fichiers courant</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="116"/>
-        <location filename="../../gui/previewdialog.cpp" line="163"/>
+        <location filename="../../gui/previewdialog.cpp" line="125"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="163"/>
+        <location filename="../../gui/previewdialog.cpp" line="125"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>

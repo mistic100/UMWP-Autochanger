@@ -99,7 +99,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>Open files with :</string>
+          <string>File editor :</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

@@ -6,7 +6,6 @@
         <file>images/icons/add.png</file>
         <file>images/icons/add_color.png</file>
         <file>images/icons/bug.png</file>
-        <file>images/icons/bullet_cross.png</file>
         <file>images/icons/bullet_green.png</file>
         <file>images/icons/bullet_red.png</file>
         <file>images/icons/clear.png</file>
@@ -53,5 +52,7 @@
         <file>lang/changelog.css</file>
         <file>images/monitor-bg.png</file>
         <file>images/icons/bullet_yellow.png</file>
+        <file>images/icons/folder_go.png</file>
+        <file>images/icons/cross.png</file>
     </qresource>
 </RCC>
