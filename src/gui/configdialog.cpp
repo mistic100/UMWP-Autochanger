@@ -1,8 +1,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QToolTip>
 
 #include "configdialog.h"
 #include "ui_configdialog.h"
+#include "../umutils.h"
 
 
 /**
@@ -22,7 +24,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     setFixedSize(size());
     setWindowFlags(UM::SimpleDialogFlag);
 
-    ui->tabWidget->setCurrentIndex(0);
+    ui->tabs->setCurrentIndex(0);
 
     // checkboxes
     ui->optionMinimize->setChecked(         m_settings->param(UM::CONF::minimize).toBool());
@@ -43,6 +45,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->hotkeyShowHide->setHotkey(  m_settings->hotkey(UM::CONF::HOTKEY::showhide));
     ui->hotkeyStartPause->setHotkey(m_settings->hotkey(UM::CONF::HOTKEY::startpause));
     ui->hotkeyDelay->setHotkey(     m_settings->hotkey(UM::CONF::HOTKEY::delay));
+    ui->hotkeyLockUnlock->setHotkey(m_settings->hotkey(UM::CONF::HOTKEY::lockunlock));
 
     // delay
     QTime time = QTime(0, 0, 0).addSecs(m_settings->param(UM::CONF::delay).toInt());
@@ -90,6 +93,17 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
     ui->optionMode->setCurrentData(m_settings->param(UM::CONF::default_mode));
 
+    // lock
+    boolean lockEnabled = m_settings->param(UM::CONF::lock_enabled).toBool();
+    ui->optionLockPassword->setDisabled(!lockEnabled);
+    ui->currentPassword->setDisabled(   !lockEnabled);
+    ui->optionLockStartup->setDisabled( !lockEnabled);
+    ui->optionLockMinimize->setDisabled(!lockEnabled);
+
+    ui->optionLockEnabled->setChecked(  lockEnabled);
+    ui->optionLockStartup->setChecked(  m_settings->param(UM::CONF::lock_startup).toBool());
+    ui->optionLockMinimize->setChecked( m_settings->param(UM::CONF::lock_minimize).toBool());
+
     QLOG_TRACE() << "ConfigDialog openned";
 }
 
@@ -111,13 +125,46 @@ void ConfigDialog::done(int result)
     {
         QString error;
 
-        // validate hotkeys
-        QHash<QString, QHotKeyWidget*> requestHotkeys;
-        requestHotkeys.insert(tr("Refresh"), ui->hotkeyRefresh);
-        requestHotkeys.insert(tr("Show/Hide"), ui->hotkeyShowHide);
-        requestHotkeys.insert(tr("Start/Pause"), ui->hotkeyStartPause);
-        requestHotkeys.insert(tr("Change delay"), ui->hotkeyDelay);
+        bool lockWasEnabled = m_settings->param(UM::CONF::lock_enabled).toBool();
+        bool lockEnabled = ui->optionLockEnabled->isChecked();
+        QString lockCurrentHash = m_settings->param(UM::CONF::lock_password).toString();
+        QString lockCurrentPassword = ui->currentPassword->text();
+        QString lockPassword = ui->optionLockPassword->text();
 
+        QHash<QString, QHotKeyWidget*> requestHotkeys;
+        requestHotkeys.insert(tr("Refresh"),        ui->hotkeyRefresh);
+        requestHotkeys.insert(tr("Show/Hide"),      ui->hotkeyShowHide);
+        requestHotkeys.insert(tr("Start/Pause"),    ui->hotkeyStartPause);
+        requestHotkeys.insert(tr("Change delay"),   ui->hotkeyDelay);
+        requestHotkeys.insert(tr("Lock/Unlock"),    ui->hotkeyLockUnlock);
+
+        // validate delay
+        if (ui->optionDelay->time() < QTime(0, 0, 10))
+        {
+            error = tr("Delay can not be lower than 10 seconds");
+            ui->optionDelay->setTime(QTime(0, 0, 10));
+            ui->tabs->setCurrentTab("general");
+            goto afterCheck;
+        }
+
+        // validate lock
+        // just enabled, password required
+        if (lockEnabled && !lockWasEnabled && lockPassword.isEmpty()) {
+            error = tr("You must enter a password to activate the lock.");
+            ui->tabs->setCurrentTab("lock");
+            goto afterCheck;
+        }
+
+        // just disabled / new password, check current password
+        if (lockWasEnabled && !lockEnabled || lockWasEnabled && lockEnabled && !lockPassword.isEmpty()) {
+            if (lockCurrentPassword.isEmpty() || lockCurrentHash != UM::hash(lockCurrentPassword, UM::PasswordHash)) {
+                error = tr("Current lock password is invalid.");
+                ui->tabs->setCurrentTab("lock");
+                goto afterCheck;
+            }
+        }
+
+        // validate hotkeys
         for (QHash<QString, QHotKeyWidget*>::iterator it=requestHotkeys.begin(); it!=requestHotkeys.end(); ++it)
         {
             if (!it.value()->hotkey())
@@ -136,7 +183,7 @@ void ConfigDialog::done(int result)
                 {
                     error = tr("Hotkey for \"%1\" already used for \"%2\"")
                             .arg(it.key()).arg(it2.key());
-
+                    ui->tabs->setCurrentTab("hotkeys");
                     goto afterCheck;
                 }
             }
@@ -154,21 +201,13 @@ void ConfigDialog::done(int result)
                 {
                     error = tr("Hotkey for \"%1\" already used for set \"%2\"")
                             .arg(it.key()).arg(poSet->name());
-
+                    ui->tabs->setCurrentTab("hotkeys");
                     goto afterCheck;
                 }
             }
         }
+
         afterCheck:
-
-        // validate delay
-        QTime time = ui->optionDelay->time();
-        if (time < QTime(0, 0, 10))
-        {
-            error = tr("Delay can not be lower than 10 seconds");
-            ui->optionDelay->setTime(QTime(0, 0, 10));
-        }
-
         if (!error.isEmpty())
         {
             QLOG_ERROR() << error;
@@ -207,21 +246,37 @@ void ConfigDialog::save()
         opener = "";
     }
 
-    m_settings->setParam(UM::CONF::delay,                 delay);
-    m_settings->setParam(UM::CONF::language,              lang);
-    m_settings->setParam(UM::CONF::open_program,          opener);
-    m_settings->setParam(UM::CONF::default_mode,          ui->optionMode->currentData());
-    m_settings->setParam(UM::CONF::default_type,          ui->optionType->currentData());
-    m_settings->setParam(UM::CONF::default_style,         ui->optionStyle->currentData());
-    m_settings->setParam(UM::CONF::minimize,              ui->optionMinimize->isChecked());
-    m_settings->setParam(UM::CONF::check_updates,         ui->optionCheckUpdates->isChecked());
-    m_settings->setParam(UM::CONF::use_hotkeys,           ui->optionUseHotkeys->isChecked());
-    m_settings->setParam(UM::CONF::show_notifications,    ui->optionShowNotifications->isChecked());
+    bool lockEnabled = ui->optionLockEnabled->isChecked();
+    QString lockPassword = ui->optionLockPassword->text();
+
+    m_settings->setParam(UM::CONF::delay,               delay);
+    m_settings->setParam(UM::CONF::language,            lang);
+    m_settings->setParam(UM::CONF::open_program,        opener);
+    m_settings->setParam(UM::CONF::default_mode,        ui->optionMode->currentData());
+    m_settings->setParam(UM::CONF::default_type,        ui->optionType->currentData());
+    m_settings->setParam(UM::CONF::default_style,       ui->optionStyle->currentData());
+    m_settings->setParam(UM::CONF::minimize,            ui->optionMinimize->isChecked());
+    m_settings->setParam(UM::CONF::check_updates,       ui->optionCheckUpdates->isChecked());
+    m_settings->setParam(UM::CONF::use_hotkeys,         ui->optionUseHotkeys->isChecked());
+    m_settings->setParam(UM::CONF::show_notifications,  ui->optionShowNotifications->isChecked());
+
+    m_settings->setParam(UM::CONF::lock_enabled,        lockEnabled);
+    if (!lockEnabled)
+    {
+        m_settings->setParam(UM::CONF::lock_password,   "");
+    }
+    else if (!lockPassword.isEmpty())
+    {
+        m_settings->setParam(UM::CONF::lock_password,   UM::hash(lockPassword, UM::PasswordHash));
+    }
+    m_settings->setParam(UM::CONF::lock_startup,        ui->optionLockStartup->isChecked());
+    m_settings->setParam(UM::CONF::lock_minimize,       ui->optionLockMinimize->isChecked());
 
     m_settings->setHotkey(UM::CONF::HOTKEY::refresh,    ui->hotkeyRefresh->hotkey());
     m_settings->setHotkey(UM::CONF::HOTKEY::showhide,   ui->hotkeyShowHide->hotkey());
     m_settings->setHotkey(UM::CONF::HOTKEY::startpause, ui->hotkeyStartPause->hotkey());
     m_settings->setHotkey(UM::CONF::HOTKEY::delay,      ui->hotkeyDelay->hotkey());
+    m_settings->setHotkey(UM::CONF::HOTKEY::lockunlock, ui->hotkeyLockUnlock->hotkey());
 
     if (ui->optionAutostart->isChecked())
     {
@@ -247,6 +302,17 @@ void ConfigDialog::on_optionUseHotkeys_toggled(bool _checked)
     ui->hotkeyShowHide->setDisabled(!_checked);
     ui->hotkeyStartPause->setDisabled(!_checked);
     ui->hotkeyDelay->setDisabled(!_checked);
+}
+
+/**
+ * @brief Disable lock fields
+ * @param bool _checked
+ */
+void ConfigDialog::on_optionLockEnabled_toggled(bool _checked)
+{
+    ui->optionLockPassword->setDisabled(!_checked);
+    ui->optionLockStartup->setDisabled(!_checked);
+    ui->optionLockMinimize->setDisabled(!_checked);
 }
 
 /**
@@ -280,4 +346,12 @@ void ConfigDialog::on_optionOpenProgram_currentIndexChanged(int)
             }
         }
     }
+}
+
+/**
+ * @brief Click on help button
+ */
+void ConfigDialog::on_lockHelp_clicked()
+{
+    QToolTip::showText(QCursor::pos(), tr("This option allows to lock any changes in the app configuration until a password is entered.<br><b>Warning:</b> even though the password is hashed, the config file is not secure and can be manually modified."), this);
 }

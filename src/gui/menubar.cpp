@@ -11,13 +11,16 @@
  * @param Controller* _ctrl
  */
 MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
-    QToolBar((QWidget*) _parent)
+    QToolBar((QWidget*) _parent),
+    m_ctrl(_ctrl)
 {
     setMovable(false);
-    setIconSize(QSize(20, 20));
+    setIconSize(QSize(22, 16));
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
-    connect(_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
+    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
+    connect(m_ctrl, SIGNAL(lockToggled(bool)), this, SLOT(setLocked(bool)));
+    connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled()); });
 
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
@@ -41,6 +44,8 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     m_actionPause =           addAction(QIcon(":/images/icons/play_pause.png"), tr("Pause"));
     QAction* actionRefresh =  addAction(QIcon(":/images/icons/refresh.png"),    tr("Refresh"));
     QAction* actionHide =     addAction(QIcon(":/images/icons/hide.png"),       tr("Hide"));
+    m_actionLock =            addAction(QIcon(":/images/icons/lock.png"),       tr("Lock"));
+    m_actionUnlock =          addAction(QIcon(":/images/icons/unlock.png"),     tr("Unlock"));
 
                               addMenu(QIcon(":/images/icons/config.png"), tr("Configuration"), menuConfig);
                               addMenu(QIcon(":/images/icons/help.png"),   tr("Help"), menuHelp);
@@ -52,8 +57,10 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionQuit,    SIGNAL(triggered()), _parent, SLOT(quit()));
     connect(actionAdd,     SIGNAL(triggered()), _parent, SLOT(addSet()));
     connect(actionHide,    SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
-    connect(actionRefresh, SIGNAL(triggered()), _ctrl,   SLOT(update()));
-    connect(m_actionPause, SIGNAL(triggered()), _ctrl,   SLOT(startPause()));
+    connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
+    connect(m_actionPause, SIGNAL(triggered()), m_ctrl,  SLOT(startPause()));
+    connect(m_actionLock,  SIGNAL(triggered()), m_ctrl,  SLOT(lock()));
+    connect(m_actionUnlock, SIGNAL(triggered()), _parent, SLOT(openUnlockDialog()));
 
     connect(actionOptions, SIGNAL(triggered()), _parent, SLOT(openConfigDialog()));
     connect(actionScreens, SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
@@ -68,6 +75,9 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionHelp,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_DOCUMENTATION_URL)); });
     connect(actionIssues, &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_ISSUES_URL)); });
     connect(actionHome,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_HOMEPAGE)); });
+
+    setStartPause(true);
+    setLockEnabled(m_ctrl->lockEnabled());
 }
 
 /**
@@ -85,6 +95,31 @@ void MenuBar::setStartPause(bool _start)
     {
         m_pauseBlinker->start();
         m_actionPause->setText(tr("Start"));
+    }
+}
+
+/**
+ * @brief Update visiblity of lock buttons
+ * @param bool _locked
+ */
+void MenuBar::setLocked(bool _locked)
+{
+    m_actionLock->setVisible(!_locked);
+    m_actionUnlock->setVisible(_locked);
+}
+
+/**
+ * @brief Update visiblity of lock buttons
+ * @param bool _lockEnabled
+ */
+void MenuBar::setLockEnabled(bool _lockEnabled)
+{
+    m_actionLock->setVisible(_lockEnabled);
+    m_actionUnlock->setVisible(_lockEnabled);
+
+    if (_lockEnabled)
+    {
+        setLocked(m_ctrl->locked());
     }
 }
 

@@ -54,5 +54,9 @@
         <file>images/icons/bullet_yellow.png</file>
         <file>images/icons/folder_go.png</file>
         <file>images/icons/cross.png</file>
+        <file>images/icons/lock.png</file>
+        <file>images/icons/unlock.png</file>
+        <file>images/icon_lock.png</file>
+        <file>images/icon_lock_pause.png</file>
     </qresource>
 </RCC>

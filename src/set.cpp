@@ -2,6 +2,7 @@
 
 #include "set.h"
 #include "environment.h"
+#include "umutils.h"
 
 
 static const QStringList FILES_FILTER = QStringList()<<"*.jpeg"<<"*.jpg"<<"*.bmp"<<"*.png"<<"*.gif";
@@ -21,7 +22,7 @@ Set::Set(const QString &_path, const QString &_name)
         m_path.append('\\');
     }
 
-    m_uuid = QString(QCryptographicHash::hash(m_path.toUtf8(), QCryptographicHash::Md5).toHex());
+    m_uuid = UM::hash(m_path, QCryptographicHash::Md5);
 }
 
 /**

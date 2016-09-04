@@ -115,7 +115,14 @@ QList<Set*> MainList::getSelectedSets() const
  */
 void MainList::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
-    m_ctrl->moveSet(from, to);
+    if (!((MainWindow*) parent())->openUnlockDialog())
+    {
+        insertItem(from, takeItem(to)); // revert move
+    }
+    else
+    {
+        m_ctrl->moveSet(from, to);
+    }
 }
 
 /**

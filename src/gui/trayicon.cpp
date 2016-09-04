@@ -14,6 +14,8 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
 {
     connect(_parent, SIGNAL(showHidden(bool)), this, SLOT(onWindowShown(bool)));
     connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(onStartPause(bool)));
+    connect(m_ctrl, SIGNAL(lockToggled(bool)), this, SLOT(setLocked(bool)));
+    connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled()); });
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged()));
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
@@ -22,6 +24,8 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     m_actionPause =          menu->addAction(QIcon(":/images/icons/play_pause.png"), tr("Pause"));
     QAction* actionRefresh = menu->addAction(QIcon(":/images/icons/refresh.png"),    tr("Refresh"));
     m_actionHide =           menu->addAction(QIcon(":/images/icons/hide.png"),       tr("Hide"));
+    m_actionLock =           menu->addAction(QIcon(":/images/icons/lock.png"),       tr("Lock"));
+    m_actionUnlock =         menu->addAction(QIcon(":/images/icons/lock.png"),       tr("Unlock"));
     m_quickMenu =            menu->addMenu(QIcon(":/images/icons/quick.png"),        tr("Quick switch"));
                              menu->addSeparator();
     QAction* actionQuit =    menu->addAction(QIcon(":/images/icons/quit.png"),       tr("Quit"));
@@ -30,12 +34,38 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     connect(m_actionHide,  SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
     connect(m_actionPause, SIGNAL(triggered()), m_ctrl,  SLOT(startPause()));
     connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
+    connect(m_actionLock,  SIGNAL(triggered()), m_ctrl,  SLOT(lock()));
+    connect(m_actionUnlock,SIGNAL(triggered()), _parent, SLOT(openUnlockDialog()));
 
-    setIcon(QIcon(":/images/icon.png"));
     setToolTip(APP_NAME);
     setContextMenu(menu);
 
     onListChanged();
+    setLockEnabled(m_ctrl->lockEnabled());
+    updateIcon();
+}
+
+/**
+ * @brief Update the tray icon
+ */
+void TrayIcon::updateIcon()
+{
+    QString icon = ":/images/icon.png";
+
+    if (m_ctrl->locked() && m_ctrl->paused())
+    {
+        icon = ":/images/icon_lock_pause.png";
+    }
+    else if (m_ctrl->paused())
+    {
+        icon = ":/images/icon_pause.png";
+    }
+    else if (m_ctrl->locked())
+    {
+        icon = ":/images/icon_lock.png";
+    }
+
+    setIcon(QIcon(icon));
 }
 
 /**
@@ -63,12 +93,39 @@ void TrayIcon::onStartPause(bool _start)
     if (_start)
     {
         m_actionPause->setText(tr("Pause"));
-        setIcon(QIcon(":/images/icon.png"));
     }
     else
     {
         m_actionPause->setText(tr("Start"));
-        setIcon(QIcon(":/images/icon_pause.png"));
+    }
+
+    updateIcon();
+}
+
+/**
+ * @brief Update visiblity of lock buttons
+ * @param bool _locked
+ */
+void TrayIcon::setLocked(bool _locked)
+{
+    m_actionLock->setVisible(!_locked);
+    m_actionUnlock->setVisible(_locked);
+
+    updateIcon();
+}
+
+/**
+ * @brief Update visiblity of lock buttons
+ * @param bool _lockEnabled
+ */
+void TrayIcon::setLockEnabled(bool _lockEnabled)
+{
+    m_actionLock->setVisible(_lockEnabled);
+    m_actionUnlock->setVisible(_lockEnabled);
+
+    if (_lockEnabled)
+    {
+        setLocked(m_ctrl->locked());
     }
 }
 
@@ -86,7 +143,11 @@ void TrayIcon::onListChanged()
         QAction* action = m_quickMenu->addAction(set->name());
         action->setData(i);
 
-        if (set->isActive())
+        if (set == m_ctrl->currentSet())
+        {
+            action->setIcon(QIcon(":/images/icons/bullet_yellow.png"));
+        }
+        else if (set->isActive())
         {
             action->setIcon(QIcon(":/images/icons/bullet_green.png"));
         }

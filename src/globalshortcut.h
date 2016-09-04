@@ -18,7 +18,8 @@ public:
         STARTPAUSE,
         REFRESH,
         SHOWHIDE,
-        DELAY
+        DELAY,
+        LOCKUNLOCK
     };
 
 private:

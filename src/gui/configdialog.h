@@ -36,7 +36,9 @@ protected:
 
 private slots:
     void on_optionUseHotkeys_toggled(bool _checked);
+    void on_optionLockEnabled_toggled(bool _checked);
     void on_optionOpenProgram_currentIndexChanged(int);
+    void on_lockHelp_clicked();
 };
 
 #endif // CONFIGDIALOG_H

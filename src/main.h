@@ -76,6 +76,9 @@ namespace UM {
     // flags for dialog without help button
     const Qt::WindowFlags SimpleDialogFlag = Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint;
 
+    // algorythm used for password hash
+    const QCryptographicHash::Algorithm PasswordHash = QCryptographicHash::Sha512;
+
     // config keys
     namespace CONF {
         const QString window_width = "window_width";
@@ -94,12 +97,17 @@ namespace UM {
         const QString default_style = "default_style";
         const QString changelog_shown = "changelog_shown";
         const QString open_program = "open_program";
+        const QString lock_enabled = "lock_enabled";
+        const QString lock_password = "lock_password";
+        const QString lock_startup = "lock_startup";
+        const QString lock_minimize = "lock_minimize";
 
         namespace HOTKEY {
             const QString refresh = "refresh";
             const QString startpause = "startpause";
             const QString showhide = "showhide";
             const QString delay = "delay";
+            const QString lockunlock = "lockunlock";
         }
     }
 }

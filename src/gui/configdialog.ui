@@ -14,17 +14,10 @@
    <string>Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_1">
-   <item row="1" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" colspan="2">
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidgetExt" name="tabs">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="general">
       <attribute name="title">
@@ -111,6 +104,115 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="lock">
+      <attribute name="title">
+       <string>Lock</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Password :</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Current password :</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QCheckBox" name="optionLockEnabled">
+           <property name="text">
+            <string>Enable lock</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="lockHelp">
+           <property name="cursor">
+            <cursorShape>WhatsThisCursor</cursorShape>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../UMWP_Autochanger.qrc">
+             <normaloff>:/images/icons/help_color.png</normaloff>:/images/icons/help_color.png</iconset>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QLineEdit" name="currentPassword">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="3">
+        <widget class="QCheckBox" name="optionLockMinimize">
+         <property name="text">
+          <string>Lock on minimize</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <widget class="QCheckBox" name="optionLockStartup">
+         <property name="text">
+          <string>Lock at startup</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLineEdit" name="optionLockPassword">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="defaults">
       <attribute name="title">
        <string>Defaults</string>
@@ -189,14 +291,17 @@
        <string>Hotkeys</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="1">
-        <widget class="QHotKeyWidget" name="hotkeyRefresh" native="true"/>
+       <item row="5" column="1">
+        <widget class="QHotKeyWidget" name="hotkeyDelay" native="true"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QHotKeyWidget" name="hotkeyShowHide" native="true"/>
        </item>
        <item row="3" column="1">
         <widget class="QHotKeyWidget" name="hotkeyStartPause" native="true"/>
        </item>
-       <item row="2" column="1">
-        <widget class="QHotKeyWidget" name="hotkeyShowHide" native="true"/>
+       <item row="1" column="1">
+        <widget class="QHotKeyWidget" name="hotkeyRefresh" native="true"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_4">
@@ -235,7 +340,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -248,7 +353,7 @@
          </property>
         </spacer>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>Change delay :</string>
@@ -258,8 +363,18 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>Lock/Unlock :</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="1">
-        <widget class="QHotKeyWidget" name="hotkeyDelay" native="true"/>
+        <widget class="QHotKeyWidget" name="hotkeyLockUnlock" native="true"/>
        </item>
       </layout>
       <zorder>optionUseHotkeys</zorder>
@@ -272,7 +387,16 @@
       <zorder>verticalSpacer</zorder>
       <zorder>label_10</zorder>
       <zorder>hotkeyDelay</zorder>
+      <zorder>label_14</zorder>
+      <zorder>hotkeyLockUnlock</zorder>
      </widget>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
@@ -289,8 +413,16 @@
    <extends>QComboBox</extends>
    <header>../ext/qcomboboxext.h</header>
   </customwidget>
+  <customwidget>
+   <class>QTabWidgetExt</class>
+   <extends>QTabWidget</extends>
+   <header location="global">../ext/qtabwidgetext.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../UMWP_Autochanger.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

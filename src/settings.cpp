@@ -25,11 +25,16 @@ Settings::Settings(Environment* _enviro) :
     m_options[UM::CONF::default_style] = UM::IM_STRETCH_PROP;
     m_options[UM::CONF::changelog_shown] = "0.0.0";
     m_options[UM::CONF::open_program] = "";
+    m_options[UM::CONF::lock_enabled] = false;
+    m_options[UM::CONF::lock_password] = "";
+    m_options[UM::CONF::lock_startup] = true;
+    m_options[UM::CONF::lock_minimize] = true;
 
     m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
     m_hotkeys[UM::CONF::HOTKEY::startpause] = 0;
     m_hotkeys[UM::CONF::HOTKEY::showhide] = 0;
     m_hotkeys[UM::CONF::HOTKEY::delay] = 0;
+    m_hotkeys[UM::CONF::HOTKEY::lockunlock] = 0;
 }
 
 /**

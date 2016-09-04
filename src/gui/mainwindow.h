@@ -65,11 +65,13 @@ public slots:
     void openExportDialog();
     void openImportDialog();
     void openDelayDialog();
+    boolean openUnlockDialog();
 
     void onNewVersion();
     void openNewVersionDialog();
 
 signals:
+    void settingsChanged();
     void showHidden(bool);
 };
 

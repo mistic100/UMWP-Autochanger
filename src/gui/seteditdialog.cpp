@@ -189,5 +189,5 @@ void SetEditDialog::on_styleConfig_clicked()
  */
 void SetEditDialog::on_freqHelp_clicked()
 {
-    QToolTip::showText(QCursor::pos(), tr("The frequency is the chance of this set to be randomly selected among others.<br><u>Note:</u> at equal frequency, a set with more images has higher chance to be selected."), this);
+    QToolTip::showText(QCursor::pos(), tr("The frequency is the chance of this set to be randomly selected among others.<br><b>Note:</b> at equal frequency, a set with more images has higher chance to be selected."), this);
 }

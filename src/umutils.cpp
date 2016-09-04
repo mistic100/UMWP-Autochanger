@@ -1,3 +1,5 @@
+#include <QCryptographicHash>
+
 #include "umutils.h"
 
 /**
@@ -50,4 +52,15 @@ QList<QLine> UM::rectBorders(const QRect &_rect)
             <<QLine(_rect.topRight(), _rect.bottomRight())
             <<QLine(_rect.bottomLeft(), _rect.bottomRight())
             <<QLine(_rect.topLeft(), _rect.bottomLeft());
+}
+
+/**
+ * @brief Hash a string
+ * @param string _value
+ * @param int _algorythm
+ * @return string
+ */
+QString UM::hash(const QString &_value, QCryptographicHash::Algorithm _algorythm)
+{
+    return QString(QCryptographicHash::hash(_value.toUtf8(), _algorythm).toHex());
 }

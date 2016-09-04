@@ -16,7 +16,7 @@ extern Q_CORE_EXPORT QBasicAtomicInt qt_qhash_seed;
 int main(int argc, char *argv[])
 {
     // ensure only one running instance
-    HANDLE hMutexHandle = CreateMutex(NULL, TRUE, L"com.strangeplanet.umwp_autochanger");
+    HANDLE hMutexHandle = CreateMutex(NULL, TRUE, APP_MUTEX);
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
         return 0;

@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QFile>
 #include <QFileDialog>
+#include <QInputDialog>
 
 #include "mainwindow.h"
 #include "mainlist.h"
@@ -13,6 +14,7 @@
 #include "changelogdialog.h"
 #include "seteditdialog.h"
 #include "delaydialog.h"
+#include "../umutils.h"
 
 
 /**
@@ -43,6 +45,7 @@ MainWindow::MainWindow(Controller* _ctrl) :
     m_trayIcon->show();
 
     connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(onNewVersion()));
+    connect(m_ctrl, SIGNAL(requestUnlock()), this, SLOT(openUnlockDialog()));
 
     init();
 }
@@ -141,6 +144,7 @@ void MainWindow::defineHotkeys()
         otherHotkeys.insert(GlobalShortcut::STARTPAUSE, m_settings->hotkey(UM::CONF::HOTKEY::startpause));
         otherHotkeys.insert(GlobalShortcut::SHOWHIDE,   m_settings->hotkey(UM::CONF::HOTKEY::showhide));
         otherHotkeys.insert(GlobalShortcut::DELAY,      m_settings->hotkey(UM::CONF::HOTKEY::delay));
+        otherHotkeys.insert(GlobalShortcut::LOCKUNLOCK, m_settings->hotkey(UM::CONF::HOTKEY::lockunlock));
 
         for (QHash<GlobalShortcut::Type, int>::Iterator it=otherHotkeys.begin(); it!=otherHotkeys.end(); ++it)
         {
@@ -170,6 +174,11 @@ void MainWindow::toggleWindow(bool _forceHide)
         }
 
         hide();
+
+        if (m_ctrl->lockEnabled() && m_settings->param(UM::CONF::lock_minimize).toBool())
+        {
+            m_ctrl->lock();
+        }
 
         emit showHidden(false);
 
@@ -203,6 +212,11 @@ void MainWindow::toggleWindow(bool _forceHide)
  */
 void MainWindow::addSet()
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     QString dirname = QFileDialog::getExistingDirectory(this, tr("Add set"),
                                                         m_settings->param(UM::CONF::last_dir).toString());
 
@@ -217,6 +231,11 @@ void MainWindow::addSet()
  */
 void MainWindow::editSets(const QList<Set*> _sets)
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     SetEditDialog dialog(this, m_ctrl, _sets);
 
     // need to unbind hotkeys to allow hotkeys input
@@ -233,6 +252,11 @@ void MainWindow::editSets(const QList<Set*> _sets)
  */
 void MainWindow::deleteSets(const QList<Set*> _sets)
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
                                    QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
 
@@ -247,6 +271,11 @@ void MainWindow::deleteSets(const QList<Set*> _sets)
  */
 void MainWindow::openSets(const QList<Set*> _sets)
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     foreach (const Set* set, _sets)
     {
         QDesktopServices::openUrl(QUrl("file:///" + set->path()));
@@ -269,6 +298,11 @@ void MainWindow::clearCache()
  */
 void MainWindow::openConfigDialog()
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     ConfigDialog dialog(this, m_ctrl);
 
     // need to unbind hotkeys to allow hotkeys input
@@ -276,6 +310,7 @@ void MainWindow::openConfigDialog()
     if (dialog.exec())
     {
         dialog.save();
+        emit settingsChanged();
         m_ctrl->update();
     }
     defineHotkeys();
@@ -286,6 +321,11 @@ void MainWindow::openConfigDialog()
  */
 void MainWindow::openScreensDialog()
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     ScreensDialog dialog(this, m_ctrl);
 
     if (dialog.exec())
@@ -300,6 +340,11 @@ void MainWindow::openScreensDialog()
  */
 void MainWindow::openExportDialog()
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     QString filename = QFileDialog::getSaveFileName(this, tr("Export configuration file"),
                                                     QDir::homePath() + QDir::separator() + "umwp_settings.xml",
                                                     tr("XML files (*.xml)"));
@@ -318,6 +363,11 @@ void MainWindow::openExportDialog()
  */
 void MainWindow::openImportDialog()
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     QString filename = QFileDialog::getOpenFileName(this, tr("Import configuration file"),
                                                     QDir::homePath(),
                                                     tr("XML files (*.xml)"));
@@ -348,6 +398,11 @@ void MainWindow::openChangelogDialog()
  */
 void MainWindow::openDelayDialog()
 {
+    if (m_ctrl->locked())
+    {
+        return;
+    }
+
     DelayDialog* existingDialog = findChild<DelayDialog*>();
 
     if (existingDialog != NULL)
@@ -363,6 +418,40 @@ void MainWindow::openDelayDialog()
             dialog.save();
             m_ctrl->update();
         }
+    }
+}
+
+/**
+ * @brief Open unlock dialog
+ */
+boolean MainWindow::openUnlockDialog()
+{
+    if (!m_ctrl->lockEnabled() || !m_ctrl->locked())
+    {
+        return true;
+    }
+
+    QLOG_TRACE() << "Password dialog openned";
+
+    bool ok;
+    QString password = QInputDialog::getText(this, tr("Unlock"), tr("Password"), QLineEdit::Password, "", &ok);
+
+    if (!ok)
+    {
+        QLOG_INFO()<<"Password cancelled";
+        return false;
+    }
+
+    if (m_settings->param(UM::CONF::lock_password) == UM::hash(password, UM::PasswordHash))
+    {
+        m_ctrl->unlock();
+        return true;
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Invalid password"), QMessageBox::Ok);
+        QLOG_ERROR()<<"Invalid password";
+        return false;
     }
 }
 
@@ -417,6 +506,8 @@ void MainWindow::onHotkey()
 
     QLOG_DEBUG() << "Hotkey: " << QString::number(shortcut->type());
 
+    boolean showNotification = !isVisible() && m_settings->param(UM::CONF::show_notifications).toBool();
+
     switch (shortcut->type())
     {
     case GlobalShortcut::REFRESH:
@@ -431,11 +522,41 @@ void MainWindow::onHotkey()
         openDelayDialog();
         break;
 
+    case GlobalShortcut::LOCKUNLOCK:
+    {
+        if (!m_ctrl->lockEnabled())
+        {
+            if (showNotification)
+            {
+                m_trayIcon->showMessage(APP_NAME, tr("The lock is not configured"), QSystemTrayIcon::Critical);
+            }
+            break;
+        }
+
+        if (m_ctrl->locked())
+        {
+            if (openUnlockDialog() && showNotification)
+            {
+                m_trayIcon->showMessage(APP_NAME, tr("Unlocked"));
+            }
+        }
+        else
+        {
+            m_ctrl->lock();
+
+            if (showNotification)
+            {
+                m_trayIcon->showMessage(APP_NAME, tr("Locked"));
+            }
+        }
+        break;
+    }
+
     case GlobalShortcut::STARTPAUSE:
     {
         bool running = m_ctrl->startPause();
 
-        if (!isVisible() && m_settings->param(UM::CONF::show_notifications).toBool())
+        if (showNotification)
         {
             if (!running)
             {
@@ -451,9 +572,16 @@ void MainWindow::onHotkey()
 
     case GlobalShortcut::SETS:
     {
+        boolean locked = m_ctrl->lockEnabled() && m_ctrl->locked();
+
+        if (!openUnlockDialog())
+        {
+            return;
+        }
+
         m_ctrl->setActiveSets(shortcut->sets());
 
-        if (!isVisible() && m_settings->param(UM::CONF::show_notifications).toBool())
+        if (showNotification)
         {
             QString setsName;
             for (int i=0, l=m_settings->nbActiveSets(); i<l; i++)
@@ -465,6 +593,11 @@ void MainWindow::onHotkey()
             }
 
             m_trayIcon->showMessage(APP_NAME, tr("Current sets : %1").arg(setsName));
+        }
+
+        if (locked)
+        {
+            m_ctrl->lock();
         }
         break;
     }

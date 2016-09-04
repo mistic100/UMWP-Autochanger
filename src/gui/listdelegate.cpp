@@ -118,17 +118,13 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     {
         icon = QIcon(":/images/icons/bullet_yellow.png");
     }
+    else if (set->isActive())
+    {
+        icon = QIcon(":/images/icons/bullet_green.png");
+    }
     else
     {
-        switch (set->isActive())
-        {
-        case true:
-            icon = QIcon(":/images/icons/bullet_green.png");
-            break;
-        case false:
-            icon = QIcon(":/images/icons/bullet_red.png");
-            break;
-        }
+        icon = QIcon(":/images/icons/bullet_red.png");
     }
 
     rect = baseRect.adjusted(leftMargin, 0, 0, 0);

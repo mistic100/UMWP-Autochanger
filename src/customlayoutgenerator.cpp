@@ -89,7 +89,7 @@ QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
         poolSurface+= block.width() * block.height();
 
     // compute how many times each item must be duplicated in the pool
-    // in order to fill teh whole surface
+    // in order to fill the whole surface
     int nbPool = poolSurface==0 ? 0 : qCeil(totalSurface / poolSurface);
 
     // actually duplicate the items

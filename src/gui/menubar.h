@@ -20,6 +20,10 @@ class MenuBar : public QToolBar
     Q_OBJECT
 
 private:
+    Controller* m_ctrl;
+
+    QAction* m_actionLock;
+    QAction* m_actionUnlock;
     QAction* m_actionPause;
     QWidgetBlinker* m_pauseBlinker;
 
@@ -31,6 +35,8 @@ private:
 
 private slots:
     void setStartPause(bool _start);
+    void setLocked(bool _locked);
+    void setLockEnabled(bool _lockEnabled);
 };
 
 #endif // MENUBAR_H
