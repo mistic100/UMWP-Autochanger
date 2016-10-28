@@ -396,28 +396,28 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="659"/>
+        <location filename="../../gui/mainwindow.cpp" line="664"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="371"/>
+        <location filename="../../gui/mainwindow.cpp" line="376"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="348"/>
+        <location filename="../../gui/mainwindow.cpp" line="353"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="470"/>
+        <location filename="../../gui/mainwindow.cpp" line="475"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="350"/>
-        <location filename="../../gui/mainwindow.cpp" line="373"/>
+        <location filename="../../gui/mainwindow.cpp" line="355"/>
+        <location filename="../../gui/mainwindow.cpp" line="378"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
@@ -427,90 +427,90 @@
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="260"/>
+        <location filename="../../gui/mainwindow.cpp" line="265"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="260"/>
+        <location filename="../../gui/mainwindow.cpp" line="265"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="383"/>
-        <location filename="../../gui/mainwindow.cpp" line="452"/>
-        <location filename="../../gui/mainwindow.cpp" line="491"/>
+        <location filename="../../gui/mainwindow.cpp" line="388"/>
+        <location filename="../../gui/mainwindow.cpp" line="457"/>
+        <location filename="../../gui/mainwindow.cpp" line="496"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="383"/>
+        <location filename="../../gui/mainwindow.cpp" line="388"/>
         <source>Invalid settings file</source>
         <translation>Fichier de configuration invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="437"/>
+        <location filename="../../gui/mainwindow.cpp" line="442"/>
         <source>Unlock</source>
         <translation>Dévérouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="437"/>
+        <location filename="../../gui/mainwindow.cpp" line="442"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="452"/>
+        <location filename="../../gui/mainwindow.cpp" line="457"/>
         <source>Invalid password</source>
-        <translation type="unfinished">Mot de passe invalide</translation>
+        <translation>Mot de passe invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="474"/>
+        <location filename="../../gui/mainwindow.cpp" line="479"/>
         <source>Changelog</source>
         <translation>Suivi de versions</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="491"/>
+        <location filename="../../gui/mainwindow.cpp" line="496"/>
         <source>No active files</source>
         <translation>Aucun fichier actif</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="531"/>
+        <location filename="../../gui/mainwindow.cpp" line="536"/>
         <source>The lock is not configured</source>
         <translation>Le vérouillage n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="540"/>
+        <location filename="../../gui/mainwindow.cpp" line="545"/>
         <source>Unlocked</source>
         <translation>Dévérouillé</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="549"/>
+        <location filename="../../gui/mainwindow.cpp" line="554"/>
         <source>Locked</source>
         <translation>Vérouillé</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="563"/>
+        <location filename="../../gui/mainwindow.cpp" line="568"/>
         <source>Paused</source>
         <translation>Mis en pause</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="567"/>
+        <location filename="../../gui/mainwindow.cpp" line="572"/>
         <source>Running</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="595"/>
+        <location filename="../../gui/mainwindow.cpp" line="600"/>
         <source>Current sets : %1</source>
         <translation>Sets actuels : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="615"/>
-        <location filename="../../gui/mainwindow.cpp" line="626"/>
+        <location filename="../../gui/mainwindow.cpp" line="620"/>
+        <location filename="../../gui/mainwindow.cpp" line="631"/>
         <source>A new version is available : %1</source>
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="663"/>
+        <location filename="../../gui/mainwindow.cpp" line="668"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Fermer et ne plus afficher ce message</translation>
     </message>
@@ -520,7 +520,7 @@
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="660"/>
+        <location filename="../../gui/mainwindow.cpp" line="665"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
     </message>
@@ -771,37 +771,42 @@
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="29"/>
+        <location filename="../../gui/seteditdialog.ui" line="149"/>
         <source>Frequency :</source>
         <translation>Fréquence :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="72"/>
+        <location filename="../../gui/seteditdialog.ui" line="106"/>
         <source>Name :</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="82"/>
+        <location filename="../../gui/seteditdialog.ui" line="96"/>
         <source>Hotkey :</source>
         <translation>Raccourci :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="92"/>
+        <location filename="../../gui/seteditdialog.ui" line="86"/>
         <source>Mode :</source>
         <translation>Mode :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="143"/>
+        <location filename="../../gui/seteditdialog.ui" line="48"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="52"/>
+        <location filename="../../gui/seteditdialog.ui" line="126"/>
         <source>Type :</source>
         <translation>Type :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="62"/>
+        <location filename="../../gui/seteditdialog.ui" line="182"/>
+        <source>Per folder</source>
+        <translation>Par dossier</translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.ui" line="116"/>
         <source>Style :</source>
         <translation>Style :</translation>
     </message>
@@ -856,43 +861,48 @@
         <translation>Séquentiel</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="64"/>
+        <location filename="../../gui/seteditdialog.cpp" line="65"/>
         <source>[multiple sets]</source>
         <translation>[plusieurs sets]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="107"/>
+        <location filename="../../gui/seteditdialog.cpp" line="112"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="111"/>
+        <location filename="../../gui/seteditdialog.cpp" line="116"/>
         <source>Start/Pause</source>
         <translation>Démarrer/Pause</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="115"/>
+        <location filename="../../gui/seteditdialog.cpp" line="120"/>
         <source>Show/Hide</source>
         <translation>Afficher/Masquer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="127"/>
+        <location filename="../../gui/seteditdialog.cpp" line="132"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="192"/>
+        <location filename="../../gui/seteditdialog.cpp" line="204"/>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation>La fréquence est la chance qu&apos;un set soit sélectionné aléatoirement.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; à fréquence égale, un set avec plus d&apos;images a plus de chances d&apos;être sélectionné.</translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.cpp" line="209"/>
+        <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode and with one wallpaper per monitor or with a custom layout.</source>
+        <translation>Quand cette case est cochée, les images sont choisies dans un des sous-dossiers du set plutôt que dans tout le set.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; cette option n&apos;est disponible qu&apos;en mode aléatoire et avec une image par écran ou avec un style personnalisé.</translation>
     </message>
     <message>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;u&gt;Note:&lt;/u&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation type="vanished">La fréquence est la chance qu&apos;un set soit sélectionné aléatoirement.&lt;br&gt;&lt;u&gt;Note :&lt;/u&gt; à fréquence égale, un set avec plus d&apos;images a plus de chances d&apos;être sélectionné.</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="107"/>
-        <location filename="../../gui/seteditdialog.cpp" line="111"/>
-        <location filename="../../gui/seteditdialog.cpp" line="115"/>
+        <location filename="../../gui/seteditdialog.cpp" line="112"/>
+        <location filename="../../gui/seteditdialog.cpp" line="116"/>
+        <location filename="../../gui/seteditdialog.cpp" line="120"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation>Raccourci déjà utilisé pour &quot;%1&quot;</translation>
     </message>
@@ -900,12 +910,12 @@
         <location filename="../../gui/seteditdialog.cpp" line="32"/>
         <location filename="../../gui/seteditdialog.cpp" line="33"/>
         <location filename="../../gui/seteditdialog.cpp" line="34"/>
-        <location filename="../../gui/seteditdialog.cpp" line="72"/>
+        <location filename="../../gui/seteditdialog.cpp" line="73"/>
         <source>[keep]</source>
         <translation>[conserver]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="121"/>
+        <location filename="../../gui/seteditdialog.cpp" line="126"/>
         <source>Name can not be empty</source>
         <translation>Le nom ne peut être vide</translation>
     </message>

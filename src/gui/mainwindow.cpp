@@ -222,7 +222,12 @@ void MainWindow::addSet()
 
     if (!dirname.isEmpty())
     {
-        m_ctrl->addSet(dirname);
+        Set* set = m_ctrl->addSet(dirname);
+
+        if (set != NULL)
+        {
+            this->editSets(QList<Set*>() << set);
+        }
     }
 }
 

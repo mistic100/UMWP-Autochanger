@@ -62,7 +62,7 @@ void MainList::onListChanged(bool _resetSel)
 
         if (!m_settings->set(i)->isValid())
         {
-            if (m_settings->set(i)->count() == 0)
+            if (m_settings->set(i)->nbFiles() == 0)
             {
                 item->setToolTip(tr("This set does not have any image files."));
             }

@@ -24,6 +24,7 @@ public:
      */
     struct Result {
         Set* set;
+        QString folder;
         QVector<QString> files;
     };
 
@@ -42,18 +43,19 @@ public:
 
 private:
     Set* getRandomSet();
+    QString getRandomFolder(Set* _set);
 
     QRect getDesktopEnabledRect();
 
     // source files getters
-    QVector<QString> getFiles(Set* _set);
-    QVector<QString> getFiles(Set* _set, int _nb);
+    QVector<QString> getFiles(Result *_context);
+    QVector<QString> getFiles(Result *_context, int _nb);
     QString getNextFile(Set* _set);
-    QString getRandomFile(Set* _set, const QVector<QString> &_files);
+    QString getRandomFile(Result *_context, const QVector<QString> &_files);
 
     // custom generation
-    QVector<QString> getCustomFiles(Set* _set, QVector<QString> &_srcFiles);
-    QString generateCustomFile(int _idx, Set* _set, QVector<QString> &_srcFiles);
+    QVector<QString> getCustomFiles(Result *_context);
+    QString generateCustomFile(int _idx, Result *_context);
 
     // standard generation
     QString adaptFileToMonitor(const QString &_file, int _idx, Set* _set);

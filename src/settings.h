@@ -30,8 +30,6 @@ public:
     bool save(QString _filename = "");
     bool load(QString _filename = "");
 
-    void updateSets();
-
     // getters
     const QVariant  param(const QString &_key) const  { return m_options.value(_key); }
     const int       hotkey(const QString &_key) const { return m_hotkeys.value(_key); }

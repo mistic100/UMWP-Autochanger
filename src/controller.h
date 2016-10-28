@@ -56,7 +56,7 @@ public slots:
 
     void editSets(const QList<Set*> &_sets, const Set &_data);
     void moveSet(int _from, int _to);
-    void addSet(const QString &_dirname);
+    Set* addSet(const QString &_dirname);
     bool loadConfig(const QString &_file);
     void setActiveSets(const QList<int> &_idx);
     void deleteSets(const QList<Set*> &_sets);

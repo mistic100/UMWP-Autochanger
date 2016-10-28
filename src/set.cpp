@@ -56,6 +56,12 @@ Set::Set(const QDomElement* _dom)
         m_frequency = _dom->attribute("frequency").toDouble();
     }
 
+    // added in 2.1.1
+    if (_dom->hasAttribute("perFolder"))
+    {
+        m_perFolder = _dom->attribute("perFolder").toInt();
+    }
+
     // before 1.4 format
     if (_dom->hasAttribute("hotkey_mod"))
     {
@@ -133,6 +139,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
     _writer->writeAttribute("active", QString::number(m_active));
     _writer->writeAttribute("hotkey", QString::number(m_hotkey));
     _writer->writeAttribute("frequency", QString::number(m_frequency));
+    _writer->writeAttribute("perFolder", QString::number(m_perFolder));
 
     _writer->writeTextElement("path", m_path);
 
@@ -174,8 +181,8 @@ void Set::init()
  */
 const QString Set::fullName() const
 {
-    return m_name+" ("+QString::number(count())+")";
-    }
+    return m_name+" ("+QString::number(nbFiles())+")";
+}
 
 /**
  * @brief Get the hotkey as readable string
@@ -187,19 +194,88 @@ const QString Set::hotkeyStr() const
 }
 
 /**
+ * @brief Get the number of files in a folder
+ * @param string _folder
+ * @return int
+ */
+const int Set::nbFilesInFolder(const QString &_folder) const
+{
+    int total = 0;
+    foreach(const QString _path, m_files)
+    {
+        if (_path.startsWith(_folder))
+        {
+            total++;
+        }
+    }
+    return total;
+}
+
+/**
  * @brief Get a file path
  * @param int _i
- * @return  string
+ * @return string
  */
 const QString Set::file(int _i) const
 {
-    if (_i < m_files.size())
+    if (_i < 0) {
+        return m_files.front();
+    }
+    else if (_i < m_files.size())
     {
         return m_files.at(_i);
     }
     else
     {
         return m_files.back();
+    }
+}
+
+/**
+ * @brief Get a file path inside a folder
+ * @param string _folder
+ * @param int _i
+ * @return string
+ */
+const QString Set::fileInFolder(const QString &_folder, int _i) const
+{
+    if (_i < 0) {
+        _i = 0;
+    }
+
+    int i = 0;
+    foreach(const QString _path, m_files)
+    {
+        if (_path.startsWith(_folder))
+        {
+            if (i == _i)
+            {
+                return _path;
+            }
+            i++;
+        }
+    }
+
+    return m_files.back();
+}
+
+/**
+ * @brief Get a folder path
+ * @param int _i
+ * @return string
+ */
+const QString Set::folder(int _i) const
+{
+    if (_i < 0) {
+        return m_folders.front();
+    }
+    else if (_i < m_folders.size())
+    {
+        return m_folders.at(_i);
+    }
+    else
+    {
+        return m_folders.back();
     }
 }
 
@@ -211,6 +287,7 @@ bool Set::check()
 {
     m_valid = QDir(m_path).exists();
     m_valid&= m_files.length() > 0;
+    m_valid&= !m_perFolder || m_folders.length() > 0;
     return m_valid;
 }
 
@@ -263,15 +340,31 @@ void Set::populateFiles()
         return;
     }
 
+    bool forceCheck = m_files.length() == 0 || m_perFolder && m_folders.length() == 0;
     double date = lastChange();
-    if (date <= m_lastModif)
+
+    if (!forceCheck && date <= m_lastModif)
     {
         return;
     }
 
     m_lastModif = date;
     m_files.clear();
+    m_folders.clear();
 
+    // list non-empty sub-folders
+    QDir dir(m_path);
+    QStringList folders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+
+    foreach (const QString path, folders)
+    {
+        if (QDir(m_path + path).entryList(FILES_FILTER, QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot).count() > 0)
+        {
+            m_folders.append(m_path + path);
+        }
+    }
+
+    // recursively list files
     populateFilesRecur(m_path);
 
     writeCache();
@@ -284,24 +377,24 @@ void Set::populateFiles()
  */
 void Set::populateFilesRecur(const QString &_path, const int _level)
 {
-    QDir dir(_path);
-    QStringList files = dir.entryList(FILES_FILTER,
-                                      QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot,
-                                      QDir::Name | QDir::DirsLast | QDir::IgnoreCase
-                                      );
-
-    foreach (const QString path, files)
+    if (_level < APP_MAX_TRAVERSAL)
     {
-        if (QFileInfo(_path + path).isDir())
+        QDir dir(_path);
+        QStringList files = dir.entryList(FILES_FILTER,
+                                          QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot,
+                                          QDir::Name | QDir::DirsLast | QDir::IgnoreCase
+                                          );
+
+        foreach (const QString path, files)
         {
-            if (_level+1 < APP_MAX_TRAVERSAL)
+            if (QFileInfo(_path + path).isDir())
             {
                 populateFilesRecur(_path + path + "/", _level+1);
             }
-        }
-        else
-        {
-            m_files.append(_path + path);
+            else if (!m_perFolder || _level > 0) // do not list first level files if perFolder
+            {
+                m_files.append(_path + path);
+            }
         }
     }
 }
@@ -324,6 +417,10 @@ void Set::readCache()
             in>>m_current.file;
             in>>m_current.index;
         }
+        if (!in.atEnd())
+        {
+            in>>m_folders;
+        }
 
         file.close();
     }
@@ -344,6 +441,7 @@ void Set::writeCache() const
         out<<m_files;
         out<<m_current.file;
         out<<m_current.index;
+        out<<m_folders;
 
         file.close();
     }

@@ -55,6 +55,12 @@ void Settings::check()
     {
         m_monitors.resize(size);
     }
+
+    foreach (Set* set, m_sets)
+    {
+        set->populateFiles();
+        set->check();
+    }
 }
 
 /**
@@ -520,6 +526,7 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
         if (_data.frequency() != 0) set->setFrequency(_data.frequency());
         if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
         else if (_data.style() != UM::IM_NONE) set->setCustLayout(CustomLayout());
+        if (_data.perFolder() != -1) set->setPerFolder(_data.perFolder());
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }
@@ -552,18 +559,6 @@ void Settings::moveSet(int _from, int _to)
 }
 
 /**
- * @brief Remove unexisting sets and update file lists
- */
-void Settings::updateSets()
-{
-    foreach (Set* set, m_sets)
-    {
-        set->populateFiles();
-        set->check();
-    }
-}
-
-/**
  * @brief Get one of the active sets
  * @param int _i - position in the sub-vector of active sets
  * @return Set*
@@ -574,7 +569,7 @@ Set* Settings::activeSet(int _i, bool _withFiles) const
 
     foreach (Set* set, m_sets)
     {
-        if (set->isActive() && set->isValid() && (!_withFiles || set->count()>0))
+        if (set->isActive() && set->isValid() && (!_withFiles || set->nbFiles() > 0))
         {
             activeSets.append(set);
         }
@@ -594,7 +589,7 @@ int const Settings::nbActiveSets(bool _withFiles) const
 
     foreach (const Set* set, m_sets)
     {
-        if (set->isActive() && set->isValid() && (!_withFiles || set->count()>0))
+        if (set->isActive() && set->isValid() && (!_withFiles || set->nbFiles() > 0))
         {
             totalSets++;
         }

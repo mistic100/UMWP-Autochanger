@@ -141,7 +141,6 @@ void Controller::update()
     m_enviro->refreshMonitors();
     m_settings->check();
 
-    m_settings->updateSets();
     emit listChanged(false);
 
     m_files.clear();
@@ -189,20 +188,22 @@ void Controller::moveSet(int _from, int _to)
  * @brief Add a new set
  * @param string _dirname
  */
-void Controller::addSet(const QString &_dirname)
+Set* Controller::addSet(const QString &_dirname)
 {
     if (!(emit requestUnlock()))
     {
-        return;
+        return NULL;
     }
 
     QDir dir(_dirname);
     dir.cdUp();
     m_settings->setParam(UM::CONF::last_dir, dir.absolutePath());
 
-    m_settings->addSet(QString(_dirname).replace('/', '\\'));
+    Set* set = m_settings->addSet(QString(_dirname).replace('/', '\\'));
 
     emit listChanged(true);
+
+    return set;
 }
 
 /**

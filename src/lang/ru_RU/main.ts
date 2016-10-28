@@ -381,28 +381,28 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="659"/>
+        <location filename="../../gui/mainwindow.cpp" line="664"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="371"/>
+        <location filename="../../gui/mainwindow.cpp" line="376"/>
         <source>Import configuration file</source>
         <translation>Импорт файла настроек</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="348"/>
+        <location filename="../../gui/mainwindow.cpp" line="353"/>
         <source>Export configuration file</source>
         <translation>Экспорт файла настроек</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="470"/>
+        <location filename="../../gui/mainwindow.cpp" line="475"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="350"/>
-        <location filename="../../gui/mainwindow.cpp" line="373"/>
+        <location filename="../../gui/mainwindow.cpp" line="355"/>
+        <location filename="../../gui/mainwindow.cpp" line="378"/>
         <source>XML files (*.xml)</source>
         <translation>XML файл (*.xml)</translation>
     </message>
@@ -412,90 +412,90 @@
         <translation>Добавить набор</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="260"/>
+        <location filename="../../gui/mainwindow.cpp" line="265"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="260"/>
+        <location filename="../../gui/mainwindow.cpp" line="265"/>
         <source>Are you sure?</source>
         <translation>Вы уверены?</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="383"/>
-        <location filename="../../gui/mainwindow.cpp" line="452"/>
-        <location filename="../../gui/mainwindow.cpp" line="491"/>
+        <location filename="../../gui/mainwindow.cpp" line="388"/>
+        <location filename="../../gui/mainwindow.cpp" line="457"/>
+        <location filename="../../gui/mainwindow.cpp" line="496"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="383"/>
+        <location filename="../../gui/mainwindow.cpp" line="388"/>
         <source>Invalid settings file</source>
         <translation>Неверный файл настроек</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="437"/>
+        <location filename="../../gui/mainwindow.cpp" line="442"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="437"/>
+        <location filename="../../gui/mainwindow.cpp" line="442"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="452"/>
+        <location filename="../../gui/mainwindow.cpp" line="457"/>
         <source>Invalid password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="474"/>
+        <location filename="../../gui/mainwindow.cpp" line="479"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="491"/>
+        <location filename="../../gui/mainwindow.cpp" line="496"/>
         <source>No active files</source>
         <translation>Нет активных файлов</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="531"/>
+        <location filename="../../gui/mainwindow.cpp" line="536"/>
         <source>The lock is not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="540"/>
+        <location filename="../../gui/mainwindow.cpp" line="545"/>
         <source>Unlocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="549"/>
+        <location filename="../../gui/mainwindow.cpp" line="554"/>
         <source>Locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="563"/>
+        <location filename="../../gui/mainwindow.cpp" line="568"/>
         <source>Paused</source>
         <translation>Приостановлено</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="567"/>
+        <location filename="../../gui/mainwindow.cpp" line="572"/>
         <source>Running</source>
         <translation>Работает</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="595"/>
+        <location filename="../../gui/mainwindow.cpp" line="600"/>
         <source>Current sets : %1</source>
         <translation>Текущий набор: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="615"/>
-        <location filename="../../gui/mainwindow.cpp" line="626"/>
+        <location filename="../../gui/mainwindow.cpp" line="620"/>
+        <location filename="../../gui/mainwindow.cpp" line="631"/>
         <source>A new version is available : %1</source>
         <translation>Доступна новая версия: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="663"/>
+        <location filename="../../gui/mainwindow.cpp" line="668"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Закрыть и больше не показывать это сообщение</translation>
     </message>
@@ -505,7 +505,7 @@
         <translation>%1 всё ещё работает</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="660"/>
+        <location filename="../../gui/mainwindow.cpp" line="665"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Если вы выйдете сейчас, &lt;br&gt;обои перестанут меняться.</translation>
     </message>
@@ -756,37 +756,42 @@
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="29"/>
+        <location filename="../../gui/seteditdialog.ui" line="149"/>
         <source>Frequency :</source>
         <translation>Частота:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="72"/>
+        <location filename="../../gui/seteditdialog.ui" line="106"/>
         <source>Name :</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="82"/>
+        <location filename="../../gui/seteditdialog.ui" line="96"/>
         <source>Hotkey :</source>
         <translation>Горячая клавиша:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="92"/>
+        <location filename="../../gui/seteditdialog.ui" line="86"/>
         <source>Mode :</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="143"/>
+        <location filename="../../gui/seteditdialog.ui" line="48"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="52"/>
+        <location filename="../../gui/seteditdialog.ui" line="126"/>
         <source>Type :</source>
         <translation>Тип:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="62"/>
+        <location filename="../../gui/seteditdialog.ui" line="182"/>
+        <source>Per folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.ui" line="116"/>
         <source>Style :</source>
         <translation>Стиль:</translation>
     </message>
@@ -841,34 +846,39 @@
         <translation>Последовательно</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="64"/>
+        <location filename="../../gui/seteditdialog.cpp" line="65"/>
         <source>[multiple sets]</source>
         <translation>[Несколько наборов]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="107"/>
+        <location filename="../../gui/seteditdialog.cpp" line="112"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="111"/>
+        <location filename="../../gui/seteditdialog.cpp" line="116"/>
         <source>Start/Pause</source>
         <translation>Старт/Пауза</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="115"/>
+        <location filename="../../gui/seteditdialog.cpp" line="120"/>
         <source>Show/Hide</source>
         <translation>Показать/Свернуть</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="127"/>
+        <location filename="../../gui/seteditdialog.cpp" line="132"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="192"/>
+        <location filename="../../gui/seteditdialog.cpp" line="204"/>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation>Частота - вероятность случайного выбора.&lt;br&gt;&lt;b&gt;Примечание:&lt;/b&gt; имея одинаковую &quot;частоту&quot;, набор с бОльшим количеством изображений имеет бОльшую вероятность быть выбранным.</translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.cpp" line="209"/>
+        <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode and with one wallpaper per monitor or with a custom layout.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;u&gt;Note:&lt;/u&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
@@ -876,9 +886,9 @@
 &lt;br&gt;&lt;u&gt;Примечание:&lt;/u&gt; имея одинаковую &quot;частоту&quot;, набор с бОльшим количеством изображений имеет бОльшую вероятность быть выбранным.</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="107"/>
-        <location filename="../../gui/seteditdialog.cpp" line="111"/>
-        <location filename="../../gui/seteditdialog.cpp" line="115"/>
+        <location filename="../../gui/seteditdialog.cpp" line="112"/>
+        <location filename="../../gui/seteditdialog.cpp" line="116"/>
+        <location filename="../../gui/seteditdialog.cpp" line="120"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation>Горячая клавиша уже используется для &quot;%1&quot;</translation>
     </message>
@@ -886,12 +896,12 @@
         <location filename="../../gui/seteditdialog.cpp" line="32"/>
         <location filename="../../gui/seteditdialog.cpp" line="33"/>
         <location filename="../../gui/seteditdialog.cpp" line="34"/>
-        <location filename="../../gui/seteditdialog.cpp" line="72"/>
+        <location filename="../../gui/seteditdialog.cpp" line="73"/>
         <source>[keep]</source>
         <translation>[оставить]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="121"/>
+        <location filename="../../gui/seteditdialog.cpp" line="126"/>
         <source>Name can not be empty</source>
         <translation>&quot;Имя&quot; не может быть пустым</translation>
     </message>

@@ -57,6 +57,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->selectMode->setCurrentData(set->mode());
         ui->inputHotkey->setHotkey(set->hotkey());
         ui->inputFreq->setValue(set->frequency());
+        ui->checkFolder->setChecked(set->perFolder());
         ui->styleConfig->setVisible(set->style() == UM::IM_CUSTOM);
     }
     else
@@ -70,12 +71,16 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->inputFreq->setMinimum(0);
         ui->inputFreq->setValue(0);
         ui->inputFreq->setSpecialValueText(tr("[keep]"));
+        ui->checkFolder->setTristate(true);
+        ui->checkFolder->setCheckState(Qt::PartiallyChecked);
         ui->styleConfig->setVisible(false);
     }
 
     ui->inputHotkey->setDisabled(!m_settings->param(UM::CONF::use_hotkeys).toBool());
 
     ui->inputName->setFocus();
+
+    updateCheckFolder();
 
     QLOG_TRACE() << "SetEditDialog openned";
 }
@@ -146,6 +151,7 @@ const Set SetEditDialog::result()
     UM::WALLPAPER type = static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt());
     UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
     UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
+    int perFolder = ui->checkFolder->checkState() == Qt::PartiallyChecked ? -1 : (int) (ui->checkFolder->isEnabled() && ui->checkFolder->checkState() == Qt::Checked);
 
     Set result;
     result.setName(ui->inputName->text());
@@ -155,6 +161,7 @@ const Set SetEditDialog::result()
     result.setHotkey(ui->inputHotkey->hotkey());
     result.setCustLayout(m_custLayout);
     result.setFrequency(ui->inputFreq->value());
+    result.setPerFolder(perFolder);
 
     return result;
 }
@@ -183,11 +190,36 @@ void SetEditDialog::on_styleConfig_clicked()
         m_custLayout = dialog.getCustLayout();
     }
 }
+void SetEditDialog::updateCheckFolder()
+{
+    UM::WALLPAPER type = static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt());
+    UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
+    UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
 
-/**
- * @brief Click on help button
- */
+    ui->checkFolder->setEnabled(mode == UM::MODE_RANDOM && (style == UM::IM_CUSTOM || type == UM::W_MONITOR));
+}
+
 void SetEditDialog::on_freqHelp_clicked()
 {
     QToolTip::showText(QCursor::pos(), tr("The frequency is the chance of this set to be randomly selected among others.<br><b>Note:</b> at equal frequency, a set with more images has higher chance to be selected."), this);
+}
+
+void SetEditDialog::on_folderHelp_clicked()
+{
+    QToolTip::showText(QCursor::pos(), tr("When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.<br><b>Note:</b> this option is only available in random mode and with one wallpaper per monitor or with a custom layout."), this);
+}
+
+void SetEditDialog::on_selectType_currentIndexChanged(int)
+{
+    updateCheckFolder();
+}
+
+void SetEditDialog::on_selectStyle_currentIndexChanged(int)
+{
+    updateCheckFolder();
+}
+
+void SetEditDialog::on_selectMode_currentIndexChanged(int)
+{
+    updateCheckFolder();
 }

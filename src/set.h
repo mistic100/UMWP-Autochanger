@@ -25,9 +25,11 @@ private:
     UM::IMAGE        m_style = UM::IM_FILL;
     UM::MODE         m_mode = UM::MODE_RANDOM;
     double           m_frequency = 1.0;
+    int              m_perFolder = 0; // defined as integer to allow transitive state when editing multiple sets
     bool             m_active = true;
     bool             m_valid = true;
     QVector<QString> m_files;
+    QVector<QString> m_folders;
     Current          m_current;
     double           m_lastModif = 0;
     int              m_hotkey = 0;
@@ -44,7 +46,10 @@ public:
     const UM::IMAGE     style() const       { return m_style; }
     const UM::MODE      mode() const        { return m_mode; }
     const double        frequency() const   { return m_frequency; }
-    const int           count() const       { return m_files.size(); }
+    const int           perFolder() const   { return m_perFolder; }
+    const int           nbFiles() const     { return m_files.size(); }
+    const int           nbFolders() const   { return m_folders.size(); }
+    const int           nbFilesInFolder(const QString &_folder) const;
     const bool          isActive() const    { return m_active; }
     const bool          isValid() const     { return m_valid; }
     const int           hotkey() const      { return m_hotkey; }
@@ -52,6 +57,8 @@ public:
     const Current       current() const     { return m_current; }
     const CustomLayout  custLayout() const  { return m_custLayout; }
     const QString       file(int _i) const;
+    const QString       fileInFolder(const QString &_folder, int _i) const;
+    const QString       folder(int _i) const;
 
     void setActive(const bool _a)           { m_active=_a; }
     void setName(const QString &_name)      { m_name=_name; }
@@ -59,6 +66,7 @@ public:
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setMode(const UM::MODE _mode)      { m_mode=_mode; }
     void setFrequency(const double _freq)   { m_frequency=_freq; }
+    void setPerFolder(const int _val)       { m_perFolder=_val; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
     void setCurrent(const Current &_curr)   { m_current=_curr; }
     void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }
