@@ -28,6 +28,7 @@ MainList::MainList(QWidget* _parent, Controller* _ctrl) :
 
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
     connect(m_ctrl, &Controller::generationFinished, this, [this]{ viewport()->update(); });
+    connect(m_ctrl, &Controller::lockToggled, this, [this]{ viewport()->update(); });
 
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),  this, SLOT(onContextMenu(QPoint)));
     connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onItemDoubleClicked(QListWidgetItem*)));
