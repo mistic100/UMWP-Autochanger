@@ -24,7 +24,7 @@ public:
      */
     struct Result {
         Set* set;
-        QString folder;
+        QVector<QString> folders;
         QVector<QString> files;
     };
 
@@ -43,7 +43,7 @@ public:
 
 private:
     Set* getRandomSet();
-    QString getRandomFolder(Set* _set);
+    QString getRandomFolder(Set* _set, const QVector<QString> &_folders);
 
     QRect getDesktopEnabledRect();
 

@@ -143,7 +143,7 @@ void TrayIcon::onListChanged()
         QAction* action = m_quickMenu->addAction(set->name());
         action->setData(i);
 
-        if (set == m_ctrl->currentSet())
+        if (set == m_ctrl->current().set)
         {
             action->setIcon(QIcon(":/images/icons/bullet_yellow.png"));
         }

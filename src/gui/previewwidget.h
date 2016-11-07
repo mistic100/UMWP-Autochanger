@@ -24,7 +24,7 @@ class PreviewWidget : public QWidget
     Q_OBJECT
 
 public:
-    PreviewWidget(QString &_path, int _width, bool _showEdit, PreviewDialog* _parent) :
+    PreviewWidget(const QString &_path, const QString &_image, int _width, bool _showEdit, bool _showOverlay, PreviewDialog* _parent) :
         QWidget(_parent)
     {
         QVBoxLayout* layout = new QVBoxLayout();
@@ -33,7 +33,7 @@ public:
         layout->setSpacing(0);
 
         // resize image and add blue border
-        QPixmap image = QPixmap(_path).scaledToWidth(_width, Qt::FastTransformation);
+        QPixmap image = QPixmap(_image).scaledToWidth(_width, Qt::FastTransformation);
 
         QPen pen(Qt::SolidLine);
         pen.setWidth(borderWidth);
@@ -42,6 +42,12 @@ public:
         QPainter painter(&image);
         painter.setPen(pen);
         painter.drawRect(image.rect().adjusted(1, 1, -1, -1));
+
+        if (_showOverlay)
+        {
+            QImage overlay = QImage(":/images/folder-overlay.png");
+            painter.drawImage(image.width()-overlay.width()-5, image.height()-overlay.height()-5, overlay);
+        }
 
         // thumbnail
         QPushButton* thumb = new QPushButton();
@@ -54,7 +60,7 @@ public:
         connect(thumb, &QPushButton::clicked, _parent, [=]{ _parent->onThumbnailClicked(_path); });
 
         // label with filename
-        QString text = fontMetrics().elidedText(QFileInfo(_path).fileName(), Qt::ElideRight, _width);
+        QString text = fontMetrics().elidedText(QFileInfo(_path).baseName(), Qt::ElideRight, _width);
         QLabel* label = new QLabel(text);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);

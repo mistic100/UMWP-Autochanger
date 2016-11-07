@@ -200,8 +200,13 @@ const QString Set::hotkeyStr() const
  */
 const int Set::nbFilesInFolder(const QString &_folder) const
 {
+    if (_folder == m_path)
+    {
+        return nbFiles();
+    }
+
     int total = 0;
-    foreach(const QString _path, m_files)
+    foreach (const QString _path, m_files)
     {
         if (_path.startsWith(_folder))
         {
@@ -218,7 +223,8 @@ const int Set::nbFilesInFolder(const QString &_folder) const
  */
 const QString Set::file(int _i) const
 {
-    if (_i < 0) {
+    if (_i < 0)
+    {
         return m_files.front();
     }
     else if (_i < m_files.size())
@@ -239,12 +245,18 @@ const QString Set::file(int _i) const
  */
 const QString Set::fileInFolder(const QString &_folder, int _i) const
 {
-    if (_i < 0) {
+    if (_folder == m_path)
+    {
+        return file(_i);
+    }
+
+    if (_i < 0)
+    {
         _i = 0;
     }
 
     int i = 0;
-    foreach(const QString _path, m_files)
+    foreach (const QString _path, m_files)
     {
         if (_path.startsWith(_folder))
         {
@@ -266,7 +278,8 @@ const QString Set::fileInFolder(const QString &_folder, int _i) const
  */
 const QString Set::folder(int _i) const
 {
-    if (_i < 0) {
+    if (_i < 0)
+    {
         return m_folders.front();
     }
     else if (_i < m_folders.size())

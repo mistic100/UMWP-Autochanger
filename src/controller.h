@@ -27,8 +27,7 @@ private:
     WallpaperGenerator* m_generator;
     QFutureWatcher<WallpaperGenerator::Result> m_generatorWatcher;
 
-    QVector<QString> m_files;
-    Set* m_set;
+    WallpaperGenerator::Result m_current;
 
     boolean m_locked;
 
@@ -42,8 +41,7 @@ public:
     Settings* settings() const { return m_settings; }
     Environment* enviro() const { return m_enviro; }
 
-    const QVector<QString> &currentFiles() const { return m_files; }
-    const Set* currentSet() const { return m_set; }
+    const WallpaperGenerator::Result &current() const { return m_current; }
 
     const boolean lockEnabled() const { return m_settings->param(UM::CONF::lock_enabled).toBool(); }
     const boolean locked() const { return m_locked; }

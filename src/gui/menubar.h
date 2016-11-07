@@ -22,6 +22,7 @@ class MenuBar : public QToolBar
 private:
     Controller* m_ctrl;
 
+    QAction* m_actionFiles;
     QAction* m_actionLock;
     QAction* m_actionUnlock;
     QAction* m_actionPause;
@@ -37,6 +38,7 @@ private slots:
     void setStartPause(bool _start);
     void setLocked(bool _locked);
     void setLockEnabled(bool _lockEnabled);
+    void currentSetChanged();
 };
 
 #endif // MENUBAR_H

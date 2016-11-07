@@ -51,6 +51,11 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
         return result;
     }
 
+    if (!result.set->perFolder())
+    {
+        result.folders.append(result.set->path());
+    }
+
     QLOG_DEBUG() << "Current set:" << result.set->name() << "Type:" << result.set->type() << "Style:" << result.set->style();
 
     QVector<QString> tempFiles;
@@ -125,13 +130,13 @@ Set* WallpaperGenerator::getRandomSet()
  * @param Set* _set
  * @return string
  */
-QString WallpaperGenerator::getRandomFolder(Set *_set)
+QString WallpaperGenerator::getRandomFolder(Set *_set, const QVector<QString> &_folders)
 {
     int nbFolders = _set->nbFolders();
 
     if (nbFolders == 0)
     {
-        return QString();
+        return _set->path();
     }
 
     if (nbFolders == 1)
@@ -141,7 +146,30 @@ QString WallpaperGenerator::getRandomFolder(Set *_set)
 
     std::uniform_int<int> unif(0, nbFolders-1);
 
-    return _set->folder(unif(m_randomEngine));
+    // search a random unused folder
+    short loop = 10; // the collisions detection will only try 10 times
+    QString folder;
+
+    // if all folders are already used, disable collisions detection
+    if (nbFolders <= _folders.size())
+    {
+        loop = 1;
+    }
+
+    while (loop > 0)
+    {
+        loop--;
+
+        int counter = unif(m_randomEngine);
+        folder = _set->folder(counter);
+
+        if (!_folders.contains(folder))
+        {
+            loop = 0;
+        }
+    }
+
+    return folder;
 }
 
 /**
@@ -155,7 +183,7 @@ QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _conte
 
     if (_context->set->perFolder())
     {
-        _context->folder = getRandomFolder(_context->set);
+        _context->folders.append(getRandomFolder(_context->set, _context->folders));
     }
 
     if (_context->set->type() == UM::W_DESKTOP)
@@ -212,7 +240,7 @@ QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _conte
 
     if (_context->set->perFolder())
     {
-        _context->folder = getRandomFolder(_context->set);
+        _context->folders.append(getRandomFolder(_context->set, _context->folders));
     }
 
     if (_context->set->mode() == UM::MODE_RANDOM)
@@ -278,7 +306,8 @@ QString WallpaperGenerator::getNextFile(Set* _set)
  */
 QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, const QVector<QString> &_files)
 {
-    int total = _context->set->perFolder() ? _context->set->nbFilesInFolder(_context->folder) : _context->set->nbFiles();
+    QString folder = _context->folders.last();
+    int total = _context->set->nbFilesInFolder(folder);
 
     if (total == 0)
     {
@@ -288,7 +317,7 @@ QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, 
     // only one file in the set ?!
     if (total == 1)
     {
-        return _context->set->perFolder() ? _context->set->fileInFolder(_context->folder, 0) : _context->set->file(0);
+        return _context->set->fileInFolder(folder, 0);
     }
 
     std::uniform_int<int> unif(0, total-1);
@@ -308,7 +337,7 @@ QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, 
         loop--;
 
         int counter = unif(m_randomEngine);
-        file = _context->set->perFolder() ? _context->set->fileInFolder(_context->folder, counter) : _context->set->file(counter);
+        file = _context->set->fileInFolder(folder, counter);
 
         if (!_files.contains(file))
         {

@@ -123,7 +123,7 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
 
 
     // STATE ICON
-    if (set == m_ctrl->currentSet())
+    if (set == m_ctrl->current().set)
     {
         icon = QIcon(":/images/icons/bullet_yellow.png");
     }

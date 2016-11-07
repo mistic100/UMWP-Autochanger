@@ -58,5 +58,6 @@
         <file>images/icons/unlock.png</file>
         <file>images/icon_lock.png</file>
         <file>images/icon_lock_pause.png</file>
+        <file>images/folder-overlay.png</file>
     </qresource>
 </RCC>

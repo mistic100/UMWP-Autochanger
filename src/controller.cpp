@@ -16,7 +16,6 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     m_enviro(_enviro)
 {
     m_generator = new WallpaperGenerator(this);
-    m_set = NULL;
     m_locked = false;
 
     m_mainTimer = new QTimer(this);
@@ -142,9 +141,6 @@ void Controller::update()
     m_settings->check();
 
     emit listChanged(false);
-
-    m_files.clear();
-
     emit generationStarted();
 
     QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate);
@@ -156,13 +152,7 @@ void Controller::update()
  */
 void Controller::onGenerationDone()
 {
-    WallpaperGenerator::Result result = m_generatorWatcher.future().result();
-
-    if (result.set != NULL)
-    {
-        m_set = result.set;
-        m_files = result.files;
-    }
+    m_current = m_generatorWatcher.future().result();
 
     emit generationFinished();
 }
