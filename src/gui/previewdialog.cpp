@@ -29,7 +29,6 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
     mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
     setLayout(mainLayout);
-    setWindowTitle(m_ctrl->current().set->perFolder() ? tr("Active folders") : tr("Active files"));
     setWindowFlags(UM::SimpleDialogFlag);
 
     connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(draw()));
@@ -53,6 +52,8 @@ void PreviewDialog::draw()
     }
 
     WallpaperGenerator::Result current = m_ctrl->current();
+
+    setWindowTitle(current.set != NULL && current.set->perFolder() ? tr("Active folders") : tr("Active files"));
 
     // rare case
     if (current.set == NULL)

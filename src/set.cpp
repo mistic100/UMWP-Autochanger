@@ -208,7 +208,7 @@ const int Set::nbFilesInFolder(const QString &_folder) const
     int total = 0;
     foreach (const QString _path, m_files)
     {
-        if (_path.startsWith(_folder))
+        if (_path.startsWith(_folder + QDir::separator()))
         {
             total++;
         }
@@ -258,7 +258,7 @@ const QString Set::fileInFolder(const QString &_folder, int _i) const
     int i = 0;
     foreach (const QString _path, m_files)
     {
-        if (_path.startsWith(_folder))
+        if (_path.startsWith(_folder + QDir::separator()))
         {
             if (i == _i)
             {
@@ -402,7 +402,7 @@ void Set::populateFilesRecur(const QString &_path, const int _level)
         {
             if (QFileInfo(_path + path).isDir())
             {
-                populateFilesRecur(_path + path + "/", _level+1);
+                populateFilesRecur(_path + path + QDir::separator(), _level+1);
             }
             else if (!m_perFolder || _level > 0) // do not list first level files if perFolder
             {

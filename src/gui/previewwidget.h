@@ -60,7 +60,7 @@ public:
         connect(thumb, &QPushButton::clicked, _parent, [=]{ _parent->onThumbnailClicked(_path); });
 
         // label with filename
-        QString text = fontMetrics().elidedText(QFileInfo(_path).baseName(), Qt::ElideRight, _width);
+        QString text = fontMetrics().elidedText(QFileInfo(_path).completeBaseName(), Qt::ElideRight, _width);
         QLabel* label = new QLabel(text);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);

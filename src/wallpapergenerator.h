@@ -23,7 +23,7 @@ public:
      * @brief The result of the async generation
      */
     struct Result {
-        Set* set;
+        Set* set = NULL;
         QVector<QString> folders;
         QVector<QString> files;
     };

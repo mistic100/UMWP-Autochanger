@@ -129,7 +129,7 @@ void MenuBar::setLockEnabled(bool _lockEnabled)
  */
 void MenuBar::currentSetChanged()
 {
-    m_actionFiles->setText(m_ctrl->current().set->perFolder() ? tr("Active folders") : tr("Active files"));
+    m_actionFiles->setText(m_ctrl->current().set != NULL && m_ctrl->current().set->perFolder() ? tr("Active folders") : tr("Active files"));
 }
 
 /**
