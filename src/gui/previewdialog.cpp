@@ -30,6 +30,7 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
 
     setLayout(mainLayout);
     setWindowFlags(UM::SimpleDialogFlag);
+    setWindowTitle(tr("Active files"));
 
     connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(draw()));
 
@@ -53,8 +54,6 @@ void PreviewDialog::draw()
 
     WallpaperGenerator::Result current = m_ctrl->current();
 
-    setWindowTitle(current.set != NULL && current.set->perFolder() ? tr("Active folders") : tr("Active files"));
-
     // rare case
     if (current.set == NULL)
     {
@@ -63,56 +62,49 @@ void PreviewDialog::draw()
 
     // width of the thumbnail
     int width = 150;
-    if (!current.set->perFolder())
+    if (current.set->style() == UM::IM_CUSTOM)
     {
-        if (current.set->style() == UM::IM_CUSTOM)
-        {
-            width = 100;
-        }
-        else if (current.set->type() == UM::W_DESKTOP)
-        {
-            width*= m_ctrl->settings()->nbEnabledMonitors();
-        }
+        width = 100;
+    }
+    else if (current.set->type() == UM::W_DESKTOP)
+    {
+        width*= m_ctrl->settings()->nbEnabledMonitors();
     }
 
     int col = 0; int row = 0;
-    if (current.set->perFolder())
+
+    foreach (QString folder, current.folders)
     {
-        foreach (QString folder, current.folders)
+        PreviewWidget* widget = new PreviewWidget(folder, current.set->fileInFolder(folder, 0), width, false, true, this);
+
+        m_layout->addWidget(widget, row, col);
+
+        col++;
+        if (col > 5)
         {
-            PreviewWidget* widget = new PreviewWidget(folder, current.set->fileInFolder(folder, 0), width, false, true, this);
-
-            m_layout->addWidget(widget, row, col);
-
-            col++;
-            if (col > 5)
-            {
-                col = 0;
-                row+= 1;
-            }
+            col = 0;
+            row+= 1;
         }
     }
-    else
+
+    bool showEdit = !m_settings->param(UM::CONF::open_program).toString().isEmpty();
+
+    foreach (QString file, current.files)
     {
-        bool showEdit = !m_settings->param(UM::CONF::open_program).toString().isEmpty();
-
-        foreach (QString file, current.files)
+        if (file.isEmpty())
         {
-            if (file.isEmpty())
-            {
-                continue;
-            }
+            continue;
+        }
 
-            PreviewWidget* widget = new PreviewWidget(file, file, width, showEdit, false, this);
+        PreviewWidget* widget = new PreviewWidget(file, file, width, showEdit, false, this);
 
-            m_layout->addWidget(widget, row, col);
+        m_layout->addWidget(widget, row, col);
 
-            col++;
-            if (col > 5)
-            {
-                col = 0;
-                row+= 1;
-            }
+        col++;
+        if (col > 5)
+        {
+            col = 0;
+            row+= 1;
         }
     }
 }
@@ -167,7 +159,9 @@ void PreviewDialog::onOpenButtonClicked(const QString &_path)
 {
     QLOG_TRACE() << "Locate" << _path;
 
-    if (m_ctrl->current().set->perFolder())
+    QFileInfo info(_path);
+
+    if (info.isDir())
     {
         QDesktopServices::openUrl(QUrl("file:///"+ _path));
     }

@@ -42,18 +42,12 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
 
     WallpaperGenerator::Result result;
 
-    // get random files
     result.set = getRandomSet();
 
     if (result.set == NULL)
     {
         QLOG_WARN() << "No active set";
         return result;
-    }
-
-    if (!result.set->perFolder())
-    {
-        result.folders.append(result.set->path());
     }
 
     QLOG_DEBUG() << "Current set:" << result.set->name() << "Type:" << result.set->type() << "Style:" << result.set->style();
@@ -65,12 +59,11 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
     }
     else
     {
-        result.files += getFiles(&result);
-
-        tempFiles = adaptFiles(result.set, result.files);
+        tempFiles = adaptFiles(result.set, getFiles(&result));
     }
 
     QLOG_DEBUG() << "Current files:" << result.files;
+    QLOG_DEBUG() << "Current folders:" << result.folders;
 
     QString filepath = generateFile(result.set, tempFiles);
 
@@ -181,11 +174,6 @@ QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _conte
 {
     QVector<QString> files;
 
-    if (_context->set->perFolder())
-    {
-        _context->folders.append(getRandomFolder(_context->set, _context->folders));
-    }
-
     if (_context->set->type() == UM::W_DESKTOP)
     {
         if (_context->set->mode() == UM::MODE_RANDOM)
@@ -225,6 +213,8 @@ QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _conte
         _context->set->writeCache();
     }
 
+    _context->files += files;
+
     return files;
 }
 
@@ -234,19 +224,23 @@ QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _conte
  * @param int _nb
  * @return
  */
-QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _context, int _nb)
+QVector<QString> WallpaperGenerator::getFilesForCustom(WallpaperGenerator::Result* _context, int _nb)
 {
     QVector<QString> files;
 
-    if (_context->set->perFolder())
-    {
-        _context->folders.append(getRandomFolder(_context->set, _context->folders));
-    }
+    CustomLayout layout = _context->set->custLayout();
 
     if (_context->set->mode() == UM::MODE_RANDOM)
     {
+        QString folder = "";
+        if (layout.perFolder)
+        {
+            folder = getRandomFolder(_context->set, _context->folders);
+            _context->folders.append(folder);
+        }
+
         for (int i=0; i<_nb; i++)
-            files.append(getRandomFile(_context, files));
+            files.append(getRandomFile(_context, files, folder));
     }
     else
     {
@@ -255,6 +249,11 @@ QVector<QString> WallpaperGenerator::getFiles(WallpaperGenerator::Result* _conte
 
         // save current file info
         _context->set->writeCache();
+    }
+
+    if (_context->set->mode() != UM::MODE_RANDOM || !layout.perFolder)
+    {
+        _context->files += files;
     }
 
     return files;
@@ -304,10 +303,9 @@ QString WallpaperGenerator::getNextFile(Set* _set)
  * @param string[] _files
  * @return string
  */
-QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, const QVector<QString> &_files)
+QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, const QVector<QString> &_files, const QString &_folder)
 {
-    QString folder = _context->folders.last();
-    int total = _context->set->nbFilesInFolder(folder);
+    int total = _context->set->nbFilesInFolder(_folder);
 
     if (total == 0)
     {
@@ -317,7 +315,7 @@ QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, 
     // only one file in the set ?!
     if (total == 1)
     {
-        return _context->set->fileInFolder(folder, 0);
+        return _context->set->fileInFolder(_folder, 0);
     }
 
     std::uniform_int<int> unif(0, total-1);
@@ -337,7 +335,7 @@ QString WallpaperGenerator::getRandomFile(WallpaperGenerator::Result* _context, 
         loop--;
 
         int counter = unif(m_randomEngine);
-        file = _context->set->fileInFolder(folder, counter);
+        file = _context->set->fileInFolder(_folder, counter);
 
         if (!_files.contains(file))
         {
@@ -421,7 +419,7 @@ QVector<QString> WallpaperGenerator::getCustomFiles(WallpaperGenerator::Result* 
 QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Result* _context)
 {
     QRect scrRect;
-    if (_context->set->type() == UM::W_DESKTOP)
+    if (_idx == -1)
     {
         scrRect = QRect(QPoint(), getDesktopEnabledRect().size());
     }
@@ -456,8 +454,7 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
     }
 
     // get necessary files from set
-    QVector<QString> files = getFiles(_context, blocks.size());
-    _context->files += files;
+    QVector<QString> files = getFilesForCustom(_context, blocks.size());
 
     QImage image(scrRect.size(), QImage::Format_RGB32);
     QPainter painter(&image);

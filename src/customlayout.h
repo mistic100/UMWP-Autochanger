@@ -22,6 +22,7 @@ struct CustomLayout {
     bool borderScreenEnabled;
     short borderWidth;
     QRgb borderColor;
+    bool perFolder;
 
     CustomLayout() :
         rows(4),
@@ -37,7 +38,8 @@ struct CustomLayout {
         borderEnabled(true),
         borderScreenEnabled(false),
         borderWidth(10),
-        borderColor(Qt::black)
+        borderColor(Qt::black),
+        perFolder(false)
     {}
 };
 

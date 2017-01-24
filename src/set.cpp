@@ -57,9 +57,13 @@ Set::Set(const QDomElement* _dom)
     }
 
     // added in 2.1.1
-    if (_dom->hasAttribute("perFolder"))
+    if (_dom->hasAttribute("monitors"))
     {
-        m_perFolder = _dom->attribute("perFolder").toInt();
+        QStringList monitors = _dom->attribute("monitors").split(",");
+        foreach (QString monitor, monitors)
+        {
+            m_monitors.append(monitor.toInt());
+        }
     }
 
     // before 1.4 format
@@ -104,6 +108,7 @@ Set::Set(const QDomElement* _dom)
                 m_custLayout.borderScreenEnabled = (bool) element.attribute("borderScreenEnabled").toInt();
                 m_custLayout.borderWidth = element.attribute("borderWidth").toShort();
                 m_custLayout.borderColor = element.attribute("borderColor").toUInt();
+                m_custLayout.perFolder = (bool) element.attribute("perFolder").toInt();
             }
         }
 
@@ -139,7 +144,13 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
     _writer->writeAttribute("active", QString::number(m_active));
     _writer->writeAttribute("hotkey", QString::number(m_hotkey));
     _writer->writeAttribute("frequency", QString::number(m_frequency));
-    _writer->writeAttribute("perFolder", QString::number(m_perFolder));
+
+    QStringList monitors;
+    foreach (int monitor, m_monitors)
+    {
+        monitors.append(QString::number(monitor));
+    }
+    _writer->writeAttribute("monitors", monitors.join(","));
 
     _writer->writeTextElement("path", m_path);
 
@@ -161,6 +172,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
         _writer->writeAttribute("borderScreenEnabled", QString::number(m_custLayout.borderScreenEnabled));
         _writer->writeAttribute("borderWidth", QString::number(m_custLayout.borderWidth));
         _writer->writeAttribute("borderColor", QString::number(m_custLayout.borderColor));
+        _writer->writeAttribute("perFolder", QString::number(m_custLayout.perFolder));
 
         _writer->writeEndElement();
     }
@@ -200,7 +212,7 @@ const QString Set::hotkeyStr() const
  */
 const int Set::nbFilesInFolder(const QString &_folder) const
 {
-    if (_folder == m_path)
+    if (_folder.isEmpty())
     {
         return nbFiles();
     }
@@ -245,7 +257,7 @@ const QString Set::file(int _i) const
  */
 const QString Set::fileInFolder(const QString &_folder, int _i) const
 {
-    if (_folder == m_path)
+    if (_folder.isEmpty())
     {
         return file(_i);
     }
@@ -300,7 +312,6 @@ bool Set::check()
 {
     m_valid = QDir(m_path).exists();
     m_valid&= m_files.length() > 0;
-    m_valid&= !m_perFolder || m_folders.length() > 0;
     return m_valid;
 }
 
@@ -353,7 +364,7 @@ void Set::populateFiles()
         return;
     }
 
-    bool forceCheck = m_files.length() == 0 || m_perFolder && m_folders.length() == 0;
+    bool forceCheck = m_files.length() == 0;
     double date = lastChange();
 
     if (!forceCheck && date <= m_lastModif)
@@ -404,7 +415,7 @@ void Set::populateFilesRecur(const QString &_path, const int _level)
             {
                 populateFilesRecur(_path + path + QDir::separator(), _level+1);
             }
-            else if (!m_perFolder || _level > 0) // do not list first level files if perFolder
+            else
             {
                 m_files.append(_path + path);
             }

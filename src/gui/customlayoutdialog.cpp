@@ -1,3 +1,5 @@
+#include <QToolTip>
+
 #include "../customlayoutgenerator.h"
 #include "../umutils.h"
 
@@ -77,20 +79,7 @@ void CustomLayoutDialog::showEvent(QShowEvent*)
     connect(ui->borderWidth,    SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->borderColor,    SIGNAL(colorChanged(QColor)),   this, SLOT(renderPreview()));
 
-    ui->view->installEventFilter(this);
-
     renderPreview();
-}
-
-bool CustomLayoutDialog::eventFilter(QObject* _target, QEvent* _event)
-{
-    if (_target == ui->view && _event->type() == QEvent::MouseButtonPress)
-    {
-        renderPreview();
-        return true;
-    }
-
-    return QDialog::eventFilter(_target, _event);
 }
 
 /**
@@ -99,6 +88,8 @@ bool CustomLayoutDialog::eventFilter(QObject* _target, QEvent* _event)
  */
 void CustomLayoutDialog::setCustLayout(const CustomLayout &_layout)
 {
+    ui->checkFolder->setChecked(_layout.perFolder);
+
     ui->rows->setValue(_layout.rows);
     ui->cols->setValue(_layout.cols);
     ui->tileRows->setSpan(_layout.minRows, _layout.maxRows);
@@ -126,6 +117,8 @@ void CustomLayoutDialog::setCustLayout(const CustomLayout &_layout)
 CustomLayout CustomLayoutDialog::getCustLayout() const
 {
     CustomLayout layout;
+
+    layout.perFolder = ui->checkFolder->isChecked();
 
     layout.rows = ui->rows->value();
     layout.cols = ui->cols->value();
@@ -289,4 +282,14 @@ void CustomLayoutDialog::renderPreview()
     catch(const std::exception) {
         // do not update the view
     }
+}
+
+void CustomLayoutDialog::on_helpFolder_clicked()
+{
+    QToolTip::showText(QCursor::pos(), tr("When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.<br><b>Note:</b> this option is only available in random mode."), this);
+}
+
+void CustomLayoutDialog::on_buttonRefresh_clicked()
+{
+    renderPreview();
 }

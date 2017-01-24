@@ -41,6 +41,8 @@ public:
     const int       nbSets() const    { return m_sets.size(); }
     Set*            activeSet(int _i, bool _withFiles=false) const;
     const int       nbActiveSets(bool _withFiles=false) const;
+    Set*            activeSetOnMonitor(int _i, int _monitor) const;
+    const int       nbActiveSetsOnMonitor(int _monitor) const;
 
     // setters
     void setParam(const QString &_key, const QVariant &_val) { m_options[_key] = _val; }

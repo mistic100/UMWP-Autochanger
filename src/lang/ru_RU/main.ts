@@ -287,58 +287,73 @@
         <translation>Настройки &quot;Особой&quot; раскладки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="452"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="197"/>
         <source>Tiles size</source>
         <translation>Размер плитки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="570"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="29"/>
         <source>Grid</source>
         <translation>Сетка</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="153"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="473"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="594"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="53"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="218"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="449"/>
         <source>Rows</source>
         <translation>Строки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="117"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="158"/>
+        <source>Per folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="413"/>
         <source>Screen border</source>
         <translation>Рамка экрана</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="50"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="773"/>
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="346"/>
         <source>Width</source>
         <translation>Ширина</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="94"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="390"/>
         <source>Color</source>
         <translation>Цвет</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="212"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="504"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="625"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="84"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="249"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="508"/>
         <source>Columns</source>
         <translation>Колонки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="280"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="576"/>
         <source>Position</source>
         <translation>Положение</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="127"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="423"/>
         <source>Fixed tile</source>
         <translation>Фиксированная плитка</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="26"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="322"/>
         <source>Border</source>
         <translation>Граница</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.cpp" line="289"/>
+        <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -513,111 +528,105 @@
 <context>
     <name>MenuBar</name>
     <message>
-        <location filename="../../gui/menubar.cpp" line="27"/>
+        <location filename="../../gui/menubar.cpp" line="26"/>
         <source>Options</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="28"/>
+        <location filename="../../gui/menubar.cpp" line="27"/>
         <source>Manage monitors</source>
         <translation>Настройка мониторов</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="30"/>
+        <location filename="../../gui/menubar.cpp" line="29"/>
         <source>Import configuration file</source>
         <translation>Импорт файла настроек</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="31"/>
+        <location filename="../../gui/menubar.cpp" line="30"/>
         <source>Export configuration file</source>
         <translation>Экспорт файла настроек</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="52"/>
+        <location filename="../../gui/menubar.cpp" line="51"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="37"/>
-        <location filename="../../gui/menubar.cpp" line="132"/>
+        <location filename="../../gui/menubar.cpp" line="36"/>
         <source>Active files</source>
         <translation>Активные файлы</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="33"/>
+        <location filename="../../gui/menubar.cpp" line="32"/>
         <source>Clear cache</source>
         <translation>Очистить кэш</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="36"/>
+        <location filename="../../gui/menubar.cpp" line="35"/>
         <source>User guide</source>
         <translation>Инструкция пользователя</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="39"/>
+        <location filename="../../gui/menubar.cpp" line="38"/>
         <source>Report a bug</source>
         <translation>Сообщить об ошибке</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="40"/>
+        <location filename="../../gui/menubar.cpp" line="39"/>
         <source>Homepage</source>
         <translation>Домашняя страница</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="41"/>
+        <location filename="../../gui/menubar.cpp" line="40"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="43"/>
+        <location filename="../../gui/menubar.cpp" line="42"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="44"/>
+        <location filename="../../gui/menubar.cpp" line="43"/>
         <source>Add set</source>
         <translation>Добавить набор</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="45"/>
-        <location filename="../../gui/menubar.cpp" line="93"/>
+        <location filename="../../gui/menubar.cpp" line="44"/>
+        <location filename="../../gui/menubar.cpp" line="92"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="46"/>
+        <location filename="../../gui/menubar.cpp" line="45"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="47"/>
+        <location filename="../../gui/menubar.cpp" line="46"/>
         <source>Hide</source>
         <translation>Скрыть</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="48"/>
+        <location filename="../../gui/menubar.cpp" line="47"/>
         <source>Lock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="49"/>
+        <location filename="../../gui/menubar.cpp" line="48"/>
         <source>Unlock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="51"/>
+        <location filename="../../gui/menubar.cpp" line="50"/>
         <source>Configuration</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="98"/>
+        <location filename="../../gui/menubar.cpp" line="97"/>
         <source>Start</source>
         <translation>Старт</translation>
-    </message>
-    <message>
-        <location filename="../../gui/menubar.cpp" line="132"/>
-        <source>Active folders</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -656,22 +665,17 @@
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="32"/>
+        <location filename="../../gui/previewdialog.cpp" line="33"/>
         <source>Active files</source>
         <translation>Активные файлы</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="32"/>
-        <source>Active folders</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../gui/previewdialog.cpp" line="149"/>
+        <location filename="../../gui/previewdialog.cpp" line="142"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="149"/>
+        <location filename="../../gui/previewdialog.cpp" line="142"/>
         <source>Are you sure?</source>
         <translation>Вы уверены?</translation>
     </message>
@@ -767,129 +771,135 @@
         <translation>Свойства</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="149"/>
+        <location filename="../../gui/seteditdialog.ui" line="143"/>
         <source>Frequency :</source>
         <translation>Частота:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="106"/>
+        <location filename="../../gui/seteditdialog.ui" line="93"/>
         <source>Name :</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="96"/>
+        <location filename="../../gui/seteditdialog.ui" line="83"/>
         <source>Hotkey :</source>
         <translation>Горячая клавиша:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="86"/>
+        <location filename="../../gui/seteditdialog.ui" line="73"/>
         <source>Mode :</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="48"/>
+        <location filename="../../gui/seteditdialog.ui" line="38"/>
         <source>Configure</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="126"/>
+        <location filename="../../gui/seteditdialog.ui" line="113"/>
         <source>Type :</source>
         <translation>Тип:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="182"/>
-        <source>Per folder</source>
+        <location filename="../../gui/seteditdialog.ui" line="166"/>
+        <source>Monitors :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="116"/>
+        <location filename="../../gui/seteditdialog.ui" line="103"/>
         <source>Style :</source>
         <translation>Стиль:</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="37"/>
+        <location filename="../../gui/seteditdialog.cpp" line="38"/>
         <source>One image for each monitor</source>
         <translation>Одно изображение для каждого монитора</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="38"/>
+        <location filename="../../gui/seteditdialog.cpp" line="39"/>
         <source>One image for the whole desktop</source>
         <translation>Одно изображение на целый рабочий стол</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="40"/>
+        <location filename="../../gui/seteditdialog.cpp" line="41"/>
         <source>Center</source>
         <translation>Центр</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="41"/>
+        <location filename="../../gui/seteditdialog.cpp" line="42"/>
         <source>Tile</source>
         <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="42"/>
+        <location filename="../../gui/seteditdialog.cpp" line="43"/>
         <source>Stretch</source>
         <translation>Растянуть</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="43"/>
+        <location filename="../../gui/seteditdialog.cpp" line="44"/>
         <source>Strecth proportional</source>
         <translation>Пропорционально растянуть</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="44"/>
+        <location filename="../../gui/seteditdialog.cpp" line="45"/>
         <source>Fill</source>
         <translation>Заполнить</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="45"/>
+        <location filename="../../gui/seteditdialog.cpp" line="46"/>
         <source>Custom...</source>
         <translation>Особая...</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="47"/>
+        <location filename="../../gui/seteditdialog.cpp" line="48"/>
         <source>Random</source>
         <translation>Произвольно</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="48"/>
+        <location filename="../../gui/seteditdialog.cpp" line="49"/>
         <source>Sequential</source>
         <translation>Последовательно</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="65"/>
+        <location filename="../../gui/seteditdialog.cpp" line="51"/>
+        <location filename="../../gui/seteditdialog.cpp" line="52"/>
+        <source>All monitors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.cpp" line="60"/>
+        <source>Monitor %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.cpp" line="78"/>
         <source>[multiple sets]</source>
         <translation>[Несколько наборов]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="112"/>
+        <location filename="../../gui/seteditdialog.cpp" line="123"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="116"/>
+        <location filename="../../gui/seteditdialog.cpp" line="127"/>
         <source>Start/Pause</source>
         <translation>Старт/Пауза</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="120"/>
+        <location filename="../../gui/seteditdialog.cpp" line="131"/>
         <source>Show/Hide</source>
         <translation>Показать/Свернуть</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="132"/>
+        <location filename="../../gui/seteditdialog.cpp" line="143"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="204"/>
+        <location filename="../../gui/seteditdialog.cpp" line="229"/>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation>Частота - вероятность случайного выбора.&lt;br&gt;&lt;b&gt;Примечание:&lt;/b&gt; имея одинаковую &quot;частоту&quot;, набор с бОльшим количеством изображений имеет бОльшую вероятность быть выбранным.</translation>
-    </message>
-    <message>
-        <location filename="../../gui/seteditdialog.cpp" line="209"/>
-        <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode and with one wallpaper per monitor or with a custom layout.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;u&gt;Note:&lt;/u&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
@@ -897,22 +907,23 @@
 &lt;br&gt;&lt;u&gt;Примечание:&lt;/u&gt; имея одинаковую &quot;частоту&quot;, набор с бОльшим количеством изображений имеет бОльшую вероятность быть выбранным.</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="112"/>
-        <location filename="../../gui/seteditdialog.cpp" line="116"/>
-        <location filename="../../gui/seteditdialog.cpp" line="120"/>
+        <location filename="../../gui/seteditdialog.cpp" line="123"/>
+        <location filename="../../gui/seteditdialog.cpp" line="127"/>
+        <location filename="../../gui/seteditdialog.cpp" line="131"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation>Горячая клавиша уже используется для &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="32"/>
         <location filename="../../gui/seteditdialog.cpp" line="33"/>
         <location filename="../../gui/seteditdialog.cpp" line="34"/>
-        <location filename="../../gui/seteditdialog.cpp" line="73"/>
+        <location filename="../../gui/seteditdialog.cpp" line="35"/>
+        <location filename="../../gui/seteditdialog.cpp" line="53"/>
+        <location filename="../../gui/seteditdialog.cpp" line="86"/>
         <source>[keep]</source>
         <translation>[оставить]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="126"/>
+        <location filename="../../gui/seteditdialog.cpp" line="137"/>
         <source>Name can not be empty</source>
         <translation>&quot;Имя&quot; не может быть пустым</translation>
     </message>

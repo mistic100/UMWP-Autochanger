@@ -2,6 +2,9 @@
 #include <atlbase.h>
 #include "lib/createshortcut.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+
 #include "environment.h"
 
 
@@ -89,28 +92,18 @@ void Environment::log()
     QList<QString> sizes;
     for (QHash<int, QRect>::const_iterator it=m_wpSizes.begin(); it!=m_wpSizes.end(); ++it)
     {
-        sizes.append(
-            QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height())
-            +" at "+ QString::number(it.value().left()) +"x"+ QString::number(it.value().top())
-        );
+        if (it.key() != -1)
+        {
+            sizes.append(
+                QString::number(it.key()) +": "+ QString::number(it.value().width()) +"x"+ QString::number(it.value().height())
+                +" at "+ QString::number(it.value().left()) +"x"+ QString::number(it.value().top())
+            );
+        }
     }
 
+    sizes.append("Total: " + QString::number(m_wpSizes.value(-1).width()) + "x" + QString::number(m_wpSizes.value(-1).height()));
+
     QLOG_DEBUG() << "== MONITORS" << sizes;
-}
-
-/**
- * Callback for EnumDisplayMonitors
- */
-BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM dwData)
-{
-    MONITORINFO mi;
-    mi.cbSize = sizeof(mi);
-    GetMonitorInfo(hMonitor, &mi);
-
-    QList<RECT>* monitors = reinterpret_cast<QList<RECT>*>(dwData);
-    monitors->append(mi.rcMonitor);
-
-    return true;
 }
 
 /**
@@ -122,35 +115,22 @@ void Environment::refreshMonitors()
 {
     m_wpSizes.clear();
 
-    QList<RECT> monitors;
-    EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, reinterpret_cast<LPARAM>(&monitors));
+    QDesktopWidget* desktop = QApplication::desktop();
 
-    if (monitors.size() > 0)
-    {
-        int i=0, minX=0, maxX=0, minY=0, maxY=0;
+    int minX=0, maxX=0, minY=0, maxY=0;
 
-        foreach (const RECT rect, monitors)
-        {
-            m_wpSizes.insert(i++, QRect(
-                             rect.left,
-                             rect.top,
-                             rect.right-rect.left,
-                             rect.bottom-rect.top
-            ));
+    for (int i = 0; i < desktop->numScreens(); i++) {
+        const QRect wpSize = desktop->screenGeometry(i);
+        m_wpSizes.insert(i, wpSize);
 
-            minX = qMin(minX, (int)rect.left);
-            minY = qMin(minY, (int)rect.top);
-            maxX = qMax(maxX, (int)rect.right);
-            maxY = qMax(maxY, (int)rect.bottom);
-        }
-
-        // store whole desktop size with its top-left-most position
-        m_wpSizes.insert(-1, QRect(minX, minY, maxX-minX, maxY-minY));
+        minX = qMin(minX, wpSize.left());
+        minY = qMin(minY, wpSize.top());
+        maxX = qMax(maxX, wpSize.right());
+        maxY = qMax(maxY, wpSize.bottom());
     }
-    else
-    {
-        QLOG_FATAL()<<"Unable to query monitors";
-    }
+
+    // store whole desktop size with its top-left-most position
+    m_wpSizes.insert(-1, QRect(minX, minY, maxX-minX, maxY-minY));
 
     if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
     {

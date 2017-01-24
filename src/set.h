@@ -25,7 +25,6 @@ private:
     UM::IMAGE        m_style = UM::IM_FILL;
     UM::MODE         m_mode = UM::MODE_RANDOM;
     double           m_frequency = 1.0;
-    int              m_perFolder = 0; // defined as integer to allow transitive state when editing multiple sets
     bool             m_active = true;
     bool             m_valid = true;
     QVector<QString> m_files;
@@ -34,6 +33,7 @@ private:
     double           m_lastModif = 0;
     int              m_hotkey = 0;
     CustomLayout     m_custLayout;
+    QVector<int>     m_monitors;
 
 public:
     Set() {} // only used for temp items
@@ -46,7 +46,6 @@ public:
     const UM::IMAGE     style() const       { return m_style; }
     const UM::MODE      mode() const        { return m_mode; }
     const double        frequency() const   { return m_frequency; }
-    const int           perFolder() const   { return m_perFolder; }
     const int           nbFiles() const     { return m_files.size(); }
     const int           nbFolders() const   { return m_folders.size(); }
     const int           nbFilesInFolder(const QString &_folder) const;
@@ -56,6 +55,8 @@ public:
     const QString       uuid() const        { return m_uuid; }
     const Current       current() const     { return m_current; }
     const CustomLayout  custLayout() const  { return m_custLayout; }
+    const QVector<int>  monitors() const    { return m_monitors; }
+    const bool          isActiveOnMonitor(int _i) const { return m_monitors.size() == 0 || m_monitors.contains(_i); }
     const QString       file(int _i) const;
     const QString       fileInFolder(const QString &_folder, int _i) const;
     const QString       folder(int _i) const;
@@ -66,10 +67,10 @@ public:
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setMode(const UM::MODE _mode)      { m_mode=_mode; }
     void setFrequency(const double _freq)   { m_frequency=_freq; }
-    void setPerFolder(const int _val)       { m_perFolder=_val; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
     void setCurrent(const Current &_curr)   { m_current=_curr; }
     void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }
+    void setMonitors(const QVector<int> &_monitors) { m_monitors=_monitors; }
 
     void init();
     bool check();

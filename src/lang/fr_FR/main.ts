@@ -291,41 +291,51 @@
         <translation>Configuration du style personnalisé</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="452"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="197"/>
         <source>Tiles size</source>
         <translation>Taille des tuiles</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="570"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="29"/>
         <source>Grid</source>
         <translation>Grille</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="153"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="473"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="594"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="53"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="218"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="449"/>
         <source>Rows</source>
         <translation>Lignes</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="117"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="158"/>
+        <source>Per folder</source>
+        <translation>Par dossier</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="413"/>
         <source>Screen border</source>
         <translation>Bordure de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="50"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="773"/>
+        <source>Refresh</source>
+        <translation>Rafraîchir</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="346"/>
         <source>Width</source>
         <translation>Largeur</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="94"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="390"/>
         <source>Color</source>
         <translation>Couleur</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="212"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="504"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="625"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="84"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="249"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="508"/>
         <source>Columns</source>
         <translation>Colonnes</translation>
     </message>
@@ -334,19 +344,24 @@
         <translation type="vanished">Tuiles</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="127"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="423"/>
         <source>Fixed tile</source>
         <translation>Tuile principale</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="280"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="576"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="26"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="322"/>
         <source>Border</source>
         <translation>Bordure</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.cpp" line="289"/>
+        <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode.</source>
+        <translation>Quand cette case est cochée, les images sont choisies dans un des sous-dossiers du set plutôt que dans tout le set.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; cette option n&apos;est disponible qu&apos;en mode aléatoire.</translation>
     </message>
 </context>
 <context>
@@ -528,111 +543,109 @@
 <context>
     <name>MenuBar</name>
     <message>
-        <location filename="../../gui/menubar.cpp" line="27"/>
+        <location filename="../../gui/menubar.cpp" line="26"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="28"/>
+        <location filename="../../gui/menubar.cpp" line="27"/>
         <source>Manage monitors</source>
         <translation>Gérer les moniteurs</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="30"/>
+        <location filename="../../gui/menubar.cpp" line="29"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="31"/>
+        <location filename="../../gui/menubar.cpp" line="30"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="52"/>
+        <location filename="../../gui/menubar.cpp" line="51"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="37"/>
-        <location filename="../../gui/menubar.cpp" line="132"/>
+        <location filename="../../gui/menubar.cpp" line="36"/>
         <source>Active files</source>
         <translation>Fichiers actifs</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="33"/>
+        <location filename="../../gui/menubar.cpp" line="32"/>
         <source>Clear cache</source>
         <translation>Effacer le cache</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="36"/>
+        <location filename="../../gui/menubar.cpp" line="35"/>
         <source>User guide</source>
         <translation>Guide d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="39"/>
+        <location filename="../../gui/menubar.cpp" line="38"/>
         <source>Report a bug</source>
         <translation>Rapporter un bug</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="40"/>
+        <location filename="../../gui/menubar.cpp" line="39"/>
         <source>Homepage</source>
         <translation>Page du projet</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="41"/>
+        <location filename="../../gui/menubar.cpp" line="40"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="43"/>
+        <location filename="../../gui/menubar.cpp" line="42"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="44"/>
+        <location filename="../../gui/menubar.cpp" line="43"/>
         <source>Add set</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="45"/>
-        <location filename="../../gui/menubar.cpp" line="93"/>
+        <location filename="../../gui/menubar.cpp" line="44"/>
+        <location filename="../../gui/menubar.cpp" line="92"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="46"/>
+        <location filename="../../gui/menubar.cpp" line="45"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="47"/>
+        <location filename="../../gui/menubar.cpp" line="46"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="48"/>
+        <location filename="../../gui/menubar.cpp" line="47"/>
         <source>Lock</source>
         <translation>Vérouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="49"/>
+        <location filename="../../gui/menubar.cpp" line="48"/>
         <source>Unlock</source>
         <translation>Dévérouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="51"/>
+        <location filename="../../gui/menubar.cpp" line="50"/>
         <source>Configuration</source>
         <translation>Configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="98"/>
+        <location filename="../../gui/menubar.cpp" line="97"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="132"/>
         <source>Active folders</source>
-        <translation>Dossiers actifs</translation>
+        <translation type="vanished">Dossiers actifs</translation>
     </message>
 </context>
 <context>
@@ -671,22 +684,21 @@
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="32"/>
+        <location filename="../../gui/previewdialog.cpp" line="33"/>
         <source>Active files</source>
         <translation>Fichiers courant</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="32"/>
         <source>Active folders</source>
-        <translation>Dossiers actifs</translation>
+        <translation type="vanished">Dossiers actifs</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="149"/>
+        <location filename="../../gui/previewdialog.cpp" line="142"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="149"/>
+        <location filename="../../gui/previewdialog.cpp" line="142"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>
@@ -782,151 +794,166 @@
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="149"/>
+        <location filename="../../gui/seteditdialog.ui" line="143"/>
         <source>Frequency :</source>
         <translation>Fréquence :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="106"/>
+        <location filename="../../gui/seteditdialog.ui" line="93"/>
         <source>Name :</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="96"/>
+        <location filename="../../gui/seteditdialog.ui" line="83"/>
         <source>Hotkey :</source>
         <translation>Raccourci :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="86"/>
+        <location filename="../../gui/seteditdialog.ui" line="73"/>
         <source>Mode :</source>
         <translation>Mode :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="48"/>
+        <location filename="../../gui/seteditdialog.ui" line="38"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="126"/>
+        <location filename="../../gui/seteditdialog.ui" line="113"/>
         <source>Type :</source>
         <translation>Type :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="182"/>
-        <source>Per folder</source>
-        <translation>Par dossier</translation>
+        <location filename="../../gui/seteditdialog.ui" line="166"/>
+        <source>Monitors :</source>
+        <translation>Moniteurs :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="116"/>
+        <source>Per folder</source>
+        <translation type="vanished">Par dossier</translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.ui" line="103"/>
         <source>Style :</source>
         <translation>Style :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="37"/>
+        <location filename="../../gui/seteditdialog.cpp" line="38"/>
         <source>One image for each monitor</source>
         <translation>Une image sur chaque écran</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="38"/>
+        <location filename="../../gui/seteditdialog.cpp" line="39"/>
         <source>One image for the whole desktop</source>
         <translation>Une image pour tout le bureau</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="40"/>
+        <location filename="../../gui/seteditdialog.cpp" line="41"/>
         <source>Center</source>
         <translation>Centrer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="41"/>
+        <location filename="../../gui/seteditdialog.cpp" line="42"/>
         <source>Tile</source>
         <translation>Mosaïque</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="42"/>
+        <location filename="../../gui/seteditdialog.cpp" line="43"/>
         <source>Stretch</source>
         <translation>Étirer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="43"/>
+        <location filename="../../gui/seteditdialog.cpp" line="44"/>
         <source>Strecth proportional</source>
         <translation>Ajuster</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="44"/>
+        <location filename="../../gui/seteditdialog.cpp" line="45"/>
         <source>Fill</source>
         <translation>Remplir</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="45"/>
+        <location filename="../../gui/seteditdialog.cpp" line="46"/>
         <source>Custom...</source>
         <translation>Personnalisé...</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="47"/>
+        <location filename="../../gui/seteditdialog.cpp" line="48"/>
         <source>Random</source>
         <translation>Aléatoire</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="48"/>
+        <location filename="../../gui/seteditdialog.cpp" line="49"/>
         <source>Sequential</source>
         <translation>Séquentiel</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="65"/>
+        <location filename="../../gui/seteditdialog.cpp" line="51"/>
+        <location filename="../../gui/seteditdialog.cpp" line="52"/>
+        <source>All monitors</source>
+        <translation>Tous les moniteurs</translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.cpp" line="60"/>
+        <source>Monitor %1</source>
+        <translation>Moniteur %1</translation>
+    </message>
+    <message>
+        <location filename="../../gui/seteditdialog.cpp" line="78"/>
         <source>[multiple sets]</source>
         <translation>[plusieurs sets]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="112"/>
+        <location filename="../../gui/seteditdialog.cpp" line="123"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="116"/>
+        <location filename="../../gui/seteditdialog.cpp" line="127"/>
         <source>Start/Pause</source>
         <translation>Démarrer/Pause</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="120"/>
+        <location filename="../../gui/seteditdialog.cpp" line="131"/>
         <source>Show/Hide</source>
         <translation>Afficher/Masquer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="132"/>
+        <location filename="../../gui/seteditdialog.cpp" line="143"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="204"/>
+        <location filename="../../gui/seteditdialog.cpp" line="229"/>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation>La fréquence est la chance qu&apos;un set soit sélectionné aléatoirement.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; à fréquence égale, un set avec plus d&apos;images a plus de chances d&apos;être sélectionné.</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="209"/>
         <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode and with one wallpaper per monitor or with a custom layout.</source>
-        <translation>Quand cette case est cochée, les images sont choisies dans un des sous-dossiers du set plutôt que dans tout le set.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; cette option n&apos;est disponible qu&apos;en mode aléatoire et avec une image par écran ou avec un style personnalisé.</translation>
+        <translation type="vanished">Quand cette case est cochée, les images sont choisies dans un des sous-dossiers du set plutôt que dans tout le set.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; cette option n&apos;est disponible qu&apos;en mode aléatoire et avec une image par écran ou avec un style personnalisé.</translation>
     </message>
     <message>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;u&gt;Note:&lt;/u&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation type="vanished">La fréquence est la chance qu&apos;un set soit sélectionné aléatoirement.&lt;br&gt;&lt;u&gt;Note :&lt;/u&gt; à fréquence égale, un set avec plus d&apos;images a plus de chances d&apos;être sélectionné.</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="112"/>
-        <location filename="../../gui/seteditdialog.cpp" line="116"/>
-        <location filename="../../gui/seteditdialog.cpp" line="120"/>
+        <location filename="../../gui/seteditdialog.cpp" line="123"/>
+        <location filename="../../gui/seteditdialog.cpp" line="127"/>
+        <location filename="../../gui/seteditdialog.cpp" line="131"/>
         <source>Hotkey already used for &quot;%1&quot;</source>
         <translation>Raccourci déjà utilisé pour &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="32"/>
         <location filename="../../gui/seteditdialog.cpp" line="33"/>
         <location filename="../../gui/seteditdialog.cpp" line="34"/>
-        <location filename="../../gui/seteditdialog.cpp" line="73"/>
+        <location filename="../../gui/seteditdialog.cpp" line="35"/>
+        <location filename="../../gui/seteditdialog.cpp" line="53"/>
+        <location filename="../../gui/seteditdialog.cpp" line="86"/>
         <source>[keep]</source>
         <translation>[conserver]</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="126"/>
+        <location filename="../../gui/seteditdialog.cpp" line="137"/>
         <source>Name can not be empty</source>
         <translation>Le nom ne peut être vide</translation>
     </message>

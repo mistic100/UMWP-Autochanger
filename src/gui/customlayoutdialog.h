@@ -40,13 +40,14 @@ public:
 
 protected:
     void showEvent(QShowEvent*);
-    bool eventFilter(QObject* _target, QEvent* _event);
 
 private slots:
     void renderPreview();
     void on_rows_valueChanged(int _val);
     void on_cols_valueChanged(int _val);
     void on_borderWidth_valueChanged(int _val);
+    void on_helpFolder_clicked();
+    void on_buttonRefresh_clicked();
 };
 
 #endif // CustomLayoutDialog_H

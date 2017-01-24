@@ -49,9 +49,9 @@ private:
 
     // source files getters
     QVector<QString> getFiles(Result *_context);
-    QVector<QString> getFiles(Result *_context, int _nb);
+    QVector<QString> getFilesForCustom(Result *_context, int _nb);
     QString getNextFile(Set* _set);
-    QString getRandomFile(Result *_context, const QVector<QString> &_files);
+    QString getRandomFile(Result *_context, const QVector<QString> &_files, const QString &_folder="");
 
     // custom generation
     QVector<QString> getCustomFiles(Result *_context);

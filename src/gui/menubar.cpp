@@ -20,7 +20,6 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
     connect(m_ctrl, SIGNAL(lockToggled(bool)), this, SLOT(setLocked(bool)));
-    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(currentSetChanged()));
     connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled()); });
 
     QMenu* menuConfig = new QMenu();
@@ -34,7 +33,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     QMenu* menuHelp = new QMenu();
     QAction* actionHelp =   menuHelp->addAction(QIcon(":/images/icons/help_color.png"), tr("User guide"));
-    m_actionFiles =         menuHelp->addAction(QIcon(":/images/icons/images.png"),     tr("Active files"));
+    QAction* actionFiles =  menuHelp->addAction(QIcon(":/images/icons/images.png"),     tr("Active files"));
                             menuHelp->addSeparator();
     QAction* actionIssues = menuHelp->addAction(QIcon(":/images/icons/bug.png"),   tr("Report a bug"));
     QAction* actionHome =   menuHelp->addAction(QIcon(":/images/icons/house.png"), tr("Homepage"));
@@ -70,7 +69,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionClear,   SIGNAL(triggered()), _parent, SLOT(clearCache()));
 
     connect(actionAbout,   SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
-    connect(m_actionFiles, SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
+    connect(actionFiles,   SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
 
     // use functors to map URLS to open
     connect(actionHelp,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_DOCUMENTATION_URL)); });
@@ -122,14 +121,6 @@ void MenuBar::setLockEnabled(bool _lockEnabled)
     {
         setLocked(m_ctrl->locked());
     }
-}
-
-/**
- * @brief Change "Current files" label
- */
-void MenuBar::currentSetChanged()
-{
-    m_actionFiles->setText(m_ctrl->current().set != NULL && m_ctrl->current().set->perFolder() ? tr("Active folders") : tr("Active files"));
 }
 
 /**

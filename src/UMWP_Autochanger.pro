@@ -75,7 +75,8 @@ HEADERS += \
     gui/customlayoutdialog.h \
     gui/delaydialog.h \
     gui/previewwidget.h \
-    ext/qtabwidgetext.h
+    ext/qtabwidgetext.h \
+    ext/qchecklist.h
 
 FORMS += \
     gui/seteditdialog.ui \

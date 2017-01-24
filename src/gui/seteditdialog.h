@@ -37,16 +37,14 @@ public:
     const Set result();
 
 private:
-    void updateCheckFolder();
+    void updateUi();
 
 protected:
     void done(int result);
 
 private slots:
-    void on_selectStyle_currentDataChanged(QVariant data);
     void on_styleConfig_clicked();
     void on_freqHelp_clicked();
-    void on_folderHelp_clicked();
     void on_selectType_currentIndexChanged(int);
     void on_selectStyle_currentIndexChanged(int);
     void on_selectMode_currentIndexChanged(int);

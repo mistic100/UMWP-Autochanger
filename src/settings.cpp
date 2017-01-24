@@ -526,7 +526,7 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
         if (_data.frequency() != 0) set->setFrequency(_data.frequency());
         if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
         else if (_data.style() != UM::IM_NONE) set->setCustLayout(CustomLayout());
-        if (_data.perFolder() != -1) set->setPerFolder(_data.perFolder());
+        if (!_data.monitors().contains(-1)) set->setMonitors(_data.monitors());
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }
@@ -569,7 +569,7 @@ Set* Settings::activeSet(int _i, bool _withFiles) const
 
     foreach (Set* set, m_sets)
     {
-        if (set->isActive() && set->isValid() && (!_withFiles || set->nbFiles() > 0))
+        if (set->isValid() && set->isActive() && (!_withFiles || set->nbFiles() > 0))
         {
             activeSets.append(set);
         }
@@ -589,7 +589,46 @@ int const Settings::nbActiveSets(bool _withFiles) const
 
     foreach (const Set* set, m_sets)
     {
-        if (set->isActive() && set->isValid() && (!_withFiles || set->nbFiles() > 0))
+        if (set->isValid() && set->isActive() && (!_withFiles || set->nbFiles() > 0))
+        {
+            totalSets++;
+        }
+    }
+
+    return totalSets;
+}
+
+/**
+ * @brief Get one of the active sets on a monitor
+ * @param int _i - position in the sub-vector of active sets
+ * @return Set*
+ */
+Set* Settings::activeSetOnMonitor(int _i, int _monitor) const
+{
+    QVector<Set*> activeSets;
+
+    foreach (Set* set, m_sets)
+    {
+        if (set->isValid() && set->isActive() && set->isActiveOnMonitor(_monitor) && set->nbFiles() > 0)
+        {
+            activeSets.append(set);
+        }
+    }
+
+    return activeSets.at(_i);
+}
+
+/**
+ * @brief Get the number of active sets on a monitor
+ * @return int
+ */
+int const Settings::nbActiveSetsOnMonitor(int _monitor) const
+{
+    int totalSets = 0;
+
+    foreach (const Set* set, m_sets)
+    {
+        if (set->isValid() && set->isActive() && set->isActiveOnMonitor(_monitor) && set->nbFiles() > 0)
         {
             totalSets++;
         }
