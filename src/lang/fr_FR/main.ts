@@ -18,22 +18,22 @@
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="37"/>
+        <location filename="../../gui/configdialog.ui" line="53"/>
         <source>Language :</source>
         <translation>Langue :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="50"/>
+        <location filename="../../gui/configdialog.ui" line="36"/>
         <source>Delay :</source>
         <translation>Délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="72"/>
+        <location filename="../../gui/configdialog.ui" line="78"/>
         <source>Minimize on startup</source>
         <translation>Réduire au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="79"/>
+        <location filename="../../gui/configdialog.ui" line="85"/>
         <source>Check updates</source>
         <translation>Chercher les nouvelles versions</translation>
     </message>
@@ -43,57 +43,57 @@
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="95"/>
+        <location filename="../../gui/configdialog.ui" line="101"/>
         <source>File editor :</source>
         <translation>Editeur d&apos;images :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="109"/>
+        <location filename="../../gui/configdialog.ui" line="115"/>
         <source>Lock</source>
         <translation>Vérouillage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="115"/>
+        <location filename="../../gui/configdialog.ui" line="196"/>
         <source>Password :</source>
         <translation>Mot de passe :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="125"/>
+        <location filename="../../gui/configdialog.ui" line="206"/>
         <source>Current password :</source>
         <translation>Mot de passe actuel :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="137"/>
+        <location filename="../../gui/configdialog.ui" line="150"/>
         <source>Enable lock</source>
         <translation>Activer le vérouillage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="183"/>
+        <location filename="../../gui/configdialog.ui" line="127"/>
         <source>Lock on minimize</source>
         <translation>Vérouiller quand l&apos;application est masquée</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="190"/>
+        <location filename="../../gui/configdialog.ui" line="134"/>
         <source>Lock at startup</source>
         <translation>Vérouiller au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="270"/>
+        <location filename="../../gui/configdialog.ui" line="288"/>
         <source>Mode :</source>
         <translation>Mode :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="369"/>
+        <location filename="../../gui/configdialog.ui" line="393"/>
         <source>Lock/Unlock :</source>
         <translation>(Dé)vérouiller :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="65"/>
+        <location filename="../../gui/configdialog.ui" line="71"/>
         <source>Start with Windows</source>
         <translation>Démarrer avec Windows</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="86"/>
+        <location filename="../../gui/configdialog.ui" line="92"/>
         <source>Show notifications</source>
         <translation>Afficher les notifications</translation>
     </message>
@@ -102,52 +102,52 @@
         <translation type="vanished">Lecteur d&apos;images :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="218"/>
+        <location filename="../../gui/configdialog.ui" line="230"/>
         <source>Defaults</source>
         <translation>Par défaut</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="224"/>
+        <location filename="../../gui/configdialog.ui" line="242"/>
         <source>Style :</source>
         <translation>Style :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="247"/>
+        <location filename="../../gui/configdialog.ui" line="265"/>
         <source>Type :</source>
         <translation>Type :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="283"/>
+        <location filename="../../gui/configdialog.ui" line="301"/>
         <source>Defaults settings for new sets.</source>
         <translation>Valeurs par défaut pour les nouveaux sets.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="291"/>
+        <location filename="../../gui/configdialog.ui" line="309"/>
         <source>Hotkeys</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="319"/>
+        <location filename="../../gui/configdialog.ui" line="343"/>
         <source>Show/Hide :</source>
         <translation>Masquer/Afficher :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="329"/>
+        <location filename="../../gui/configdialog.ui" line="353"/>
         <source>Refresh :</source>
         <translation>Rafraîchir :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="359"/>
+        <location filename="../../gui/configdialog.ui" line="383"/>
         <source>Change delay :</source>
         <translation>Changer le délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="309"/>
+        <location filename="../../gui/configdialog.ui" line="333"/>
         <source>Start/Pause :</source>
         <translation>Démarrer/Pause :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="339"/>
+        <location filename="../../gui/configdialog.ui" line="363"/>
         <source>Use hotkeys</source>
         <translation>Utiliser les raccourcis</translation>
     </message>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="68"/>
-        <location filename="../../gui/configdialog.cpp" line="325"/>
+        <location filename="../../gui/configdialog.cpp" line="326"/>
         <source>Select program...</source>
         <translation>Choisir un programme...</translation>
     </message>
@@ -253,7 +253,7 @@
         <translation>Raccourci &quot;%1&quot; déjà utilisé pour le set &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="356"/>
+        <location filename="../../gui/configdialog.cpp" line="357"/>
         <source>This option allows to lock any changes in the app configuration until a password is entered.&lt;br&gt;&lt;b&gt;Warning:&lt;/b&gt; even though the password is hashed, the config file is not secure and can be manually modified.</source>
         <translation>Cette option permet de vérouiller tout changement dans la configuration de l&apos;application tant qu&apos;un mot de passe n&apos;est pas renseigné.&lt;br&gt;&lt;b&gt;Attention :&lt;/b&gt; bien que le mot de passe soit hashé, le fichier de configuration n&apos;est pas sécurisé et peut être manuellement modifié.</translation>
     </message>
@@ -278,7 +278,7 @@
         <translation>Vous devez redémarrer %1 pour appliquer la nouvelle langue.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="325"/>
+        <location filename="../../gui/configdialog.cpp" line="326"/>
         <source>Executables (*.exe)</source>
         <translation>Éxécutables (*.exe)</translation>
     </message>
@@ -693,12 +693,12 @@
         <translation type="vanished">Dossiers actifs</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="142"/>
+        <location filename="../../gui/previewdialog.cpp" line="143"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="142"/>
+        <location filename="../../gui/previewdialog.cpp" line="143"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>
@@ -794,37 +794,37 @@
         <translation>Propriétés</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="143"/>
+        <location filename="../../gui/seteditdialog.ui" line="119"/>
         <source>Frequency :</source>
         <translation>Fréquence :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="93"/>
+        <location filename="../../gui/seteditdialog.ui" line="23"/>
         <source>Name :</source>
         <translation>Nom :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="83"/>
+        <location filename="../../gui/seteditdialog.ui" line="106"/>
         <source>Hotkey :</source>
         <translation>Raccourci :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="73"/>
+        <location filename="../../gui/seteditdialog.ui" line="93"/>
         <source>Mode :</source>
         <translation>Mode :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="38"/>
+        <location filename="../../gui/seteditdialog.ui" line="84"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="113"/>
+        <location filename="../../gui/seteditdialog.ui" line="36"/>
         <source>Type :</source>
         <translation>Type :</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="166"/>
+        <location filename="../../gui/seteditdialog.ui" line="49"/>
         <source>Monitors :</source>
         <translation>Moniteurs :</translation>
     </message>
@@ -833,7 +833,7 @@
         <translation type="vanished">Par dossier</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.ui" line="103"/>
+        <location filename="../../gui/seteditdialog.ui" line="62"/>
         <source>Style :</source>
         <translation>Style :</translation>
     </message>
@@ -924,7 +924,7 @@
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/seteditdialog.cpp" line="229"/>
+        <location filename="../../gui/seteditdialog.cpp" line="238"/>
         <source>The frequency is the chance of this set to be randomly selected among others.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; at equal frequency, a set with more images has higher chance to be selected.</source>
         <translation>La fréquence est la chance qu&apos;un set soit sélectionné aléatoirement.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; à fréquence égale, un set avec plus d&apos;images a plus de chances d&apos;être sélectionné.</translation>
     </message>

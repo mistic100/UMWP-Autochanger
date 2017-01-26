@@ -23,9 +23,9 @@ public:
      * @brief The result of the async generation
      */
     struct Result {
-        Set* set = NULL;
-        QVector<QString> folders;
+        QVector<Set*> sets;
         QVector<QString> files;
+        UM::WALLPAPER type;
     };
 
 private:
@@ -42,30 +42,28 @@ public:
     Result generate();
 
 private:
-    Set* getRandomSet();
-    QString getRandomFolder(Set* _set, const QVector<QString> &_folders);
-
     QRect getDesktopEnabledRect();
 
-    // source files getters
-    QVector<QString> getFiles(Result *_context);
-    QVector<QString> getFilesForCustom(Result *_context, int _nb);
+    // random access
+    QString getFile(int _idx, Result* _context);
+    Set* getRandomSet(const int _monitor, const QVector<Set*> &_existingSets);
+    QString getRandomFolder(Set* _set);
+    QString getRandomFile(Set* _set, const QString &_folder="");
     QString getNextFile(Set* _set);
-    QString getRandomFile(Result *_context, const QVector<QString> &_files, const QString &_folder="");
 
     // custom generation
-    QVector<QString> getCustomFiles(Result *_context);
-    QString generateCustomFile(int _idx, Result *_context);
+    QString generateCustomFile(int _idx, Result* _context);
+    QVector<QString> getFilesForCustom(Set* _set, int _nb, Result* _context);
 
     // standard generation
-    QString adaptFileToMonitor(const QString &_file, int _idx, Set* _set);
-    QVector<QString> adaptFiles(Set* _set, const QVector<QString> &_files);
+    QString getAndAdaptFile(int _idx, Result* _context);
+    QString adaptFileToMonitor(const QString &_file, int _idx, Result* _context);
 
     // final generation
-    QString generateFile(Set* _set, const QVector<QString> &_files);
+    QString generateFile(const QVector<QString> &_files, Result* _context);
 
     // cache keys
-    QString getDesktopWallpaperKey(UM::IMAGE _style);
+    QString getDesktopWallpaperKey();
     QString getCacheFilename(const QString &_file, const QRect &_rect, const QString &_key1, const QString &_key2);
     QString getCustLayoutTempFilename(int _idx, Set* _set);
 };

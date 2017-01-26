@@ -16,7 +16,7 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(onStartPause(bool)));
     connect(m_ctrl, SIGNAL(lockToggled(bool)), this, SLOT(setLocked(bool)));
     connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled()); });
-    connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged()));
+    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(onListChanged()));
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
 
@@ -143,7 +143,7 @@ void TrayIcon::onListChanged()
         QAction* action = m_quickMenu->addAction(set->name());
         action->setData(i);
 
-        if (set == m_ctrl->current().set)
+        if (m_ctrl->current().sets.contains(set))
         {
             action->setIcon(QIcon(":/images/icons/bullet_yellow.png"));
         }

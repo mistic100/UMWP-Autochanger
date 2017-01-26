@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
+    <width>350</width>
     <height>258</height>
    </rect>
   </property>
@@ -24,6 +24,22 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Delay :</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
         <widget class="QTimeEdit" name="optionDelay">
          <property name="displayFormat">
@@ -43,16 +59,6 @@
        </item>
        <item row="0" column="1" colspan="2">
         <widget class="QComboBoxExt" name="optionLang"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Delay :</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
        </item>
        <item row="3" column="0" colspan="3">
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -109,23 +115,30 @@
        <string>Lock</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_12">
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <item row="6" column="0" colspan="3">
+        <widget class="QCheckBox" name="optionLockMinimize">
          <property name="text">
-          <string>Password :</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <string>Lock on minimize</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_13">
+       <item row="5" column="0" colspan="3">
+        <widget class="QCheckBox" name="optionLockStartup">
          <property name="text">
-          <string>Current password :</string>
+          <string>Lock at startup</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
+        <widget class="QLineEdit" name="optionLockPassword">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
          </property>
         </widget>
        </item>
@@ -177,24 +190,23 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="3">
-        <widget class="QCheckBox" name="optionLockMinimize">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>Lock on minimize</string>
+          <string>Password :</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="3">
-        <widget class="QCheckBox" name="optionLockStartup">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_13">
          <property name="text">
-          <string>Lock at startup</string>
+          <string>Current password :</string>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QLineEdit" name="optionLockPassword">
-         <property name="echoMode">
-          <enum>QLineEdit::Password</enum>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -218,6 +230,12 @@
        <string>Defaults</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
        <item row="2" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
@@ -291,6 +309,12 @@
        <string>Hotkeys</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
        <item row="5" column="1">
         <widget class="QHotKeyWidget" name="hotkeyDelay" native="true"/>
        </item>

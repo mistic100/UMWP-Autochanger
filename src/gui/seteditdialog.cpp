@@ -222,6 +222,15 @@ void SetEditDialog::updateUi()
 
     ui->selectMonitors->setEnabled(type == UM::W_MONITOR);
     ui->styleConfig->setVisible(style == UM::IM_CUSTOM);
+
+    if (type == UM::W_DESKTOP)
+    {
+        QStandardItemModel* model = (QStandardItemModel*) ui->selectMonitors->model();
+        for (int i = 0; i < model->rowCount(); i++)
+        {
+            model->item(i)->setCheckState(Qt::Checked);
+        }
+    }
 }
 
 void SetEditDialog::on_freqHelp_clicked()

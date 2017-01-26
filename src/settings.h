@@ -39,8 +39,8 @@ public:
 
     Set*            set(int _i) const { return m_sets.at(_i); }
     const int       nbSets() const    { return m_sets.size(); }
-    Set*            activeSet(int _i, bool _withFiles=false) const;
-    const int       nbActiveSets(bool _withFiles=false) const;
+    Set*            activeSet(int _i) const;
+    const int       nbActiveSets() const;
     Set*            activeSetOnMonitor(int _i, int _monitor) const;
     const int       nbActiveSetsOnMonitor(int _monitor) const;
 

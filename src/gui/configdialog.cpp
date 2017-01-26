@@ -302,6 +302,7 @@ void ConfigDialog::on_optionUseHotkeys_toggled(bool _checked)
     ui->hotkeyShowHide->setDisabled(!_checked);
     ui->hotkeyStartPause->setDisabled(!_checked);
     ui->hotkeyDelay->setDisabled(!_checked);
+    ui->hotkeyLockUnlock->setDisabled(!_checked);
 }
 
 /**

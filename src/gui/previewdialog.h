@@ -25,6 +25,9 @@ private:
 public:
     PreviewDialog(QWidget* _parent, Controller* _ctrl);
 
+private:
+    QString getFolderImage(const QString &_folder);
+
 public slots:
     void draw();
 

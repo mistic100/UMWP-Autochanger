@@ -491,7 +491,7 @@ void MainWindow::openAboutDialog()
  */
 void MainWindow::openPreviewDialog()
 {
-    if (m_ctrl->current().files.isEmpty() && m_ctrl->current().folders.isEmpty())
+    if (m_ctrl->current().files.isEmpty())
     {
         QMessageBox::warning(this, tr("Error"), tr("No active files"), QMessageBox::Ok);
     }

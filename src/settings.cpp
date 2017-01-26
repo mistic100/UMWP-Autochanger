@@ -563,13 +563,13 @@ void Settings::moveSet(int _from, int _to)
  * @param int _i - position in the sub-vector of active sets
  * @return Set*
  */
-Set* Settings::activeSet(int _i, bool _withFiles) const
+Set* Settings::activeSet(int _i) const
 {
     QVector<Set*> activeSets;
 
     foreach (Set* set, m_sets)
     {
-        if (set->isValid() && set->isActive() && (!_withFiles || set->nbFiles() > 0))
+        if (set->isValid() && set->isActive())
         {
             activeSets.append(set);
         }
@@ -580,16 +580,15 @@ Set* Settings::activeSet(int _i, bool _withFiles) const
 
 /**
  * @brief Get the number of active sets
- * @param bool _withFiles - if true, only non-empty sets are counted
  * @return int
  */
-int const Settings::nbActiveSets(bool _withFiles) const
+int const Settings::nbActiveSets() const
 {
     int totalSets = 0;
 
     foreach (const Set* set, m_sets)
     {
-        if (set->isValid() && set->isActive() && (!_withFiles || set->nbFiles() > 0))
+        if (set->isValid() && set->isActive())
         {
             totalSets++;
         }

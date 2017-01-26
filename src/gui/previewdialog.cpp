@@ -54,38 +54,13 @@ void PreviewDialog::draw()
 
     WallpaperGenerator::Result current = m_ctrl->current();
 
-    // rare case
-    if (current.set == NULL)
-    {
-        return;
-    }
-
-    // width of the thumbnail
-    int width = 150;
-    if (current.set->style() == UM::IM_CUSTOM)
-    {
-        width = 100;
-    }
-    else if (current.set->type() == UM::W_DESKTOP)
+    int width = 100;
+    if (current.type == UM::W_DESKTOP)
     {
         width*= m_ctrl->settings()->nbEnabledMonitors();
     }
 
     int col = 0; int row = 0;
-
-    foreach (QString folder, current.folders)
-    {
-        PreviewWidget* widget = new PreviewWidget(folder, current.set->fileInFolder(folder, 0), width, false, true, this);
-
-        m_layout->addWidget(widget, row, col);
-
-        col++;
-        if (col > 5)
-        {
-            col = 0;
-            row+= 1;
-        }
-    }
 
     bool showEdit = !m_settings->param(UM::CONF::open_program).toString().isEmpty();
 
@@ -96,7 +71,10 @@ void PreviewDialog::draw()
             continue;
         }
 
-        PreviewWidget* widget = new PreviewWidget(file, file, width, showEdit, false, this);
+        QFileInfo info(file);
+        QString image = info.isFile() ? file : getFolderImage(file);
+
+        PreviewWidget* widget = new PreviewWidget(file, image, width, showEdit && info.isFile(), info.isDir(), this);
 
         m_layout->addWidget(widget, row, col);
 
@@ -107,6 +85,29 @@ void PreviewDialog::draw()
             row+= 1;
         }
     }
+}
+
+/**
+ * @brief Get the first image of a folder
+ * @param string _folder
+ * @return string
+ */
+QString PreviewDialog::getFolderImage(const QString &_folder)
+{
+    for (int i = 0; i < m_settings->nbSets(); i++)
+    {
+        Set* set = m_settings->set(i);
+
+        for (int j = 0; j < set->nbFolders(); j++)
+        {
+            if (_folder == set->folder(j))
+            {
+                return set->fileInFolder(_folder, 0);
+            }
+        }
+    }
+
+    return "";
 }
 
 /**

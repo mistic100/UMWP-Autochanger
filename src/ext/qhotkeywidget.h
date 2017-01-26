@@ -37,7 +37,7 @@ public:
 
         QPushButton* erase = new QPushButton(this);
         erase->setFlat(true);
-        erase->setIcon(QIcon(":/images/icons/bullet_cross.png"));
+        erase->setIcon(QIcon(":/images/icons/cross.png"));
         erase->setToolTip(tr("Reset"));
         layout->addWidget(erase);
 

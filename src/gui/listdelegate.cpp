@@ -32,6 +32,9 @@ const QFont infoFont = QFont("Calibri", 9, -1, true);
 const QColor infoColorSelected = QColor(220, 220, 220);
 const QColor infoColor = QColor(150, 150, 150);
 
+QFont monitorsFont = QFont("Calibri", 8);
+const QColor monitorsColor = Qt::black;
+
 QT_BEGIN_NAMESPACE
     extern Q_GUI_EXPORT void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
 QT_END_NAMESPACE
@@ -46,7 +49,9 @@ ListDelegate::ListDelegate(QObject* _parent, Controller *_ctrl) :
     QAbstractItemDelegate(_parent),
     m_ctrl(_ctrl),
     m_settings(_ctrl->settings())
-{}
+{
+    monitorsFont.setLetterSpacing(QFont::AbsoluteSpacing, -1);
+}
 
 /**
  * @brief ListDelegate::sizeHint
@@ -123,7 +128,7 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
 
 
     // STATE ICON
-    if (set == m_ctrl->current().set)
+    if (m_ctrl->current().sets.contains(set))
     {
         icon = QIcon(":/images/icons/bullet_yellow.png");
     }
@@ -157,6 +162,51 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     rect = baseRect.adjusted(0, 3, -rightMargin1, 0);
     icon.paint(&painter, rect, Qt::AlignTop|Qt::AlignRight);
     rightMargin1+= 16 + 4;
+
+
+    // MONITORS
+    // multiline is handled manually because QFont does not have a lineHeight option
+    // the display does not allow more than 6 monitors
+    if (set->type() == UM::W_MONITOR && !set->monitors().isEmpty())
+    {
+        QString monitors, monitors2;
+        for (int i = 0; i < m_ctrl->enviro()->nbMonitors(); i++)
+        {
+            if (m_settings->monitor(i).enabled && set->isActiveOnMonitor(i))
+            {
+                if (monitors.size() < 5)
+                {
+                    if (!monitors.isEmpty())
+                    {
+                        monitors+= "-";
+                    }
+                    monitors+= QString::number(i+1);
+                }
+                else if (monitors2.size() < 5)
+                {
+                    if (!monitors2.isEmpty())
+                    {
+                        monitors2+= "-";
+                    }
+                    monitors2+= QString::number(i+1);
+                }
+            }
+        }
+
+        rect = QRect(baseRect.width()-rightMargin1+2, baseRect.top(), 20, 16);
+
+        painter.setFont(monitorsFont);
+        painter.setPen(monitorsColor);
+
+        painter.drawText(rect, monitors);
+
+        if (!monitors2.isEmpty())
+        {
+            rect.translate(0, 8);
+
+            painter.drawText(rect, monitors2);
+        }
+    }
 
 
     // STYLE ICON
