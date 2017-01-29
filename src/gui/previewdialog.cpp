@@ -54,17 +54,25 @@ void PreviewDialog::draw()
 
     WallpaperGenerator::Result current = m_ctrl->current();
 
-    int width = 100;
-    if (current.type == UM::W_DESKTOP)
+    int width;
+    if (current.type == UM::W_DESKTOP && current.sets.at(0)->style() != UM::IM_CUSTOM)
     {
-        width*= m_ctrl->settings()->nbEnabledMonitors();
+        width = 200 * m_ctrl->settings()->nbEnabledMonitors();
+    }
+    else if (current.files.size() <= 4)
+    {
+        width = 150;
+    }
+    else
+    {
+        width = 100;
     }
 
     int col = 0; int row = 0;
 
     bool showEdit = !m_settings->param(UM::CONF::open_program).toString().isEmpty();
 
-    foreach (QString file, current.files)
+    foreach (const QString &file, current.files)
     {
         if (file.isEmpty())
         {

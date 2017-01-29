@@ -90,7 +90,7 @@ const int Settings::nbEnabledMonitors() const
 {
     int n = 0;
 
-    foreach (const UM::Monitor mon, m_monitors)
+    foreach (const UM::Monitor &mon, m_monitors)
     {
         if (mon.enabled) n++;
     }
@@ -115,15 +115,14 @@ void Settings::log()
         hotkeys.append(it.key() +": "+ QString::number(it.value()));
     }
 
-    QList<QString> sets;
-    for (QVector<Set*>::const_iterator it = m_sets.constBegin(); it != m_sets.constEnd(); ++it)
-    {
-        sets.append((*it)->name()+": "+((*it)->isActive()?"active":"inactive"));
-    }
-
     QLOG_DEBUG() << "== OPTIONS" << options;
     QLOG_DEBUG() << "== HOTKEYS" << hotkeys;
-    QLOG_DEBUG() << "== SETS" << sets;
+    QLOG_DEBUG() << "== SETS";
+
+    foreach (Set* set, m_sets)
+    {
+        QLOG_DEBUG()<<"   "<<set->name()<<(set->isActive()?"active":"inactive")<<","<<set->nbFiles()<<"files,"<<set->nbFolders()<<"folders";
+    }
 }
 
 /**
@@ -287,14 +286,14 @@ bool Settings::load(QString _filename)
         save();
     }
 
-    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
-    {
-        log();
-    }
-
     foreach (Set* set, m_sets)
     {
         set->init();
+    }
+
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
+    {
+        log();
     }
 
     return true;
@@ -363,7 +362,7 @@ bool Settings::save(QString _filename)
     // monitors node
     writer.writeStartElement("monitors");
 
-    foreach (const UM::Monitor mon, m_monitors)
+    foreach (const UM::Monitor &mon, m_monitors)
     {
         writer.writeStartElement("monitor");
         writer.writeAttribute("enabled", QString::number(mon.enabled));
@@ -589,45 +588,6 @@ int const Settings::nbActiveSets() const
     foreach (const Set* set, m_sets)
     {
         if (set->isValid() && set->isActive())
-        {
-            totalSets++;
-        }
-    }
-
-    return totalSets;
-}
-
-/**
- * @brief Get one of the active sets on a monitor
- * @param int _i - position in the sub-vector of active sets
- * @return Set*
- */
-Set* Settings::activeSetOnMonitor(int _i, int _monitor) const
-{
-    QVector<Set*> activeSets;
-
-    foreach (Set* set, m_sets)
-    {
-        if (set->isValid() && set->isActive() && set->isActiveOnMonitor(_monitor) && set->nbFiles() > 0)
-        {
-            activeSets.append(set);
-        }
-    }
-
-    return activeSets.at(_i);
-}
-
-/**
- * @brief Get the number of active sets on a monitor
- * @return int
- */
-int const Settings::nbActiveSetsOnMonitor(int _monitor) const
-{
-    int totalSets = 0;
-
-    foreach (const Set* set, m_sets)
-    {
-        if (set->isValid() && set->isActive() && set->isActiveOnMonitor(_monitor) && set->nbFiles() > 0)
         {
             totalSets++;
         }

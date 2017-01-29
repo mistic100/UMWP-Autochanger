@@ -46,9 +46,9 @@ private:
 
     // random access
     QString getFile(int _idx, Result* _context);
-    Set* getRandomSet(const int _monitor, const QVector<Set*> &_existingSets);
+    Set* getRandomSet(const int _monitor=-1, const QVector<Set*> &_existingSets=QVector<Set*>());
     QString getRandomFolder(Set* _set);
-    QString getRandomFile(Set* _set, const QString &_folder="");
+    QString getRandomFile(Set* _set, const QString &_folder="", const QVector<QString> &_files=QVector<QString>());
     QString getNextFile(Set* _set);
 
     // custom generation

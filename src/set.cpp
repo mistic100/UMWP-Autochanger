@@ -50,14 +50,14 @@ Set::Set(const QDomElement* _dom)
         m_mode = static_cast<UM::MODE>(_dom->attribute("mode").toInt());
     }
 
-    // added in 2.1.1
+    // added in 2.2
     if (_dom->hasAttribute("frequency"))
     {
         m_frequency = _dom->attribute("frequency").toDouble();
     }
 
-    // added in 2.1.1
-    if (_dom->hasAttribute("monitors"))
+    // added in 2.2
+    if (_dom->hasAttribute("monitors") && !_dom->attribute("monitors").isEmpty())
     {
         QStringList monitors = _dom->attribute("monitors").split(",");
         foreach (QString monitor, monitors)
