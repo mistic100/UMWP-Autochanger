@@ -37,9 +37,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     // hotkeys
     bool useHotkeys = m_settings->param(UM::CONF::use_hotkeys).toBool();
-    ui->hotkeyRefresh->setDisabled(!useHotkeys);
-    ui->hotkeyShowHide->setDisabled(!useHotkeys);
-    ui->hotkeyStartPause->setDisabled(!useHotkeys);
+    on_optionUseHotkeys_toggled(useHotkeys);
 
     ui->hotkeyRefresh->setHotkey(   m_settings->hotkey(UM::CONF::HOTKEY::refresh));
     ui->hotkeyShowHide->setHotkey(  m_settings->hotkey(UM::CONF::HOTKEY::showhide));
@@ -95,10 +93,8 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
 
     // lock
     boolean lockEnabled = m_settings->param(UM::CONF::lock_enabled).toBool();
-    ui->optionLockPassword->setDisabled(!lockEnabled);
-    ui->currentPassword->setDisabled(   !lockEnabled);
-    ui->optionLockStartup->setDisabled( !lockEnabled);
-    ui->optionLockMinimize->setDisabled(!lockEnabled);
+    on_optionLockEnabled_toggled(lockEnabled);
+    ui->currentPassword->setDisabled(!lockEnabled);
 
     ui->optionLockEnabled->setChecked(  lockEnabled);
     ui->optionLockStartup->setChecked(  m_settings->param(UM::CONF::lock_startup).toBool());
@@ -302,7 +298,7 @@ void ConfigDialog::on_optionUseHotkeys_toggled(bool _checked)
     ui->hotkeyShowHide->setDisabled(!_checked);
     ui->hotkeyStartPause->setDisabled(!_checked);
     ui->hotkeyDelay->setDisabled(!_checked);
-    ui->hotkeyLockUnlock->setDisabled(!_checked);
+    ui->hotkeyLockUnlock->setDisabled(!_checked || !ui->optionLockEnabled->isChecked());
 }
 
 /**
@@ -314,6 +310,7 @@ void ConfigDialog::on_optionLockEnabled_toggled(bool _checked)
     ui->optionLockPassword->setDisabled(!_checked);
     ui->optionLockStartup->setDisabled(!_checked);
     ui->optionLockMinimize->setDisabled(!_checked);
+    ui->hotkeyLockUnlock->setDisabled(!_checked || !ui->optionUseHotkeys->isChecked());
 }
 
 /**
