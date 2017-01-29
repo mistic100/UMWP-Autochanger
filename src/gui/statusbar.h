@@ -18,6 +18,8 @@ private:
 public:
     StatusBar(QWidget* _parent, Controller* _ctrl);
 
+    void newVersion(const QString &_version);
+
 public slots:
     void showLoader();
     void hideLoader();

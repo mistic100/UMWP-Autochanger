@@ -396,7 +396,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="664"/>
+        <location filename="../../gui/mainwindow.cpp" line="665"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
@@ -504,13 +504,12 @@
         <translation>Текущий набор: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="620"/>
-        <location filename="../../gui/mainwindow.cpp" line="631"/>
+        <location filename="../../gui/mainwindow.cpp" line="626"/>
         <source>A new version is available : %1</source>
         <translation>Доступна новая версия: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="668"/>
+        <location filename="../../gui/mainwindow.cpp" line="669"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Закрыть и больше не показывать это сообщение</translation>
     </message>
@@ -520,7 +519,7 @@
         <translation>%1 всё ещё работает</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="665"/>
+        <location filename="../../gui/mainwindow.cpp" line="666"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Если вы выйдете сейчас, &lt;br&gt;обои перестанут меняться.</translation>
     </message>
@@ -647,17 +646,27 @@
         <translation>Доступна новая версия: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="55"/>
+        <location filename="../../gui/newversiondialog.cpp" line="27"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../../gui/newversiondialog.cpp" line="28"/>
+        <source>Close and don&apos;t show this message again</source>
+        <translation>Закрыть и больше не показывать это сообщение</translation>
+    </message>
+    <message>
+        <location filename="../../gui/newversiondialog.cpp" line="58"/>
         <source>Downloading UMWP_Autochanger_%1_Setup.exe ...</source>
         <translation>Скачивается UMWP_Autochanger_%1_Setup.exe ...</translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="71"/>
+        <location filename="../../gui/newversiondialog.cpp" line="76"/>
         <source>Unable to download installer file.</source>
         <translation>Не получается скачать установочный файл.</translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="71"/>
+        <location filename="../../gui/newversiondialog.cpp" line="76"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -670,12 +679,12 @@
         <translation>Активные файлы</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="143"/>
+        <location filename="../../gui/previewdialog.cpp" line="151"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../gui/previewdialog.cpp" line="143"/>
+        <location filename="../../gui/previewdialog.cpp" line="151"/>
         <source>Are you sure?</source>
         <translation>Вы уверены?</translation>
     </message>
@@ -926,6 +935,14 @@
         <location filename="../../gui/seteditdialog.cpp" line="137"/>
         <source>Name can not be empty</source>
         <translation>&quot;Имя&quot; не может быть пустым</translation>
+    </message>
+</context>
+<context>
+    <name>StatusBar</name>
+    <message>
+        <location filename="../../gui/statusbar.cpp" line="41"/>
+        <source>A new version is available : %1</source>
+        <translation>Доступна новая версия: %1</translation>
     </message>
 </context>
 <context>

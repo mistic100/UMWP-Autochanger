@@ -1,5 +1,7 @@
 #include <QMovie>
+#include <QPushButton>
 
+#include "mainwindow.h"
 #include "statusbar.h"
 
 /**
@@ -28,6 +30,21 @@ StatusBar::StatusBar(QWidget* _parent, Controller* _ctrl) :
     connect(_ctrl, SIGNAL(generationFinished()), this, SLOT(hideLoader()));
 
     hideLoader();
+}
+
+/**
+ * @brief Displays the "New version" message
+ * @param string _version
+ */
+void StatusBar::newVersion(const QString &_version)
+{
+    QPushButton* statusLabel = new QPushButton(tr("A new version is available : %1").arg(_version));
+    statusLabel->setFlat(true);
+    statusLabel->setStyleSheet("QPushButton { color : red; } QPushButton:flat:pressed { border: none; }");
+    statusLabel->setCursor(Qt::PointingHandCursor);
+    addWidget(statusLabel);
+
+    connect(statusLabel, SIGNAL(clicked()), (MainWindow*) parent(), SLOT(openNewVersionDialog()));
 }
 
 /**

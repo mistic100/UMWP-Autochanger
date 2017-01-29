@@ -101,6 +101,7 @@ namespace UM {
         const QString lock_password = "lock_password";
         const QString lock_startup = "lock_startup";
         const QString lock_minimize = "lock_minimize";
+        const QString ignore_update = "ignore_update";
 
         namespace HOTKEY {
             const QString refresh = "refresh";

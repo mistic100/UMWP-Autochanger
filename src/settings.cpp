@@ -29,6 +29,7 @@ Settings::Settings(Environment* _enviro) :
     m_options[UM::CONF::lock_password] = "";
     m_options[UM::CONF::lock_startup] = true;
     m_options[UM::CONF::lock_minimize] = true;
+    m_options[UM::CONF::ignore_update] = "0.0.0";
 
     m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
     m_hotkeys[UM::CONF::HOTKEY::startpause] = 0;

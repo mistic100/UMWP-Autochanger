@@ -614,26 +614,22 @@ void MainWindow::onHotkey()
  */
 void MainWindow::onNewVersion()
 {
-    QString _version = m_enviro->newVersion().code;
+    QString version = m_enviro->newVersion().code;
 
-    // message in status bar
-    QPushButton* statusLabel = new QPushButton(tr("A new version is available : %1").arg(_version));
-    statusLabel->setFlat(true);
-    statusLabel->setStyleSheet("QPushButton { color : red; } QPushButton:flat:pressed { border: none; }");
-    statusLabel->setCursor(Qt::PointingHandCursor);
-    m_statusBar->addPermanentWidget(statusLabel);
-
-    connect(statusLabel, SIGNAL(clicked()), this, SLOT(openNewVersionDialog()));
-
-    if (!isVisible())
+    if (QString(version).compare(m_settings->param(UM::CONF::ignore_update).toString()) > 0)
     {
-        // tray tootlip
-        m_trayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(_version));
-        connect(m_trayIcon, SIGNAL(messageClicked()), this, SLOT(toggleWindow()));
-    }
-    else
-    {
-        openNewVersionDialog();
+        m_statusBar->newVersion(version);
+
+        if (!isVisible())
+        {
+            // tray tootlip
+            m_trayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(version));
+            connect(m_trayIcon, SIGNAL(messageClicked()), this, SLOT(toggleWindow()));
+        }
+        else
+        {
+            openNewVersionDialog();
+        }
     }
 }
 
@@ -643,7 +639,12 @@ void MainWindow::onNewVersion()
 void MainWindow::openNewVersionDialog()
 {
     NewVersionDialog dialog(this, m_ctrl);
-    dialog.exec();
+    int res = dialog.exec();
+
+    if (res == QDialog::Rejected)
+    {
+        m_settings->setParam(UM::CONF::ignore_update, m_enviro->newVersion().code);
+    }
 }
 
 /**

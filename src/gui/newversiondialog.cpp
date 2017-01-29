@@ -23,6 +23,9 @@ NewVersionDialog::NewVersionDialog(QWidget* _parent, Controller* _ctrl) :
 
     ui->progressBar->setVisible(false);
     ui->label->setText(tr("A new version is available : %1").arg(m_version.code));
+
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Close"));
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Close and don't show this message again"));
 }
 
 /**
@@ -53,6 +56,8 @@ void NewVersionDialog::on_updateButton_clicked()
     else
     {
         ui->label->setText(tr("Downloading UMWP_Autochanger_%1_Setup.exe ...").arg(m_version.code));
+
+        QLOG_DEBUG() << "Download" << m_version.link;
 
         QNetworkAccessManager* manager = new QNetworkAccessManager();
         m_reply = manager->get(QNetworkRequest(QUrl(m_version.link)));
@@ -124,6 +129,7 @@ void NewVersionDialog::onDownloadFinished()
         if (hash.compare(m_version.hash, Qt::CaseInsensitive) != 0)
         {
             QLOG_ERROR() << "File corrupted";
+            QLOG_DEBUG() << "Remote hash" << m_version.hash << "Local hash" << hash;
 
             m_file.remove();
             errorMessage();
