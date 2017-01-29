@@ -278,3 +278,7 @@ kbd{
 .share-google {
   background-position:0px -48px;
 }
+
+[class^=icon-] {
+  display: inline-block;
+}

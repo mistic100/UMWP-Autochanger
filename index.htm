@@ -10,6 +10,7 @@
   <title>Ultimate Monitor Wallpaper Autochanger</title>
   
   <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="src/sprite.css">
 </head>
 
 <body>
@@ -62,8 +63,8 @@
     </div>
     
     <div id="downloadContainer">
-      <a href="download.php?ver=latest&amp;type=exe" class="button">Version 2.1(Installer)</a>
-      <a href="download.php?ver=latest&amp;type=zip" class="button">Version 2.1 (ZIP)</a>
+      <a href="download.php?ver=latest&amp;type=exe" class="button">Version 2.2 (Installer)</a>
+      <a href="download.php?ver=latest&amp;type=zip" class="button">Version 2.2 (ZIP)</a>
       
       <h3>Requirement</h3>
       <ul>
@@ -83,8 +84,8 @@
   <div class="the_page">
     <ol class="cb">
       <li>Launch <b>UMWP Autochanger</b>.</li>
-      <li>Click on the <b><img src="src/icons/add2.png"> Add set</b> button to add a new set.</li>
-      <li>Once you have added your sets, click on the <b><img src="src/icons/refresh.png"> Refresh</b> button, the wallpaper will randomly change every 60 seconds.</li>
+      <li>Click on the <b><i class="icon-add2"></i> Add set</b> button to add a new set.</li>
+      <li>Once you have added your sets, click on the <b><i class="icon-refresh"></i> Refresh</b> button, the wallpaper will randomly change every 60 seconds.</li>
     </ol>
     </div>
   </div>
@@ -113,50 +114,56 @@
     <p>The wallpaper is updated periodically, by default every 60 seconds (configurable).</p>
     
     <h3>Add, delete and activate sets</h3>
-    <p>To add a set just click on the <img src="src/icons/add2.png"> menu button, on right-click in the list and click <img src="src/icons/add.png">, an explorer window will open to allow you to choose a folder.</p>
-    <p>To delete a set, right-click on it and click on <img src="src/icons/delete.png">.</p>
-    <p>To activate/deactivate a set, right-click on it and click on <img src="src/icons/enable.png"> or <img src="src/icons/disable.png">. Active sets are marked with a <img src="src/icons/bullet_green.png"> icon and inactive sets are marked with a <img src="src/icons/bullet_red.png"> icon.</p>
+    <p>To add a set just click on the <i class="icon-add"></i> menu button, or right-click in the list and click <i class="icon-add_color"></i>, an explorer window will open to allow you to choose a folder.</p>
+    <p>To delete a set, right-click on it and click on <i class="icon-delete"></i>.</p>
+    <p>To activate/deactivate a set, right-click on it and click on <i class="icon-enable"></i> or <i class="icon-disable"></i>. Active sets are marked with a <i class="icon-bullet_green"></i> icon and inactive sets are marked with a <i class="icon-bullet_red"></i> icon, current sets are marked with <i class="icon-bullet_yellow"></i> icon.</p>
     
     <h3>Edit sets</h3>
-    <p>Right-click on a set and click on <img src="src/icons/edit.png"> to edit it's properties, you can change the name, the style, the type, the mode and the shortcut (see dedicated section about shortcuts).</p>
+    <p>Right-click on a set and click on <i class="icon-edit"></i> to edit it's properties, you can change the name, the style, the type, the mode and the shortcut (see dedicated section about shortcuts).</p>
     <p>You can edit several sets together by selecting them before right-click. In this mode, names and shortcuts can't be edited.</p>
     <p>There are two types available:</p>
       <ul class="cb1">
-        <li><b><img src="src/icons/w_monitor.png"> Monitor:</b> a different image is used for each monitor</li>
-        <li><b><img src="src/icons/w_desktop.png"> Desktop:</b> only one image is used for all monitors</li>
+        <li><b><i class="icon-w_monitor"></i> Monitor:</b> a different image is used for each monitor</li>
+        <li><b><i class="icon-w_desktop"></i> Desktop:</b> only one image is used for all monitors</li>
       </ul>
-    <p>There are five styles available, the same as the default Windows 7 wallpaper manager:</p>
+    <p>There are six styles available, the first five are the same as the default Windows 7 wallpaper manager:</p>
       <ul class="cb1">
-        <li><b><img src="src/icons/im_center.png"> Center</b></li>
-        <li><b><img src="src/icons/im_tile.png"> Tile</b></li>
-        <li><b><img src="src/icons/im_stretch.png"> Stretch</b></li>
-        <li><b><img src="src/icons/im_stretch_prop.png"> Strecth proportional</b></li>
-        <li><b><img src="src/icons/im_fill.png"> Fill</b></li>
+        <li><b><i class="icon-im_center"></i> Center</b></li>
+        <li><b><i class="icon-im_tile"></i> Tile</b></li>
+        <li><b><i class="icon-im_stretch"></i> Stretch</b></li>
+        <li><b><i class="icon-im_stretch_prop"></i> Strecth proportional</b></li>
+        <li><b><i class="icon-im_fill"></i> Fill</b></li>
+        <li><b><i class="icon-im_custom"></i> Custom</b> (see bellow)</li>
       </ul>
     <p>There are two modes available:</p>
       <ul class="cb1">
-        <li><b><img src="src/icons/mode_random.png"> Random:</b> files are chosen randomly in the set</li>
-        <li><b><img src="src/icons/mode_sequential.png"> Sequential:</b> files are chosen sequentially in alphabetical order</li>
+        <li><b><i class="icon-mode_random"></i> Random:</b> files are chosen randomly in the set</li>
+        <li><b><i class="icon-mode_sequential"></i> Sequential:</b> files are chosen sequentially in alphabetical order</li>
       </ul>
       
     <h3>Configuration</h3>
-    <p>In <b><img src="src/icons/config.png"> Configuration &#8227; <img src="src/icons/settings.png"> Options</b> menu you can configure the update delay, the shortcuts and some other options.</p>
-    <p>The <b>Defaults</b> is used to define default type, style and mode for new sets.</p>
-    <p>Additionally you can <b><img src="src/icons/export.png"> export</b> and <b><img src="src/icons/import.png"> import</b> the configuration as a XML file, usefull if you plan the reset your system !</p>
+    <p>In <b><i class="icon-config"></i> Configuration &#8227; <i class="icon-settings"></i> Options</b> menu you can configure the update delay, the shortcuts and some other options.</p>
+    <p>The <b>Lock</b> allows to define a password that must be entered to change the active sets or modify the configuration.</p>
+    <p>The <b>Defaults</b> tab is used to define default type, style and mode for new sets.</p>
+    <p>Additionally you can <b><i class="icon-export"></i> export</b> and <b><i class="icon-import"></i> import</b> the configuration as a XML file, usefull if you plan the reset your system !</p>
     
     <h3>Shortcuts</h3>
     <p>As we already seen, sets state can be changed in the main window. UMWP Autochanger also provides two mechanisms to quickly change the active set.</p>
-    <p>The first one is the <b><img src="src/icons/quick.png"> Quick change</b> menu available when you right-click on the system tray icon.</p>
+    <p>The first one is the <b><i class="icon-quick"></i> Quick change</b> menu available when you right-click on the system tray icon.</p>
 
     <p>The second one are the keyboard shortcuts. Shortcuts are keys combinations you assign to specific sets or actions.</p>
-    <p>First of all you have to activate the feature in the main <b><img src="src/icons/settings.png"> Options</b> window, you can also configure Refresh, Hide/Show and Start/Pause shortcuts in this window.</p>
+    <p>First of all you have to activate the feature in the main <b><i class="icon-settings"></i> Options</b> window, you can also configure Refresh, Hide/Show and Start/Pause shortcuts in this window.</p>
     <p>The sets shortcuts are configured in their respective properties window. Many sets can have the same shortcut, thus they will be activated together, but actions shortcuts must be unique.</p>
     <p style="color:#b00;"><b>Warning:</b> shortcuts are registered globally on the operating system, that means they can cause interferences with other softwares, so make sure the shortcuts you choose are not already used.</p>
+
+    <h3>Custom layout</h3>
+    <p>The <b><i class="icon-im_custom"></i> Custom</b> style can be used to generate more or less random patchwork wallpapers. You can choose the size of the grid, the prefered range of tiles size and the color and size of a border.</p>
+    <p>This mode also has a special <b>Per folder</b> mode (only available in <i class="icon-mode_random"></i> random mode) in which all tiles are choose inside a single sub-folder of the set.</p>
     
     <h3>Tips</h3>
     <p>Sets can be reordered by drag-and-drop.</p>
-    <p>The <b><img src="src/icons/help.png"> Help &#8227; <img src="src/icons/images.png"> Current files</b> window allows you to check the names of the current images and open them by clicking on the thumbnail.</p>
-    <p>When you click on the close button of the main window, the application is not actually closed, it is hidden in the system tray. Click on <b><img src="src/icons/quit.png"> Quit</b> to close the application.</p>
+    <p>The <b><i class="icon-help"></i> Help &#8227; <i class="icon-images"></i> Current files</b> window allows you to check the names of the current images and open them by clicking on the thumbnail.</p>
+    <p>When you click on the close button of the main window, the application is not actually closed, it is hidden in the system tray. Click on <b><i class="icon-quit"></i> Quit</b> to close the application.</p>
     <p>You can select multiple sets by pressing <kbd>Ctrl</kbd> and/or <kbd>Shift</kbd> while clicking, as in the Windows explorer.</p>
   </div>
 </div>

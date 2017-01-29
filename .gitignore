@@ -1,1 +1,4 @@
-/downloads.json
+downloads.json
+.idea
+*.iml
+node_modules
