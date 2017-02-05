@@ -11,6 +11,8 @@ Put these files in `data` directory before running `setup.iss` or `package.bat`:
 * Qt5Network.dll
 * Qt5Widgets.dll
 * Qt5Xml.dll
+* libeay32.dll
+* ssleay32.dll
 * imageformats/qgif.dll
 * imageformats/qjpeg.dll
 * platforms/qwindows.dll

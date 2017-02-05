@@ -23,7 +23,14 @@ public slots:
     {
         QNetworkAccessManager* manager = new QNetworkAccessManager();
         connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
-        manager->get(QNetworkRequest(QUrl(APP_VERSION_URL)));
+
+        QNetworkRequest request(QUrl(APP_VERSION_URL));
+        if (QString(APP_VERSION_URL).startsWith("https"))
+        {
+            request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+        }
+
+        manager->get(request);
     }
 
 private slots:
@@ -35,12 +42,20 @@ private slots:
             version.code = _reply->readLine().trimmed();
             version.link = _reply->readLine().trimmed();
             version.hash = _reply->readLine().trimmed();
+            if (QString(APP_VERSION_URL).startsWith("https"))
+            {
+                version.link = version.link.replace("http://", "https://");
+            }
 
             if (version.code.compare(APP_VERSION) > 0)
             {
                 QLOG_DEBUG() << "New version detected: " << version.code;
                 emit newVersionAvailable(version);
             }
+        }
+        else
+        {
+            QLOG_ERROR() << _reply->errorString();
         }
 
         _reply->manager()->deleteLater();

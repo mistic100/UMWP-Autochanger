@@ -60,7 +60,14 @@ void NewVersionDialog::on_updateButton_clicked()
         QLOG_DEBUG() << "Download" << m_version.link;
 
         QNetworkAccessManager* manager = new QNetworkAccessManager();
-        m_reply = manager->get(QNetworkRequest(QUrl(m_version.link)));
+
+        QNetworkRequest request(QUrl(m_version.link));
+        if (m_version.link.startsWith("https"))
+        {
+            request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+        }
+
+        m_reply = manager->get(request);
 
         connect(m_reply, SIGNAL(readyRead()), this, SLOT(onDataReady()));
         connect(m_reply, SIGNAL(finished()), this, SLOT(onDownloadFinished()));
@@ -114,7 +121,7 @@ void NewVersionDialog::onDownloadFinished()
 
     if (m_reply->error() != QNetworkReply::NoError)
     {
-        QLOG_ERROR() << "Network error";
+        QLOG_ERROR() << m_reply->errorString();
 
         m_file.remove();
         errorMessage();
