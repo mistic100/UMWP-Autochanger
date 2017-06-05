@@ -12,8 +12,9 @@
  * @param QWidget* _parent
  * @param Controller* _ctrl
  */
-MainList::MainList(QWidget* _parent, Controller* _ctrl) :
-    QListWidget(_parent),
+MainList::MainList(MainWindow* _parent, Controller* _ctrl) :
+    QListWidget((QWidget*) _parent),
+    m_parent(_parent),
     m_ctrl(_ctrl),
     m_settings(_ctrl->settings())
 {
@@ -23,8 +24,7 @@ MainList::MainList(QWidget* _parent, Controller* _ctrl) :
     setContextMenuPolicy(Qt::CustomContextMenu);
     setStyle(new ListProxyStyle());
 
-    connect(model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-            this, SLOT(onItemMoved(QModelIndex,int,int,QModelIndex,int)));
+    connect(model(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(onItemMoved(QModelIndex,int,int,QModelIndex,int)));
 
     connect(m_ctrl, SIGNAL(listChanged(bool)), this, SLOT(onListChanged(bool)));
     connect(m_ctrl, &Controller::generationFinished, this, [this]{ viewport()->update(); });
@@ -116,7 +116,7 @@ QList<Set*> MainList::getSelectedSets() const
  */
 void MainList::onItemMoved(const QModelIndex &, int from, int, const QModelIndex &, int to)
 {
-    if (!((MainWindow*) parent())->openUnlockDialog())
+    if (!m_parent->openUnlockDialog())
     {
         insertItem(from, takeItem(to)); // revert move
     }
@@ -132,7 +132,7 @@ void MainList::onItemMoved(const QModelIndex &, int from, int, const QModelIndex
 void MainList::onItemDoubleClicked(QListWidgetItem*)
 {
     QList<Set*> sets = getSelectedSets();
-    ((MainWindow*) parent())->editSets(sets);
+    m_parent->editSets(sets);
 }
 
 /**
@@ -144,7 +144,7 @@ void MainList::onContextMenu(const QPoint &_pos)
     QList<Set*> sets = getSelectedSets();
     QPoint pos = mapToGlobal(_pos);
 
-    SetContextMenu menu((QWidget*) parent(), m_ctrl, sets);
+    SetContextMenu menu(m_parent, sets);
     menu.exec(pos);
 }
 
@@ -162,7 +162,7 @@ bool MainList::eventFilter(QObject* _target, QEvent* _event)
         if (key->key() == Qt::Key_Delete && key->modifiers() == Qt::NoModifier)
         {
             QList<Set*> sets = getSelectedSets();
-            ((MainWindow*) parent())->deleteSets(sets);
+            m_parent->deleteSets(sets);
 
             return true;
         }

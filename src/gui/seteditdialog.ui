@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>280</width>
-    <height>230</height>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,29 +43,6 @@
    <item row="1" column="1">
     <widget class="QComboBoxExt" name="selectType"/>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Monitors :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QCheckList" name="selectMonitors"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Style :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
      <item>
@@ -97,9 +74,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QComboBoxExt" name="selectMode"/>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
@@ -110,8 +84,8 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QHotKeyWidget" name="inputHotkey" native="true"/>
+   <item row="4" column="1">
+    <widget class="QComboBoxExt" name="selectMode"/>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_5">
@@ -122,6 +96,32 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Monitors :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QCheckList" name="selectMonitors"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Style :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QHotKeyWidget" name="inputHotkey" native="true"/>
    </item>
    <item row="6" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -170,7 +170,7 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="0" colspan="2">
+   <item row="8" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -179,6 +179,19 @@
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Lock :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QComboBoxExt" name="selectLock"/>
    </item>
   </layout>
  </widget>

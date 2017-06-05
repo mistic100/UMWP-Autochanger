@@ -29,6 +29,7 @@ Settings::Settings(Environment* _enviro) :
     m_options[UM::CONF::lock_password] = "";
     m_options[UM::CONF::lock_startup] = true;
     m_options[UM::CONF::lock_minimize] = true;
+    m_options[UM::CONF::lock_type] = UM::LOCK_ALL;
     m_options[UM::CONF::ignore_update] = "0.0.0";
 
     m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
@@ -524,6 +525,7 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
         if (_data.mode() != UM::MODE_NONE) set->setMode(_data.mode());
         if (_data.hotkey() != QHotKeyWidget::KEEP_KEY) set->setHotkey(_data.hotkey());
         if (_data.frequency() != 0) set->setFrequency(_data.frequency());
+        if (_data.lock() != UNKNOW_BOOL) set->setLock(_data.lock());
         if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
         else if (_data.style() != UM::IM_NONE) set->setCustLayout(CustomLayout());
         if (!_data.monitors().contains(-1)) set->setMonitors(_data.monitors());

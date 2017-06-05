@@ -10,15 +10,15 @@
  */
 TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
     QSystemTrayIcon((QWidget*) _parent),
+    m_parent(_parent),
     m_ctrl(_ctrl)
 {
-    connect(_parent, SIGNAL(showHidden(bool)), this, SLOT(onWindowShown(bool)));
-    connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(onStartPause(bool)));
-    connect(m_ctrl, SIGNAL(lockToggled(bool)), this, SLOT(setLocked(bool)));
-    connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled()); });
-    connect(m_ctrl, SIGNAL(generationFinished()), this, SLOT(onListChanged()));
-    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
+    connect(m_parent, SIGNAL(showHidden(bool)),     this, SLOT(onWindowShown(bool)));
+    connect(m_ctrl,   SIGNAL(startedPaused(bool)),  this, SLOT(onStartPause(bool)));
+    connect(m_ctrl,   SIGNAL(lockToggled(bool)),    this, SLOT(setLocked(bool)));
+    connect(m_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled() == UM::LOCK_ALL); });
+    connect(m_ctrl,   SIGNAL(generationFinished()), this, SLOT(onListChanged()));
+    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(onActivated(QSystemTrayIcon::ActivationReason)));
 
     QMenu* menu = new QMenu();
     m_actionPause =          menu->addAction(QIcon(":/images/icons/play_pause.png"), tr("Pause"));
@@ -30,18 +30,18 @@ TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
                              menu->addSeparator();
     QAction* actionQuit =    menu->addAction(QIcon(":/images/icons/quit.png"),       tr("Quit"));
 
-    connect(actionQuit,    SIGNAL(triggered()), _parent, SLOT(quit()));
-    connect(m_actionHide,  SIGNAL(triggered()), _parent, SLOT(toggleWindow()));
-    connect(m_actionPause, SIGNAL(triggered()), m_ctrl,  SLOT(startPause()));
-    connect(actionRefresh, SIGNAL(triggered()), m_ctrl,  SLOT(update()));
-    connect(m_actionLock,  SIGNAL(triggered()), m_ctrl,  SLOT(lock()));
-    connect(m_actionUnlock,SIGNAL(triggered()), _parent, SLOT(openUnlockDialog()));
+    connect(actionQuit,    SIGNAL(triggered()), m_parent, SLOT(quit()));
+    connect(m_actionHide,  SIGNAL(triggered()), m_parent, SLOT(toggleWindow()));
+    connect(m_actionPause, SIGNAL(triggered()), m_ctrl,   SLOT(startPause()));
+    connect(actionRefresh, SIGNAL(triggered()), m_ctrl,   SLOT(update()));
+    connect(m_actionLock,  SIGNAL(triggered()), m_ctrl,   SLOT(lock()));
+    connect(m_actionUnlock,SIGNAL(triggered()), m_parent, SLOT(openUnlockDialog()));
 
     setToolTip(APP_NAME);
     setContextMenu(menu);
 
     onListChanged();
-    setLockEnabled(m_ctrl->lockEnabled());
+    setLockEnabled(m_ctrl->lockEnabled() == UM::LOCK_ALL);
     updateIcon();
 }
 
@@ -165,10 +165,9 @@ void TrayIcon::onListChanged()
  */
 void TrayIcon::onQuickClicked()
 {
-    QAction* action = (QAction*)(QObject::sender());
-    int idx = action->data().toInt();
+    int idx = ((QAction*) QObject::sender())->data().toInt();
 
-    m_ctrl->setActiveSets(QList<int>()<<idx);
+    m_parent->setActiveSets(QList<int>()<<idx);
 }
 
 /**
@@ -178,6 +177,6 @@ void TrayIcon::onActivated(QSystemTrayIcon::ActivationReason _reason)
 {
     if (_reason && _reason == QSystemTrayIcon::DoubleClick)
     {
-        ((MainWindow*)parent())->toggleWindow();
+        m_parent->toggleWindow();
     }
 }

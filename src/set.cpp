@@ -56,6 +56,12 @@ Set::Set(const QDomElement* _dom)
         m_frequency = _dom->attribute("frequency").toDouble();
     }
 
+    // added in 2.2.1
+    if (_dom->hasAttribute("lock"))
+    {
+        m_lock = static_cast<TRI_BOOL>(_dom->attribute("lock").toInt());
+    }
+
     // added in 2.2
     if (_dom->hasAttribute("monitors") && !_dom->attribute("monitors").isEmpty())
     {
@@ -144,6 +150,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
     _writer->writeAttribute("active", QString::number(m_active));
     _writer->writeAttribute("hotkey", QString::number(m_hotkey));
     _writer->writeAttribute("frequency", QString::number(m_frequency));
+    _writer->writeAttribute("lock", QString::number(m_lock));
 
     QStringList monitors;
     foreach (int monitor, m_monitors)

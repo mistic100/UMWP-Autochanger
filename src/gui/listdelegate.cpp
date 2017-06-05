@@ -143,10 +143,17 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
 
     rect = baseRect.adjusted(leftMargin, 0, 0, 0);
     icon.paint(&painter, rect, Qt::AlignVCenter|Qt::AlignLeft);
-    leftMargin+= 16;
-
 
     painter.setOpacity(set->isActive() ? iconOpacityActive : iconOpacityInactive);
+
+    // LOCK ICON
+    if (m_ctrl->lockEnabled() == UM::LOCK_SETS && set->lock() == TRUE_BOOL) {
+        icon = QIcon(":/images/icons/bullet_lock.png");
+        rect = baseRect.adjusted(leftMargin, 0, 0, 0);
+        icon.paint(&painter, rect, Qt::AlignBottom|Qt::AlignLeft);
+    }
+
+    leftMargin+= 16;
 
     // TYPE ICON
     switch (set->type())

@@ -33,6 +33,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->selectType->addItem(tr("[keep]"),  UM::W_NONE);
         ui->selectStyle->addItem(tr("[keep]"), UM::IM_NONE);
         ui->selectMode->addItem(tr("[keep]"),  UM::MODE_NONE);
+        ui->selectLock->addItem(tr("[keep]"),  UNKNOW_BOOL);
     }
 
     ui->selectType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
@@ -61,6 +62,9 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         }
     }
 
+    ui->selectLock->addItem(QIcon(":/images/icons/unlock.png"), tr("Disabled"), 0);
+    ui->selectLock->addItem(QIcon(":/images/icons/lock.png"),   tr("Enabled"),  1);
+
     if (m_sets.size() == 1)
     {
         Set* set = m_sets.at(0);
@@ -71,23 +75,26 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->selectMode->setCurrentData(set->mode());
         ui->inputHotkey->setHotkey(set->hotkey());
         ui->inputFreq->setValue(set->frequency());
+        ui->selectLock->setCurrentData((int) set->lock());
         ui->styleConfig->setVisible(set->style() == UM::IM_CUSTOM);
     }
     else
     {
         ui->inputName->setText(tr("[multiple sets]"));
         ui->inputName->setDisabled(true);
-        ui->selectType->setCurrentIndex(0);
-        ui->selectStyle->setCurrentIndex(0);
-        ui->selectMode->setCurrentIndex(0);
+        ui->selectType->setCurrentData(UM::W_NONE);
+        ui->selectStyle->setCurrentData(UM::IM_NONE);
+        ui->selectMode->setCurrentData(UM::MODE_NONE);
         ui->inputHotkey->setHotkey(QHotKeyWidget::KEEP_KEY);
         ui->inputFreq->setMinimum(0);
         ui->inputFreq->setValue(0);
         ui->inputFreq->setSpecialValueText(tr("[keep]"));
+        ui->selectLock->setCurrentData(UNKNOW_BOOL);
         ui->styleConfig->setVisible(false);
     }
 
-    ui->inputHotkey->setDisabled(!m_settings->param(UM::CONF::use_hotkeys).toBool());
+    ui->inputHotkey->setEnabled(m_settings->param(UM::CONF::use_hotkeys).toBool());
+    ui->selectLock->setEnabled(m_ctrl->lockEnabled() == UM::LOCK_SETS);
 
     ui->inputName->setFocus();
 
@@ -162,6 +169,7 @@ const Set SetEditDialog::result()
     UM::WALLPAPER type = static_cast<UM::WALLPAPER>(ui->selectType->currentData().toInt());
     UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
     UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
+    TRI_BOOL lock = static_cast<TRI_BOOL>(ui->selectLock->currentData().toInt());
 
     QVector<int> monitors;
     QStandardItemModel* model = (QStandardItemModel*) ui->selectMonitors->model();
@@ -192,6 +200,7 @@ const Set SetEditDialog::result()
     result.setHotkey(ui->inputHotkey->hotkey());
     result.setCustLayout(m_custLayout);
     result.setFrequency(ui->inputFreq->value());
+    result.setLock(lock);
     result.setMonitors(monitors);
 
     return result;

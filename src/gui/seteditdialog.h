@@ -22,7 +22,7 @@ class SetEditDialog : public QDialog
     Q_OBJECT
 
 private:
-    Ui::SetEditDialog *ui;
+    Ui::SetEditDialog* ui;
 
     Controller* m_ctrl;
     Settings* m_settings;

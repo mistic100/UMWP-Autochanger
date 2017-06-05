@@ -6,6 +6,8 @@
 #include "../main.h"
 #include "../controller.h"
 
+class MainWindow;
+
 /**
  * @brief The main widget of the software
  */
@@ -16,9 +18,10 @@ class MainList : public QListWidget
 private:
     Controller* m_ctrl;
     Settings* m_settings;
+    MainWindow* m_parent;
     
 public:
-    MainList(QWidget* _parent, Controller* _ctrl);
+    MainList(MainWindow* _parent, Controller* _ctrl);
 
     QList<int> getSelectedIndexes() const;
     QList<Set*> getSelectedSets() const;

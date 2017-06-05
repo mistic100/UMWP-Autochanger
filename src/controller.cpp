@@ -23,7 +23,7 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
 
     connect(&m_generatorWatcher, SIGNAL(finished()), this, SLOT(onGenerationDone()));
 
-    if (m_settings->param(UM::CONF::lock_enabled).toBool() && m_settings->param(UM::CONF::lock_startup).toBool())
+    if (lockEnabled() == UM::LOCK_ALL && m_settings->param(UM::CONF::lock_startup).toBool())
     {
         lock();
     }
@@ -164,11 +164,6 @@ void Controller::onGenerationDone()
  */
 void Controller::moveSet(int _from, int _to)
 {
-    if (!(emit requestUnlock()))
-    {
-        return;
-    }
-
     m_settings->moveSet(_from, _to);
 
     emit listChanged(true);
@@ -180,11 +175,6 @@ void Controller::moveSet(int _from, int _to)
  */
 Set* Controller::addSet(const QString &_dirname)
 {
-    if (!(emit requestUnlock()))
-    {
-        return NULL;
-    }
-
     QDir dir(_dirname);
     dir.cdUp();
     m_settings->setParam(UM::CONF::last_dir, dir.absolutePath());
@@ -203,11 +193,6 @@ Set* Controller::addSet(const QString &_dirname)
  */
 bool Controller::loadConfig(const QString &_file)
 {
-    if (!(emit requestUnlock()))
-    {
-        return false;
-    }
-
     if (m_settings->load(_file))
     {
         m_settings->check();
@@ -228,23 +213,11 @@ bool Controller::loadConfig(const QString &_file)
 
 /**
  * @brief Change which sets are active
- * @param int[] _idx
+ * @param Set*[] _sets
  */
-void Controller::setActiveSets(const QList<int> &_idx)
+void Controller::setActiveSets(const QList<Set*> &_sets)
 {
-    if (!(emit requestUnlock()))
-    {
-        return;
-    }
-
-    QList<Set*> sets;
-
-    foreach (const int i, _idx)
-    {
-        sets.append(m_settings->set(i));
-    }
-
-    m_settings->setActiveSets(sets);
+    m_settings->setActiveSets(_sets);
 
     update();
 }
@@ -255,11 +228,6 @@ void Controller::setActiveSets(const QList<int> &_idx)
  */
 void Controller::deleteSets(const QList<Set*> &_sets)
 {
-    if (!(emit requestUnlock()))
-    {
-        return;
-    }
-
     m_settings->deleteSets(_sets);
 
     emit listChanged(true);
@@ -271,11 +239,6 @@ void Controller::deleteSets(const QList<Set*> &_sets)
  */
 void Controller::activateSets(const QList<Set*> &_sets)
 {
-    if (!(emit requestUnlock()))
-    {
-        return;
-    }
-
     m_settings->activateSets(_sets);
 
     emit listChanged(false);
@@ -287,11 +250,6 @@ void Controller::activateSets(const QList<Set*> &_sets)
  */
 void Controller::unactivateSets(const QList<Set*> &_sets)
 {
-    if (!(emit requestUnlock()))
-    {
-        return;
-    }
-
     m_settings->unactivateSets(_sets);
 
     emit listChanged(false);
@@ -304,11 +262,6 @@ void Controller::unactivateSets(const QList<Set*> &_sets)
  */
 void Controller::editSets(const QList<Set*> &_sets, const Set &_data)
 {
-    if (!(emit requestUnlock()))
-    {
-        return;
-    }
-
     m_settings->editSets(_sets, _data);
 
     emit listChanged(false);
@@ -319,11 +272,14 @@ void Controller::editSets(const QList<Set*> &_sets, const Set &_data)
  */
 void  Controller::unlock()
 {
-    m_locked = false;
+    if (lockEnabled() == UM::LOCK_ALL)
+    {
+        m_locked = false;
 
-    QLOG_DEBUG()<<"Unlock";
+        QLOG_DEBUG()<<"Unlock";
 
-    emit lockToggled(false);
+        emit lockToggled(false);
+    }
 }
 
 /**
@@ -331,9 +287,12 @@ void  Controller::unlock()
  */
 void  Controller::lock()
 {
-    m_locked = true;
+    if (lockEnabled() == UM::LOCK_ALL)
+    {
+        m_locked = true;
 
-    QLOG_DEBUG()<<"Lock";
+        QLOG_DEBUG()<<"Lock";
 
-    emit lockToggled(true);
+        emit lockToggled(true);
+    }
 }

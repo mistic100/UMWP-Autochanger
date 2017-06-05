@@ -11,10 +11,9 @@
  * @param Controller* _ctrl
  * @param int[] _sets
  */
-SetContextMenu::SetContextMenu(QWidget* _parent, Controller* _ctrl, const QList<Set*> &_sets) :
-    QMenu( _parent),
-    m_ctrl(_ctrl),
-    m_settings(_ctrl->settings()),
+SetContextMenu::SetContextMenu(MainWindow* _parent, const QList<Set*> &_sets) :
+    QMenu((QWidget*) _parent),
+    m_parent(_parent),
     m_sets(_sets)
 {
     if (m_sets.size() > 0)
@@ -31,12 +30,12 @@ SetContextMenu::SetContextMenu(QWidget* _parent, Controller* _ctrl, const QList<
         if (nbActive >= nbInactive)
         {
             QAction* actionUnactivate = addAction(QIcon(":/images/icons/disable.png"), tr("Disable"));
-            connect(actionUnactivate, &QAction::triggered, this, [this]{ m_ctrl->unactivateSets(m_sets); });
+            connect(actionUnactivate, &QAction::triggered, this, [this]{ m_parent->unactivateSets(m_sets); });
         }
         else
         {
             QAction* actionActivate = addAction(QIcon(":/images/icons/enable.png"), tr("Enable"));
-            connect(actionActivate, &QAction::triggered, this, [this]{ m_ctrl->activateSets(m_sets); });
+            connect(actionActivate, &QAction::triggered, this, [this]{ m_parent->activateSets(m_sets); });
         }
 
         addSeparator();
@@ -45,11 +44,11 @@ SetContextMenu::SetContextMenu(QWidget* _parent, Controller* _ctrl, const QList<
         addSeparator();
         QAction* actionDelete = addAction(QIcon(":/images/icons/delete.png"), tr("Delete"));
 
-        connect(actionEdit,   &QAction::triggered, this, [this]{ ((MainWindow*) parent())->editSets(m_sets); });
-        connect(actionOpen,   &QAction::triggered, this, [this]{ ((MainWindow*) parent())->openSets(m_sets); });
-        connect(actionDelete, &QAction::triggered, this, [this]{ ((MainWindow*) parent())->deleteSets(m_sets); });
+        connect(actionEdit,   &QAction::triggered, this, [this]{ m_parent->editSets(m_sets); });
+        connect(actionOpen,   &QAction::triggered, this, [this]{ m_parent->openSets(m_sets); });
+        connect(actionDelete, &QAction::triggered, this, [this]{ m_parent->deleteSets(m_sets); });
     }
 
     QAction* actionAdd = addAction(QIcon(":/images/icons/add_color.png"), tr("Add set"));
-    connect(actionAdd, &QAction::triggered, this, [this]{ ((MainWindow*) parent())->addSet(); });
+    connect(actionAdd, &QAction::triggered, this, [this]{ m_parent->addSet(); });
 }

@@ -15,6 +15,11 @@
 
 #include "constants.h"
 
+enum TRI_BOOL {
+    UNKNOW_BOOL = -1,
+    FALSE_BOOL = FALSE,
+    TRUE_BOOL = TRUE
+};
 
 namespace UM {
     // wallpaper arrangment
@@ -59,6 +64,14 @@ namespace UM {
         ALIGN_BOTTOM_RIGHT = 8
     };
 
+    // lock mode
+    enum LOCK_TYPE
+    {
+        LOCK_DISABLED = 0,
+        LOCK_ALL = 1,
+        LOCK_SETS = 2
+    };
+
     // helper for monitors config
     struct Monitor {
         bool enabled;
@@ -101,6 +114,7 @@ namespace UM {
         const QString lock_password = "lock_password";
         const QString lock_startup = "lock_startup";
         const QString lock_minimize = "lock_minimize";
+        const QString lock_type = "lock_type";
         const QString ignore_update = "ignore_update";
 
         namespace HOTKEY {

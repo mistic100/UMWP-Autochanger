@@ -20,6 +20,9 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     m_enviro(_ctrl->enviro())
 {
     ui->setupUi(this);
+    ui_lockType = new QButtonGroupExt(this);
+
+    connect(ui_lockType, SIGNAL(buttonToggled(int,bool)), this, SLOT(on_lockType_toggled(int,bool)));
 
     setFixedSize(size());
     setWindowFlags(UM::SimpleDialogFlag);
@@ -99,6 +102,11 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionLockEnabled->setChecked(  lockEnabled);
     ui->optionLockStartup->setChecked(  m_settings->param(UM::CONF::lock_startup).toBool());
     ui->optionLockMinimize->setChecked( m_settings->param(UM::CONF::lock_minimize).toBool());
+
+    ui_lockType->addButton(ui->optionLockAll,  UM::LOCK_ALL);
+    ui_lockType->addButton(ui->optionLockSets, UM::LOCK_SETS);
+    ui_lockType->setCheckedId(m_settings->param(UM::CONF::lock_type).toInt());
+    on_lockType_toggled(ui_lockType->checkedId(), true);
 
     QLOG_TRACE() << "ConfigDialog openned";
 }
@@ -267,6 +275,7 @@ void ConfigDialog::save()
     }
     m_settings->setParam(UM::CONF::lock_startup,        ui->optionLockStartup->isChecked());
     m_settings->setParam(UM::CONF::lock_minimize,       ui->optionLockMinimize->isChecked());
+    m_settings->setParam(UM::CONF::lock_type,           ui_lockType->checkedId());
 
     m_settings->setHotkey(UM::CONF::HOTKEY::refresh,    ui->hotkeyRefresh->hotkey());
     m_settings->setHotkey(UM::CONF::HOTKEY::showhide,   ui->hotkeyShowHide->hotkey());
@@ -294,11 +303,11 @@ void ConfigDialog::save()
  */
 void ConfigDialog::on_optionUseHotkeys_toggled(bool _checked)
 {
-    ui->hotkeyRefresh->setDisabled(!_checked);
-    ui->hotkeyShowHide->setDisabled(!_checked);
-    ui->hotkeyStartPause->setDisabled(!_checked);
-    ui->hotkeyDelay->setDisabled(!_checked);
-    ui->hotkeyLockUnlock->setDisabled(!_checked || !ui->optionLockEnabled->isChecked());
+    ui->hotkeyRefresh->setEnabled(_checked);
+    ui->hotkeyShowHide->setEnabled(_checked);
+    ui->hotkeyStartPause->setEnabled(_checked);
+    ui->hotkeyDelay->setEnabled(_checked);
+    ui->hotkeyLockUnlock->setEnabled(_checked && ui->optionLockEnabled->isChecked());
 }
 
 /**
@@ -307,10 +316,23 @@ void ConfigDialog::on_optionUseHotkeys_toggled(bool _checked)
  */
 void ConfigDialog::on_optionLockEnabled_toggled(bool _checked)
 {
-    ui->optionLockPassword->setDisabled(!_checked);
-    ui->optionLockStartup->setDisabled(!_checked);
-    ui->optionLockMinimize->setDisabled(!_checked);
-    ui->hotkeyLockUnlock->setDisabled(!_checked || !ui->optionUseHotkeys->isChecked());
+    ui->optionLockPassword->setEnabled(_checked);
+    ui->optionLockAll->setEnabled(_checked);
+    ui->optionLockSets->setEnabled(_checked);
+    ui->hotkeyLockUnlock->setEnabled(_checked && ui->optionUseHotkeys->isChecked());
+    on_lockType_toggled(ui_lockType->checkedId(), true);
+}
+
+/**
+ * @brief Disable lock sub-fields
+ * @param int _id - mode
+ * @param bool _checked
+ */
+void ConfigDialog::on_lockType_toggled(int _id, bool _checked)
+{
+    ui->optionLockMinimize->setEnabled(_id == UM::LOCK_ALL && _checked && ui->optionLockEnabled->isChecked());
+    ui->optionLockStartup->setEnabled(_id == UM::LOCK_ALL && _checked && ui->optionLockEnabled->isChecked());
+    ui->lockSetsHelp->setEnabled(_id == UM::LOCK_SETS && _checked && ui->optionLockEnabled->isChecked());
 }
 
 /**

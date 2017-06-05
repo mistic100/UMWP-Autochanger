@@ -45,6 +45,7 @@ protected:
     void showEvent(QShowEvent* _event);
     void resizeEvent(QResizeEvent* _event);
     void closeEvent(QCloseEvent* _event);
+    bool eventFilter(QObject* _target, QEvent* _event);
 
 public slots:
     void quit();
@@ -52,7 +53,10 @@ public slots:
     void onHotkey();
 
     void addSet();
-    void editSets(const QList<Set *> _sets);
+    void activateSets(const QList<Set*> _sets);
+    void unactivateSets(const QList<Set*> _sets);
+    boolean setActiveSets(const QList<int> _idx);
+    void editSets(const QList<Set*> _sets);
     void deleteSets(const QList<Set*> _sets);
     void openSets(const QList<Set*> _sets);
     void clearCache();
@@ -65,7 +69,8 @@ public slots:
     void openExportDialog();
     void openImportDialog();
     void openDelayDialog();
-    boolean openUnlockDialog();
+    boolean openUnlockDialog(boolean _force) { return openUnlockDialog(QList<Set*>(), _force); }
+    boolean openUnlockDialog(const QList<Set*> _sets = QList<Set*>(), boolean _force = false);
 
     void onNewVersion();
     void openNewVersionDialog();

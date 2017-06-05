@@ -25,6 +25,7 @@ private:
     UM::IMAGE        m_style = UM::IM_FILL;
     UM::MODE         m_mode = UM::MODE_RANDOM;
     double           m_frequency = 1.0;
+    TRI_BOOL         m_lock = FALSE_BOOL;
     bool             m_active = true;
     bool             m_valid = true;
     QVector<QString> m_files;
@@ -46,6 +47,7 @@ public:
     const UM::IMAGE     style() const       { return m_style; }
     const UM::MODE      mode() const        { return m_mode; }
     const double        frequency() const   { return m_frequency; }
+    const TRI_BOOL      lock() const        { return m_lock; }
     const int           nbFiles() const     { return m_files.size(); }
     const int           nbFolders() const   { return m_folders.size(); }
     const int           nbFilesInFolder(const QString &_folder) const;
@@ -67,6 +69,7 @@ public:
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setMode(const UM::MODE _mode)      { m_mode=_mode; }
     void setFrequency(const double _freq)   { m_frequency=_freq; }
+    void setLock(const TRI_BOOL _lock)      { m_lock=_lock; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
     void setCurrent(const Current &_curr)   { m_current=_curr; }
     void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }

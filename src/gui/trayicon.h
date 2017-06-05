@@ -19,6 +19,7 @@ class TrayIcon : public QSystemTrayIcon
 
 private:
     Controller* m_ctrl;
+    MainWindow* m_parent;
 
     QAction* m_actionHide;
     QAction* m_actionPause;

@@ -45,7 +45,6 @@ MainWindow::MainWindow(Controller* _ctrl) :
     m_trayIcon->show();
 
     connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(onNewVersion()));
-    connect(m_ctrl, SIGNAL(requestUnlock()), this, SLOT(openUnlockDialog()));
 
     init();
 }
@@ -175,7 +174,7 @@ void MainWindow::toggleWindow(bool _forceHide)
 
         hide();
 
-        if (m_ctrl->lockEnabled() && m_settings->param(UM::CONF::lock_minimize).toBool())
+        if (m_ctrl->lockEnabled() == UM::LOCK_ALL && m_settings->param(UM::CONF::lock_minimize).toBool())
         {
             m_ctrl->lock();
         }
@@ -232,11 +231,53 @@ void MainWindow::addSet()
 }
 
 /**
+ * @brief Activate sets
+ * @param Set*[] _sets
+ */
+void MainWindow::activateSets(const QList<Set *> _sets)
+{
+    if (openUnlockDialog(_sets))
+    {
+        m_ctrl->activateSets(_sets);
+    }
+}
+
+/**
+ * @brief Deactivate sets
+ * @param Set*[] _sets
+ */
+void MainWindow::unactivateSets(const QList<Set *> _sets)
+{
+    m_ctrl->unactivateSets(_sets);
+}
+
+/**
+ * @brief Change which sets are active
+ * @param int[] _idx
+ */
+boolean MainWindow::setActiveSets(const QList<int> _idx)
+{
+    QList<Set*> sets;
+    foreach (const int i, _idx)
+    {
+        sets.append(m_settings->set(i));
+    }
+
+    if (openUnlockDialog(sets))
+    {
+        m_ctrl->setActiveSets(sets);
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * @brief Open set edit dialog
  */
 void MainWindow::editSets(const QList<Set*> _sets)
 {
-    if (!openUnlockDialog())
+    if (!openUnlockDialog(_sets))
     {
         return;
     }
@@ -257,7 +298,7 @@ void MainWindow::editSets(const QList<Set*> _sets)
  */
 void MainWindow::deleteSets(const QList<Set*> _sets)
 {
-    if (!openUnlockDialog())
+    if (!openUnlockDialog(_sets))
     {
         return;
     }
@@ -276,7 +317,7 @@ void MainWindow::deleteSets(const QList<Set*> _sets)
  */
 void MainWindow::openSets(const QList<Set*> _sets)
 {
-    if (!openUnlockDialog())
+    if (!openUnlockDialog(_sets))
     {
         return;
     }
@@ -303,7 +344,7 @@ void MainWindow::clearCache()
  */
 void MainWindow::openConfigDialog()
 {
-    if (!openUnlockDialog())
+    if (!openUnlockDialog(true))
     {
         return;
     }
@@ -345,7 +386,7 @@ void MainWindow::openScreensDialog()
  */
 void MainWindow::openExportDialog()
 {
-    if (!openUnlockDialog())
+    if (!openUnlockDialog(true))
     {
         return;
     }
@@ -368,7 +409,7 @@ void MainWindow::openExportDialog()
  */
 void MainWindow::openImportDialog()
 {
-    if (!openUnlockDialog())
+    if (!openUnlockDialog(true))
     {
         return;
     }
@@ -428,24 +469,56 @@ void MainWindow::openDelayDialog()
 
 /**
  * @brief Open unlock dialog
+ * @param Set*[] _sets
+ * @param bool _force
+ * @return bool
  */
-boolean MainWindow::openUnlockDialog()
+boolean MainWindow::openUnlockDialog(const QList<Set *> _sets, boolean _force)
 {
-    if (!m_ctrl->lockEnabled() || !m_ctrl->locked())
+    if (m_ctrl->lockEnabled() == UM::LOCK_DISABLED)
     {
         return true;
     }
 
+    if (m_ctrl->lockEnabled() == UM::LOCK_ALL && !m_ctrl->locked())
+    {
+        return true;
+    }
+
+    if (m_ctrl->lockEnabled() == UM::LOCK_SETS && !_force) {
+        boolean hasLock = false;
+
+        foreach (const Set* set, _sets) {
+            if (set->lock() == TRUE_BOOL) {
+                hasLock = true;
+                break;
+            }
+        }
+
+        if (!hasLock) {
+            return true;
+        }
+    }
+
     QLOG_TRACE() << "Password dialog openned";
 
-    bool ok;
-    QString password = QInputDialog::getText(this, tr("Unlock"), tr("Password"), QLineEdit::Password, "", &ok);
+    QInputDialog dialog(this);
+    dialog.setInputMode(QInputDialog::TextInput);
+    dialog.setTextEchoMode(QLineEdit::Password);
+    dialog.setLabelText(tr("Password"));
+    dialog.setWindowTitle(tr("Unlock"));
+    dialog.setProperty("umwp-unlock", true);
+    dialog.installEventFilter(this);
+
+    bool ok = dialog.exec();
 
     if (!ok)
     {
         QLOG_INFO()<<"Password cancelled";
         return false;
     }
+
+    QString password = dialog.textValue();
 
     if (m_settings->param(UM::CONF::lock_password) == UM::hash(password, UM::PasswordHash))
     {
@@ -467,7 +540,7 @@ void MainWindow::openAboutDialog()
 {
     QString text = "<h3>" + QString(APP_FILEDESCRIPTION) + " " + QString(APP_VERSION) + "</h3>";
     text+= "Created by Damien \"Mistic\" Sorel.<br>";
-    text+= "&copy; 2013-2016 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    text+= "&copy; 2013-2017 <a href=\"http://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     text+= "Licenced under <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a>";
 
     QMessageBox dialog;
@@ -529,7 +602,7 @@ void MainWindow::onHotkey()
 
     case GlobalShortcut::LOCKUNLOCK:
     {
-        if (!m_ctrl->lockEnabled())
+        if (m_ctrl->lockEnabled() != UM::LOCK_ALL)
         {
             if (showNotification)
             {
@@ -577,14 +650,12 @@ void MainWindow::onHotkey()
 
     case GlobalShortcut::SETS:
     {
-        boolean locked = m_ctrl->lockEnabled() && m_ctrl->locked();
+        boolean locked = m_ctrl->lockEnabled() == UM::LOCK_ALL && m_ctrl->locked();
 
-        if (!openUnlockDialog())
+        if (!setActiveSets(shortcut->sets()))
         {
             return;
         }
-
-        m_ctrl->setActiveSets(shortcut->sets());
 
         if (showNotification)
         {
@@ -638,6 +709,11 @@ void MainWindow::onNewVersion()
  */
 void MainWindow::openNewVersionDialog()
 {
+    if (!openUnlockDialog())
+    {
+        return;
+    }
+
     NewVersionDialog dialog(this, m_ctrl);
     int res = dialog.exec();
 
@@ -719,4 +795,16 @@ void MainWindow::closeEvent(QCloseEvent* _event)
 
     _event->ignore();
     QMainWindow::closeEvent(_event);
+}
+
+bool MainWindow::eventFilter(QObject* _target, QEvent* _event)
+{
+    // Force raise the password dialog
+    if (_target->property("umwp-unlock").isValid() && _event->type() == QEvent::Show)
+    {
+        ((QInputDialog*) _target)->activateWindow();
+        ((QInputDialog*) _target)->raise();
+    }
+
+    return false;
 }

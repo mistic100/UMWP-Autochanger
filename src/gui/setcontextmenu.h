@@ -4,7 +4,9 @@
 #include <QMenu>
 
 #include "../main.h"
-#include "../controller.h"
+#include "../set.h"
+
+class MainWindow;
 
 /**
  * @brief Custom context menu for main list
@@ -14,13 +16,12 @@ class SetContextMenu : public QMenu
     Q_OBJECT
 
 private:
-    Controller* m_ctrl;
-    Settings* m_settings;
+    MainWindow* m_parent;
 
     QList<Set*> m_sets;
 
 public:
-    SetContextMenu(QWidget* _parent, Controller* _ctrl, const QList<Set*> &_sets);
+    SetContextMenu(MainWindow *_parent, const QList<Set*> &_sets);
 
 };
 

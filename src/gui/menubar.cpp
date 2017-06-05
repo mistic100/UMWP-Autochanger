@@ -20,7 +20,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
 
     connect(m_ctrl, SIGNAL(startedPaused(bool)), this, SLOT(setStartPause(bool)));
     connect(m_ctrl, SIGNAL(lockToggled(bool)), this, SLOT(setLocked(bool)));
-    connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled()); });
+    connect(_parent, &MainWindow::settingsChanged, this, [this]{ setLockEnabled(m_ctrl->lockEnabled() == UM::LOCK_ALL); });
 
     QMenu* menuConfig = new QMenu();
     QAction* actionOptions = menuConfig->addAction(QIcon(":/images/icons/settings.png"),  tr("Options"));
@@ -77,7 +77,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionHome,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_HOMEPAGE)); });
 
     setStartPause(true);
-    setLockEnabled(m_ctrl->lockEnabled());
+    setLockEnabled(m_ctrl->lockEnabled() == UM::LOCK_ALL);
 }
 
 /**

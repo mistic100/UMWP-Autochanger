@@ -43,7 +43,11 @@ public:
 
     const WallpaperGenerator::Result &current() const { return m_current; }
 
-    const boolean lockEnabled() const { return m_settings->param(UM::CONF::lock_enabled).toBool(); }
+    const UM::LOCK_TYPE lockEnabled() const {
+        return m_settings->param(UM::CONF::lock_enabled).toBool() ?
+                    static_cast<UM::LOCK_TYPE>(m_settings->param(UM::CONF::lock_type).toInt()) :
+                    UM::LOCK_DISABLED;
+    }
     const boolean locked() const { return m_locked; }
     const boolean paused() const { return !m_mainTimer->isActive(); }
 
@@ -56,7 +60,7 @@ public slots:
     void moveSet(int _from, int _to);
     Set* addSet(const QString &_dirname);
     bool loadConfig(const QString &_file);
-    void setActiveSets(const QList<int> &_idx);
+    void setActiveSets(const QList<Set*> &_sets);
     void deleteSets(const QList<Set*> &_sets);
     void activateSets(const QList<Set*> &_sets);
     void unactivateSets(const QList<Set*> &_sets);
@@ -74,7 +78,6 @@ signals:
     void startedPaused(bool);
     void newVersionAvailable();
     void lockToggled(bool);
-    boolean requestUnlock();
 };
 
 #endif // CONTROLLER_H
