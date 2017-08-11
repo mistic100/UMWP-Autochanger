@@ -1,4 +1,5 @@
 #include <QCryptographicHash>
+#include <QKeySequence>
 
 #include "umutils.h"
 
@@ -41,20 +42,6 @@ QRect UM::scaledRect(const QRect &_rect, float _xRatio, float _yRatio)
 }
 
 /**
- * @brief Get borders of a rect
- * @param QRect _rect
- * @return QLine[]
- */
-QList<QLine> UM::rectBorders(const QRect &_rect)
-{
-    return QList<QLine>()
-            <<QLine(_rect.topLeft(), _rect.topRight())
-            <<QLine(_rect.topRight(), _rect.bottomRight())
-            <<QLine(_rect.bottomLeft(), _rect.bottomRight())
-            <<QLine(_rect.topLeft(), _rect.bottomLeft());
-}
-
-/**
  * @brief Hash a string
  * @param string _value
  * @param int _algorythm
@@ -63,4 +50,21 @@ QList<QLine> UM::rectBorders(const QRect &_rect)
 QString UM::hash(const QString &_value, QCryptographicHash::Algorithm _algorythm)
 {
     return QString(QCryptographicHash::hash(_value.toUtf8(), _algorythm).toHex());
+}
+
+/**
+ * @brief Converts a key sequence to it's int code
+ * @param _seq
+ * @return int
+ */
+int UM::keySequenceToInt(const QKeySequence &_seq)
+{
+    int code = 0;
+
+    for (int i = 0; i < _seq.count(); i++)
+    {
+        code+= _seq[i];
+    }
+
+    return code;
 }

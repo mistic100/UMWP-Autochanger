@@ -13,9 +13,9 @@ namespace UM
 
     QRect scaledRect(const QRect &_rect, float _xRatio, float _yRatio);
 
-    QList<QLine> rectBorders(const QRect &_rect);
-
     QString hash(const QString &_input, QCryptographicHash::Algorithm _algorythm);
+
+    int keySequenceToInt(const QKeySequence &_seq);
 }
 
 #endif // UMUTILS_H

@@ -217,7 +217,14 @@ bool Settings::load(QString _filename)
                 // 1.4 format
                 else
                 {
-                    m_hotkeys[ hotkeyNode.tagName() ] = hotkeyNode.text().toInt();
+                    // stored in string representation since 2.2.1
+                    bool isInt;
+                    m_hotkeys[ hotkeyNode.tagName() ] = hotkeyNode.text().toInt(&isInt);
+
+                    if (!isInt)
+                    {
+                        m_hotkeys[ hotkeyNode.tagName() ] = UM::keySequenceToInt(QKeySequence(hotkeyNode.text()));
+                    }
                 }
 
                 hotkeyNode = hotkeyNode.nextSibling().toElement();
@@ -255,7 +262,7 @@ bool Settings::load(QString _filename)
             {
                 UM::Monitor mon;
                 mon.enabled = (bool) monNode.attribute("enabled").toInt();
-                mon.color = monNode.attribute("color").toUInt();
+                mon.color = QColor(monNode.attribute("color")).rgb();
 
                 m_monitors.append(mon);
 
@@ -346,7 +353,7 @@ bool Settings::save(QString _filename)
 
     for (QHash<QString, int>::const_iterator it = m_hotkeys.constBegin(); it != m_hotkeys.constEnd(); ++it)
     {
-        writer.writeTextElement(it.key(), QString::number(it.value()));
+        writer.writeTextElement(it.key(), QKeySequence(it.value()).toString());
     }
 
     writer.writeEndElement();
@@ -368,7 +375,7 @@ bool Settings::save(QString _filename)
     {
         writer.writeStartElement("monitor");
         writer.writeAttribute("enabled", QString::number(mon.enabled));
-        writer.writeAttribute("color", QString::number(mon.color));
+        writer.writeAttribute("color", QColor(mon.color).name());
         writer.writeEndElement();
     }
 
@@ -519,16 +526,16 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
 {
     foreach (Set* set, _sets)
     {
-        if (_sets.size() == 1) set->setName(_data.name());
-        if (_data.type() != UM::W_NONE) set->setType(_data.type());
-        if (_data.style() != UM::IM_NONE) set->setStyle(_data.style());
-        if (_data.mode() != UM::MODE_NONE) set->setMode(_data.mode());
-        if (_data.hotkey() != QHotKeyWidget::KEEP_KEY) set->setHotkey(_data.hotkey());
-        if (_data.frequency() != 0) set->setFrequency(_data.frequency());
-        if (_data.lock() != UNKNOW_BOOL) set->setLock(_data.lock());
-        if (_data.style() == UM::IM_CUSTOM) set->setCustLayout(_data.custLayout());
-        else if (_data.style() != UM::IM_NONE) set->setCustLayout(CustomLayout());
-        if (!_data.monitors().contains(-1)) set->setMonitors(_data.monitors());
+        if (_sets.size() == 1)                          set->setName(_data.name());
+        if (_data.type() != UM::W_NONE)                 set->setType(_data.type());
+        if (_data.style() != UM::IM_NONE)               set->setStyle(_data.style());
+        if (_data.mode() != UM::MODE_NONE)              set->setMode(_data.mode());
+        if (_data.hotkey() != QHotKeyWidget::KEEP_KEY)  set->setHotkey(_data.hotkey());
+        if (_data.frequency() != 0)                     set->setFrequency(_data.frequency());
+        if (_data.lock() != UNKNOW_BOOL)                set->setLock(_data.lock());
+        if (_data.style() == UM::IM_CUSTOM)             set->setCustLayout(_data.custLayout());
+        else if (_data.style() != UM::IM_NONE)          set->setCustLayout(CustomLayout());
+        if (!_data.monitors().contains(-1))             set->setMonitors(_data.monitors());
 
         QLOG_DEBUG() << "Edit set: " << set->name();
     }

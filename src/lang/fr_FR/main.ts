@@ -169,7 +169,7 @@
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="69"/>
-        <location filename="../../gui/configdialog.cpp" line="340"/>
+        <location filename="../../gui/configdialog.cpp" line="345"/>
         <source>Select program...</source>
         <translation>Choisir un programme...</translation>
     </message>
@@ -264,7 +264,7 @@
         <translation>Raccourci &quot;%1&quot; déjà utilisé pour le set &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="371"/>
+        <location filename="../../gui/configdialog.cpp" line="376"/>
         <source>This option allows to lock any changes in the app configuration until a password is entered.&lt;br&gt;&lt;b&gt;Warning:&lt;/b&gt; even though the password is hashed, the config file is not secure and can be manually modified.</source>
         <translation>Cette option permet de verrouiller tout changement dans la configuration de l&apos;application tant qu&apos;un mot de passe n&apos;est pas renseigné.&lt;br&gt;&lt;b&gt;Attention :&lt;/b&gt; bien que le mot de passe soit hashé, le fichier de configuration n&apos;est pas sécurisé et peut être manuellement modifié.</translation>
     </message>
@@ -289,7 +289,7 @@
         <translation>Vous devez redémarrer %1 pour appliquer la nouvelle langue.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="340"/>
+        <location filename="../../gui/configdialog.cpp" line="345"/>
         <source>Executables (*.exe)</source>
         <translation>Éxécutables (*.exe)</translation>
     </message>
@@ -302,71 +302,93 @@
         <translation>Configuration du style personnalisé</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="197"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="127"/>
         <source>Tiles size</source>
         <translation>Taille des tuiles</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="29"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="245"/>
         <source>Grid</source>
         <translation>Grille</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="53"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="218"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="449"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="148"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="269"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="576"/>
         <source>Rows</source>
         <translation>Lignes</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="158"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="875"/>
         <source>Per folder</source>
         <translation>Par dossier</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="413"/>
         <source>Screen border</source>
-        <translation>Bordure de l&apos;écran</translation>
+        <translation type="vanished">Bordure de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="773"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="925"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="346"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="57"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="493"/>
         <source>Width</source>
         <translation>Largeur</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="390"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="33"/>
+        <source>Shadow</source>
+        <translation>Ombre</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="114"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="471"/>
         <source>Color</source>
         <translation>Couleur</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="84"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="249"/>
-        <location filename="../../gui/customlayoutdialog.ui" line="508"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="179"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="300"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="648"/>
         <source>Columns</source>
         <translation>Colonnes</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="423"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="369"/>
+        <source>Random</source>
+        <translation>Aléatoire</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="384"/>
+        <source>Angle</source>
+        <translation>Angle</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="394"/>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location filename="../../gui/customlayoutdialog.ui" line="550"/>
         <source>Fixed tile</source>
         <translation>Tuile principale</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="576"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="404"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="703"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="322"/>
+        <location filename="../../gui/customlayoutdialog.ui" line="456"/>
         <source>Border</source>
         <translation>Bordure</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.cpp" line="289"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="334"/>
         <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode.</source>
         <translation>Quand cette case est cochée, les images sont choisies dans un des sous-dossiers du set plutôt que dans tout le set.&lt;br&gt;&lt;b&gt;Note :&lt;/b&gt; cette option n&apos;est disponible qu&apos;en mode aléatoire.</translation>
     </message>
@@ -411,28 +433,28 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="723"/>
+        <location filename="../../gui/mainwindow.cpp" line="741"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="408"/>
+        <location filename="../../gui/mainwindow.cpp" line="417"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="385"/>
+        <location filename="../../gui/mainwindow.cpp" line="394"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="530"/>
+        <location filename="../../gui/mainwindow.cpp" line="548"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="387"/>
-        <location filename="../../gui/mainwindow.cpp" line="410"/>
+        <location filename="../../gui/mainwindow.cpp" line="396"/>
+        <location filename="../../gui/mainwindow.cpp" line="419"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
@@ -442,89 +464,89 @@
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="297"/>
+        <location filename="../../gui/mainwindow.cpp" line="306"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="297"/>
+        <location filename="../../gui/mainwindow.cpp" line="306"/>
         <source>Are you sure?</source>
         <translation>Êtes-vous sûr ?</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="420"/>
-        <location filename="../../gui/mainwindow.cpp" line="512"/>
-        <location filename="../../gui/mainwindow.cpp" line="551"/>
+        <location filename="../../gui/mainwindow.cpp" line="429"/>
+        <location filename="../../gui/mainwindow.cpp" line="530"/>
+        <location filename="../../gui/mainwindow.cpp" line="569"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="420"/>
+        <location filename="../../gui/mainwindow.cpp" line="429"/>
         <source>Invalid settings file</source>
         <translation>Fichier de configuration invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="497"/>
+        <location filename="../../gui/mainwindow.cpp" line="509"/>
         <source>Unlock</source>
         <translation>Déverrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="497"/>
+        <location filename="../../gui/mainwindow.cpp" line="508"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="512"/>
+        <location filename="../../gui/mainwindow.cpp" line="530"/>
         <source>Invalid password</source>
         <translation>Mot de passe invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="534"/>
+        <location filename="../../gui/mainwindow.cpp" line="552"/>
         <source>Changelog</source>
         <translation>Suivi de versions</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="551"/>
+        <location filename="../../gui/mainwindow.cpp" line="569"/>
         <source>No active files</source>
         <translation>Aucun fichier actif</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="591"/>
+        <location filename="../../gui/mainwindow.cpp" line="609"/>
         <source>The lock is not configured</source>
         <translation>Le verrouillage n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="600"/>
+        <location filename="../../gui/mainwindow.cpp" line="618"/>
         <source>Unlocked</source>
         <translation>Déverrouillé</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="609"/>
+        <location filename="../../gui/mainwindow.cpp" line="627"/>
         <source>Locked</source>
         <translation>Verrouillé</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="623"/>
+        <location filename="../../gui/mainwindow.cpp" line="641"/>
         <source>Paused</source>
         <translation>Mis en pause</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="627"/>
+        <location filename="../../gui/mainwindow.cpp" line="645"/>
         <source>Running</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="653"/>
+        <location filename="../../gui/mainwindow.cpp" line="671"/>
         <source>Current sets : %1</source>
         <translation>Sets actuels : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="679"/>
+        <location filename="../../gui/mainwindow.cpp" line="697"/>
         <source>A new version is available : %1</source>
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="727"/>
+        <location filename="../../gui/mainwindow.cpp" line="745"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Fermer et ne plus afficher ce message</translation>
     </message>
@@ -534,7 +556,7 @@
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="724"/>
+        <location filename="../../gui/mainwindow.cpp" line="742"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
     </message>

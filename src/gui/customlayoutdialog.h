@@ -31,6 +31,8 @@ private:
     Controller* m_ctrl;
     CustomLayoutGenerator* m_generator;
 
+    std::mt19937 m_randomEngine;
+
 public:
     CustomLayoutDialog(QWidget* _parent, Controller* _ctrl);
     ~CustomLayoutDialog();
@@ -46,6 +48,7 @@ private slots:
     void on_rows_valueChanged(int _val);
     void on_cols_valueChanged(int _val);
     void on_borderWidth_valueChanged(int _val);
+    void on_shadowWidth_valueChanged(int _val);
     void on_helpFolder_clicked();
     void on_buttonRefresh_clicked();
 };

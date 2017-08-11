@@ -59,7 +59,7 @@ Set::Set(const QDomElement* _dom)
     // added in 2.2.1
     if (_dom->hasAttribute("lock"))
     {
-        m_lock = static_cast<TRI_BOOL>(_dom->attribute("lock").toInt());
+        m_lock = static_cast<TRI_BOOL>(QVariant(_dom->attribute("lock")).toBool());
     }
 
     // added in 2.2
@@ -80,7 +80,14 @@ Set::Set(const QDomElement* _dom)
     // since 1.4 format
     else if (_dom->hasAttribute("hotkey"))
     {
-        m_hotkey = _dom->attribute("hotkey").toInt();
+        // stored in string representation since 2.2.1
+        bool isInt;
+        m_hotkey = _dom->attribute("hotkey").toInt(&isInt);
+
+        if (!isInt)
+        {
+            m_hotkey = UM::keySequenceToInt(QKeySequence(_dom->attribute("hotkey")));
+        }
     }
 
     // inner nodes
@@ -100,21 +107,7 @@ Set::Set(const QDomElement* _dom)
             // added in 2.1
             else if (element.tagName() == "customLayout")
             {
-                m_custLayout.rows = element.attribute("rows").toShort();
-                m_custLayout.cols = element.attribute("cols").toShort();
-                m_custLayout.minRows = element.attribute("minRows").toShort();
-                m_custLayout.minCols = element.attribute("minCols").toShort();
-                m_custLayout.maxRows = element.attribute("maxRows").toShort();
-                m_custLayout.maxCols = element.attribute("maxCols").toShort();
-                m_custLayout.mainEnabled = (bool) element.attribute("mainEnabled").toInt();
-                m_custLayout.mainRows = element.attribute("mainRows").toShort();
-                m_custLayout.mainCols = element.attribute("mainCols").toShort();
-                m_custLayout.mainPos = static_cast<UM::ALIGN>(element.attribute("mainPos").toInt());
-                m_custLayout.borderEnabled = (bool) element.attribute("borderEnabled").toInt();
-                m_custLayout.borderScreenEnabled = (bool) element.attribute("borderScreenEnabled").toInt();
-                m_custLayout.borderWidth = element.attribute("borderWidth").toShort();
-                m_custLayout.borderColor = element.attribute("borderColor").toUInt();
-                m_custLayout.perFolder = (bool) element.attribute("perFolder").toInt();
+                m_custLayout = CustomLayout(&element);
             }
         }
 
@@ -148,9 +141,9 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
     _writer->writeAttribute("style", QString::number(m_style));
     _writer->writeAttribute("mode", QString::number(m_mode));
     _writer->writeAttribute("active", QString::number(m_active));
-    _writer->writeAttribute("hotkey", QString::number(m_hotkey));
+    _writer->writeAttribute("hotkey", QKeySequence(m_hotkey).toString());
     _writer->writeAttribute("frequency", QString::number(m_frequency));
-    _writer->writeAttribute("lock", QString::number(m_lock));
+    _writer->writeAttribute("lock", QVariant((bool) m_lock).toString());
 
     QStringList monitors;
     foreach (int monitor, m_monitors)
@@ -163,25 +156,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
 
     if (m_style == UM::IM_CUSTOM)
     {
-        _writer->writeStartElement("customLayout");
-
-        _writer->writeAttribute("rows", QString::number(m_custLayout.rows));
-        _writer->writeAttribute("cols", QString::number(m_custLayout.cols));
-        _writer->writeAttribute("minRows", QString::number(m_custLayout.minRows));
-        _writer->writeAttribute("minCols", QString::number(m_custLayout.minCols));
-        _writer->writeAttribute("maxRows", QString::number(m_custLayout.maxRows));
-        _writer->writeAttribute("maxCols", QString::number(m_custLayout.maxCols));
-        _writer->writeAttribute("mainEnabled", QString::number(m_custLayout.mainEnabled));
-        _writer->writeAttribute("mainRows", QString::number(m_custLayout.mainRows));
-        _writer->writeAttribute("mainCols", QString::number(m_custLayout.mainCols));
-        _writer->writeAttribute("mainPos", QString::number(m_custLayout.mainPos));
-        _writer->writeAttribute("borderEnabled", QString::number(m_custLayout.borderEnabled));
-        _writer->writeAttribute("borderScreenEnabled", QString::number(m_custLayout.borderScreenEnabled));
-        _writer->writeAttribute("borderWidth", QString::number(m_custLayout.borderWidth));
-        _writer->writeAttribute("borderColor", QString::number(m_custLayout.borderColor));
-        _writer->writeAttribute("perFolder", QString::number(m_custLayout.perFolder));
-
-        _writer->writeEndElement();
+        m_custLayout.writeXml(_writer);
     }
 
     _writer->writeEndElement();

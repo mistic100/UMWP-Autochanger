@@ -1,4 +1,6 @@
 #include <QToolTip>
+#include <QGraphicsRectItem>
+#include <QGraphicsDropShadowEffect>
 
 #include "../customlayoutgenerator.h"
 #include "../umutils.h"
@@ -42,6 +44,9 @@ CustomLayoutDialog::CustomLayoutDialog(QWidget* _parent, Controller* _ctrl) :
     setFixedSize(size());
     setWindowFlags(UM::SimpleDialogFlag);
 
+    std::random_device rd;
+    m_randomEngine.seed(rd());
+
     m_generator = new CustomLayoutGenerator();
 }
 
@@ -64,6 +69,7 @@ void CustomLayoutDialog::showEvent(QShowEvent*)
 
     m_scene = new QGraphicsScene(ui->view);
     m_scene->setSceneRect(rect);
+    ui->view->setRenderHint(QPainter::Antialiasing);
     ui->view->setScene(m_scene);
 
     connect(ui->rows,           SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
@@ -75,9 +81,15 @@ void CustomLayoutDialog::showEvent(QShowEvent*)
     connect(ui->mainCols,       SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->mainRows,       SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->borderEnabled,  SIGNAL(toggled(bool)),          this, SLOT(renderPreview()));
-    connect(ui->borderScreenEnabled, SIGNAL(toggled(bool)),     this, SLOT(renderPreview()));
     connect(ui->borderWidth,    SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
     connect(ui->borderColor,    SIGNAL(colorChanged(QColor)),   this, SLOT(renderPreview()));
+    connect(ui->shadowEnabled,  SIGNAL(toggled(bool)),          this, SLOT(renderPreview()));
+    connect(ui->shadowWidth,    SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->shadowColor,    SIGNAL(colorChanged(QColor)),   this, SLOT(renderPreview()));
+    connect(ui->variationEnabled,SIGNAL(toggled(bool)),         this, SLOT(renderPreview()));
+    connect(ui->angleVariation, SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->sizeVariation,  SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
+    connect(ui->posVariation,   SIGNAL(valueChanged(int)),      this, SLOT(renderPreview()));
 
     renderPreview();
 }
@@ -101,13 +113,22 @@ void CustomLayoutDialog::setCustLayout(const CustomLayout &_layout)
     ui_mainPosition->setCheckedId(_layout.mainPos);
 
     ui->borderEnabled->setChecked(_layout.borderEnabled);
-    ui->borderScreenEnabled->setChecked(_layout.borderScreenEnabled);
     ui->borderWidth->setValue(_layout.borderWidth);
     ui->borderColor->setColor(QColor(_layout.borderColor));
+
+    ui->shadowEnabled->setChecked(_layout.shadowEnabled);
+    ui->shadowWidth->setValue(_layout.shadowWidth);
+    ui->shadowColor->setColor(QColor(_layout.shadowColor));
+
+    ui->variationEnabled->setChecked(_layout.variationEnabled);
+    ui->angleVariation->setValue(_layout.angleVariation * 10);
+    ui->sizeVariation->setValue(_layout.sizeVariation * 10);
+    ui->posVariation->setValue(_layout.posVariation * 10);
 
     on_rows_valueChanged(_layout.rows);
     on_cols_valueChanged(_layout.cols);
     on_borderWidth_valueChanged(_layout.borderWidth);
+    on_shadowWidth_valueChanged(_layout.shadowWidth);
 }
 
 /**
@@ -128,7 +149,6 @@ CustomLayout CustomLayoutDialog::getCustLayout() const
     layout.maxCols = ui->tileCols->upperValue();
 
     layout.mainEnabled = ui->mainEnabled->isChecked();
-    layout.borderScreenEnabled = ui->borderScreenEnabled->isChecked();
     layout.mainRows = ui->mainRows->value();
     layout.mainCols = ui->mainCols->value();
     layout.mainPos = static_cast<UM::ALIGN>(ui_mainPosition->checkedId());
@@ -136,6 +156,15 @@ CustomLayout CustomLayoutDialog::getCustLayout() const
     layout.borderEnabled = ui->borderEnabled->isChecked();
     layout.borderWidth = ui->borderWidth->value();
     layout.borderColor = ui->borderColor->getColor().rgb();
+
+    layout.shadowEnabled = ui->shadowEnabled->isChecked();
+    layout.shadowWidth = ui->shadowWidth->value();
+    layout.shadowColor = ui->shadowColor->getColor().rgb();
+
+    layout.variationEnabled = ui->variationEnabled->isChecked();
+    layout.angleVariation = ui->angleVariation->value() / 10.0;
+    layout.sizeVariation = ui->sizeVariation->value() / 10.0;
+    layout.posVariation = ui->posVariation->value() / 10.0;
 
     return layout;
 }
@@ -174,7 +203,16 @@ void CustomLayoutDialog::on_cols_valueChanged(int _val)
  */
 void CustomLayoutDialog::on_borderWidth_valueChanged(int _val)
 {
-    ui->borderWidthLabel->setText(QString::number(_val));
+    ui->borderWidthLabel->setText(QString::number(_val) + " px");
+}
+
+/**
+ * @brief Update shadow width label
+ * @param _val
+ */
+void CustomLayoutDialog::on_shadowWidth_valueChanged(int _val)
+{
+    ui->shadowWidthLabel->setText(QString::number(_val) + " px");
 }
 
 /**
@@ -189,10 +227,22 @@ void CustomLayoutDialog::renderPreview()
         m_scene->clear();
 
         QStringList colors(COLORS);
-        std::random_shuffle(colors.begin(), colors.end());
+        std::shuffle(colors.begin(), colors.end(), m_randomEngine);
 
         QSize size = ui->view->size();
         QList<QRect> blocks;
+
+        int monitorWidth = size.width();
+        QColor monitorColor;
+        for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+        {
+            if (m_ctrl->settings()->monitor(i).enabled)
+            {
+                monitorWidth = m_ctrl->enviro()->wpSize(i).width();
+                monitorColor = QColor(m_ctrl->settings()->monitor(i).color);
+                break;
+            }
+        }
 
         // scale blocks to wallpaper size
         double wRatio =  size.width() / (double) layout.cols;
@@ -215,66 +265,61 @@ void CustomLayoutDialog::renderPreview()
             blocks.append(newBlock);
         }
 
-        // draw background the same color of borders
+        // draw background
+        m_scene->addRect(QRect(QPoint(0, 0), size), Qt::NoPen, QBrush(monitorColor));
+
+        // init random engine
+        if (layout.variationEnabled)
+        {
+            std::shuffle(blocks.begin(), blocks.end(), m_randomEngine);
+        }
+
+        std::normal_distribution<double> randomAngle(0.0, 0.3 + 30.0 * layout.angleVariation);
+        std::normal_distribution<double> randomSize(0.2 * layout.sizeVariation, 0.002 + 0.2 * layout.sizeVariation);
+        std::normal_distribution<double> randomPos(0.0, 0.001 + 0.1 * layout.posVariation);
+
+        QPen pen(Qt::NoPen);
+
         if (layout.borderEnabled)
         {
-            m_scene->addRect(QRect(QPoint(0, 0), size), Qt::NoPen, QBrush(QColor(layout.borderColor)));
+            pen.setStyle(Qt::SolidLine);
+            pen.setColor(QColor(layout.borderColor));
+            pen.setJoinStyle(Qt::MiterJoin);
+            pen.setWidth(qRound((double) layout.borderWidth * size.width() / monitorWidth));
         }
 
         // draw blocks
         int i = 0;
-        foreach (const QRect block, blocks)
+        foreach (QRect block, blocks)
         {
-            m_scene->addRect(block, Qt::NoPen, QBrush(QColor(colors.at(i))));
+            QGraphicsRectItem* item = m_scene->addRect(block, pen, QBrush(QColor(colors.at(i))));
+
+            if (layout.shadowEnabled)
+            {
+                QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
+                effect->setColor(QColor(layout.shadowColor));
+                effect->setOffset(0);
+                effect->setBlurRadius(layout.shadowWidth);
+
+                item->setGraphicsEffect(effect);
+            }
+
+            if (layout.variationEnabled)
+            {
+                int newWidth = block.width() * (1 + randomSize(m_randomEngine));
+                int newHeight = block.height() * (1 + randomSize(m_randomEngine));
+                int newLeft = block.left() + (block.width() - newWidth) / 2 + randomPos(m_randomEngine) * newWidth;
+                int newTop = block.top() + (block.height() - newHeight) / 2 + randomPos(m_randomEngine) * newHeight;
+                double angle = randomAngle(m_randomEngine);
+
+                block = QRect(newLeft, newTop, newWidth, newHeight);
+                item->setRect(block);
+                item->setTransformOriginPoint(block.center());
+                item->setRotation(angle);
+            }
 
             i++;
             if (i == colors.size()) i = 0;
-        }
-
-        // draw borders
-        if (layout.borderEnabled)
-        {
-            // get border width for the view
-            int monitorWidth = size.width();
-            for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
-            {
-                if (m_ctrl->settings()->monitor(i).enabled)
-                {
-                    monitorWidth = m_ctrl->enviro()->wpSize(i).width();
-                    break;
-                }
-            }
-
-            QPen pen;
-            pen.setColor(QColor(layout.borderColor));
-            pen.setJoinStyle(Qt::MiterJoin);
-            pen.setWidth(qRound((double) layout.borderWidth * size.width() / monitorWidth));
-
-            foreach (const QRect block, blocks)
-            {
-                foreach (const QLine line, UM::rectBorders(block))
-                {
-                    if (
-                            (line.x1()==0 && line.x2()==0) ||
-                            (line.x1()==size.width()-1 && line.x2()==size.width()-1) ||
-                            (line.y1()==0 && line.y2()==0) ||
-                            (line.y1()==size.height()-1 && line.y2()==size.height()-1)
-                            )
-                    {
-                        // do not draw extreme borders
-                    }
-                    else
-                    {
-                        m_scene->addLine(line, pen);
-                    }
-                }
-            }
-
-            if (layout.borderScreenEnabled)
-            {
-                QRect borderRect(pen.width()/2, pen.width()/2, size.width()-pen.width()-2, size.height()-pen.width()-2);
-                m_scene->addRect(borderRect, pen, Qt::NoBrush);
-            }
         }
 
         ui->view->update();

@@ -6,6 +6,10 @@
 #include "lib/Crc32.h"
 #include "umutils.h"
 
+QT_BEGIN_NAMESPACE
+    extern Q_GUI_EXPORT void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
+QT_END_NAMESPACE
+
 
 /**
  * @brief WallpaperGenerator::WallpaperGenerator
@@ -441,6 +445,7 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
     {
         QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
+        // make sure the rect touch the border of the screen
         if (qAbs(newBlock.left() - scrRect.width()) <= 3)
         {
             newBlock.setLeft(scrRect.width()-1);
@@ -459,8 +464,44 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
 
     QLOG_DEBUG()<<"Custom sources:"<<files;
 
+    // init random engines
+    if (layout.variationEnabled)
+    {
+        std::shuffle(blocks.begin(), blocks.end(), m_randomEngine);
+    }
+
+    std::normal_distribution<double> randomAngle(0.0, 0.3 + 30.0 * layout.angleVariation);
+    std::normal_distribution<double> randomSize(0.2 * layout.sizeVariation, 0.002 + 0.2 * layout.sizeVariation);
+    std::normal_distribution<double> randomPos(0.0, 0.001 + 0.1 * layout.posVariation);
+
+    // init painter
     QImage image(scrRect.size(), QImage::Format_RGB32);
     QPainter painter(&image);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+    // draw background
+    QColor monitorColor = QColor(m_settings->monitor(_idx).color);
+    painter.setBrush(QBrush(monitorColor));
+    painter.drawRect(scrRect);
+
+    QPen borderPen(Qt::NoPen);
+    QBrush shadowBrush(Qt::NoBrush);
+
+    if (layout.borderEnabled)
+    {
+        borderPen.setStyle(Qt::SolidLine);
+        borderPen.setColor(QColor(layout.borderColor));
+        borderPen.setJoinStyle(Qt::MiterJoin);
+        borderPen.setWidth(layout.borderWidth / 2);
+    }
+
+    if (layout.shadowEnabled)
+    {
+        QColor color(layout.shadowColor);
+        color.setAlpha(10);
+        shadowBrush.setStyle(Qt::SolidPattern);
+        shadowBrush.setColor(color);
+    }
 
     // draw each block
     for (int i=0, l=blocks.size(); i<l; i++)
@@ -468,6 +509,63 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
         QRect block = blocks.at(i);
         QImage source(files.at(i));
 
+        // alter the block
+        double angle = 0;
+        QPoint offset;
+        if (layout.variationEnabled)
+        {
+            int newWidth = block.width() * (1 + randomSize(m_randomEngine));
+            int newHeight = block.height() * (1 + randomSize(m_randomEngine));
+            int newLeft = block.left() + (block.width() - newWidth) / 2 + randomPos(m_randomEngine) * newWidth;
+            int newTop = block.top() + (block.height() - newHeight) / 2 + randomPos(m_randomEngine) * newHeight;
+            angle = randomAngle(m_randomEngine);
+
+            block = QRect(newLeft, newTop, newWidth, newHeight);
+            offset = block.center();
+
+            block.translate(-offset);
+        }
+
+        // draw the drop shadow (from QPixmapDropShadowFilter implementation)
+        if (layout.shadowEnabled)
+        {
+            QImage tmp(scrRect.size(), QImage::Format_ARGB32_Premultiplied);
+            tmp.fill(0);
+
+            QPainter tmpPainter(&tmp);
+
+            if (layout.variationEnabled)
+            {
+                tmpPainter.translate(offset);
+                tmpPainter.rotate(angle);
+            }
+
+            tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
+            tmpPainter.setBrush(QBrush(Qt::white));
+            tmpPainter.drawRect(block);
+            tmpPainter.end();
+
+            QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
+            blurred.fill(0);
+
+            tmpPainter.begin(&blurred);
+            qt_blurImage(&tmpPainter, tmp, layout.shadowWidth, false, true);
+
+            tmpPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+            tmpPainter.fillRect(tmp.rect(), QColor(layout.shadowColor));
+            tmpPainter.end();
+
+            painter.drawImage(QPoint(), blurred);
+        }
+
+        // transform the painter
+        if (layout.variationEnabled)
+        {
+            painter.translate(offset);
+            painter.rotate(angle);
+        }
+
+        // draw the image
         source = source.scaled(block.size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
         QRect srcRect = QRect(QPoint(), source.size());
 
@@ -476,46 +574,28 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
                     (srcRect.height()-block.height()) / 2,
                      block.width(),
                      block.height()
-        );
+                    );
 
         painter.drawImage(block, source, zoneSource);
-    }
 
-    // draw borders
-    if (layout.borderEnabled)
-    {
-        QPen pen;
-        pen.setColor(QColor(layout.borderColor));
-        pen.setJoinStyle(Qt::MiterJoin);
-        pen.setWidth(layout.borderWidth);
-        painter.setPen(pen);
-
-        foreach (const QRect &block, blocks)
+        // draw the borders
+        if (layout.borderEnabled)
         {
-            foreach (const QLine &line, UM::rectBorders(block))
-            {
-                if (
-                        (line.x1()==0 && line.x2()==0) ||
-                        (line.x1()==scrRect.width()-1 && line.x2()==scrRect.width()-1) ||
-                        (line.y1()==0 && line.y2()==0) ||
-                        (line.y1()==scrRect.height()-1 && line.y2()==scrRect.height()-1)
-                        )
-                {
-                    // do not draw extreme borders
-                }
-                else
-                {
-                    painter.drawLine(line);
-                }
-            }
-        }
+            // 1px offset to overlap image limit
+            QRect borderRect = block.adjusted(
+                        borderPen.width()/2 - 1,
+                        borderPen.width()/2 - 1,
+                        - borderPen.width()/2 + 1,
+                        - borderPen.width()/2 + 1
+                        );
 
-        if (layout.borderScreenEnabled)
-        {
-            QRect borderRect(pen.width()/2, pen.width()/2, scrRect.width()-pen.width(), scrRect.height()-pen.width());
+            painter.setPen(borderPen);
             painter.setBrush(Qt::NoBrush);
+
             painter.drawRect(borderRect);
         }
+
+        painter.resetTransform();
     }
 
     painter.end();
@@ -870,7 +950,7 @@ QString WallpaperGenerator::getCacheFilename(const QString &_file, const QRect &
 
 /**
  * @brief Return a temp file path for a custom layout
- * @param QRect _rect
+ * @param int _idx
  * @param Set* _set
  * @return string
  */
