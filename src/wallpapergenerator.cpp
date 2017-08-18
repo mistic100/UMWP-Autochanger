@@ -437,6 +437,11 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
     QList<QRect> rawBlocks = m_custGenerator->generate(layout);
     QList<QRect> blocks;
 
+    if (rawBlocks.empty())
+    {
+        return "";
+    }
+
     // scale blocks to wallpaper size
     double wRatio =  scrRect.width() / (double) layout.cols;
     double hRatio =  scrRect.height() / (double) layout.rows;

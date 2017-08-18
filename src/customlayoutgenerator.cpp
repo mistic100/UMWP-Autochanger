@@ -19,10 +19,11 @@ QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
     if (_conf.cols < 1 || _conf.rows < 1 ||
             _conf.minCols > _conf.cols || _conf.maxCols > _conf.cols || _conf.minCols > _conf.maxCols ||
             _conf.minRows > _conf.rows || _conf.maxRows > _conf.rows || _conf.minRows > _conf.maxRows ||
-            _conf.mainCols > _conf.cols || _conf.mainRows > _conf.rows
+            _conf.mainEnabled && (_conf.mainCols > _conf.cols || _conf.mainRows > _conf.rows)
             )
     {
-        throw std::logic_error("Dimensions out of bounds");
+        QLOG_FATAL()<<"CustomLayoutGenerator: Dimensions out of bounds";
+        return QList<QRect>();
     }
 
     m_conf = _conf;
@@ -80,7 +81,7 @@ QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
     // and with sizes bounded by the config
     for (int i=m_conf.minCols; i<=m_conf.maxCols; i++)
         for (int j=m_conf.minRows; j<=m_conf.maxRows; j++)
-            if (canFitBlock(i, j))
+            if (canFitBlock(i, j) && !(i == m_conf.maxCols && j == m_conf.maxRows))
                 pool.append(QRect(0, 0, i, j));
 
     // compute the surface occupied by all pool items

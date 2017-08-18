@@ -220,113 +220,114 @@ void CustomLayoutDialog::on_shadowWidth_valueChanged(int _val)
  */
 void CustomLayoutDialog::renderPreview()
 {
-    try {
-        CustomLayout layout = getCustLayout();
-        QList<QRect> rawBlocks = m_generator->generate(layout);
+    CustomLayout layout = getCustLayout();
+    QList<QRect> rawBlocks = m_generator->generate(layout);
 
-        m_scene->clear();
+    if (rawBlocks.empty())
+    {
+        // do not update the view
+        return;
+    }
 
-        QStringList colors(COLORS);
-        std::shuffle(colors.begin(), colors.end(), m_randomEngine);
+    m_scene->clear();
 
-        QSize size = ui->view->size();
-        QList<QRect> blocks;
+    QStringList colors(COLORS);
+    std::shuffle(colors.begin(), colors.end(), m_randomEngine);
 
-        int monitorWidth = size.width();
-        QColor monitorColor;
-        for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+    QSize size = ui->view->size();
+    QList<QRect> blocks;
+
+    int monitorWidth = size.width();
+    QColor monitorColor;
+    for (int i=0, l=m_ctrl->enviro()->nbMonitors(); i<l; i++)
+    {
+        if (m_ctrl->settings()->monitor(i).enabled)
         {
-            if (m_ctrl->settings()->monitor(i).enabled)
-            {
-                monitorWidth = m_ctrl->enviro()->wpSize(i).width();
-                monitorColor = QColor(m_ctrl->settings()->monitor(i).color);
-                break;
-            }
+            monitorWidth = m_ctrl->enviro()->wpSize(i).width();
+            monitorColor = QColor(m_ctrl->settings()->monitor(i).color);
+            break;
+        }
+    }
+
+    // scale blocks to wallpaper size
+    double wRatio =  size.width() / (double) layout.cols;
+    double hRatio =  size.height() / (double) layout.rows;
+
+    foreach (const QRect block, rawBlocks)
+    {
+        QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
+
+        if (qAbs(newBlock.left() - size.width()) <= 3)
+        {
+            newBlock.setLeft(size.width()-1);
         }
 
-        // scale blocks to wallpaper size
-        double wRatio =  size.width() / (double) layout.cols;
-        double hRatio =  size.height() / (double) layout.rows;
-
-        foreach (const QRect block, rawBlocks)
+        if (qAbs(newBlock.bottom() - size.height()) <= 3)
         {
-            QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
-
-            if (qAbs(newBlock.left() - size.width()) <= 3)
-            {
-                newBlock.setLeft(size.width()-1);
-            }
-
-            if (qAbs(newBlock.bottom() - size.height()) <= 3)
-            {
-                newBlock.setBottom(size.height()-1);
-            }
-
-            blocks.append(newBlock);
+            newBlock.setBottom(size.height()-1);
         }
 
-        // draw background
-        m_scene->addRect(QRect(QPoint(0, 0), size), Qt::NoPen, QBrush(monitorColor));
+        blocks.append(newBlock);
+    }
 
-        // init random engine
+    // draw background
+    m_scene->addRect(QRect(QPoint(0, 0), size), Qt::NoPen, QBrush(monitorColor));
+
+    // init random engine
+    if (layout.variationEnabled)
+    {
+        std::shuffle(blocks.begin(), blocks.end(), m_randomEngine);
+    }
+
+    std::normal_distribution<double> randomAngle(0.0, 0.3 + 30.0 * layout.angleVariation);
+    std::normal_distribution<double> randomSize(0.2 * layout.sizeVariation, 0.002 + 0.2 * layout.sizeVariation);
+    std::normal_distribution<double> randomPos(0.0, 0.001 + 0.1 * layout.posVariation);
+
+    QPen pen(Qt::NoPen);
+
+    if (layout.borderEnabled)
+    {
+        pen.setStyle(Qt::SolidLine);
+        pen.setColor(QColor(layout.borderColor));
+        pen.setJoinStyle(Qt::MiterJoin);
+        pen.setWidth(qRound((double) layout.borderWidth * size.width() / monitorWidth));
+    }
+
+    // draw blocks
+    int i = 0;
+    foreach (QRect block, blocks)
+    {
+        QGraphicsRectItem* item = m_scene->addRect(block, pen, QBrush(QColor(colors.at(i))));
+
+        if (layout.shadowEnabled)
+        {
+            QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
+            effect->setColor(QColor(layout.shadowColor));
+            effect->setOffset(0);
+            effect->setBlurRadius(layout.shadowWidth);
+
+            item->setGraphicsEffect(effect);
+        }
+
         if (layout.variationEnabled)
         {
-            std::shuffle(blocks.begin(), blocks.end(), m_randomEngine);
+            int newWidth = block.width() * (1 + randomSize(m_randomEngine));
+            int newHeight = block.height() * (1 + randomSize(m_randomEngine));
+            int newLeft = block.left() + (block.width() - newWidth) / 2 + randomPos(m_randomEngine) * newWidth;
+            int newTop = block.top() + (block.height() - newHeight) / 2 + randomPos(m_randomEngine) * newHeight;
+            double angle = randomAngle(m_randomEngine);
+
+            block = QRect(newLeft, newTop, newWidth, newHeight);
+            item->setRect(block);
+            item->setTransformOriginPoint(block.center());
+            item->setRotation(angle);
         }
 
-        std::normal_distribution<double> randomAngle(0.0, 0.3 + 30.0 * layout.angleVariation);
-        std::normal_distribution<double> randomSize(0.2 * layout.sizeVariation, 0.002 + 0.2 * layout.sizeVariation);
-        std::normal_distribution<double> randomPos(0.0, 0.001 + 0.1 * layout.posVariation);
-
-        QPen pen(Qt::NoPen);
-
-        if (layout.borderEnabled)
-        {
-            pen.setStyle(Qt::SolidLine);
-            pen.setColor(QColor(layout.borderColor));
-            pen.setJoinStyle(Qt::MiterJoin);
-            pen.setWidth(qRound((double) layout.borderWidth * size.width() / monitorWidth));
-        }
-
-        // draw blocks
-        int i = 0;
-        foreach (QRect block, blocks)
-        {
-            QGraphicsRectItem* item = m_scene->addRect(block, pen, QBrush(QColor(colors.at(i))));
-
-            if (layout.shadowEnabled)
-            {
-                QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
-                effect->setColor(QColor(layout.shadowColor));
-                effect->setOffset(0);
-                effect->setBlurRadius(layout.shadowWidth);
-
-                item->setGraphicsEffect(effect);
-            }
-
-            if (layout.variationEnabled)
-            {
-                int newWidth = block.width() * (1 + randomSize(m_randomEngine));
-                int newHeight = block.height() * (1 + randomSize(m_randomEngine));
-                int newLeft = block.left() + (block.width() - newWidth) / 2 + randomPos(m_randomEngine) * newWidth;
-                int newTop = block.top() + (block.height() - newHeight) / 2 + randomPos(m_randomEngine) * newHeight;
-                double angle = randomAngle(m_randomEngine);
-
-                block = QRect(newLeft, newTop, newWidth, newHeight);
-                item->setRect(block);
-                item->setTransformOriginPoint(block.center());
-                item->setRotation(angle);
-            }
-
-            i++;
-            if (i == colors.size()) i = 0;
-        }
-
-        ui->view->update();
+        i++;
+        if (i == colors.size()) i = 0;
     }
-    catch(const std::exception) {
-        // do not update the view
-    }
+
+    ui->view->update();
 }
 
 void CustomLayoutDialog::on_helpFolder_clicked()
