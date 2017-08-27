@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <title>Ultimate Monitor Wallpaper Autochanger</title>
+    <meta name="description" content="UMWP Autochanger is a tool for multi-monitors users.">
+    <meta property="og:image" content="assets/img/screenshots/main.png">
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="assets/css/paper-kit.css" rel="stylesheet"/>
+    <link href="assets/css/umwp.css" rel="stylesheet"/>
+    <link href="assets/css/umwp-sprite.css" rel="stylesheet"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,300,700' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-toggleable-md fixed-top navbar-transparent" color-on-scroll="300">
+    <div class="container">
+        <div class="navbar-translate">
+            <button class="navbar-toggler navbar-toggler-right navbar-burger" type="button"
+                    data-toggle="collapse" data-target="#navbarToggler">
+                <span class="navbar-toggler-bar"></span>
+                <span class="navbar-toggler-bar"></span>
+                <span class="navbar-toggler-bar"></span>
+            </button>
+            <a class="navbar-brand hidden-sm-down" href="#">Ultimate Monitor Wallpaper Autochanger</a>
+            <a class="navbar-brand hidden-md-up" href="#">UMWP Autochanger</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" rel="nofollow" data-toggle="tooltip" data-placement="bottom" target="_blank"
+                       title="Share on Twitter"
+                       href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fwww.strangeplanet.fr%2Fwork%2Fumwp-autochanger&text=Ultimate%20Monitor%20Wallpaper%20Autochanger,%20a%20tool%20for%20multi-monitors%20users"
+                       onclick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=470,width=600');return false;">
+                        <i class="fa fa-twitter" style="font-size: 1.5em;"></i>
+                        <p class="hidden-lg-up">Share on Twitter</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" rel="nofollow" data-toggle="tooltip" data-placement="bottom" target="_blank"
+                       title="Share on Facebook"
+                       href="https://www.facebook.com/sharer/sharer.php?t=Ultimate%20Monitor%20Wallpaper%20Autochanger,%20a%20tool%20for%20multi-monitors%20users&u=http%3A%2F%2Fwww.strangeplanet.fr%2Fwork%2Fumwp-autochanger"
+                       onclick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=500,width=500');return false;">
+                        <i class="fa fa-facebook" style="font-size: 1.5em;"></i>
+                        <p class="hidden-lg-up">Share on Facebook</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" title="Star on GitHub" data-toggle="tooltip" data-placement="bottom"
+                       target="_blank" href="https://github.com/mistic100/UMWP-Autochanger">
+                        <i class="fa fa-github" style="font-size: 1.5em;"></i>
+                        <p class="hidden-lg-up">GitHub</p>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="btn btn-danger btn-round dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cloud-download" style="font-size: 1.5em; padding-right: 1.5em;"></i> Download
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">Download UMWP Autochanger <span id="version"></span></li>
+                        <li class="dropdown-item"><a href="download.php?ver=latest&amp;type=exe"><b>Installer</b>
+                            (recommended)</a></li>
+                        <li class="dropdown-item"><a href="download.php?ver=latest&amp;type=zip"><b>Portable ZIP</b></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="page-header" data-parallax="true">
+    <div class="filter"></div>
+    <img class="image" src="assets/img/backgrounds/img3.jpg">
+    <img class="image" src="assets/img/backgrounds/img6.jpg">
+    <img class="image" src="assets/img/backgrounds/img8.jpg">
+    <img class="image" src="assets/img/backgrounds/img10.jpg">
+    <img class="image" src="assets/img/backgrounds/img14.jpg">
+    <div class="container">
+        <div class="motto text-center">
+            <h1>Unleash your desktop wallpaper</h1>
+            <h3>Manage images folders and generate beautiful wallpapers for your multi-monitors Windows desktop.</h3>
+            <a href="#overview" class="btn btn-outline-neutral btn-round" style="margin-top: 2em;">
+                <i class="fa fa-info-circle" style="font-size: 1.5em; padding-right: 1.5em;"></i> Learn more
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+    <div class="section text-center" id="overview">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <h2 class="title">UMWP Autochanger is a little tool for multi-monitors Windows users.</h2>
+                    <img src="assets/img/screenshots/main.png" class="img-fluid d-block mx-auto">
+                </div>
+            </div>
+            <br/><br/>
+            <div class="row">
+                <div class="col-lg-2 offset-lg-1 col-md-6">
+                    <div class="info">
+                        <div class="icon icon-danger">
+                            <img src="assets/img/icons/random.svg" style="width: 1em"/>
+                        </div>
+                        <div class="description">
+                            <h4 class="info-title">Random</h4>
+                            <p class="description">Randomly and periodically change the wallpaper of all your
+                                monitors.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="info">
+                        <div class="icon icon-danger">
+                            <img src="assets/img/icons/folder.svg" style="width: 1em"/>
+                        </div>
+                        <div class="description">
+                            <h4 class="info-title">Folders</h4>
+                            <p>Manage sets of wallpapers, allowing you to quickly change which images are used.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="info">
+                        <div class="icon icon-danger">
+                            <img src="assets/img/icons/shortcut.svg" style="width: 1em"/>
+                        </div>
+                        <div class="description">
+                            <h4 class="info-title">Shortcuts</h4>
+                            <p>Change current wallpaper with your keyboard without stopping what you are doing.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="info">
+                        <div class="icon icon-danger">
+                            <img src="assets/img/icons/patchwork.svg" style="width: 1em"/>
+                        </div>
+                        <div class="description">
+                            <h4 class="info-title">Patchwork</h4>
+                            <p>Generate unique patchworks with your own photos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 offset-md-3 offset-lg-0">
+                    <div class="info">
+                        <div class="icon icon-danger">
+                            <img src="assets/img/icons/password.svg" style="width: 1em"/>
+                        </div>
+                        <div class="description">
+                            <h4 class="info-title">Password</h4>
+                            <p>Prevent unwanted eyes to see your photos by setting a password to some folders.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center" style="padding-top: 4em;">
+                <a href="#installation" class="btn btn-outline-danger btn-round">
+                    Installation guide
+                </a>
+                <a href="#testimonies" class="btn btn-outline-default btn-round">
+                    Testimonies
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section section-gray" id="installation">
+        <div class="container">
+            <h2 class="title text-center">Install UMWP Autochanger</h2>
+
+            <div class="guide-list">
+                <div class="media guide-item">
+                    <img class="d-flex mr-3" src="assets/img/guide/gears.png">
+                    <div class="media-body">
+                        <h5 class="mt-0">Install &amp; launch UMWP Autochanger</h5>
+                        Download the installation package or the portable ZIP with the link above and install it like
+                        any software.
+                    </div>
+                </div>
+                <div class="media guide-item">
+                    <img class="d-flex mr-3" src="assets/img/guide/folder.png">
+                    <div class="media-body">
+                        <h5 class="mt-0">Add your first set</h5>
+                        Click on the <b><i class="umwp-add"></i> Add set</b> button and select a folder containing image
+                        files.
+                    </div>
+                </div>
+                <div class="media guide-item">
+                    <img class="d-flex mr-3" src="assets/img/guide/refresh.png">
+                    <div class="media-body">
+                        <h5 class="mt-0">Apply</h5>
+                        Click on the <b><i class="umwp-refresh"></i> Refresh</b> button, the wallpaper will randomly
+                        change every 60 seconds.
+                    </div>
+                </div>
+                <div class="media guide-item">
+                    <img class="d-flex mr-3" src="assets/img/guide/book.png">
+                    <div class="media-body">
+                        <h5 class="mt-0">Configuration</h5>
+                        Read the documentation to learn about all the awesome features of UMWP Autochanger.
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center" style="padding-top: 4em;">
+                <a href="#help" class="btn btn-outline-danger btn-round">
+                    Documentation
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="help">
+        <div class="container">
+            <h2 class="title text-center">Documentation</h2>
+
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#documentation-intro" role="tab">Introduction</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#documentation-sets" role="tab">Manage sets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#documentation-hotkeys" role="tab">Hotkeys &amp;
+                                lock</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#documentation-custom" role="tab">Custom
+                                style</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane active text-justify" id="documentation-intro" role="tabpanel">
+                    <h3>Presentation</h3>
+
+                    <p>The core concept of UMWP Autochanger is <b>sets</b>. Basically sets are folders on your computer
+                        where the tool will search for JPEG/PNG/BMP/GIF files up to 3 levels deep.</p>
+                    <p>Once configured the tool will choose a random set among all activated set, then choose one image
+                        file for each monitor. Finally the final wallpaper is built with these files and sended to
+                        Windows desktop manager.</p>
+                    <p>The wallpaper is updated periodically, by default every 60 seconds (configurable).</p>
+
+                    <img src="assets/img/screenshots/main.png" class="img-fluid d-block mx-auto">
+
+                    <hr>
+
+                    <h3>Configuration</h3>
+
+                    <p>In <b><i class="umwp-config"></i> Configuration &#8227; <i class="umwp-settings"></i> Options</b>
+                        menu you can configure the update delay, the shortcuts and some other options.</p>
+                    <p>The <b>Defaults</b> tab is used to define default type, style and mode for new sets.</p>
+                    <p>Additionally you can <b><i class="umwp-export"></i> export</b> and <b><i class="umwp-import"></i>
+                        import</b> the configuration as a XML file, usefull if you plan the reset your system !</p>
+
+                    <img src="assets/img/screenshots/options1.png" class="img-fluid d-block mx-auto">
+
+                    <hr>
+
+                    <a class="btn btn-danger btn-link"
+                       href="#help" onclick="$('[href=\'#documentation-sets\']').tab('show')">
+                        Continue reading
+                    </a>
+                </div>
+                <div class="tab-pane text-justify" id="documentation-sets" role="tabpanel">
+                    <h3>Add, delete, enable &amp; disable</h3>
+
+                    <p>To add a set just click on the <i class="umwp-add"></i> menu button, or right-click in the list
+                        and click <i class="umwp-add_color"></i>, an explorer window will open to allow you to choose a
+                        folder.</p>
+                    <p>To delete a set, right-click on it and click on <i class="umwp-delete"></i>.</p>
+                    <p>To enable/disable a set, right-click on it and click on <i class="umwp-enable"></i> or
+                        <i class="umwp-disable"></i>. Active sets are marked with a <i class="umwp-bullet_green"></i>
+                        icon and inactive sets are marked with a <i class="umwp-bullet_red"></i> icon, current sets are
+                        marked with <i class="umwp-bullet_yellow"></i> icon.</p>
+
+                    <img src="assets/img/screenshots/context.png" class="img-fluid d-block mx-auto">
+
+                    <hr>
+
+                    <h3>Configure</h3>
+
+                    <p>Right-click on a set and click on <i class="umwp-edit"></i> to edit it's properties, you can
+                        change the name, style, type, mode, hotkey and lock
+                        (<a onclick="$('[href=\'#documentation-hotkeys\']').tab('show')" href="#help">see
+                            dedicated section</a>) as well as on
+                        which monitors this set is visible.</p>
+                    <p class="alert alert-info"><i class="fa fa-info"></i>
+                        You can edit several sets together by selecting them before right-click. In this mode, names and
+                        shortcuts can't be edited.</p>
+
+                    <p>There are two types available:</p>
+                    <ul>
+                        <li><b><i class="umwp-w_monitor"></i> Monitor:</b> a different image is used for each monitor
+                        </li>
+                        <li><b><i class="umwp-w_desktop"></i> Desktop:</b> only one image is used for all monitors</li>
+                    </ul>
+
+                    <p>There are six styles available:</p>
+                    <ul>
+                        <li><b><i class="umwp-im_center"></i> Center</b></li>
+                        <li><b><i class="umwp-im_tile"></i> Tile</b></li>
+                        <li><b><i class="umwp-im_stretch"></i> Stretch</b></li>
+                        <li><b><i class="umwp-im_stretch_prop"></i> Strecth proportional</b></li>
+                        <li><b><i class="umwp-im_fill"></i> Fill</b></li>
+                        <li><b><i class="umwp-im_custom"></i> Custom</b>
+                            (<a onclick="$('[href=\'#documentation-custom\']').tab('show')" href="#help">see
+                                dedicated section</a>)
+                        </li>
+                    </ul>
+
+                    <p>There are two modes available:</p>
+                    <ul>
+                        <li><b><i class="umwp-mode_random"></i> Random:</b> files are chosen randomly in the set</li>
+                        <li><b><i class="umwp-mode_sequential"></i> Sequential:</b> files are chosen sequentially in
+                            alphabetical order
+                        </li>
+                    </ul>
+
+                    <img src="assets/img/screenshots/properties.png" class="img-fluid d-block mx-auto">
+
+                    <hr>
+
+                    <a class="btn btn-danger btn-link"
+                       href="#help" onclick="$('[href=\'#documentation-hotkeys\']').tab('show')">
+                        Continue reading
+                    </a>
+                </div>
+                <div class="tab-pane text-justify" id="documentation-hotkeys" role="tabpanel">
+                    <h3>Hotkeys</h3>
+
+                    <p>As we already seen, sets state can be changed in the main window. UMWP Autochanger also provides
+                        two mechanisms to quickly change the active set.</p>
+                    <p>The first one is the <b><i class="umwp-quick"></i> Quick change</b> menu available when you
+                        right-click on the system tray icon.</p>
+
+                    <img src="assets/img/screenshots/tray.png" class="img-fluid d-block mx-auto">
+
+                    <p>The second one are the keyboard shortcuts. Shortcuts are keys combinations you assign to specific
+                        sets or actions.</p>
+                    <p>First of all you have to activate the feature in the main <b><i class="umwp-settings"></i>
+                        Options</b> window, you can also configure Refresh, Hide/Show and Start/Pause shortcuts in this
+                        window.</p>
+                    <p>The sets shortcuts are configured in their respective properties window. Many sets can have the
+                        same shortcut, thus they will be activated together, but actions shortcuts must be unique.</p>
+                    <p class="alert alert-warning"><b>Warning:</b> shortcuts are registered globally on the operating
+                        system,
+                        that means they can cause interferences with other softwares, so make sure the shortcuts you
+                        choose are not already used.</p>
+
+                    <img src="assets/img/screenshots/options4.png" class="img-fluid d-block mx-auto">
+
+                    <hr>
+
+                    <h3>Lock</h3>
+
+                    <p>The password lock can be used to prevent unwanted modification of the configuration and
+                        activation of sets.</p>
+                    <p>The lock has two modes:</p>
+
+                    <ul>
+                        <li><b>Lock everything:</b> when locked, nothing can be done in the application without entering
+                            the password. The sets list is blurred out.
+                        </li>
+                        <li><b>Lock sets:</b> only some specific sets require the password in order to be activated.
+                        </li>
+                    </ul>
+
+                    <p>In both modes, the password is always requested to enter the options.</p>
+
+                    <img src="assets/img/screenshots/options2.png" class="img-fluid d-block mx-auto">
+
+                    <hr>
+
+                    <a class="btn btn-danger btn-link"
+                       href="#help" onclick="$('[href=\'#documentation-custom\']').tab('show')">
+                        Continue reading
+                    </a>
+                </div>
+                <div class="tab-pane text-justify" id="documentation-custom" role="tabpanel">
+                    <p>The <b><i class="umwp-im_custom"></i> Custom</b> style can be used to generate more or less
+                        random patchwork wallpapers. You can choose the size of the grid, the prefered range of tiles
+                        size and the color and size of the border and the shadow.</p>
+                    <p>This mode also has a special <b>Per folder</b> mode (only available in
+                        <i class="umwp-mode_random"></i> random mode) in which all tiles are choose inside a single
+                        sub-folder of the set.</p>
+
+                    <img src="assets/img/screenshots/custom-layout.png" class="img-fluid d-block mx-auto">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section section-dark text-center" id="testimonies">
+        <div class="container">
+            <h2 class="title">They use UMWP Autochanger</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card card-profile card-plain">
+                        <div class="card-avatar">
+                            <img src="assets/img/faces/jeff-bridge.jpg" alt="Jeff Bridge">
+                        </div>
+                        <div class="card-block">
+                            <div class="author">
+                                <h4 class="card-title">Jeff Bridge</h4>
+                                <h6 class="card-category">Computer programmer</h6>
+                            </div>
+                            <p class="card-description text-center">
+                                <span class="h2">&laquo;</span>&nbsp;Ultimate Monitor Wallpaper Autochanger is the
+                                perfect little software if you want to loose countless hours in configuration for a
+                                pointless feature. I mean, come on ! Who looks at his wallpaper all day long anyway ?
+                                You'd better take five minutes choosing a nice photo and leave it there for twenty
+                                years.&nbsp;<span class="h2"
+                                                  style="vertical-align: middle; line-height:0.5em">&raquo;</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-profile card-plain">
+                        <div class="card-avatar">
+                            <img src="assets/img/faces/stoya.jpg" alt="Stoya">
+                        </div>
+                        <div class="card-block">
+                            <div class="author">
+                                <h4 class="card-title">Stoya</h4>
+                                <h6 class="card-category">Geek</h6>
+                            </div>
+                            <p class="card-description text-center">
+                                <span class="h2">&laquo;</span>&nbsp;Gghagg gagh gaggh ggahg gaggh !!&nbsp;<span
+                                    class="h2" style="vertical-align: middle; line-height:0.5em">&raquo;</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card card-profile card-plain">
+                        <div class="card-avatar">
+                            <img src="assets/img/faces/morgan-freeman.jpg" alt="Morgan Freeman">
+                        </div>
+                        <div class="card-block">
+                            <div class="author">
+                                <h4 class="card-title">Morgan Freeman</h4>
+                                <h6 class="card-category">God</h6>
+                            </div>
+                            <p class="card-description text-center">
+                                <span class="h2">&laquo;</span>&nbsp;If Mistic didn't created Ultimate Monitor Wallpaper
+                                Autochanger, I would had to do it
+                                myself.&nbsp;<span class="h2"
+                                                   style="vertical-align: middle; line-height:0.5em">&raquo;</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section section-gold text-center">
+        <div class="container">
+            <h2 class="title">Got a question or a suggestion ?</h2>
+
+            <p>Heads up to the <a class="btn btn-outline-warning btn-round" href="https://github.com/mistic100/UMWP-Autochanger/issues">Github issues tracker</a> and we will try to find a solution.</p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer section-dark">
+    <div class="container">
+        <div class="row">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="https://www.creative-tim.com">Design</a></li>
+                    <li><a href="https://github.com/mistic100/UMWP-Autochanger/blob/master/LICENSE">License</a></li>
+                    <li><a href="https://github.com/mistic100/UMWP-Autochanger/tree/master/src">OpenSource</a></li>
+                </ul>
+            </nav>
+            <div class="credits ml-auto">
+                    <span class="copyright">
+                        © 2014-<script>document.write(new Date().getFullYear())</script> <a
+                            href="https://www.strangeplanet.fr">strangeplanet.fr</a>,
+                        made with <i class="fa fa-heart heart"></i> by Damien "Mistic" Sorel
+                    </span>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        type="text/javascript"></script>
+
+<script src="assets/js/paper-kit.js?v=2.0.0"></script>
+<script src="assets/js/umwp.js"></script>
+
+</html>

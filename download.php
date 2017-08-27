@@ -16,7 +16,7 @@ $versions = array(
     '1.9' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.9.zip',
     '2.0' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.0.zip',
     '2.1' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.1.zip',
-    '2.2' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.1.zip',
+    '2.2' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.2.zip',
     ),
   
   'exe' => array(
