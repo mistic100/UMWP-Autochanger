@@ -40,7 +40,7 @@ void StatusBar::newVersion(const QString &_version)
 {
     QPushButton* statusLabel = new QPushButton(tr("A new version is available : %1").arg(_version));
     statusLabel->setFlat(true);
-    statusLabel->setStyleSheet("QPushButton { color : red; } QPushButton:flat:pressed { border: none; }");
+    statusLabel->setStyleSheet("QPushButton { color : #d60000; } QPushButton:flat:pressed { border: none; }");
     statusLabel->setCursor(Qt::PointingHandCursor);
     addWidget(statusLabel);
 

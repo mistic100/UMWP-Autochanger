@@ -26,7 +26,7 @@ private:
     Controller* m_ctrl;
 
     UM::NewVersion m_version;
-    QFile  m_file;
+    QFile m_file;
     QNetworkReply* m_reply;
     
 public:
@@ -35,13 +35,14 @@ public:
 
 private:
     void errorMessage();
+    void downloadChangelog();
 
 private slots:
-    void on_updateButton_clicked();
-
     void onDataReady();
     void onDownloadFinished();
     void onDownloadProgress(qint64 _received, qint64 _total);
+    void onChangelogFinished(QNetworkReply *_reply);
+    void on_buttonUpdate_clicked();
 };
 
 #endif // NEWVERSIONDIALOG_H

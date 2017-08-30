@@ -45,7 +45,7 @@
     <message>
         <location filename="../../gui/configdialog.ui" line="108"/>
         <source>File editor :</source>
-        <translation type="unfinished"></translation>
+        <translation>Файловый редактор:</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="316"/>
@@ -65,47 +65,47 @@
     <message>
         <location filename="../../gui/configdialog.ui" line="122"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Защита</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="200"/>
         <source>Password :</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль :</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="183"/>
         <source>Current password :</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущий пароль :</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="144"/>
         <source>Enable lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить защиту</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="128"/>
         <source>Lock on minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Защитить при сворачивании</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="135"/>
         <source>Lock everything</source>
-        <translation type="unfinished"></translation>
+        <translation>Защитить всё.</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="230"/>
         <source>Lock some sets</source>
-        <translation type="unfinished"></translation>
+        <translation>Защитить несколько наборов</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="237"/>
         <source>Lock at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Защищать при запуске</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="244"/>
         <source>Open the settings of each set to make it lockable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть настройки каждого набора чтобы сделать их защищаемыми.</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="258"/>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../../gui/configdialog.ui" line="421"/>
         <source>Lock/Unlock :</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировать/Разблокировать :</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.ui" line="361"/>
@@ -241,17 +241,17 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="143"/>
         <source>Lock/Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировать/Разблокировать</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="157"/>
         <source>You must enter a password to activate the lock.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны ввести пароль чтобы включить блокировку</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="165"/>
         <source>Current lock password is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущий пароль блокировки неверный.</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="188"/>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../gui/configdialog.cpp" line="376"/>
         <source>This option allows to lock any changes in the app configuration until a password is entered.&lt;br&gt;&lt;b&gt;Warning:&lt;/b&gt; even though the password is hashed, the config file is not secure and can be manually modified.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта опция позволяет блокировать любые изменения в настройках приложения до ввода пароля.&lt;br&gt;&lt;b&gt;Внимание:&lt;/b&gt; даже при зашифрованном пароле, файл настроек может быть изменён вручную.</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="148"/>
@@ -299,17 +299,12 @@
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="17"/>
         <source>Custom Layout Configuration</source>
-        <translation>Настройки &quot;Особой&quot; раскладки</translation>
+        <translation>Настройки стиля &quot;Особый&quot;</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="127"/>
         <source>Tiles size</source>
         <translation>Размер плитки</translation>
-    </message>
-    <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="245"/>
-        <source>Grid</source>
-        <translation>Сетка</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="148"/>
@@ -319,13 +314,14 @@
         <translation>Строки</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.ui" line="875"/>
-        <source>Per folder</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../gui/customlayoutdialog.ui" line="245"/>
+        <source>Grid</source>
+        <translation>Сетка</translation>
     </message>
     <message>
-        <source>Screen border</source>
-        <translation type="vanished">Рамка экрана</translation>
+        <location filename="../../gui/customlayoutdialog.ui" line="875"/>
+        <source>Per folder</source>
+        <translation>По папкам</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="925"/>
@@ -341,7 +337,7 @@
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="33"/>
         <source>Shadow</source>
-        <translation type="unfinished"></translation>
+        <translation>Тень</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="114"/>
@@ -359,17 +355,17 @@
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="369"/>
         <source>Random</source>
-        <translation type="unfinished">Произвольно</translation>
+        <translation>Произвольно</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="384"/>
         <source>Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Угол</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="394"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../../gui/customlayoutdialog.ui" line="404"/>
@@ -388,9 +384,9 @@
         <translation>Граница</translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.cpp" line="334"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="335"/>
         <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда этот чекбокс отмечен, изображения берутся из одной из подпапок наборы, вместо всего набора.&lt;br&gt;&lt;b&gt;Замечание:&lt;/b&gt; эта опция доступна только в произвольном режиме.</translation>
     </message>
 </context>
 <context>
@@ -433,7 +429,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="741"/>
+        <location filename="../../gui/mainwindow.cpp" line="742"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
@@ -448,7 +444,7 @@
         <translation>Экспорт файла настроек</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="548"/>
+        <location filename="../../gui/mainwindow.cpp" line="549"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -476,7 +472,7 @@
     <message>
         <location filename="../../gui/mainwindow.cpp" line="429"/>
         <location filename="../../gui/mainwindow.cpp" line="530"/>
-        <location filename="../../gui/mainwindow.cpp" line="569"/>
+        <location filename="../../gui/mainwindow.cpp" line="570"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -488,65 +484,65 @@
     <message>
         <location filename="../../gui/mainwindow.cpp" line="509"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировать</translation>
     </message>
     <message>
         <location filename="../../gui/mainwindow.cpp" line="508"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <location filename="../../gui/mainwindow.cpp" line="530"/>
         <source>Invalid password</source>
-        <translation type="unfinished"></translation>
+        <translation>Неверный пароль</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="552"/>
+        <location filename="../../gui/mainwindow.cpp" line="553"/>
         <source>Changelog</source>
         <translation>Список изменений</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="569"/>
+        <location filename="../../gui/mainwindow.cpp" line="570"/>
         <source>No active files</source>
         <translation>Нет активных файлов</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="609"/>
+        <location filename="../../gui/mainwindow.cpp" line="610"/>
         <source>The lock is not configured</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировка не настроена</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="618"/>
+        <location filename="../../gui/mainwindow.cpp" line="619"/>
         <source>Unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировано</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="627"/>
+        <location filename="../../gui/mainwindow.cpp" line="628"/>
         <source>Locked</source>
-        <translation type="unfinished"></translation>
+        <translation>Заблокировано</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="641"/>
+        <location filename="../../gui/mainwindow.cpp" line="642"/>
         <source>Paused</source>
         <translation>Приостановлено</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="645"/>
+        <location filename="../../gui/mainwindow.cpp" line="646"/>
         <source>Running</source>
         <translation>Работает</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="671"/>
+        <location filename="../../gui/mainwindow.cpp" line="672"/>
         <source>Current sets : %1</source>
         <translation>Текущий набор: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="697"/>
+        <location filename="../../gui/mainwindow.cpp" line="698"/>
         <source>A new version is available : %1</source>
         <translation>Доступна новая версия: %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="745"/>
+        <location filename="../../gui/mainwindow.cpp" line="746"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Закрыть и больше не показывать это сообщение</translation>
     </message>
@@ -556,7 +552,7 @@
         <translation>%1 всё ещё работает</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="742"/>
+        <location filename="../../gui/mainwindow.cpp" line="743"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Если вы выйдете сейчас, &lt;br&gt;обои перестанут меняться.</translation>
     </message>
@@ -647,12 +643,12 @@
     <message>
         <location filename="../../gui/menubar.cpp" line="47"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировка</translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="48"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировать</translation>
     </message>
     <message>
         <location filename="../../gui/menubar.cpp" line="50"/>
@@ -668,42 +664,55 @@
 <context>
     <name>NewVersionDialog</name>
     <message>
-        <location filename="../../gui/newversiondialog.ui" line="14"/>
+        <location filename="../../gui/newversiondialog.ui" line="20"/>
         <source>New version</source>
         <translation>Новая версия</translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.ui" line="33"/>
-        <source>Update now</source>
-        <translation>Обновить сейчас</translation>
+        <location filename="../../gui/newversiondialog.ui" line="67"/>
+        <source>A new version of %1 is available!</source>
+        <comment>%1: application name</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="25"/>
-        <source>A new version is available : %1</source>
-        <translation>Доступна новая версия: %1</translation>
+        <location filename="../../gui/newversiondialog.ui" line="74"/>
+        <source>%1 %2 is now available, you have version %3. Would you like to download it now?</source>
+        <comment>%1: application name, %2: new version, %3 current version</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="27"/>
-        <source>Close</source>
-        <translation>Закрыть</translation>
+        <location filename="../../gui/newversiondialog.ui" line="87"/>
+        <source>Release notes:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="28"/>
-        <source>Close and don&apos;t show this message again</source>
-        <translation>Закрыть и больше не показывать это сообщение</translation>
+        <location filename="../../gui/newversiondialog.ui" line="171"/>
+        <source>Downloading %1 %2.</source>
+        <comment>%1: application name, %2: new version</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="58"/>
-        <source>Downloading UMWP_Autochanger_%1_Setup.exe ...</source>
-        <translation>Скачивается UMWP_Autochanger_%1_Setup.exe ...</translation>
+        <location filename="../../gui/newversiondialog.ui" line="107"/>
+        <source>Skip this version</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="83"/>
+        <location filename="../../gui/newversiondialog.ui" line="127"/>
+        <source>Remind me later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/newversiondialog.ui" line="134"/>
+        <source>Install update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/newversiondialog.cpp" line="84"/>
         <source>Unable to download installer file.</source>
         <translation>Не получается скачать установочный файл.</translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="83"/>
+        <location filename="../../gui/newversiondialog.cpp" line="84"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -849,7 +858,7 @@
     <message>
         <location filename="../../gui/seteditdialog.ui" line="103"/>
         <source>Monitors :</source>
-        <translation type="unfinished"></translation>
+        <translation>Мониторы :</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.ui" line="116"/>
@@ -859,7 +868,7 @@
     <message>
         <location filename="../../gui/seteditdialog.ui" line="186"/>
         <source>Lock :</source>
-        <translation type="unfinished"></translation>
+        <translation>Защита:</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="39"/>
@@ -899,7 +908,7 @@
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="47"/>
         <source>Custom...</source>
-        <translation>Особая...</translation>
+        <translation>Особый...</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="49"/>
@@ -915,17 +924,17 @@
         <location filename="../../gui/seteditdialog.cpp" line="52"/>
         <location filename="../../gui/seteditdialog.cpp" line="53"/>
         <source>All monitors</source>
-        <translation type="unfinished"></translation>
+        <translation>Все мониторы</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="61"/>
         <source>Monitor %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Монитор %1</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="65"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключено</translation>
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="66"/>
@@ -1015,12 +1024,12 @@
     <message>
         <location filename="../../gui/trayicon.cpp" line="27"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Блокировка</translation>
     </message>
     <message>
         <location filename="../../gui/trayicon.cpp" line="28"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Разблокировать</translation>
     </message>
     <message>
         <location filename="../../gui/trayicon.cpp" line="29"/>

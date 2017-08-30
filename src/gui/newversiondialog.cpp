@@ -17,15 +17,18 @@ NewVersionDialog::NewVersionDialog(QWidget* _parent, Controller* _ctrl) :
 {
     ui->setupUi(this);
 
-    setWindowFlags(UM::SimpleDialogFlag);
-
     m_version = m_ctrl->enviro()->newVersion();
 
-    ui->progressBar->setVisible(false);
-    ui->label->setText(tr("A new version is available : %1").arg(m_version.code));
+    ui->blockDownloading->setVisible(false);
+    resize(size().width(), 250);
 
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Close"));
-    ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Close and don't show this message again"));
+    ui->title->setText(ui->title->text().arg(APP_NAME));
+    ui->description->setText(ui->description->text().arg(APP_NAME, m_version.code, APP_VERSION));
+    ui->titleDownloading->setText(ui->titleDownloading->text().arg(APP_NAME, m_version.code));
+
+    downloadChangelog();
+
+    setWindowFlags(UM::SimpleDialogFlag);
 }
 
 /**
@@ -39,11 +42,11 @@ NewVersionDialog::~NewVersionDialog()
 /**
  * @brief Launch download on click on main button
  */
-void NewVersionDialog::on_updateButton_clicked()
+void NewVersionDialog::on_buttonUpdate_clicked()
 {
-    ui->updateButton->setVisible(false);
-    ui->progressBar->setVisible(true);
-    ui->buttonBox->setDisabled(true);
+    ui->blockInfo->setVisible(false);
+    ui->blockDownloading->setVisible(true);
+    resize(size().width(), 60);
 
     m_file.setFileName(QDir::toNativeSeparators(QDir::tempPath() + "/" + APP_INSTALLER_FILENAME));
 
@@ -55,8 +58,6 @@ void NewVersionDialog::on_updateButton_clicked()
     }
     else
     {
-        ui->label->setText(tr("Downloading UMWP_Autochanger_%1_Setup.exe ...").arg(m_version.code));
-
         QLOG_DEBUG() << "Download" << m_version.link;
 
         QNetworkAccessManager* manager = new QNetworkAccessManager();
@@ -81,7 +82,64 @@ void NewVersionDialog::on_updateButton_clicked()
 void NewVersionDialog::errorMessage()
 {
     QMessageBox::critical(this, tr("Error"), tr("Unable to download installer file."), QMessageBox::Ok, QMessageBox::Ok);
-    done(0);
+    reject();
+}
+
+/**
+ * @brief Download the changelog file
+ */
+void NewVersionDialog::downloadChangelog()
+{
+    QString url = QString(APP_CHANGELOG_URL).arg(m_version.code);
+
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onChangelogFinished(QNetworkReply*)));
+
+    QNetworkRequest request = QNetworkRequest(QUrl(url));
+    if (url.startsWith("https"))
+    {
+        request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+    }
+
+    manager->get(request);
+}
+
+/**
+ * @brief Display the changelog file
+ * @param _reply
+ */
+void NewVersionDialog::onChangelogFinished(QNetworkReply* _reply)
+{
+    QString html;
+
+    if (_reply->error() == QNetworkReply::NoError)
+    {
+        // Load CSS
+        html.append("<style>");
+
+        QFile cssFile(":/lang/changelog.css");
+
+        cssFile.open(QIODevice::ReadOnly);
+        QTextStream cssContent(&cssFile);
+        cssContent.setCodec("UTF-8");
+        html.append(cssContent.readAll());
+        cssFile.close();
+
+        html.append("</style>");
+
+        html.append(QString(_reply->readAll()));
+    }
+    else
+    {
+        QLOG_ERROR() << _reply->errorString();
+
+        html.append(_reply->errorString());
+    }
+
+    ui->textBrowser->setHtml(html);
+
+    _reply->manager()->deleteLater();
+    _reply->deleteLater();
 }
 
 /**
@@ -148,6 +206,7 @@ void NewVersionDialog::onDownloadFinished()
             ui->progressBar->setValue(100);
             ui->progressBar->setMaximum(100);
 
+            accept();
             m_ctrl->launchInstaller();
         }
     }

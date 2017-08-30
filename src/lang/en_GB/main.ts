@@ -384,7 +384,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/customlayoutdialog.cpp" line="334"/>
+        <location filename="../../gui/customlayoutdialog.cpp" line="335"/>
         <source>When this box is checked, the images will be grabbed from one of the sub-folders of the set instead of the entire set.&lt;br&gt;&lt;b&gt;Note:&lt;/b&gt; this option is only available in random mode.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -429,7 +429,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="741"/>
+        <location filename="../../gui/mainwindow.cpp" line="742"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -444,7 +444,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="548"/>
+        <location filename="../../gui/mainwindow.cpp" line="549"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -472,7 +472,7 @@
     <message>
         <location filename="../../gui/mainwindow.cpp" line="429"/>
         <location filename="../../gui/mainwindow.cpp" line="530"/>
-        <location filename="../../gui/mainwindow.cpp" line="569"/>
+        <location filename="../../gui/mainwindow.cpp" line="570"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -497,52 +497,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="552"/>
+        <location filename="../../gui/mainwindow.cpp" line="553"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="569"/>
+        <location filename="../../gui/mainwindow.cpp" line="570"/>
         <source>No active files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="609"/>
+        <location filename="../../gui/mainwindow.cpp" line="610"/>
         <source>The lock is not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="618"/>
+        <location filename="../../gui/mainwindow.cpp" line="619"/>
         <source>Unlocked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="627"/>
+        <location filename="../../gui/mainwindow.cpp" line="628"/>
         <source>Locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="641"/>
+        <location filename="../../gui/mainwindow.cpp" line="642"/>
         <source>Paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="645"/>
+        <location filename="../../gui/mainwindow.cpp" line="646"/>
         <source>Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="671"/>
+        <location filename="../../gui/mainwindow.cpp" line="672"/>
         <source>Current sets : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="697"/>
+        <location filename="../../gui/mainwindow.cpp" line="698"/>
         <source>A new version is available : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="745"/>
+        <location filename="../../gui/mainwindow.cpp" line="746"/>
         <source>Close and don&apos;t show this message again</source>
         <translation type="unfinished"></translation>
     </message>
@@ -552,7 +552,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="742"/>
+        <location filename="../../gui/mainwindow.cpp" line="743"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -664,42 +664,55 @@
 <context>
     <name>NewVersionDialog</name>
     <message>
-        <location filename="../../gui/newversiondialog.ui" line="14"/>
+        <location filename="../../gui/newversiondialog.ui" line="20"/>
         <source>New version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.ui" line="33"/>
-        <source>Update now</source>
+        <location filename="../../gui/newversiondialog.ui" line="67"/>
+        <source>A new version of %1 is available!</source>
+        <comment>%1: application name</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="25"/>
-        <source>A new version is available : %1</source>
+        <location filename="../../gui/newversiondialog.ui" line="74"/>
+        <source>%1 %2 is now available, you have version %3. Would you like to download it now?</source>
+        <comment>%1: application name, %2: new version, %3 current version</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="27"/>
-        <source>Close</source>
+        <location filename="../../gui/newversiondialog.ui" line="87"/>
+        <source>Release notes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="28"/>
-        <source>Close and don&apos;t show this message again</source>
+        <location filename="../../gui/newversiondialog.ui" line="171"/>
+        <source>Downloading %1 %2.</source>
+        <comment>%1: application name, %2: new version</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="58"/>
-        <source>Downloading UMWP_Autochanger_%1_Setup.exe ...</source>
+        <location filename="../../gui/newversiondialog.ui" line="107"/>
+        <source>Skip this version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="83"/>
+        <location filename="../../gui/newversiondialog.ui" line="127"/>
+        <source>Remind me later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/newversiondialog.ui" line="134"/>
+        <source>Install update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../gui/newversiondialog.cpp" line="84"/>
         <source>Unable to download installer file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../gui/newversiondialog.cpp" line="83"/>
+        <location filename="../../gui/newversiondialog.cpp" line="84"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

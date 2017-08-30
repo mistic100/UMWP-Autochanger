@@ -52,6 +52,10 @@ private slots:
                 QLOG_DEBUG() << "New version detected: " << version.code;
                 emit newVersionAvailable(version);
             }
+            else
+            {
+                QLOG_DEBUG() << "Server version is" << version.code;
+            }
         }
         else
         {

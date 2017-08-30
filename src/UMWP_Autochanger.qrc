@@ -61,5 +61,7 @@
         <file>images/folder-overlay.png</file>
         <file>images/icons/bullet_lock.png</file>
         <file>images/qt-logo-16.png</file>
+        <file>images/icons/update.png</file>
+        <file>images/icon-large.png</file>
     </qresource>
 </RCC>

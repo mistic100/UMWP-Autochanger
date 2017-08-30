@@ -545,8 +545,9 @@ void MainWindow::openAboutDialog()
     text+= "Built with <a href=\"https://www.qt.io\"><img src=\":/images/qt-logo-16.png\" style=\"vertical-align: baseline\"></a>";
 
     QMessageBox dialog;
-    dialog.setIcon(QMessageBox::Information);
+    dialog.setIconPixmap(QPixmap(":/images/icon-large.png").scaled(96, 96));
     dialog.setWindowTitle(tr("About"));
+    dialog.setWindowIcon(windowIcon());
     dialog.setText(text);
     dialog.setStandardButtons(QMessageBox::Close | QMessageBox::Open);
     dialog.setDefaultButton(QMessageBox::Close);
@@ -696,7 +697,7 @@ void MainWindow::onNewVersion()
         {
             // tray tootlip
             m_trayIcon->showMessage(APP_NAME, tr("A new version is available : %1").arg(version));
-            connect(m_trayIcon, SIGNAL(messageClicked()), this, SLOT(toggleWindow()));
+            connect(m_trayIcon, &TrayIcon::messageClicked, this, [this]{ toggleWindow(); openNewVersionDialog(); });
         }
         else
         {
