@@ -2,32 +2,34 @@
 
 $versions = array(
   'zip' => array(
-    '1.0a1' => 'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.0-alpha1.zip',
-    '1.0a2' => 'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.0-alpha2.zip',
-    '1.0' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.0.zip',
-    '1.1' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.1.zip',
-    '1.2' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.2.zip',
-    '1.3' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.3.zip',
-    '1.4' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.4.zip',
-    '1.5' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.5.zip',
-    '1.6' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.6.zip',
-    '1.7' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.7.zip',
-    '1.8' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.8.zip',
-    '1.9' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.9.zip',
-    '2.0' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.0.zip',
-    '2.1' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.1.zip',
-    '2.2' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.2.zip',
+    '1.0a1' => 'dist/UMWP_Autochanger_1.0-alpha1.zip',
+    '1.0a2' => 'dist/UMWP_Autochanger_1.0-alpha2.zip',
+    '1.0' => 'dist/UMWP_Autochanger_1.0.zip',
+    '1.1' => 'dist/UMWP_Autochanger_1.1.zip',
+    '1.2' => 'dist/UMWP_Autochanger_1.2.zip',
+    '1.3' => 'dist/UMWP_Autochanger_1.3.zip',
+    '1.4' => 'dist/UMWP_Autochanger_1.4.zip',
+    '1.5' => 'dist/UMWP_Autochanger_1.5.zip',
+    '1.6' => 'dist/UMWP_Autochanger_1.6.zip',
+    '1.7' => 'dist/UMWP_Autochanger_1.7.zip',
+    '1.8' => 'dist/UMWP_Autochanger_1.8.zip',
+    '1.9' => 'dist/UMWP_Autochanger_1.9.zip',
+    '2.0' => 'dist/UMWP_Autochanger_2.0.zip',
+    '2.1' => 'dist/UMWP_Autochanger_2.1.zip',
+    '2.2' => 'dist/UMWP_Autochanger_2.2.zip',
+    '2.3.0' => 'dist/UMWP_Autochanger_2.3.0.zip',
     ),
   
   'exe' => array(
-    '1.5' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.5_Setup.exe',
-    '1.6' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.6_Setup.exe',
-    '1.7' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.7_Setup.exe',
-    '1.8' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.8_Setup.exe',
-    '1.9' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_1.9_Setup.exe',
-    '2.0' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.0_Setup.exe',
-    '2.1' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.1_Setup.exe',
-    '2.2' =>   'http://www.strangeplanet.fr/work/umwp-autochanger/dist/UMWP_Autochanger_2.2_Setup.exe',
+    '1.5' => 'dist/UMWP_Autochanger_1.5_Setup.exe',
+    '1.6' => 'dist/UMWP_Autochanger_1.6_Setup.exe',
+    '1.7' => 'dist/UMWP_Autochanger_1.7_Setup.exe',
+    '1.8' => 'dist/UMWP_Autochanger_1.8_Setup.exe',
+    '1.9' => 'dist/UMWP_Autochanger_1.9_Setup.exe',
+    '2.0' => 'dist/UMWP_Autochanger_2.0_Setup.exe',
+    '2.1' => 'dist/UMWP_Autochanger_2.1_Setup.exe',
+    '2.2' => 'dist/UMWP_Autochanger_2.2_Setup.exe',
+    '2.3.0' => 'dist/UMWP_Autochanger_2.3.0_Setup.exe',
     ),
   );
   
@@ -69,8 +71,6 @@ $file = $versions[$_GET['type']][$_GET['ver']];
 
 if (isset($_GET['serve']))
 {
-  $file = str_replace('http://www.strangeplanet.fr/work/umwp-autochanger/', '', $file);
-  
   header('Content-Type: application/force-download; name="'.basename($file).'"');
   header('Content-Disposition: attachment; filename="'.basename($file).'"');
   header('Content-Description: File Transfer');
@@ -85,7 +85,7 @@ if (isset($_GET['serve']))
 }
 else
 {
-  header('Location: '.$file);
+  header('Location: http://www.strangeplanet.fr/work/umwp-autochanger/'.$file);
 }
 
 function readlargefile($fullfile)

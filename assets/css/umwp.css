@@ -68,13 +68,17 @@
     vertical-align: middle;
 }
 
+.nav-tabs-navigation .nav-link {
+    cursor: pointer;
+}
+
 /* guide */
 .guide-item {
     margin-bottom: 2em;
     position: relative;
 }
 
-.guide-item img {
+.guide-image {
     width: 96px;
     height: 96px;
 }

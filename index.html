@@ -22,6 +22,7 @@
 </head>
 
 <body>
+<div id="top"></div>
 <nav class="navbar navbar-toggleable-md fixed-top navbar-transparent" color-on-scroll="300">
     <div class="container">
         <div class="navbar-translate">
@@ -31,8 +32,8 @@
                 <span class="navbar-toggler-bar"></span>
                 <span class="navbar-toggler-bar"></span>
             </button>
-            <a class="navbar-brand hidden-sm-down" href="#">Ultimate Monitor Wallpaper Autochanger</a>
-            <a class="navbar-brand hidden-md-up" href="#">UMWP Autochanger</a>
+            <a class="navbar-brand hidden-sm-down" href="#top">Ultimate Monitor Wallpaper Autochanger</a>
+            <a class="navbar-brand hidden-md-up" href="#top">UMWP Autochanger</a>
         </div>
         <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav ml-auto">
@@ -180,37 +181,35 @@
         <div class="container">
             <h2 class="title text-center">Install UMWP Autochanger</h2>
 
-            <div class="guide-list">
-                <div class="media guide-item">
-                    <img class="d-flex mr-3" src="assets/img/guide/gears.png">
-                    <div class="media-body">
-                        <h5 class="mt-0">Install &amp; launch UMWP Autochanger</h5>
-                        Download the installation package or the portable ZIP with the link above and install it like
-                        any software.
-                    </div>
+            <div class="media guide-item">
+                <img class="guide-image d-flex mr-3" src="assets/img/guide/gears.png">
+                <div class="media-body">
+                    <h5 class="mt-0">Install &amp; launch UMWP Autochanger</h5>
+                    Download the installation package or the portable ZIP with the link above and install it like
+                    any software.
                 </div>
-                <div class="media guide-item">
-                    <img class="d-flex mr-3" src="assets/img/guide/folder.png">
-                    <div class="media-body">
-                        <h5 class="mt-0">Add your first set</h5>
-                        Click on the <b><i class="umwp-add"></i> Add set</b> button and select a folder containing image
-                        files.
-                    </div>
+            </div>
+            <div class="media guide-item">
+                <img class="guide-image d-flex mr-3" src="assets/img/guide/folder.png">
+                <div class="media-body">
+                    <h5 class="mt-0">Add your first set</h5>
+                    Click on the <b><i class="umwp-add"></i> Add set</b> button and select a folder containing image
+                    files.
                 </div>
-                <div class="media guide-item">
-                    <img class="d-flex mr-3" src="assets/img/guide/refresh.png">
-                    <div class="media-body">
-                        <h5 class="mt-0">Apply</h5>
-                        Click on the <b><i class="umwp-refresh"></i> Refresh</b> button, the wallpaper will randomly
-                        change every 60 seconds.
-                    </div>
+            </div>
+            <div class="media guide-item">
+                <img class="guide-image d-flex mr-3" src="assets/img/guide/refresh.png">
+                <div class="media-body">
+                    <h5 class="mt-0">Apply</h5>
+                    Click on the <b><i class="umwp-refresh"></i> Refresh</b> button, the wallpaper will randomly
+                    change every 60 seconds.
                 </div>
-                <div class="media guide-item">
-                    <img class="d-flex mr-3" src="assets/img/guide/book.png">
-                    <div class="media-body">
-                        <h5 class="mt-0">Configuration</h5>
-                        Read the documentation to learn about all the awesome features of UMWP Autochanger.
-                    </div>
+            </div>
+            <div class="media guide-item">
+                <img class="guide-image d-flex mr-3" src="assets/img/guide/book.png">
+                <div class="media-body">
+                    <h5 class="mt-0">Configuration</h5>
+                    Read the documentation to learn about all the awesome features of UMWP Autochanger.
                 </div>
             </div>
 
@@ -230,17 +229,17 @@
                 <div class="nav-tabs-wrapper">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#documentation-intro" role="tab">Introduction</a>
+                            <a class="nav-link active" data-toggle="tab" data-target="#help-intro" role="tab">Introduction</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#documentation-sets" role="tab">Manage sets</a>
+                            <a class="nav-link" data-toggle="tab" data-target="#help-sets" role="tab">Manage sets</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#documentation-hotkeys" role="tab">Hotkeys &amp;
+                            <a class="nav-link" data-toggle="tab" data-target="#help-hotkeys" role="tab">Hotkeys &amp;
                                 lock</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#documentation-custom" role="tab">Custom
+                            <a class="nav-link" data-toggle="tab" data-target="#help-custom" role="tab">Custom
                                 style</a>
                         </li>
                     </ul>
@@ -248,7 +247,7 @@
             </div>
 
             <div class="tab-content">
-                <div class="tab-pane active text-justify" id="documentation-intro" role="tabpanel">
+                <div class="tab-pane fade show active text-justify" id="help-intro" role="tabpanel">
                     <h3>Presentation</h3>
 
                     <p>The core concept of UMWP Autochanger is <b>sets</b>. Basically sets are folders on your computer
@@ -275,11 +274,11 @@
                     <hr>
 
                     <a class="btn btn-danger btn-link"
-                       href="#help" onclick="$('[href=\'#documentation-sets\']').tab('show')">
+                       href="#help" onclick="$('[data-target=\'#help-sets\']').tab('show')">
                         Continue reading
                     </a>
                 </div>
-                <div class="tab-pane text-justify" id="documentation-sets" role="tabpanel">
+                <div class="tab-pane fade text-justify" id="help-sets" role="tabpanel">
                     <h3>Add, delete, enable &amp; disable</h3>
 
                     <p>To add a set just click on the <i class="umwp-add"></i> menu button, or right-click in the list
@@ -299,7 +298,7 @@
 
                     <p>Right-click on a set and click on <i class="umwp-edit"></i> to edit it's properties, you can
                         change the name, style, type, mode, hotkey and lock
-                        (<a onclick="$('[href=\'#documentation-hotkeys\']').tab('show')" href="#help">see
+                        (<a onclick="$('[data-target=\'#help-hotkeys\']').tab('show')" href="#help">see
                             dedicated section</a>) as well as on
                         which monitors this set is visible.</p>
                     <p class="alert alert-info"><i class="fa fa-info"></i>
@@ -321,7 +320,7 @@
                         <li><b><i class="umwp-im_stretch_prop"></i> Strecth proportional</b></li>
                         <li><b><i class="umwp-im_fill"></i> Fill</b></li>
                         <li><b><i class="umwp-im_custom"></i> Custom</b>
-                            (<a onclick="$('[href=\'#documentation-custom\']').tab('show')" href="#help">see
+                            (<a onclick="$('[data-target=\'#help-custom\']').tab('show')" href="#help">see
                                 dedicated section</a>)
                         </li>
                     </ul>
@@ -339,11 +338,11 @@
                     <hr>
 
                     <a class="btn btn-danger btn-link"
-                       href="#help" onclick="$('[href=\'#documentation-hotkeys\']').tab('show')">
+                       href="#help" onclick="$('[data-target=\'#help-hotkeys\']').tab('show')">
                         Continue reading
                     </a>
                 </div>
-                <div class="tab-pane text-justify" id="documentation-hotkeys" role="tabpanel">
+                <div class="tab-pane fade text-justify" id="help-hotkeys" role="tabpanel">
                     <h3>Hotkeys</h3>
 
                     <p>As we already seen, sets state can be changed in the main window. UMWP Autochanger also provides
@@ -390,11 +389,11 @@
                     <hr>
 
                     <a class="btn btn-danger btn-link"
-                       href="#help" onclick="$('[href=\'#documentation-custom\']').tab('show')">
+                       href="#help" onclick="$('[data-target=\'#help-custom\']').tab('show')">
                         Continue reading
                     </a>
                 </div>
-                <div class="tab-pane text-justify" id="documentation-custom" role="tabpanel">
+                <div class="tab-pane fade text-justify" id="help-custom" role="tabpanel">
                     <p>The <b><i class="umwp-im_custom"></i> Custom</b> style can be used to generate more or less
                         random patchwork wallpapers. You can choose the size of the grid, the prefered range of tiles
                         size and the color and size of the border and the shadow.</p>
@@ -479,7 +478,9 @@
         <div class="container">
             <h2 class="title">Got a question or a suggestion ?</h2>
 
-            <p>Heads up to the <a class="btn btn-outline-warning btn-round" href="https://github.com/mistic100/UMWP-Autochanger/issues">Github issues tracker</a> and we will try to find a solution.</p>
+            <p>Heads up to the <a class="btn btn-outline-warning btn-round"
+                                  href="https://github.com/mistic100/UMWP-Autochanger/issues">Github issues tracker</a>
+                and we will try to find a solution.</p>
         </div>
     </div>
 </div>
