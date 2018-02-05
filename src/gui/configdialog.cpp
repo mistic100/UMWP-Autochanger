@@ -85,7 +85,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),                 UM::IM_TILE);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
+    ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"), UM::IM_STRETCH_PROP);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
     ui->optionStyle->setCurrentData(m_settings->param(UM::CONF::default_style));
 

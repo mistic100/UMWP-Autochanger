@@ -200,7 +200,7 @@
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="88"/>
-        <source>Strecth proportional</source>
+        <source>Fit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -897,7 +897,7 @@
     </message>
     <message>
         <location filename="../../gui/seteditdialog.cpp" line="45"/>
-        <source>Strecth proportional</source>
+        <source>Fit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

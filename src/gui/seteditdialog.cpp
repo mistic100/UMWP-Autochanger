@@ -42,7 +42,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
     ui->selectStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),                 UM::IM_TILE);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Strecth proportional"), UM::IM_STRETCH_PROP);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"), UM::IM_STRETCH_PROP);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
     ui->selectStyle->addItem(QIcon(":/images/icons/im_custom.png"),       tr("Custom..."),            UM::IM_CUSTOM);
 
