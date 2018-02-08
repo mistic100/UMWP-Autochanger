@@ -63,5 +63,6 @@
         <file>images/qt-logo-16.png</file>
         <file>images/icons/update.png</file>
         <file>images/icon-large.png</file>
+        <file>images/icons/broken-image.png</file>
     </qresource>
 </RCC>

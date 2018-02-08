@@ -40,6 +40,17 @@ PreviewDialog::PreviewDialog(QWidget* _parent, Controller* _ctrl) :
 }
 
 /**
+ * @brief PreviewDialog::~PreviewDialog
+ */
+PreviewDialog::~PreviewDialog()
+{
+    if (m_needsUpdate)
+    {
+        m_ctrl->update();
+    }
+}
+
+/**
  * @brief Update dialog content
  */
 void PreviewDialog::draw()
@@ -146,7 +157,7 @@ void PreviewDialog::onEditButtonClicked(const QString &_path)
  * @brief Delete image file and refresh wallpaper
  * @param string _path
  */
-void PreviewDialog::onDeleteButtonClicked(const QString &_path)
+int PreviewDialog::onDeleteButtonClicked(const QString &_path)
 {
     int ret = QMessageBox::warning(this, tr("Delete"), tr("Are you sure?"),
                                    QMessageBox::Cancel | QMessageBox::Ok, QMessageBox::Cancel);
@@ -156,8 +167,10 @@ void PreviewDialog::onDeleteButtonClicked(const QString &_path)
         QLOG_TRACE() << "Delete" << _path;
 
         UM::moveFileToTrash(_path);
-        m_ctrl->update();
+        m_needsUpdate = true;
     }
+
+    return ret;
 }
 
 /**

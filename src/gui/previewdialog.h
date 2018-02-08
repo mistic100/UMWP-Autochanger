@@ -20,10 +20,13 @@ private:
     Controller* m_ctrl;
     Settings*   m_settings;
 
+    bool m_needsUpdate = false;
+
     QGridLayout* m_layout;
     
 public:
     PreviewDialog(QWidget* _parent, Controller* _ctrl);
+    ~PreviewDialog();
 
 private:
     QString getFolderImage(const QString &_folder);
@@ -32,7 +35,7 @@ public slots:
     void draw();
 
     void onThumbnailClicked(const QString &_path);
-    void onDeleteButtonClicked(const QString &_path);
+    int onDeleteButtonClicked(const QString &_path);
     void onEditButtonClicked(const QString &_path);
     void onOpenButtonClicked(const QString &_path);
 };
