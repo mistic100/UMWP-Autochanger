@@ -46,6 +46,8 @@ MainWindow::MainWindow(Controller* _ctrl) :
 
     connect(m_ctrl, SIGNAL(newVersionAvailable()), this, SLOT(onNewVersion()));
 
+    installEventFilter(this);
+
     init();
 }
 
@@ -165,7 +167,7 @@ void MainWindow::defineHotkeys()
  */
 void MainWindow::toggleWindow(bool _forceHide)
 {
-    if (_forceHide || isVisible())
+    if (_forceHide || isVisible() && !isMinimized())
     {
         if (!_forceHide)
         {
@@ -195,6 +197,7 @@ void MainWindow::toggleWindow(bool _forceHide)
         raise();
         setFocus();
         activateWindow();
+        setWindowState(Qt::WindowNoState);
 
         emit showHidden(true);
 
@@ -806,6 +809,12 @@ bool MainWindow::eventFilter(QObject* _target, QEvent* _event)
     {
         ((QInputDialog*) _target)->activateWindow();
         ((QInputDialog*) _target)->raise();
+    }
+
+    // Notify tray-menu when the window is minimized
+    if (_target == this && _event->type() == QEvent::WindowStateChange)
+    {
+        emit showHidden(!isMinimized());
     }
 
     return false;
