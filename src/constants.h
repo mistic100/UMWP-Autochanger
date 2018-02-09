@@ -1,12 +1,13 @@
 #ifndef VERSION_H
 #define VERSION_H
 
+#define CURRENT_YEAR "2018"
 #define APP_NAME "UMWP Autochanger"
 #define APP_VERSION "2.3.1"
 #define APP_VERSION_DW 2,3,1
 #define APP_COMPANYNAME "StrangePlanet"
 #define APP_FILEDESCRIPTION "Ultimate Monitor Wallpaper Autochanger"
-#define APP_LEGALCOPYRIGHT "Copyright (c) 2013-2018 StrangePlanet"
+#define APP_LEGALCOPYRIGHT "Copyright (c) 2013-" CURRENT_YEAR " StrangePlanet"
 #define APP_ORIGINALFILENAME "UMWP_Autochanger.exe"
 #define APP_MUTEX L"com.strangeplanet.umwp_autochanger"
 

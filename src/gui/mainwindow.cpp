@@ -543,7 +543,7 @@ void MainWindow::openAboutDialog()
 {
     QString text = "<h3>" + QString(APP_FILEDESCRIPTION) + " " + QString(APP_VERSION) + "</h3>";
     text+= "Created by Damien \"Mistic\" Sorel.<br>";
-    text+= "&copy; 2013-2017 <a href=\"https://strangeplanet.fr\">StrangePlanet.fr</a><br>";
+    text+= "&copy; 2013-" + QString(CURRENT_YEAR) + " <a href=\"https://strangeplanet.fr\">StrangePlanet.fr</a><br>";
     text+= "Licenced under <a href=\"https://www.gnu.org/licenses/gpl-3.0.txt\">GNU General Public License Version 3</a><br>";
     text+= "Built with <a href=\"https://www.qt.io\"><img src=\":/images/qt-logo-16.png\" style=\"vertical-align: baseline\"></a>";
 
