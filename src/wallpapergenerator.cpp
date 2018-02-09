@@ -451,9 +451,9 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
         QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
         // make sure the rect touch the border of the screen
-        if (qAbs(newBlock.left() - scrRect.width()) <= 3)
+        if (qAbs(newBlock.right() - scrRect.width()) <= 3)
         {
-            newBlock.setLeft(scrRect.width()-1);
+            newBlock.setRight(scrRect.width()-1);
         }
 
         if (qAbs(newBlock.bottom() - scrRect.height()) <= 3)
@@ -902,8 +902,8 @@ QRect WallpaperGenerator::getDesktopEnabledRect()
 
         minX = qMin(minX, rect.left());
         minY = qMin(minY, rect.top());
-        maxX = qMax(maxX, rect.left()+rect.width());
-        maxY = qMax(maxY, rect.top()+rect.height());
+        maxX = qMax(maxX, rect.left() + rect.width());
+        maxY = qMax(maxY, rect.top() + rect.height());
     }
 
     return QRect(minX, minY, maxX-minX, maxY-minY);

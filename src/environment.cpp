@@ -125,8 +125,8 @@ void Environment::refreshMonitors()
 
         minX = qMin(minX, wpSize.left());
         minY = qMin(minY, wpSize.top());
-        maxX = qMax(maxX, wpSize.right());
-        maxY = qMax(maxY, wpSize.bottom());
+        maxX = qMax(maxX, wpSize.left() + wpSize.width());
+        maxY = qMax(maxY, wpSize.top() + wpSize.height());
     }
 
     // store whole desktop size with its top-left-most position

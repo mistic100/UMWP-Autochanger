@@ -257,9 +257,9 @@ void CustomLayoutDialog::renderPreview()
     {
         QRect newBlock = UM::scaledRect(block, wRatio, hRatio);
 
-        if (qAbs(newBlock.left() - size.width()) <= 3)
+        if (qAbs(newBlock.right() - size.width()) <= 3)
         {
-            newBlock.setLeft(size.width()-1);
+            newBlock.setRight(size.width()-1);
         }
 
         if (qAbs(newBlock.bottom() - size.height()) <= 3)
