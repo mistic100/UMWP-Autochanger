@@ -18,6 +18,7 @@ $versions = array(
     '2.1' => 'dist/UMWP_Autochanger_2.1.zip',
     '2.2' => 'dist/UMWP_Autochanger_2.2.zip',
     '2.3.0' => 'dist/UMWP_Autochanger_2.3.0.zip',
+    '2.3.1' => 'dist/UMWP_Autochanger_2.3.1.zip',
     ),
   
   'exe' => array(
@@ -30,6 +31,7 @@ $versions = array(
     '2.1' => 'dist/UMWP_Autochanger_2.1_Setup.exe',
     '2.2' => 'dist/UMWP_Autochanger_2.2_Setup.exe',
     '2.3.0' => 'dist/UMWP_Autochanger_2.3.0_Setup.exe',
+    '2.3.1' => 'dist/UMWP_Autochanger_2.3.1_Setup.exe',
     ),
   );
   
