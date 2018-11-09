@@ -38,6 +38,7 @@ public:
     const QSize     windowSize() const;
 
     Set*            set(int _i) const { return m_sets.at(_i); }
+    Set*            setByUuid(const QString &_uuid) const;
     const int       nbSets() const    { return m_sets.size(); }
     Set*            activeSet(int _i) const;
     const int       nbActiveSets() const;

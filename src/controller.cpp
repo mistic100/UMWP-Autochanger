@@ -23,6 +23,8 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
 
     connect(&m_generatorWatcher, SIGNAL(finished()), this, SLOT(onGenerationDone()));
 
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(onQuit()));
+
     if (lockEnabled() == UM::LOCK_ALL && m_settings->param(UM::CONF::lock_startup).toBool())
     {
         lock();
@@ -49,6 +51,24 @@ void Controller::quit()
     else
     {
         qApp->quit();
+    }
+}
+
+/**
+ * @brief Activate default set on quit
+ */
+void Controller::onQuit()
+{
+    if (!m_settings->param(UM::CONF::default_set).toString().isEmpty())
+    {
+        Set* set = m_settings->setByUuid(m_settings->param(UM::CONF::default_set).toString());
+
+        if (set != NULL && (m_settings->nbActiveSets() > 1 || set != m_settings->activeSet(0)))
+        {
+            QLOG_DEBUG() << "Set default close set";
+            m_settings->setActiveSets(QList<Set*>() << set);
+            update(false);
+        }
     }
 }
 
@@ -128,7 +148,7 @@ bool Controller::startPause()
 /**
  * @brief Update the wallpaper
  */
-void Controller::update()
+void Controller::update(bool _async)
 {
     QLOG_INFO() << "Update !";
 
@@ -143,8 +163,16 @@ void Controller::update()
     emit listChanged(false);
     emit generationStarted();
 
-    QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate);
-    m_generatorWatcher.setFuture(future);
+    if (_async)
+    {
+        QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate);
+        m_generatorWatcher.setFuture(future);
+    }
+    else
+    {
+        m_current = m_generator->generate();
+        emit generationFinished();
+    }
 }
 
 /**

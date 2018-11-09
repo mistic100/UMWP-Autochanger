@@ -85,7 +85,7 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),                 UM::IM_TILE);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"), UM::IM_STRETCH_PROP);
+    ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"),                  UM::IM_STRETCH_PROP);
     ui->optionStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
     ui->optionStyle->setCurrentData(m_settings->param(UM::CONF::default_style));
 
@@ -93,6 +93,17 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
     ui->optionMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
     ui->optionMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
     ui->optionMode->setCurrentData(m_settings->param(UM::CONF::default_mode));
+
+    // sets
+    ui->optionDefaultSet->addItem(tr("[do not change]"), "");
+
+    for (int i=0, l=m_settings->nbSets(); i<l; i++)
+    {
+        Set* set = m_settings->set(i);
+        ui->optionDefaultSet->addItem(set->name(), set->uuid());
+    }
+
+    ui->optionDefaultSet->setCurrentData(m_settings->param(UM::CONF::default_set));
 
     // lock
     boolean lockEnabled = m_settings->param(UM::CONF::lock_enabled).toBool();
@@ -263,6 +274,7 @@ void ConfigDialog::save()
     m_settings->setParam(UM::CONF::check_updates,       ui->optionCheckUpdates->isChecked());
     m_settings->setParam(UM::CONF::use_hotkeys,         ui->optionUseHotkeys->isChecked());
     m_settings->setParam(UM::CONF::show_notifications,  ui->optionShowNotifications->isChecked());
+    m_settings->setParam(UM::CONF::default_set,         ui->optionDefaultSet->currentData());
 
     m_settings->setParam(UM::CONF::lock_enabled,        lockEnabled);
     if (!lockEnabled)

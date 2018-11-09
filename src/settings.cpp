@@ -31,6 +31,7 @@ Settings::Settings(Environment* _enviro) :
     m_options[UM::CONF::lock_minimize] = true;
     m_options[UM::CONF::lock_type] = UM::LOCK_ALL;
     m_options[UM::CONF::ignore_update] = "0.0.0";
+    m_options[UM::CONF::default_set] = "";
 
     m_hotkeys[UM::CONF::HOTKEY::refresh] = 0;
     m_hotkeys[UM::CONF::HOTKEY::startpause] = 0;
@@ -565,6 +566,24 @@ void Settings::moveSet(int _from, int _to)
     QLOG_DEBUG() << "Move set: " << set->name() << ", " << _from << "->" << _to;
 
     save();
+}
+
+/**
+ * @brief Returns a set by it's uuid
+ * @param string _uuid
+ * @return Set*
+ */
+Set* Settings::setByUuid(const QString &_uuid) const
+{
+    foreach (Set* set, m_sets)
+    {
+        if (set->uuid() == _uuid)
+        {
+            return set;
+        }
+    }
+
+    return NULL;
 }
 
 /**

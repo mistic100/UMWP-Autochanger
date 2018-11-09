@@ -53,7 +53,7 @@ public:
 
 public slots:
     void quit();
-    void update();
+    void update(bool _async=true);
     bool startPause();
 
     void editSets(const QList<Set*> &_sets, const Set &_data);
@@ -70,6 +70,7 @@ public slots:
 private slots:
     void onNewVersion(const UM::NewVersion _version);
     void onGenerationDone();
+    void onQuit();
 
 signals:
     void generationStarted();
