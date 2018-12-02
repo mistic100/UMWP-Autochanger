@@ -76,24 +76,6 @@ ConfigDialog::ConfigDialog(QWidget* _parent, Controller* _ctrl) :
         ui->optionOpenProgram->setCurrentData("default");
     }
 
-    // type
-    ui->optionType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
-    ui->optionType->addItem(QIcon(":/images/icons/w_desktop.png"), tr("One image for the whole desktop"), UM::W_DESKTOP);
-    ui->optionType->setCurrentData(m_settings->param(UM::CONF::default_type));
-
-    // style
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),                 UM::IM_TILE);
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"),                  UM::IM_STRETCH_PROP);
-    ui->optionStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
-    ui->optionStyle->setCurrentData(m_settings->param(UM::CONF::default_style));
-
-    // mode
-    ui->optionMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
-    ui->optionMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
-    ui->optionMode->setCurrentData(m_settings->param(UM::CONF::default_mode));
-
     // sets
     ui->optionDefaultSet->addItem(tr("[do not change]"), "");
 
@@ -267,9 +249,6 @@ void ConfigDialog::save()
     m_settings->setParam(UM::CONF::delay,               delay);
     m_settings->setParam(UM::CONF::language,            lang);
     m_settings->setParam(UM::CONF::open_program,        opener);
-    m_settings->setParam(UM::CONF::default_mode,        ui->optionMode->currentData());
-    m_settings->setParam(UM::CONF::default_type,        ui->optionType->currentData());
-    m_settings->setParam(UM::CONF::default_style,       ui->optionStyle->currentData());
     m_settings->setParam(UM::CONF::minimize,            ui->optionMinimize->isChecked());
     m_settings->setParam(UM::CONF::check_updates,       ui->optionCheckUpdates->isChecked());
     m_settings->setParam(UM::CONF::use_hotkeys,         ui->optionUseHotkeys->isChecked());

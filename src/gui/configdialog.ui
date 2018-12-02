@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>258</height>
+    <height>317</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,6 +37,16 @@
        <property name="rightMargin">
         <number>20</number>
        </property>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>File editor :</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -67,53 +77,62 @@
        <item row="0" column="1" colspan="2">
         <widget class="QComboBoxExt" name="optionLang"/>
        </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QComboBoxExt" name="optionOpenProgram"/>
+       </item>
        <item row="3" column="0" colspan="3">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="leftMargin">
-          <number>20</number>
-         </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QCheckBox" name="optionAutostart">
+          <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>Start with Windows</string>
+            <string>Change set on close :</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="optionMinimize">
-           <property name="text">
-            <string>Minimize on startup</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="optionCheckUpdates">
-           <property name="text">
-            <string>Check updates</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="optionShowNotifications">
-           <property name="text">
-            <string>Show notifications</string>
-           </property>
-          </widget>
+          <widget class="QComboBoxExt" name="optionDefaultSet"/>
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>File editor :</string>
+       <item row="6" column="0" colspan="3">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Windows integration</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="optionAutostart">
+            <property name="text">
+             <string>Start with Windows</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="optionMinimize">
+            <property name="text">
+             <string>Minimize on startup</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="optionCheckUpdates">
+            <property name="text">
+             <string>Check updates</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="optionShowNotifications">
+            <property name="text">
+             <string>Show notifications</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QComboBoxExt" name="optionOpenProgram"/>
        </item>
       </layout>
      </widget>
@@ -250,98 +269,6 @@
           <bool>true</bool>
          </property>
         </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="defaults">
-      <attribute name="title">
-       <string>Defaults</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1,2">
-       <property name="leftMargin">
-        <number>20</number>
-       </property>
-       <property name="rightMargin">
-        <number>20</number>
-       </property>
-       <item row="2" column="1" colspan="2">
-        <widget class="QComboBoxExt" name="optionType"/>
-       </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Defaults settings for new sets.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>Change set on close :</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QComboBoxExt" name="optionDefaultSet"/>
-       </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QComboBoxExt" name="optionStyle">
-         <property name="iconSize">
-          <size>
-           <width>20</width>
-           <height>16</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2">
-        <widget class="QComboBoxExt" name="optionMode"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Type :</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Style :</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Mode :</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

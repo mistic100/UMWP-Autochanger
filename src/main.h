@@ -105,9 +105,6 @@ namespace UM {
         const QString show_notifications = "show_notifications";
         const QString last_dir = "last_dir";
         const QString language = "language";
-        const QString default_mode = "default_mode";
-        const QString default_type = "default_type";
-        const QString default_style = "default_style";
         const QString changelog_shown = "changelog_shown";
         const QString open_program = "open_program";
         const QString lock_enabled = "lock_enabled";

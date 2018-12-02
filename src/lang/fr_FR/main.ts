@@ -18,22 +18,22 @@
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="60"/>
+        <location filename="../../gui/configdialog.ui" line="70"/>
         <source>Language :</source>
         <translation>Langue :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="43"/>
+        <location filename="../../gui/configdialog.ui" line="53"/>
         <source>Delay :</source>
         <translation>Délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="85"/>
+        <location filename="../../gui/configdialog.ui" line="116"/>
         <source>Minimize on startup</source>
         <translation>Réduire au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="92"/>
+        <location filename="../../gui/configdialog.ui" line="123"/>
         <source>Check updates</source>
         <translation>Chercher les nouvelles versions</translation>
     </message>
@@ -43,127 +43,107 @@
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="108"/>
+        <location filename="../../gui/configdialog.ui" line="43"/>
         <source>File editor :</source>
         <translation>Editeur d&apos;images :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="122"/>
+        <location filename="../../gui/configdialog.ui" line="103"/>
+        <source>Windows integration</source>
+        <translation>Intégration Windows</translation>
+    </message>
+    <message>
+        <location filename="../../gui/configdialog.ui" line="141"/>
         <source>Lock</source>
         <translation>Verrouillage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="135"/>
+        <location filename="../../gui/configdialog.ui" line="154"/>
         <source>Lock everything</source>
         <translation>Tout verrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="200"/>
+        <location filename="../../gui/configdialog.ui" line="219"/>
         <source>Password :</source>
         <translation>Mot de passe :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="183"/>
+        <location filename="../../gui/configdialog.ui" line="202"/>
         <source>Current password :</source>
         <translation>Mot de passe actuel :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="144"/>
+        <location filename="../../gui/configdialog.ui" line="163"/>
         <source>Enable lock</source>
         <translation>Activer le verrouillage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="128"/>
+        <location filename="../../gui/configdialog.ui" line="147"/>
         <source>Lock on minimize</source>
         <translation>Quand l&apos;application est masquée</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="230"/>
+        <location filename="../../gui/configdialog.ui" line="249"/>
         <source>Lock some sets</source>
         <translation>Verrouiller les sets</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="237"/>
+        <location filename="../../gui/configdialog.ui" line="256"/>
         <source>Lock at startup</source>
         <translation>Au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="244"/>
+        <location filename="../../gui/configdialog.ui" line="263"/>
         <source>Open the settings of each set to make it lockable.</source>
         <translation>Ouvrez la fenêtre de configuration de chaque set pour le rendre verrouillable.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="280"/>
+        <location filename="../../gui/configdialog.ui" line="88"/>
         <source>Change set on close :</source>
         <translation>Changer de set à la fermeture :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="326"/>
-        <source>Mode :</source>
-        <translation>Mode :</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="434"/>
+        <location filename="../../gui/configdialog.ui" line="361"/>
         <source>Lock/Unlock :</source>
         <translation>(Dé)verrouiller :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="78"/>
+        <location filename="../../gui/configdialog.ui" line="109"/>
         <source>Start with Windows</source>
         <translation>Démarrer avec Windows</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="99"/>
+        <location filename="../../gui/configdialog.ui" line="130"/>
         <source>Show notifications</source>
         <translation>Afficher les notifications</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="258"/>
-        <source>Defaults</source>
-        <translation>Par défaut</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="316"/>
-        <source>Style :</source>
-        <translation>Style :</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="306"/>
-        <source>Type :</source>
-        <translation>Type :</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="273"/>
-        <source>Defaults settings for new sets.</source>
-        <translation>Valeurs par défaut pour les nouveaux sets.</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.ui" line="350"/>
+        <location filename="../../gui/configdialog.ui" line="277"/>
         <source>Hotkeys</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="384"/>
+        <location filename="../../gui/configdialog.ui" line="311"/>
         <source>Show/Hide :</source>
         <translation>Masquer/Afficher :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="394"/>
+        <location filename="../../gui/configdialog.ui" line="321"/>
         <source>Refresh :</source>
         <translation>Rafraîchir :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="424"/>
+        <location filename="../../gui/configdialog.ui" line="351"/>
         <source>Change delay :</source>
         <translation>Changer le délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="374"/>
+        <location filename="../../gui/configdialog.ui" line="301"/>
         <source>Start/Pause :</source>
         <translation>Démarrer/Pause :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="404"/>
+        <location filename="../../gui/configdialog.ui" line="331"/>
         <source>Use hotkeys</source>
         <translation>Utiliser les raccourcis</translation>
     </message>
@@ -174,132 +154,87 @@
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="69"/>
-        <location filename="../../gui/configdialog.cpp" line="357"/>
+        <location filename="../../gui/configdialog.cpp" line="336"/>
         <source>Select program...</source>
         <translation>Choisir un programme...</translation>
     </message>
     <message>
         <location filename="../../gui/configdialog.cpp" line="80"/>
-        <source>One image for each monitor</source>
-        <translation>Une image sur chaque écran</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="81"/>
-        <source>One image for the whole desktop</source>
-        <translation>Une image pour tout le bureau</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="85"/>
-        <source>Center</source>
-        <translation>Centrer</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="86"/>
-        <source>Tile</source>
-        <translation>Mosaïque</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="87"/>
-        <source>Stretch</source>
-        <translation>Étirer</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="88"/>
-        <source>Fit</source>
-        <translation>Ajuster</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="89"/>
-        <source>Fill</source>
-        <translation>Remplir</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="93"/>
-        <source>Random</source>
-        <translation>Aléatoire</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="94"/>
-        <source>Sequential</source>
-        <translation>Séquentiel</translation>
-    </message>
-    <message>
-        <location filename="../../gui/configdialog.cpp" line="98"/>
         <source>[do not change]</source>
         <translation>[ne pas changer]</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="150"/>
+        <location filename="../../gui/configdialog.cpp" line="132"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="151"/>
+        <location filename="../../gui/configdialog.cpp" line="133"/>
         <source>Show/Hide</source>
         <translation>Afficher/Masquer</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="152"/>
+        <location filename="../../gui/configdialog.cpp" line="134"/>
         <source>Start/Pause</source>
         <translation>Démarrer/Pause</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="153"/>
+        <location filename="../../gui/configdialog.cpp" line="135"/>
         <source>Change delay</source>
         <translation>Changer le délai</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="154"/>
+        <location filename="../../gui/configdialog.cpp" line="136"/>
         <source>Lock/Unlock</source>
         <translation>(Dé)verrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="168"/>
+        <location filename="../../gui/configdialog.cpp" line="150"/>
         <source>You must enter a password to activate the lock.</source>
         <translation>Vous devez entrer un mot de passe pour activer le verrouillage.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="176"/>
+        <location filename="../../gui/configdialog.cpp" line="158"/>
         <source>Current lock password is invalid.</source>
         <translation>Mot de passe actuel invalide.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="199"/>
+        <location filename="../../gui/configdialog.cpp" line="181"/>
         <source>Hotkey for &quot;%1&quot; already used for &quot;%2&quot;</source>
         <translation>Raccourci &quot;%1&quot; déjà utilisé pour &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="217"/>
+        <location filename="../../gui/configdialog.cpp" line="199"/>
         <source>Hotkey for &quot;%1&quot; already used for set &quot;%2&quot;</source>
         <translation>Raccourci &quot;%1&quot; déjà utilisé pour le set &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="388"/>
+        <location filename="../../gui/configdialog.cpp" line="367"/>
         <source>This option allows to lock any changes in the app configuration until a password is entered.&lt;br&gt;&lt;b&gt;Warning:&lt;/b&gt; even though the password is hashed, the config file is not secure and can be manually modified.</source>
         <translation>Cette option permet de verrouiller tout changement dans la configuration de l&apos;application tant qu&apos;un mot de passe n&apos;est pas renseigné.&lt;br&gt;&lt;b&gt;Attention :&lt;/b&gt; bien que le mot de passe soit hashé, le fichier de configuration n&apos;est pas sécurisé et peut être manuellement modifié.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="159"/>
+        <location filename="../../gui/configdialog.cpp" line="141"/>
         <source>Delay can not be lower than 10 seconds</source>
         <translation>Le délai ne peut pas être inférieur à 10 secondes</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="229"/>
+        <location filename="../../gui/configdialog.cpp" line="211"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="253"/>
+        <location filename="../../gui/configdialog.cpp" line="235"/>
         <source>Language changed</source>
         <translation>Langue modifiée</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="254"/>
+        <location filename="../../gui/configdialog.cpp" line="236"/>
         <source>You must restart %1 to apply the new language.</source>
         <translation>Vous devez redémarrer %1 pour appliquer la nouvelle langue.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.cpp" line="357"/>
+        <location filename="../../gui/configdialog.cpp" line="336"/>
         <source>Executables (*.exe)</source>
         <translation>Éxécutables (*.exe)</translation>
     </message>
