@@ -31,12 +31,6 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
-       <property name="leftMargin">
-        <number>20</number>
-       </property>
-       <property name="rightMargin">
-        <number>20</number>
-       </property>
        <item row="2" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
@@ -277,12 +271,6 @@
        <string>Hotkeys</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="leftMargin">
-        <number>20</number>
-       </property>
-       <property name="rightMargin">
-        <number>20</number>
-       </property>
        <item row="5" column="1">
         <widget class="QHotKeyWidget" name="hotkeyDelay" native="true"/>
        </item>
