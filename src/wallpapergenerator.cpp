@@ -93,6 +93,7 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
     }
 
     m_enviro->setWallpaper(generateFile(tempFiles, &result));
+    cleanCustLayoutTemp();
 
     QLOG_DEBUG() << "Current type:" << result.type;
     QLOG_DEBUG() << "Current sets:" << result.sets;
@@ -966,4 +967,18 @@ QString WallpaperGenerator::getCustLayoutTempFilename(int _idx, Set* _set)
             + _set->uuid() + "-"
             + QString::number(_idx)
             + ".bmp";
+}
+
+/**
+ * @brief Deletes all temp files for custom layouts
+ */
+void WallpaperGenerator::cleanCustLayoutTemp()
+{
+    QDir cache = QDir::tempPath();
+    QStringList files = cache.entryList(QStringList()<<QString(APP_CUSTOM_PREFIX)+"*", QDir::Files);
+
+    foreach (QString file, files)
+    {
+        QFile::remove(cache.absoluteFilePath(file));
+    }
 }

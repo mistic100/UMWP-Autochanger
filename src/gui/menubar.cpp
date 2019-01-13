@@ -66,7 +66,7 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionScreens, SIGNAL(triggered()), _parent, SLOT(openScreensDialog()));
     connect(actionImport,  SIGNAL(triggered()), _parent, SLOT(openImportDialog()));
     connect(actionExport,  SIGNAL(triggered()), _parent, SLOT(openExportDialog()));
-    connect(actionClear,   SIGNAL(triggered()), _parent, SLOT(clearCache()));
+    connect(actionClear,   SIGNAL(triggered()), m_ctrl,  SLOT(clearCache()));
 
     connect(actionAbout,   SIGNAL(triggered()), _parent, SLOT(openAboutDialog()));
     connect(actionFiles,   SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));

@@ -332,17 +332,6 @@ void MainWindow::openSets(const QList<Set*> _sets)
 }
 
 /**
- * @brief Clear sets cache of selected sets
- */
-void MainWindow::clearCache()
-{
-    for (int i=0, l=m_settings->nbSets(); i<l; i++)
-    {
-        m_settings->set(i)->deleteCache();
-    }
-}
-
-/**
  * @brief Open configuration dialog
  */
 void MainWindow::openConfigDialog()

@@ -59,7 +59,6 @@ public slots:
     void editSets(const QList<Set*> _sets);
     void deleteSets(const QList<Set*> _sets);
     void openSets(const QList<Set*> _sets);
-    void clearCache();
 
     void openConfigDialog();
     void openScreensDialog();

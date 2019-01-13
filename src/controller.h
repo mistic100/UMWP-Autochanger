@@ -55,6 +55,7 @@ public slots:
     void quit();
     void update(bool _async=true);
     bool startPause();
+    void clearCache();
 
     void editSets(const QList<Set*> &_sets, const Set &_data);
     void moveSet(int _from, int _to);

@@ -186,6 +186,17 @@ void Controller::onGenerationDone()
 }
 
 /**
+ * @brief Clear sets cache of selected sets
+ */
+void Controller::clearCache()
+{
+    for (int i=0, l=m_settings->nbSets(); i<l; i++)
+    {
+        m_settings->set(i)->deleteCache();
+    }
+}
+
+/**
  * @brief Move a set
  * @param int _from
  * @param int _to

@@ -61,6 +61,7 @@ private:
 
     // final generation
     QString generateFile(const QVector<QString> &_files, Result* _context);
+    void cleanCustLayoutTemp();
 
     // cache keys
     QString getDesktopWallpaperKey();
