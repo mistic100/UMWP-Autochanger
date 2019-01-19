@@ -5,8 +5,6 @@
 #include "umutils.h"
 
 
-static const QStringList FILES_FILTER = QStringList()<<"*.jpeg"<<"*.jpg"<<"*.bmp"<<"*.png"<<"*.gif";
-
 /**
  * @brief Set::Set
  * @param string _path
@@ -165,7 +163,6 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
 void Set::init()
 {
     readCache();
-    populateFiles();
     check();
 }
 
@@ -293,116 +290,21 @@ const QString Set::folder(int _i) const
 bool Set::check()
 {
     m_valid = QDir(m_path).exists();
-    m_valid&= m_files.length() > 0;
     return m_valid;
 }
 
 /**
- * @brief Recursively read the last modification date of a folder
- * @return double
+ * @brief Update and cache files list
+ * @param double _lastModif
+ * @param string[] _files
+ * @param string[] _folders
  */
-double Set::lastChange()
+void Set::update(const double _lastModif, const QVector<QString> &_files, const QVector<QString> _folders)
 {
-    return lastChangeRecur(m_path);
-}
-
-/**
- * @brief Internal recursive function for lastChange()
- * @param string _path
- * @param int _level
- * @return double
- */
-double Set::lastChangeRecur(const QString &_path, const int _level)
-{
-    double date = QFileInfo(_path).lastModified().toTime_t();
-
-    if (_level < APP_MAX_TRAVERSAL)
-    {
-        QDirIterator dir(_path, QDir::AllDirs | QDir::NoDotAndDotDot);
-
-        while (dir.hasNext())
-        {
-            QString path = dir.next();
-
-            double subDate = lastChangeRecur(path, _level+1);
-
-            if (subDate > date)
-            {
-                date = subDate;
-            }
-        }
-    }
-
-    return date;
-}
-
-/**
- * @brief Recursively construct the list of files (if changed)
- */
-void Set::populateFiles()
-{
-    if (!QDir(m_path).exists())
-    {
-        return;
-    }
-
-    bool forceCheck = m_files.length() == 0;
-    double date = lastChange();
-
-    if (!forceCheck && date <= m_lastModif)
-    {
-        return;
-    }
-
-    m_lastModif = date;
-    m_files.clear();
-    m_folders.clear();
-
-    // list non-empty sub-folders
-    QDir dir(m_path);
-    QStringList folders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
-
-    foreach (const QString path, folders)
-    {
-        if (QDir(m_path + path).entryList(FILES_FILTER, QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot).count() > 0)
-        {
-            m_folders.append(m_path + path);
-        }
-    }
-
-    // recursively list files
-    populateFilesRecur(m_path);
-
+    m_lastModif = _lastModif;
+    m_files = _files;
+    m_folders = _folders;
     writeCache();
-}
-
-/**
- * @brief Internal recursive function for populateFiles()
- * @param string _path
- * @param int _level
- */
-void Set::populateFilesRecur(const QString &_path, const int _level)
-{
-    if (_level < APP_MAX_TRAVERSAL)
-    {
-        QDir dir(_path);
-        QStringList files = dir.entryList(FILES_FILTER,
-                                          QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot,
-                                          QDir::Name | QDir::DirsLast | QDir::IgnoreCase
-                                          );
-
-        foreach (const QString path, files)
-        {
-            if (QFileInfo(_path + path).isDir())
-            {
-                populateFilesRecur(_path + path + QDir::separator(), _level+1);
-            }
-            else
-            {
-                m_files.append(_path + path);
-            }
-        }
-    }
 }
 
 /**
@@ -456,7 +358,7 @@ void Set::writeCache() const
 /**
  * @brief Delete cache files
  */
-void Set::deleteCache() const
+void Set::deleteCache()
 {
     QDir cache(Environment::APPDATA_DIR + APP_CACHE_DIR);
     QStringList files = cache.entryList(QStringList()<<"*"+m_uuid+"*", QDir::Files);
@@ -465,4 +367,9 @@ void Set::deleteCache() const
     {
         QFile::remove(cache.absoluteFilePath(file));
     }
+
+    m_lastModif = 0;
+    m_current = Current();
+    m_files.clear();
+    m_folders.clear();
 }

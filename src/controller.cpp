@@ -1,4 +1,5 @@
-#include <QtConcurrentRun>
+#include <QtConcurrentMap>
+#include <functional>
 
 #include "main.h"
 #include "controller.h"
@@ -15,8 +16,10 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     m_settings(_settings),
     m_enviro(_enviro)
 {
-    m_generator = new WallpaperGenerator(this);
     m_locked = false;
+
+    m_generator = new WallpaperGenerator(this);
+    m_scanner = new DirectoryScanner(this);
 
     m_mainTimer = new QTimer(this);
     connect(m_mainTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -160,18 +163,41 @@ void Controller::update(bool _async)
     m_enviro->refreshMonitors();
     m_settings->check();
 
-    emit listChanged(false);
     emit generationStarted();
+
+    QList<Set*> sets;
+    for (int i = 0; i < m_settings->nbSets(); i++)
+    {
+        Set* set = m_settings->set(i);
+        if (set->isActive() && set->isValid())
+        {
+            sets.append(set);
+        }
+    }
+
+    std::function<bool(Set* _set)> scan = [this] (Set* _set) {
+        return m_scanner->scan(_set);
+    };
+
+    auto generate = [this, sets] (ScanAndGenerateResult &_result, const bool &) {
+        _result.done++;
+        if (_result.done == sets.size())
+        {
+            QLOG_INFO() << "Scan done, begin generation";
+            _result.result = m_generator->generate();
+        }
+    };
 
     if (_async)
     {
-        QFuture<WallpaperGenerator::Result> future = QtConcurrent::run(m_generator, &WallpaperGenerator::generate);
+        QFuture<ScanAndGenerateResult> future = QtConcurrent::mappedReduced<ScanAndGenerateResult>(sets, scan, generate);
         m_generatorWatcher.setFuture(future);
     }
     else
     {
-        m_current = m_generator->generate();
+        m_current = QtConcurrent::blockingMappedReduced<ScanAndGenerateResult>(sets, scan, generate).result;
         emit generationFinished();
+        emit listChanged(false);
     }
 }
 
@@ -180,9 +206,10 @@ void Controller::update(bool _async)
  */
 void Controller::onGenerationDone()
 {
-    m_current = m_generatorWatcher.future().result();
+    m_current = m_generatorWatcher.future().result().result;
 
     emit generationFinished();
+    emit listChanged(false);
 }
 
 /**

@@ -34,7 +34,8 @@ SOURCES += \
     gui/statusbar.cpp \
     gui/mainlist.cpp \
     gui/customlayoutdialog.cpp \
-    gui/delaydialog.cpp
+    gui/delaydialog.cpp \
+    directoryscanner.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
@@ -76,7 +77,8 @@ HEADERS += \
     gui/delaydialog.h \
     gui/previewwidget.h \
     ext/qtabwidgetext.h \
-    ext/qchecklist.h
+    ext/qchecklist.h \
+    directoryscanner.h
 
 FORMS += \
     gui/seteditdialog.ui \

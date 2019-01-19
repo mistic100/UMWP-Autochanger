@@ -48,6 +48,7 @@ public:
     const UM::MODE      mode() const        { return m_mode; }
     const double        frequency() const   { return m_frequency; }
     const TRI_BOOL      lock() const        { return m_lock; }
+    const double        lastModif() const   { return m_lastModif; }
     const int           nbFiles() const     { return m_files.size(); }
     const int           nbFolders() const   { return m_folders.size(); }
     const int           nbFilesInFolder(const QString &_folder) const;
@@ -71,18 +72,17 @@ public:
     void setFrequency(const double _freq)   { m_frequency=_freq; }
     void setLock(const TRI_BOOL _lock)      { m_lock=_lock; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }
-    void setCurrent(const Current &_curr)   { m_current=_curr; }
+    void setCurrent(const Current &_curr)   { m_current=_curr; writeCache(); }
     void setCustLayout(const CustomLayout &_layout) { m_custLayout=_layout; }
     void setMonitors(const QVector<int> &_monitors) { m_monitors=_monitors; }
 
     void init();
     bool check();
-    double lastChange();
-    void populateFiles();
+    void update(const double _lastModif, const QVector<QString> &_files, const QVector<QString> _folders);
 
     void readCache();
     void writeCache() const;
-    void deleteCache() const;
+    void deleteCache();
 
     void writeXml(QXmlStreamWriter *_writer) const;
 
@@ -90,9 +90,6 @@ public:
     const QString hotkeyStr() const;
     const int fileIndex(const QString &_file) const { return m_files.indexOf(_file); }
 
-private:
-    double lastChangeRecur(const QString &_child, const int _level=0);
-    void populateFilesRecur(const QString &_child, const int _level=0);
 };
 
 #endif // SET_H

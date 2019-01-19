@@ -58,7 +58,6 @@ void Settings::check()
 
     foreach (Set* set, m_sets)
     {
-        set->populateFiles();
         set->check();
     }
 }

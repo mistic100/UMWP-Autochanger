@@ -16,6 +16,19 @@ CustomLayoutGenerator::CustomLayoutGenerator()
  */
 QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
 {
+    if (QsLogging::Logger::instance().loggingLevel() != QsLogging::OffLevel)
+    {
+        QList<QString> log({
+           "grid: " + QString::number(_conf.rows) + "x" + QString::number(_conf.cols),
+           "tiles: " + QString::number(_conf.minRows) + "x" + QString::number(_conf.minCols) + " -> " + QString::number(_conf.maxRows) + "x" + QString::number(_conf.maxCols),
+           "main: " + QString(_conf.mainEnabled ? "y" : "n") + " " + QString::number(_conf.mainRows) + "x" + QString::number(_conf.mainCols),
+           "random: " + QString(_conf.variationEnabled ? "y" : "n") + " angle: " + QString::number(_conf.angleVariation) + " size: " + QString::number(_conf.sizeVariation) + " pos: " + QString::number(_conf.posVariation),
+           "border: " + QString(_conf.borderEnabled ? "y" : "n") + " " + QString::number(_conf.borderWidth) + "px " + QColor(_conf.borderColor).name(),
+           "shadow: " + QString(_conf.shadowEnabled ? "y" : "n") + " " + QString::number(_conf.shadowWidth) + "px " + QColor(_conf.shadowColor).name()
+        });
+        QLOG_DEBUG() << "== LAYOUT" << log;
+    }
+
     if (_conf.cols < 1 || _conf.rows < 1 ||
             _conf.minCols > _conf.cols || _conf.maxCols > _conf.cols || _conf.minCols > _conf.maxCols ||
             _conf.minRows > _conf.rows || _conf.maxRows > _conf.rows || _conf.minRows > _conf.maxRows ||

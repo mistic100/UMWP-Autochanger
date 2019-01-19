@@ -119,7 +119,8 @@ void Environment::refreshMonitors()
 
     int minX=0, maxX=0, minY=0, maxY=0;
 
-    for (int i = 0; i < desktop->numScreens(); i++) {
+    for (int i = 0; i < desktop->numScreens(); i++)
+    {
         const QRect wpSize = desktop->screenGeometry(i);
         m_wpSizes.insert(i, wpSize);
 

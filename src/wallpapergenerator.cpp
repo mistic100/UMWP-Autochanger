@@ -360,7 +360,6 @@ QString WallpaperGenerator::getNextFile(Set* _set)
     current.file = file;
     current.index = index;
     _set->setCurrent(current);
-    _set->writeCache();
 
     return file;
 }
