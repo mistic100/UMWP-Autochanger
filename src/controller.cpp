@@ -195,7 +195,13 @@ void Controller::update(bool _async)
     }
     else
     {
-        m_current = QtConcurrent::blockingMappedReduced<ScanAndGenerateResult>(sets, scan, generate).result;
+        ScanAndGenerateResult result;
+        foreach (auto set, sets)
+        {
+            generate(result, scan(set));
+        }
+
+        m_current = result.result;
         emit generationFinished();
         emit listChanged(false);
     }
