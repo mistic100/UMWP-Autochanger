@@ -42,7 +42,7 @@ signals:
     void globalCheckStateChanged(int);
 
 public:
-    QCheckList(QWidget* _parent = 0) : QComboBox(_parent)
+    QCheckList(QWidget* _parent = nullptr) : QComboBox(_parent)
     {
         m_model = new QStandardItemModel();
         setModel(m_model);

@@ -80,8 +80,8 @@ private:
     bool blockTracking = false;
 
 public:
-    explicit QxtSpanSlider(QWidget* parent = 0);
-    explicit QxtSpanSlider(Qt::Orientation orientation, QWidget* parent = 0);
+    explicit QxtSpanSlider(QWidget* parent = nullptr);
+    explicit QxtSpanSlider(Qt::Orientation orientation, QWidget* parent = nullptr);
     virtual ~QxtSpanSlider();
 
     HandleMovementMode handleMovementMode() const;

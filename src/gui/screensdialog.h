@@ -44,7 +44,7 @@ private:
     QGraphicsScene* m_scene;
 
     QRect m_viewport;
-    float m_ratio = 0.0;
+    double m_ratio = 0.0;
     int m_currentScreen = -1;
     
 public:

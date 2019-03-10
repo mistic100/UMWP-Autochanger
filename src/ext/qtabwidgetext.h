@@ -11,7 +11,7 @@ class QTabWidgetExt : public QTabWidget
     Q_OBJECT
 
 public:
-    QTabWidgetExt(QWidget* _parent = 0) : QTabWidget(_parent) {}
+    QTabWidgetExt(QWidget* _parent = nullptr) : QTabWidget(_parent) {}
 
     void setCurrentTab(const QString &_tabName)
     {

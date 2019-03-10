@@ -24,7 +24,7 @@ private:
     QLineEditHotkey* ui_key;
     
 public:
-    QHotKeyWidget(QWidget* _parent = 0) :
+    QHotKeyWidget(QWidget* _parent = nullptr) :
         QWidget(_parent)
     {
         QHBoxLayout* layout = new QHBoxLayout(this);
@@ -47,7 +47,7 @@ public:
         setHotkey(NO_KEY);
     }
 
-    const int hotkey() const
+    int hotkey() const
     {
         return m_hotkey;
     }

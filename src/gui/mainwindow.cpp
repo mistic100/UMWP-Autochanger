@@ -167,7 +167,7 @@ void MainWindow::defineHotkeys()
  */
 void MainWindow::toggleWindow(bool _forceHide)
 {
-    if (_forceHide || isVisible() && !isMinimized())
+    if (_forceHide || (isVisible() && !isMinimized()))
     {
         if (!_forceHide)
         {
@@ -226,7 +226,7 @@ void MainWindow::addSet()
     {
         Set* set = m_ctrl->addSet(dirname);
 
-        if (set != NULL)
+        if (set != nullptr)
         {
             this->editSets(QList<Set*>() << set);
         }
@@ -443,7 +443,7 @@ void MainWindow::openDelayDialog()
 
     DelayDialog* existingDialog = findChild<DelayDialog*>();
 
-    if (existingDialog != NULL)
+    if (existingDialog != nullptr)
     {
         existingDialog->raise();
         existingDialog->activateWindow();
@@ -680,6 +680,9 @@ void MainWindow::onHotkey()
         }
         break;
     }
+
+    case GlobalShortcut::NOOP:
+        break;
     }
 }
 

@@ -15,7 +15,7 @@ bool UM::moveFileToTrash(const QString &_filename)
     int l = _filename.toWCharArray(path);
     path[l] = '\0';
 
-    SHFILEOPSTRUCT shfos = {0};
+    SHFILEOPSTRUCT shfos;
     shfos.wFunc  = FO_DELETE;
     shfos.pFrom  = path;
     shfos.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
@@ -28,10 +28,11 @@ bool UM::moveFileToTrash(const QString &_filename)
 /**
  * @brief Return a scaled copy of a rectangle
  * @param QRect _rect
- * @param float _ratio
+ * @param double _xRatio
+ * @param double _yRatio
  * @return QRect
  */
-QRect UM::scaledRect(const QRect &_rect, float _xRatio, float _yRatio)
+QRect UM::scaledRect(const QRect &_rect, double _xRatio, double _yRatio)
 {
     return QRect(
                 qRound(_rect.left() * _xRatio),

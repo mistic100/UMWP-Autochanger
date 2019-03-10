@@ -1,4 +1,4 @@
-#include <Shlobj.h>
+#include <ShlObj.h>
 #include <atlbase.h>
 #include "lib/createshortcut.h"
 
@@ -56,7 +56,7 @@ Environment::Environment()
     HRESULT result;
 
     value = (wchar_t*) malloc(256);
-    result = SHGetKnownFolderPath(FOLDERID_Startup, 0, NULL, &value);
+    result = SHGetKnownFolderPath(FOLDERID_Startup, 0, nullptr, &value);
 
     if (result == S_OK)
     {
@@ -71,11 +71,11 @@ Environment::Environment()
     CoTaskMemFree(value);
 
     // LOCATE EXPLORER.exe
-    char* value2 = getenv("windir");
+    QByteArray windir = qgetenv("windir");
 
-    if (value2 != NULL)
+    if (!windir.isEmpty())
     {
-        Environment::EXPLORER_PATH = QString::fromLatin1(value2);
+        Environment::EXPLORER_PATH = QString::fromLocal8Bit(windir);
         Environment::EXPLORER_PATH.append("\\explorer.exe");
     }
     else
@@ -179,7 +179,7 @@ void Environment::setWallpaper(const QString &_file)
 /**
  * Can we create the shortcut ?
  */
-const bool Environment::canAddShortcut() const
+bool Environment::canAddShortcut() const
 {
     return !m_shortcutPath.isNull();
 }
@@ -187,7 +187,7 @@ const bool Environment::canAddShortcut() const
 /**
  * @brief Does the shortcut exists ?
  */
-const bool Environment::isAutostart() const
+bool Environment::isAutostart() const
 {
     if (!QFile::exists(m_shortcutPath))
     {

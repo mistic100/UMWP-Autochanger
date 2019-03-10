@@ -153,7 +153,7 @@ void ConfigDialog::done(int result)
         }
 
         // just disabled / new password, check current password
-        if (lockWasEnabled && !lockEnabled || lockWasEnabled && lockEnabled && !lockPassword.isEmpty()) {
+        if ((lockWasEnabled && !lockEnabled) || (lockWasEnabled && lockEnabled && !lockPassword.isEmpty())) {
             if (lockCurrentPassword.isEmpty() || lockCurrentHash != UM::hash(lockCurrentPassword, UM::PasswordHash)) {
                 error = tr("Current lock password is invalid.");
                 ui->tabs->setCurrentTab("lock");
@@ -333,7 +333,8 @@ void ConfigDialog::on_optionOpenProgram_currentIndexChanged(int)
 {
     if (ui->optionOpenProgram->currentData().toString() == "select")
     {
-        QString opener = QFileDialog::getOpenFileName(this, tr("Select program..."), getenv("PROGRAMFILES"), tr("Executables (*.exe)"));
+        QString programFiles = QString::fromLocal8Bit(qgetenv("PROGRAMFILES"));
+        QString opener = QFileDialog::getOpenFileName(this, tr("Select program..."), programFiles, tr("Executables (*.exe)"));
 
         if (!opener.isEmpty())
         {

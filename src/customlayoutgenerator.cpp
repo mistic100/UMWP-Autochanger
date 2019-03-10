@@ -32,7 +32,7 @@ QList<QRect> CustomLayoutGenerator::generate(const CustomLayout &_conf)
     if (_conf.cols < 1 || _conf.rows < 1 ||
             _conf.minCols > _conf.cols || _conf.maxCols > _conf.cols || _conf.minCols > _conf.maxCols ||
             _conf.minRows > _conf.rows || _conf.maxRows > _conf.rows || _conf.minRows > _conf.maxRows ||
-            _conf.mainEnabled && (_conf.mainCols > _conf.cols || _conf.mainRows > _conf.rows)
+            (_conf.mainEnabled && (_conf.mainCols > _conf.cols || _conf.mainRows > _conf.rows))
             )
     {
         QLOG_FATAL()<<"CustomLayoutGenerator: Dimensions out of bounds";

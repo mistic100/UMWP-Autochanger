@@ -9,9 +9,9 @@
  * @param Controller* _ctrl
  */
 TrayIcon::TrayIcon(MainWindow* _parent, Controller* _ctrl) :
-    QSystemTrayIcon((QWidget*) _parent),
-    m_parent(_parent),
-    m_ctrl(_ctrl)
+    QSystemTrayIcon(_parent),
+    m_ctrl(_ctrl),
+    m_parent(_parent)
 {
     connect(m_parent, SIGNAL(showHidden(bool)),     this, SLOT(onWindowShown(bool)));
     connect(m_ctrl,   SIGNAL(startedPaused(bool)),  this, SLOT(onStartPause(bool)));

@@ -64,8 +64,8 @@ private:
     static int ref;
 
 public:
-    explicit QGlobalShortcut(QObject* parent = 0);
-    explicit QGlobalShortcut(const QKeySequence& shortcut, QObject* parent = 0);
+    explicit QGlobalShortcut(QObject* parent = nullptr);
+    explicit QGlobalShortcut(const QKeySequence& shortcut, QObject* parent = nullptr);
     virtual ~QGlobalShortcut();
 
     QKeySequence shortcut() const;

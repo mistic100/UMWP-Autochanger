@@ -14,7 +14,7 @@ class QComboBoxExt : public QComboBox
     Q_OBJECT
 
 public:
-    QComboBoxExt(QWidget* _parent = 0) : QComboBox(_parent)
+    QComboBoxExt(QWidget* _parent = nullptr) : QComboBox(_parent)
     {
         connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
     }

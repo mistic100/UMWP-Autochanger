@@ -43,23 +43,23 @@ public:
 
     const QString       &path() const       { return m_path; }
     const QString       &name() const       { return m_name; }
-    const UM::WALLPAPER type() const        { return m_type; }
-    const UM::IMAGE     style() const       { return m_style; }
-    const UM::MODE      mode() const        { return m_mode; }
-    const double        frequency() const   { return m_frequency; }
-    const TRI_BOOL      lock() const        { return m_lock; }
-    const double        lastModif() const   { return m_lastModif; }
-    const int           nbFiles() const     { return m_files.size(); }
-    const int           nbFolders() const   { return m_folders.size(); }
-    const int           nbFilesInFolder(const QString &_folder) const;
-    const bool          isActive() const    { return m_active; }
-    const bool          isValid() const     { return m_valid; }
-    const int           hotkey() const      { return m_hotkey; }
+    UM::WALLPAPER       type() const        { return m_type; }
+    UM::IMAGE           style() const       { return m_style; }
+    UM::MODE            mode() const        { return m_mode; }
+    double              frequency() const   { return m_frequency; }
+    TRI_BOOL            lock() const        { return m_lock; }
+    double              lastModif() const   { return m_lastModif; }
+    int                 nbFiles() const     { return m_files.size(); }
+    int                 nbFolders() const   { return m_folders.size(); }
+    int                 nbFilesInFolder(const QString &_folder) const;
+    bool                isActive() const    { return m_active; }
+    bool                isValid() const     { return m_valid; }
+    int                 hotkey() const      { return m_hotkey; }
     const QString       uuid() const        { return m_uuid; }
     const Current       current() const     { return m_current; }
     const CustomLayout  custLayout() const  { return m_custLayout; }
     const QVector<int>  monitors() const    { return m_monitors; }
-    const bool          isActiveOnMonitor(int _i) const { return m_monitors.size() == 0 || m_monitors.contains(_i); }
+    bool                isActiveOnMonitor(int _i) const { return m_monitors.size() == 0 || m_monitors.contains(_i); }
     const QString       file(int _i) const;
     const QString       fileInFolder(const QString &_folder, int _i) const;
     const QString       folder(int _i) const;

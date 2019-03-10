@@ -11,7 +11,7 @@
  * @param Controller* _ctrl
  */
 MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
-    QToolBar((QWidget*) _parent),
+    QToolBar(_parent),
     m_ctrl(_ctrl)
 {
     setMovable(false);
@@ -70,9 +70,9 @@ MenuBar::MenuBar(MainWindow* _parent, Controller *_ctrl) :
     connect(actionFiles,   SIGNAL(triggered()), _parent, SLOT(openPreviewDialog()));
 
     // use functors to map URLS to open
-    connect(actionHelp,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_DOCUMENTATION_URL)); });
-    connect(actionIssues, &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_ISSUES_URL)); });
-    connect(actionHome,   &QAction::triggered, this, [this]{ QDesktopServices::openUrl(QUrl(APP_HOMEPAGE)); });
+    connect(actionHelp,   &QAction::triggered, this, []{ QDesktopServices::openUrl(QUrl(APP_DOCUMENTATION_URL)); });
+    connect(actionIssues, &QAction::triggered, this, []{ QDesktopServices::openUrl(QUrl(APP_ISSUES_URL)); });
+    connect(actionHome,   &QAction::triggered, this, []{ QDesktopServices::openUrl(QUrl(APP_HOMEPAGE)); });
 
     setStartPause(true);
     setLockEnabled(m_ctrl->lockEnabled() == UM::LOCK_ALL);

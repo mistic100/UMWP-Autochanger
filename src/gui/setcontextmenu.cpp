@@ -12,7 +12,7 @@
  * @param int[] _sets
  */
 SetContextMenu::SetContextMenu(MainWindow* _parent, const QList<Set*> &_sets) :
-    QMenu((QWidget*) _parent),
+    QMenu(_parent),
     m_parent(_parent),
     m_sets(_sets)
 {

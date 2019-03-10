@@ -13,12 +13,12 @@ const QColor backgroundOdd = Qt::white;
 const QColor backgroundEven = QColor(255, 254, 239);
 const QColor border = QColor(211, 211, 211);
 
-const float backgroundOpacityActive = 1.0;
-const float backgroundOpacityInactive = 0.8;
-const float iconOpacityActive = 1.0;
-const float iconOpacityInactive = 0.5;
-const float textOpacityActive = 1.0;
-const float textOpacityInactive = 0.9;
+const double backgroundOpacityActive = 1.0;
+const double backgroundOpacityInactive = 0.8;
+const double iconOpacityActive = 1.0;
+const double iconOpacityInactive = 0.5;
+const double textOpacityActive = 1.0;
+const double textOpacityInactive = 0.9;
 
 const QFont titleFont = QFont("Calibri", 11);
 const QColor titleColorSelected = QColor(255, 255, 255);
@@ -164,6 +164,8 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     case UM::W_MONITOR:
         icon = QIcon(":/images/icons/w_monitor.png");
         break;
+    case UM::W_NONE:
+        break;
     }
 
     rect = baseRect.adjusted(0, 3, -rightMargin1, 0);
@@ -237,6 +239,8 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
     case UM::IM_CUSTOM:
         icon = QIcon(":/images/icons/im_custom.png");
         break;
+    case UM::IM_NONE:
+        break;
     }
 
     rect = baseRect.adjusted(0, 0, -rightMargin2, 0);
@@ -252,6 +256,8 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
         break;
     case UM::MODE_SEQUENTIAL:
         icon = QIcon(":/images/icons/mode_sequential.png");
+        break;
+    case UM::MODE_NONE:
         break;
     }
 

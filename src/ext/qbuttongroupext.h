@@ -12,7 +12,7 @@ class QButtonGroupExt : public QButtonGroup
     Q_OBJECT
 
 public:
-    QButtonGroupExt(QWidget* _parent = 0) : QButtonGroup(_parent) {}
+    QButtonGroupExt(QWidget* _parent = nullptr) : QButtonGroup(_parent) {}
 
     void setCheckedId(int _id)
     {

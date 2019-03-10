@@ -45,6 +45,17 @@ Controller::~Controller()
 }
 
 /**
+ * @brief Return the lock type
+ * @return UM::LOCK_TYPE
+ */
+UM::LOCK_TYPE Controller::lockEnabled() const
+{
+    return m_settings->param(UM::CONF::lock_enabled).toBool() ?
+                static_cast<UM::LOCK_TYPE>(m_settings->param(UM::CONF::lock_type).toInt()) :
+                UM::LOCK_DISABLED;
+}
+
+/**
  * @brief Try to quit the app. If the WallpaperGenerator is running, try again in 500 ms
  */
 void Controller::quit()
@@ -68,7 +79,7 @@ void Controller::onQuit()
     {
         Set* set = m_settings->setByUuid(m_settings->param(UM::CONF::default_set).toString());
 
-        if (set != NULL && (m_settings->nbActiveSets() > 1 || set != m_settings->activeSet(0)))
+        if (set != nullptr && (m_settings->nbActiveSets() > 1 || set != m_settings->activeSet(0)))
         {
             QLOG_DEBUG() << "Set default close set";
             m_settings->setActiveSets(QList<Set*>() << set);

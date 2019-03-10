@@ -53,13 +53,9 @@ public:
 
     const WallpaperGenerator::Result &current() const { return m_current; }
 
-    const UM::LOCK_TYPE lockEnabled() const {
-        return m_settings->param(UM::CONF::lock_enabled).toBool() ?
-                    static_cast<UM::LOCK_TYPE>(m_settings->param(UM::CONF::lock_type).toInt()) :
-                    UM::LOCK_DISABLED;
-    }
-    const boolean locked() const { return m_locked; }
-    const boolean paused() const { return !m_mainTimer->isActive(); }
+    UM::LOCK_TYPE lockEnabled() const;
+    boolean locked() const { return m_locked; }
+    boolean paused() const { return !m_mainTimer->isActive(); }
 
 private:
     void clearOldCache();

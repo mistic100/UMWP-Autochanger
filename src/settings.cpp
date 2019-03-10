@@ -85,7 +85,7 @@ void Settings::setWindowSize(const QSize &_size)
 /**
  * @brief Return the number of enabled monitors
  */
-const int Settings::nbEnabledMonitors() const
+int Settings::nbEnabledMonitors() const
 {
     int n = 0;
 
@@ -403,7 +403,7 @@ Set* Settings::addSet(const QString &_path)
     if (!dir.exists())
     {
         QLOG_ERROR() << "Invalid set path";
-        return NULL;
+        return nullptr;
     }
 
     Set* set = new Set(_path, dir.dirName());
@@ -578,7 +578,7 @@ Set* Settings::setByUuid(const QString &_uuid) const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -605,7 +605,7 @@ Set* Settings::activeSet(int _i) const
  * @brief Get the number of active sets
  * @return int
  */
-int const Settings::nbActiveSets() const
+int Settings::nbActiveSets() const
 {
     int totalSets = 0;
 

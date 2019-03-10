@@ -32,16 +32,16 @@ public:
 
     // getters
     const QVariant  param(const QString &_key) const  { return m_options.value(_key); }
-    const int       hotkey(const QString &_key) const { return m_hotkeys.value(_key); }
+    int             hotkey(const QString &_key) const { return m_hotkeys.value(_key); }
     const UM::Monitor monitor(const int _key) const   { return m_monitors.at(_key);   }
-    const int       nbEnabledMonitors() const;
+    int             nbEnabledMonitors() const;
     const QSize     windowSize() const;
 
     Set*            set(int _i) const { return m_sets.at(_i); }
     Set*            setByUuid(const QString &_uuid) const;
-    const int       nbSets() const    { return m_sets.size(); }
+    int             nbSets() const    { return m_sets.size(); }
     Set*            activeSet(int _i) const;
-    const int       nbActiveSets() const;
+    int             nbActiveSets() const;
 
     // setters
     void setParam(const QString &_key, const QVariant &_val) { m_options[_key] = _val; }

@@ -36,8 +36,8 @@ class PreviewWidget : public QWidget
 public:
     PreviewWidget(const QString &_path, const QString &_image, int _width, bool _showEdit, bool _showOverlay, PreviewDialog* _parent) :
         QWidget(_parent),
-        m_path(_path),
-        m_parent(_parent)
+        m_parent(_parent),
+        m_path(_path)
     {
         QVBoxLayout* layout = new QVBoxLayout();
         layout->setAlignment(Qt::AlignBottom);

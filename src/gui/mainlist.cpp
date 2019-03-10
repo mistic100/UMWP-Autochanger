@@ -13,10 +13,10 @@
  * @param Controller* _ctrl
  */
 MainList::MainList(MainWindow* _parent, Controller* _ctrl) :
-    QListWidget((QWidget*) _parent),
-    m_parent(_parent),
+    QListWidget(_parent),
     m_ctrl(_ctrl),
-    m_settings(_ctrl->settings())
+    m_settings(_ctrl->settings()),
+    m_parent(_parent)
 {
     setItemDelegate(new ListDelegate(this, m_ctrl));
     setSelectionMode(QAbstractItemView::ExtendedSelection);

@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QProxyStyle>
 #include <QStyleOption>
+#include <QtMath>
 
 
 /**

@@ -11,7 +11,7 @@ namespace UM
 {
     bool moveFileToTrash(const QString &_filename);
 
-    QRect scaledRect(const QRect &_rect, float _xRatio, float _yRatio);
+    QRect scaledRect(const QRect &_rect, double _xRatio, double _yRatio);
 
     QString hash(const QString &_input, QCryptographicHash::Algorithm _algorythm);
 

@@ -189,7 +189,7 @@ const QString Set::hotkeyStr() const
  * @param string _folder
  * @return int
  */
-const int Set::nbFilesInFolder(const QString &_folder) const
+int Set::nbFilesInFolder(const QString &_folder) const
 {
     if (_folder.isEmpty())
     {

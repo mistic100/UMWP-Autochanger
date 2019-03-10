@@ -92,7 +92,7 @@ void ScreensDialog::save()
  */
 void ScreensDialog::init()
 {
-    m_ratio = 400.f/m_enviro->wpSize(-1).width();
+    m_ratio = 400.0 / m_enviro->wpSize(-1).width();
     m_viewport = UM::scaledRect(m_enviro->wpSize(-1), m_ratio, m_ratio);
 
     QRect rect(QPoint(0, 0), m_viewport.size());
@@ -129,7 +129,7 @@ void ScreensDialog::addScreen(int _i, const QRect &_screen)
     thumb->rect->setData(Qt::UserRole, _i);
 
     QFont font;
-    font.setPixelSize(scaled.height()*0.6);
+    font.setPixelSize(qRound(scaled.height()*0.6));
 
     thumb->text = m_scene->addSimpleText(QString::number(_i+1), font);
     thumb->text->setData(Qt::UserRole, _i);

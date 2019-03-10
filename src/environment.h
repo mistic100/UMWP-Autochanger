@@ -29,20 +29,20 @@ public:
     void setWallpaper(const QString &_file);
 
     // getters
-    const QString shortcutPath() const { return m_shortcutPath; }
-    const int nbMonitors() const { return qMax(0, m_wpSizes.size()-1); }
-    const QRect wpSize(int _i) const { return m_wpSizes.value(_i); }
-    const UM::NewVersion newVersion() const { return m_newVersion; }
-    const QList<QString> &languages() const { return m_languages; }
-    const bool isPortable() const { return m_isPortable; }
-    const QString getAppDataFolder() const;
+    const QString           shortcutPath() const    { return m_shortcutPath; }
+    int                     nbMonitors() const      { return qMax(0, m_wpSizes.size()-1); }
+    const QRect             wpSize(int _i) const    { return m_wpSizes.value(_i); }
+    const UM::NewVersion    newVersion() const      { return m_newVersion; }
+    const QList<QString>&   languages() const       { return m_languages; }
+    bool                    isPortable() const      { return m_isPortable; }
+    const QString           getAppDataFolder() const;
 
     // setters
     void setNewVersion(const UM::NewVersion &_version) { m_newVersion = _version; }
 
     // shortcut
-    const bool isAutostart() const;
-    const bool canAddShortcut() const;
+    bool isAutostart() const;
+    bool canAddShortcut() const;
     void createShortcut();
     void deleteShortcut();
 };
