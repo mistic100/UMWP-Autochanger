@@ -360,13 +360,7 @@ void Set::writeCache() const
  */
 void Set::deleteCache()
 {
-    QDir cache(Environment::APPDATA_DIR + APP_CACHE_DIR);
-    QStringList files = cache.entryList(QStringList()<<"*"+m_uuid+"*", QDir::Files);
-
-    foreach (QString file, files)
-    {
-        QFile::remove(cache.absoluteFilePath(file));
-    }
+    QFile::remove(Environment::APPDATA_DIR + APP_CACHE_DIR + m_uuid);
 
     m_lastModif = 0;
     m_current = Current();

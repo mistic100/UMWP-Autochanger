@@ -14,7 +14,7 @@
 #define APP_CONFIG_FILE "settings.xml"
 #define APP_CACHE_DIR "cache/"
 #define APP_WALLPAPER_FILE "umwp-wallpaper.bmp"
-#define APP_CUSTOM_PREFIX "umwp-custom-"
+#define APP_TEMP_PREFIX "umwp-temp-"
 #define APP_UNINSTALLER_FILENAME "unins000.exe"
 #define APP_INSTALLER_FILENAME "umwp-installer.exe"
 #define APP_LOG_FILENAME "debug.log"

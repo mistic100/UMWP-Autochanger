@@ -61,11 +61,13 @@ public:
     const boolean locked() const { return m_locked; }
     const boolean paused() const { return !m_mainTimer->isActive(); }
 
+private:
+    void clearOldCache();
+
 public slots:
     void quit();
     void update(bool _async=true);
     bool startPause();
-    void clearCache();
 
     void editSets(const QList<Set*> &_sets, const Set &_data);
     void moveSet(int _from, int _to);

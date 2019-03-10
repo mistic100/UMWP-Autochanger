@@ -43,9 +43,9 @@ public:
 
 private:
     QRect getDesktopEnabledRect();
+    QString getFile(int _idx, Result* _context);
 
     // random access
-    QString getFile(int _idx, Result* _context);
     Set* getRandomSet(const int _monitor=-1, const QVector<Set*> &_existingSets=QVector<Set*>());
     QString getRandomFolder(Set* _set);
     QString getRandomFile(Set* _set, const QString &_folder="", const QVector<QString> &_files=QVector<QString>());
@@ -61,12 +61,10 @@ private:
 
     // final generation
     QString generateFile(const QVector<QString> &_files, Result* _context);
-    void cleanCustLayoutTemp();
 
-    // cache keys
-    QString getDesktopWallpaperKey();
-    QString getCacheFilename(const QString &_file, const QRect &_rect, const QString &_key1, const QString &_key2);
-    QString getCustLayoutTempFilename(int _idx, Set* _set);
+    // temporary files
+    void cleanTempFiles();
+    QString getTempFilename(int _idx, Set* _set);
 };
 
 #endif // WALLPAPERGENERATOR_H

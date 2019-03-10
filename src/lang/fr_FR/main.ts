@@ -18,22 +18,22 @@
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="70"/>
+        <location filename="../../gui/configdialog.ui" line="64"/>
         <source>Language :</source>
         <translation>Langue :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="53"/>
+        <location filename="../../gui/configdialog.ui" line="47"/>
         <source>Delay :</source>
         <translation>Délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="116"/>
+        <location filename="../../gui/configdialog.ui" line="110"/>
         <source>Minimize on startup</source>
         <translation>Réduire au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="123"/>
+        <location filename="../../gui/configdialog.ui" line="117"/>
         <source>Check updates</source>
         <translation>Chercher les nouvelles versions</translation>
     </message>
@@ -43,107 +43,107 @@
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="43"/>
+        <location filename="../../gui/configdialog.ui" line="37"/>
         <source>File editor :</source>
         <translation>Editeur d&apos;images :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="103"/>
+        <location filename="../../gui/configdialog.ui" line="97"/>
         <source>Windows integration</source>
         <translation>Intégration Windows</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="141"/>
+        <location filename="../../gui/configdialog.ui" line="135"/>
         <source>Lock</source>
         <translation>Verrouillage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="154"/>
+        <location filename="../../gui/configdialog.ui" line="148"/>
         <source>Lock everything</source>
         <translation>Tout verrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="219"/>
+        <location filename="../../gui/configdialog.ui" line="213"/>
         <source>Password :</source>
         <translation>Mot de passe :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="202"/>
+        <location filename="../../gui/configdialog.ui" line="196"/>
         <source>Current password :</source>
         <translation>Mot de passe actuel :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="163"/>
+        <location filename="../../gui/configdialog.ui" line="157"/>
         <source>Enable lock</source>
         <translation>Activer le verrouillage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="147"/>
+        <location filename="../../gui/configdialog.ui" line="141"/>
         <source>Lock on minimize</source>
         <translation>Quand l&apos;application est masquée</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="249"/>
+        <location filename="../../gui/configdialog.ui" line="243"/>
         <source>Lock some sets</source>
         <translation>Verrouiller les sets</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="256"/>
+        <location filename="../../gui/configdialog.ui" line="250"/>
         <source>Lock at startup</source>
         <translation>Au démarrage</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="263"/>
+        <location filename="../../gui/configdialog.ui" line="257"/>
         <source>Open the settings of each set to make it lockable.</source>
         <translation>Ouvrez la fenêtre de configuration de chaque set pour le rendre verrouillable.</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="88"/>
+        <location filename="../../gui/configdialog.ui" line="82"/>
         <source>Change set on close :</source>
         <translation>Changer de set à la fermeture :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="361"/>
+        <location filename="../../gui/configdialog.ui" line="349"/>
         <source>Lock/Unlock :</source>
         <translation>(Dé)verrouiller :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="109"/>
+        <location filename="../../gui/configdialog.ui" line="103"/>
         <source>Start with Windows</source>
         <translation>Démarrer avec Windows</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="130"/>
+        <location filename="../../gui/configdialog.ui" line="124"/>
         <source>Show notifications</source>
         <translation>Afficher les notifications</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="277"/>
+        <location filename="../../gui/configdialog.ui" line="271"/>
         <source>Hotkeys</source>
         <translation>Raccourcis</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="311"/>
+        <location filename="../../gui/configdialog.ui" line="299"/>
         <source>Show/Hide :</source>
         <translation>Masquer/Afficher :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="321"/>
+        <location filename="../../gui/configdialog.ui" line="309"/>
         <source>Refresh :</source>
         <translation>Rafraîchir :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="351"/>
+        <location filename="../../gui/configdialog.ui" line="339"/>
         <source>Change delay :</source>
         <translation>Changer le délai :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="301"/>
+        <location filename="../../gui/configdialog.ui" line="289"/>
         <source>Start/Pause :</source>
         <translation>Démarrer/Pause :</translation>
     </message>
     <message>
-        <location filename="../../gui/configdialog.ui" line="331"/>
+        <location filename="../../gui/configdialog.ui" line="319"/>
         <source>Use hotkeys</source>
         <translation>Utiliser les raccourcis</translation>
     </message>
@@ -374,28 +374,28 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="755"/>
+        <location filename="../../gui/mainwindow.cpp" line="744"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="420"/>
+        <location filename="../../gui/mainwindow.cpp" line="409"/>
         <source>Import configuration file</source>
         <translation>Importer la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="397"/>
+        <location filename="../../gui/mainwindow.cpp" line="386"/>
         <source>Export configuration file</source>
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="552"/>
+        <location filename="../../gui/mainwindow.cpp" line="541"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="399"/>
-        <location filename="../../gui/mainwindow.cpp" line="422"/>
+        <location filename="../../gui/mainwindow.cpp" line="388"/>
+        <location filename="../../gui/mainwindow.cpp" line="411"/>
         <source>XML files (*.xml)</source>
         <translation>Fichiers XML (*.xml)</translation>
     </message>
@@ -415,79 +415,79 @@
         <translation>Êtes-vous sûr ?</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="432"/>
-        <location filename="../../gui/mainwindow.cpp" line="533"/>
-        <location filename="../../gui/mainwindow.cpp" line="574"/>
+        <location filename="../../gui/mainwindow.cpp" line="421"/>
+        <location filename="../../gui/mainwindow.cpp" line="522"/>
+        <location filename="../../gui/mainwindow.cpp" line="563"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="432"/>
+        <location filename="../../gui/mainwindow.cpp" line="421"/>
         <source>Invalid settings file</source>
         <translation>Fichier de configuration invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="512"/>
+        <location filename="../../gui/mainwindow.cpp" line="501"/>
         <source>Unlock</source>
         <translation>Déverrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="511"/>
+        <location filename="../../gui/mainwindow.cpp" line="500"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="533"/>
+        <location filename="../../gui/mainwindow.cpp" line="522"/>
         <source>Invalid password</source>
         <translation>Mot de passe invalide</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="557"/>
+        <location filename="../../gui/mainwindow.cpp" line="546"/>
         <source>Changelog</source>
         <translation>Suivi de versions</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="574"/>
+        <location filename="../../gui/mainwindow.cpp" line="563"/>
         <source>No active files</source>
         <translation>Aucun fichier actif</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="623"/>
+        <location filename="../../gui/mainwindow.cpp" line="612"/>
         <source>The lock is not configured</source>
         <translation>Le verrouillage n&apos;est pas configuré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="632"/>
+        <location filename="../../gui/mainwindow.cpp" line="621"/>
         <source>Unlocked</source>
         <translation>Déverrouillé</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="641"/>
+        <location filename="../../gui/mainwindow.cpp" line="630"/>
         <source>Locked</source>
         <translation>Verrouillé</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="655"/>
+        <location filename="../../gui/mainwindow.cpp" line="644"/>
         <source>Paused</source>
         <translation>Mis en pause</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="659"/>
+        <location filename="../../gui/mainwindow.cpp" line="648"/>
         <source>Running</source>
         <translation>Démarré</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="685"/>
+        <location filename="../../gui/mainwindow.cpp" line="674"/>
         <source>Current sets : %1</source>
         <translation>Sets actuels : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="711"/>
+        <location filename="../../gui/mainwindow.cpp" line="700"/>
         <source>A new version is available : %1</source>
         <translation>Une nouvelle version est disponible : %1</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="759"/>
+        <location filename="../../gui/mainwindow.cpp" line="748"/>
         <source>Close and don&apos;t show this message again</source>
         <translation>Fermer et ne plus afficher ce message</translation>
     </message>
@@ -497,7 +497,7 @@
         <translation>%1 est toujours en cours d&apos;éxécution</translation>
     </message>
     <message>
-        <location filename="../../gui/mainwindow.cpp" line="756"/>
+        <location filename="../../gui/mainwindow.cpp" line="745"/>
         <source>If you quit the application now,&lt;br&gt;the wallpaper will not change anymore.</source>
         <translation>Si vous quittez l&apos;application maintenant,&lt;br&gt;le fond d&apos;écran ne changera plus.</translation>
     </message>
@@ -525,83 +525,78 @@
         <translation>Exporter la configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="51"/>
+        <location filename="../../gui/menubar.cpp" line="50"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="36"/>
+        <location filename="../../gui/menubar.cpp" line="35"/>
         <source>Active files</source>
         <translation>Fichiers actifs</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="32"/>
-        <source>Clear cache</source>
-        <translation>Effacer le cache</translation>
-    </message>
-    <message>
-        <location filename="../../gui/menubar.cpp" line="35"/>
+        <location filename="../../gui/menubar.cpp" line="34"/>
         <source>User guide</source>
         <translation>Guide d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="38"/>
+        <location filename="../../gui/menubar.cpp" line="37"/>
         <source>Report a bug</source>
         <translation>Rapporter un bug</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="39"/>
+        <location filename="../../gui/menubar.cpp" line="38"/>
         <source>Homepage</source>
         <translation>Page du projet</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="40"/>
+        <location filename="../../gui/menubar.cpp" line="39"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="42"/>
+        <location filename="../../gui/menubar.cpp" line="41"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="43"/>
+        <location filename="../../gui/menubar.cpp" line="42"/>
         <source>Add set</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="44"/>
-        <location filename="../../gui/menubar.cpp" line="92"/>
+        <location filename="../../gui/menubar.cpp" line="43"/>
+        <location filename="../../gui/menubar.cpp" line="90"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="45"/>
+        <location filename="../../gui/menubar.cpp" line="44"/>
         <source>Refresh</source>
         <translation>Rafraîchir</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="46"/>
+        <location filename="../../gui/menubar.cpp" line="45"/>
         <source>Hide</source>
         <translation>Masquer</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="47"/>
+        <location filename="../../gui/menubar.cpp" line="46"/>
         <source>Lock</source>
         <translation>Verrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="48"/>
+        <location filename="../../gui/menubar.cpp" line="47"/>
         <source>Unlock</source>
         <translation>Déverrouiller</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="50"/>
+        <location filename="../../gui/menubar.cpp" line="49"/>
         <source>Configuration</source>
         <translation>Configuration</translation>
     </message>
     <message>
-        <location filename="../../gui/menubar.cpp" line="97"/>
+        <location filename="../../gui/menubar.cpp" line="95"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>

@@ -32,6 +32,8 @@ Controller::Controller(Settings* _settings, Environment* _enviro) :
     {
         lock();
     }
+
+    clearOldCache();
 }
 
 /**
@@ -219,17 +221,6 @@ void Controller::onGenerationDone()
 }
 
 /**
- * @brief Clear sets cache of selected sets
- */
-void Controller::clearCache()
-{
-    for (int i=0, l=m_settings->nbSets(); i<l; i++)
-    {
-        m_settings->set(i)->deleteCache();
-    }
-}
-
-/**
  * @brief Move a set
  * @param int _from
  * @param int _to
@@ -366,5 +357,19 @@ void  Controller::lock()
         QLOG_DEBUG()<<"Lock";
 
         emit lockToggled(true);
+    }
+}
+
+/**
+ * @brief Deletes old cache files (no image cache anymore)
+ */
+void Controller::clearOldCache()
+{
+    QDir cache(Environment::APPDATA_DIR + APP_CACHE_DIR);
+    QStringList files = cache.entryList(QStringList()<<"*.jpg", QDir::Files);
+
+    foreach (QString file, files)
+    {
+        QFile::remove(cache.absoluteFilePath(file));
     }
 }

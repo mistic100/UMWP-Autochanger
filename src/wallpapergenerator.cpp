@@ -93,7 +93,7 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
     }
 
     m_enviro->setWallpaper(generateFile(tempFiles, &result));
-    cleanCustLayoutTemp();
+    cleanTempFiles();
 
     QLOG_DEBUG() << "Current type:" << result.type;
     QLOG_DEBUG() << "Current sets:" << result.sets;
@@ -606,7 +606,7 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
     painter.end();
 
     // save in temp folder
-    QString filename = getCustLayoutTempFilename(_idx, set);
+    QString filename = getTempFilename(_idx, set);
 
     image.save(filename, 0, 100);
 
@@ -624,27 +624,14 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, R
 {
     Set* set = _context->sets.at(_idx);
 
-    QString key = QString::number(set->style());
     QRect wpRect;
-
     if (_context->type == UM::W_DESKTOP)
     {
-        key+= getDesktopWallpaperKey();
-
         wpRect.setSize(getDesktopEnabledRect().size());
     }
     else
     {
-        key+= QString::number(m_settings->monitor(_idx).color);
-
         wpRect.setSize(m_enviro->wpSize(_idx).size());
-    }
-
-    QString cachePath = getCacheFilename(_file, wpRect, key, set->uuid());
-
-    if (QFile::exists(cachePath))
-    {
-        return cachePath;
     }
 
     QImage source(_file);
@@ -781,9 +768,11 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, R
 
     painter.end();
 
-    image.save(cachePath, 0, 90);
+    QString filename = getTempFilename(_idx, set);
 
-    return cachePath;
+    image.save(filename, 0, 100);
+
+    return filename;
 }
 
 /**
@@ -910,71 +899,27 @@ QRect WallpaperGenerator::getDesktopEnabledRect()
 }
 
 /**
- * @brief Returns a unique key depending on monitors size, position, state and color
- * @return string
- */
-QString WallpaperGenerator::getDesktopWallpaperKey()
-{
-    QString str;
-
-    for (int i=0, l=m_enviro->nbMonitors(); i<l; i++)
-    {
-        QRect screen = m_enviro->wpSize(i);
-        UM::Monitor monitor = m_settings->monitor(i);
-
-        str+= QString::number(screen.left());
-        str+= QString::number(screen.top());
-        str+= QString::number(screen.width());
-        str+= QString::number(screen.height());
-        str+= QString::number(monitor.enabled);
-        str+= QString::number(monitor.color);
-    }
-
-    return str;
-}
-
-/**
- * @brief Returns the cache path
- * @param string _originalFile
- * @param rect _rect
- * @param string _key
- * @return string
- */
-QString WallpaperGenerator::getCacheFilename(const QString &_file, const QRect &_rect, const QString &_key1, const QString &_key2)
-{
-    uint32_t crc1 = crc32_1byte(_file.toStdString().c_str(), _file.size());
-    uint32_t crc2 = crc32_1byte(_key1.toStdString().c_str(), _key1.size());
-
-    return QDir::toNativeSeparators(Environment::APPDATA_DIR + APP_CACHE_DIR + "/")
-            + QString::number(crc1, 16) + "-"
-            + QString::number(crc2, 16) + "-"
-            + _key2 + "-"
-            + QString::number(_rect.width()) + "x" + QString::number(_rect.height())
-            + ".jpg";
-}
-
-/**
- * @brief Return a temp file path for a custom layout
+ * @brief Return a temp file path
  * @param int _idx
  * @param Set* _set
  * @return string
  */
-QString WallpaperGenerator::getCustLayoutTempFilename(int _idx, Set* _set)
+QString WallpaperGenerator::getTempFilename(int _idx, Set* _set)
 {
     return QDir::toNativeSeparators(QDir::tempPath() + "/")
-            + APP_CUSTOM_PREFIX
+            + APP_TEMP_PREFIX
             + _set->uuid() + "-"
             + QString::number(_idx)
             + ".bmp";
 }
 
 /**
- * @brief Deletes all temp files for custom layouts
+ * @brief Deletes all temp files
  */
-void WallpaperGenerator::cleanCustLayoutTemp()
+void WallpaperGenerator::cleanTempFiles()
 {
     QDir cache = QDir::tempPath();
-    QStringList files = cache.entryList(QStringList()<<QString(APP_CUSTOM_PREFIX)+"*", QDir::Files);
+    QStringList files = cache.entryList(QStringList()<<QString(APP_TEMP_PREFIX)+"*", QDir::Files);
 
     foreach (QString file, files)
     {
