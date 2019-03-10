@@ -23,8 +23,7 @@ int main(int argc, char *argv[])
     }
 
     // lock QHash seed in order to have a deterministic attributes order in the XML settings file
-    qputenv("QT_HASH_SEED", "0");
-    qt_qhash_seed.store(0);
+    qSetGlobalQHashSeed(0);
 
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
