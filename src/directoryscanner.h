@@ -21,7 +21,7 @@ public:
 
 private:
     double lastChange(const QString &_path, const int _level=0);
-    void filesList(const QString &_path, QVector<QString>* _files, const int _level=0);
+    void filesList(const QString &_path, bool _byDate, QVector<QString>* _files, const int _level=0);
     void foldersList(const QString &_path, QVector<QString>* _folders);
 };
 

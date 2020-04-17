@@ -26,7 +26,7 @@ bool DirectoryScanner::scan(Set *_set)
 
     double lastModif = lastChange(_set->path());
 
-    if (lastModif <= _set->lastModif())
+    if (lastModif <= _set->lastModif() && _set->recent() == _set->filesByDate())
     {
         return false;
     }
@@ -36,7 +36,7 @@ bool DirectoryScanner::scan(Set *_set)
     QVector<QString> files;
     QVector<QString> folders;
 
-    filesList(_set->path(), &files);
+    filesList(_set->path(), _set->recent(), &files);
     foldersList(_set->path(), &folders);
 
     _set->update(lastModif, files, folders);
@@ -79,24 +79,25 @@ double DirectoryScanner::lastChange(const QString &_path, const int _level)
 /**
  * @brief Recursively construct the list of files
  * @param string _path
+ * @param bool _byDate
  * @param string[]* _files
  * @param int _level
  */
-void DirectoryScanner::filesList(const QString &_path, QVector<QString>* _files, const int _level)
+void DirectoryScanner::filesList(const QString &_path, bool _byDate, QVector<QString>* _files, const int _level)
 {
     if (_level < APP_MAX_TRAVERSAL)
     {
         QDir dir(_path);
-        QStringList files = dir.entryList(FILES_FILTER,
-                                          QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot,
-                                          QDir::Name | QDir::DirsLast | QDir::IgnoreCase
-                                          );
+        QStringList files = dir.entryList(
+                    FILES_FILTER,
+                    QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot,
+                    (_byDate ? QDir::Time : (QDir::Name | QDir::IgnoreCase)) | QDir::DirsLast);
 
         foreach (const QString path, files)
         {
             if (QFileInfo(_path + path).isDir())
             {
-                filesList(_path + path + QDir::separator(), _files, _level+1);
+                filesList(_path + path + QDir::separator(), _byDate, _files, _level+1);
             }
             else
             {

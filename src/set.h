@@ -24,6 +24,7 @@ private:
     UM::WALLPAPER    m_type = UM::W_MONITOR;
     UM::IMAGE        m_style = UM::IM_FILL;
     UM::MODE         m_mode = UM::MODE_RANDOM;
+    TRI_BOOL         m_recent = FALSE_BOOL;
     double           m_frequency = 1.0;
     TRI_BOOL         m_lock = FALSE_BOOL;
     bool             m_active = true;
@@ -32,6 +33,7 @@ private:
     QVector<QString> m_folders;
     Current          m_current;
     double           m_lastModif = 0;
+    bool             m_filesByDate = false;
     int              m_hotkey = 0;
     CustomLayout     m_custLayout;
     QVector<int>     m_monitors;
@@ -46,9 +48,11 @@ public:
     UM::WALLPAPER       type() const        { return m_type; }
     UM::IMAGE           style() const       { return m_style; }
     UM::MODE            mode() const        { return m_mode; }
+    TRI_BOOL            recent() const      { return m_recent; }
     double              frequency() const   { return m_frequency; }
     TRI_BOOL            lock() const        { return m_lock; }
     double              lastModif() const   { return m_lastModif; }
+    bool                filesByDate() const { return m_filesByDate; }
     int                 nbFiles() const     { return m_files.size(); }
     int                 nbFolders() const   { return m_folders.size(); }
     int                 nbFilesInFolder(const QString &_folder) const;
@@ -69,6 +73,7 @@ public:
     void setType(const UM::WALLPAPER _type) { m_type=_type; }
     void setStyle(const UM::IMAGE _style)   { m_style=_style; }
     void setMode(const UM::MODE _mode)      { m_mode=_mode; }
+    void setRecent(const TRI_BOOL _r)       { m_recent=_r; }
     void setFrequency(const double _freq)   { m_frequency=_freq; }
     void setLock(const TRI_BOOL _lock)      { m_lock=_lock; }
     void setHotkey(const int _hotkey)       { m_hotkey=_hotkey; }

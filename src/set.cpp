@@ -70,6 +70,12 @@ Set::Set(const QDomElement* _dom)
         }
     }
 
+    // added in 2.3.3
+    if (_dom->hasAttribute("recent"))
+    {
+        m_recent = static_cast<TRI_BOOL>(QVariant(_dom->attribute("recent")).toBool());
+    }
+
     // before 1.4 format
     if (_dom->hasAttribute("hotkey_mod"))
     {
@@ -138,6 +144,7 @@ void Set::writeXml(QXmlStreamWriter* _writer) const
     _writer->writeAttribute("type", QString::number(m_type));
     _writer->writeAttribute("style", QString::number(m_style));
     _writer->writeAttribute("mode", QString::number(m_mode));
+    _writer->writeAttribute("recent", QString::number(m_recent));
     _writer->writeAttribute("active", QString::number(m_active));
     _writer->writeAttribute("hotkey", QKeySequence(m_hotkey).toString());
     _writer->writeAttribute("frequency", QString::number(m_frequency));
@@ -301,7 +308,13 @@ bool Set::check()
  */
 void Set::update(const double _lastModif, const QVector<QString> &_files, const QVector<QString> _folders)
 {
+    if (m_filesByDate != m_recent)
+    {
+        m_current = Current();
+    }
+
     m_lastModif = _lastModif;
+    m_filesByDate = m_recent;
     m_files = _files;
     m_folders = _folders;
     writeCache();
@@ -329,6 +342,10 @@ void Set::readCache()
         {
             in>>m_folders;
         }
+        if (!in.atEnd())
+        {
+            in>>m_filesByDate;
+        }
 
         file.close();
     }
@@ -350,6 +367,7 @@ void Set::writeCache() const
         out<<m_current.file;
         out<<m_current.index;
         out<<m_folders;
+        out<<m_filesByDate;
 
         file.close();
     }

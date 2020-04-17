@@ -526,6 +526,7 @@ void Settings::editSets(const QList<Set*> _sets, const Set &_data)
         if (_data.type() != UM::W_NONE)                 set->setType(_data.type());
         if (_data.style() != UM::IM_NONE)               set->setStyle(_data.style());
         if (_data.mode() != UM::MODE_NONE)              set->setMode(_data.mode());
+        if (_data.recent() != UNKNOW_BOOL)              set->setRecent(_data.recent());
         if (_data.hotkey() != QHotKeyWidget::KEEP_KEY)  set->setHotkey(_data.hotkey());
         if (_data.frequency() != 0)                     set->setFrequency(_data.frequency());
         if (_data.lock() != UNKNOW_BOOL)                set->setLock(_data.lock());

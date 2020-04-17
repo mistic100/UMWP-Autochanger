@@ -357,7 +357,8 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QString &_folder, con
         return _set->fileInFolder(_folder, 0);
     }
 
-    std::uniform_int<int> unif(0, totalFiles-1);
+    std::uniform_int_distribution<int> unif(0, totalFiles-1);
+    std::exponential_distribution<double> exp(0.3);
 
     // search a random unused file
     short loop = 10; // the collisions detection will only try 10 times
@@ -373,7 +374,20 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QString &_folder, con
     {
         loop--;
 
-        int counter = unif(m_randomEngine);
+        int counter;
+
+        if (_set->recent())
+        {
+            // exponential_distribution generates real numbers between 0 and infinity
+            // we cut results at 10 and use it for the oldest file
+            // modulo is used to avoid overflows
+            counter = ((int) round(exp(m_randomEngine) / 10.0 * totalFiles)) % totalFiles;
+        }
+        else
+        {
+            counter = unif(m_randomEngine);
+        }
+
         file = _set->fileInFolder(_folder, counter);
 
         if (!_files.contains(file))

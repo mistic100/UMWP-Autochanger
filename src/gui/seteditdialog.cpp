@@ -34,17 +34,18 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->selectStyle->addItem(tr("[keep]"), UM::IM_NONE);
         ui->selectMode->addItem(tr("[keep]"),  UM::MODE_NONE);
         ui->selectLock->addItem(tr("[keep]"),  UNKNOW_BOOL);
+        ui->inputRecent->setTristate(true);
     }
 
     ui->selectType->addItem(QIcon(":/images/icons/w_monitor.png"), tr("One image for each monitor"),      UM::W_MONITOR);
     ui->selectType->addItem(QIcon(":/images/icons/w_desktop.png"), tr("One image for the whole desktop"), UM::W_DESKTOP);
 
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),               UM::IM_CENTER);
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),                 UM::IM_TILE);
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),              UM::IM_STRETCH);
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"), UM::IM_STRETCH_PROP);
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),                 UM::IM_FILL);
-    ui->selectStyle->addItem(QIcon(":/images/icons/im_custom.png"),       tr("Custom..."),            UM::IM_CUSTOM);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_center.png"),       tr("Center"),     UM::IM_CENTER);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_tile.png"),         tr("Tile"),       UM::IM_TILE);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch.png"),      tr("Stretch"),    UM::IM_STRETCH);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_stretch_prop.png"), tr("Fit"),        UM::IM_STRETCH_PROP);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_fill.png"),         tr("Fill"),       UM::IM_FILL);
+    ui->selectStyle->addItem(QIcon(":/images/icons/im_custom.png"),       tr("Custom..."),  UM::IM_CUSTOM);
 
     ui->selectMode->addItem(QIcon(":/images/icons/mode_random.png"),     tr("Random"),     UM::MODE_RANDOM);
     ui->selectMode->addItem(QIcon(":/images/icons/mode_sequential.png"), tr("Sequential"), UM::MODE_SEQUENTIAL);
@@ -77,6 +78,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->inputFreq->setValue(set->frequency());
         ui->selectLock->setCurrentData((int) set->lock());
         ui->styleConfig->setVisible(set->style() == UM::IM_CUSTOM);
+        ui->inputRecent->setChecked(set->recent());
     }
     else
     {
@@ -91,6 +93,7 @@ SetEditDialog::SetEditDialog(QWidget* _parent, Controller* _ctrl, const QList<Se
         ui->inputFreq->setSpecialValueText(tr("[keep]"));
         ui->selectLock->setCurrentData(UNKNOW_BOOL);
         ui->styleConfig->setVisible(false);
+        ui->inputRecent->setCheckState(Qt::PartiallyChecked);
     }
 
     ui->inputHotkey->setEnabled(m_settings->param(UM::CONF::use_hotkeys).toBool());
@@ -170,6 +173,7 @@ const Set SetEditDialog::result()
     UM::IMAGE style = static_cast<UM::IMAGE>(ui->selectStyle->currentData().toInt());
     UM::MODE mode = static_cast<UM::MODE>(ui->selectMode->currentData().toInt());
     TRI_BOOL lock = static_cast<TRI_BOOL>(ui->selectLock->currentData().toInt());
+    Qt::CheckState recent = ui->inputRecent->checkState();
 
     QVector<int> monitors;
     QStandardItemModel* model = (QStandardItemModel*) ui->selectMonitors->model();
@@ -197,6 +201,7 @@ const Set SetEditDialog::result()
     result.setType(type);
     result.setStyle(style);
     result.setMode(mode);
+    result.setRecent(recent == Qt::PartiallyChecked ? UNKNOW_BOOL : recent == Qt::Checked ? TRUE_BOOL : FALSE_BOOL);
     result.setHotkey(ui->inputHotkey->hotkey());
     result.setCustLayout(m_custLayout);
     result.setFrequency(ui->inputFreq->value());
