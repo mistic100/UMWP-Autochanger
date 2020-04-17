@@ -46,15 +46,15 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
 
     WallpaperGenerator::Result result;
 
-    Set* tempSet = getRandomSet();
+    Set* set = getRandomSet();
 
-    if (tempSet == NULL)
+    if (set == nullptr)
     {
         QLOG_WARN() << "No active set";
         return result;
     }
 
-    result.type = tempSet->type();
+    result.type = set->type();
 
     QVector<QString> tempFiles;
 
@@ -64,31 +64,31 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
         {
             if (m_settings->monitor(i).enabled)
             {
-                Set* set = getRandomSet(i, result.sets);
+                set = getRandomSet(i);
 
-                if (set == NULL)
+                if (set == nullptr)
                 {
                     QLOG_WARN() << "No active set on monitor" << i;
 
-                    result.sets.append(NULL);
+                    result.sets.append(nullptr);
                     tempFiles.append("");
                 }
                 else
                 {
-                    result.sets.append(getRandomSet(i, result.sets));
+                    result.sets.append(set);
                     tempFiles.append(getFile(i, &result));
                 }
             }
             else
             {
-                result.sets.append(NULL);
+                result.sets.append(nullptr);
                 tempFiles.append("");
             }
         }
     }
     else
     {
-        result.sets.append(tempSet);
+        result.sets.append(set);
         tempFiles.append(getFile(0, &result));
     }
 
@@ -106,10 +106,9 @@ WallpaperGenerator::Result WallpaperGenerator::generate()
 /**
  * @brief Get a random Set among all active sets
  * @param int _monitor -1 to search on all monitors
- * @param Set*[] _existingSets for collision detection
  * @return Set*
  */
-Set* WallpaperGenerator::getRandomSet(const int _monitor, const QVector<Set*> &_existingSets)
+Set* WallpaperGenerator::getRandomSet(const int _monitor)
 {
     QVector<Set*> sets;
 
@@ -132,7 +131,7 @@ Set* WallpaperGenerator::getRandomSet(const int _monitor, const QVector<Set*> &_
 
     if (nbSets == 0)
     {
-        return NULL;
+        return nullptr;
     }
 
     if (nbSets == 1)
@@ -158,46 +157,19 @@ Set* WallpaperGenerator::getRandomSet(const int _monitor, const QVector<Set*> &_
     // generate random number between 0 and total weight
     std::uniform_int<int> unif(0, nbWalls.last()-1);
 
-    // search a random unused set
-    short loop = 5; // the collisions detection will only try 5 times
-    Set* set = NULL;
+    // search a random set
+    int counter = unif(m_randomEngine);
 
-    // if all sets are already used, disable collisions detection
-    if (nbSets <= _existingSets.size())
+    // choose the set containing the generated number
+    for (int i=0; i<nbSets; i++)
     {
-        loop = 1;
-    }
-
-    while (loop > 0)
-    {
-        loop--;
-
-        int counter = unif(m_randomEngine);
-        set = NULL;
-
-        // choose the set containing the generated number
-        for (int i=0; i<nbSets; i++)
+        if (counter >= nbWalls.at(i) && counter < nbWalls.at(i+1))
         {
-            if (counter >= nbWalls.at(i) && counter < nbWalls.at(i+1))
-            {
-                set = sets.at(i);
-                break;
-            }
-        }
-
-        // should never get here
-        if (set == NULL)
-        {
-            return set;
-        }
-
-        if (!_existingSets.contains(set))
-        {
-            loop = 0;
+            return sets.at(i);
         }
     }
 
-    return set;
+    return nullptr;
 }
 
 /**
@@ -387,30 +359,30 @@ QString WallpaperGenerator::getRandomFile(Set* _set, const QString &_folder, con
 
     std::uniform_int<int> unif(0, totalFiles-1);
 
-   // search a random unused file
-   short loop = 10; // the collisions detection will only try 10 times
-   QString file;
+    // search a random unused file
+    short loop = 10; // the collisions detection will only try 10 times
+    QString file;
 
-   // if all files are already used, disable collisions detection
-   if (totalFiles <= _files.size())
-   {
-       loop = 1;
-   }
+    // if all files are already used, disable collisions detection
+    if (totalFiles <= _files.size())
+    {
+        loop = 1;
+    }
 
-   while (loop > 0)
-   {
-       loop--;
+    while (loop > 0)
+    {
+        loop--;
 
-       int counter = unif(m_randomEngine);
-       file = _set->fileInFolder(_folder, counter);
+        int counter = unif(m_randomEngine);
+        file = _set->fileInFolder(_folder, counter);
 
-       if (!_files.contains(file))
-       {
-           loop = 0;
-       }
-   }
+        if (!_files.contains(file))
+        {
+            loop = 0;
+        }
+    }
 
-   return file;
+    return file;
 }
 
 /**
@@ -608,7 +580,7 @@ QString WallpaperGenerator::generateCustomFile(int _idx, WallpaperGenerator::Res
     // save in temp folder
     QString filename = getTempFilename(_idx, set);
 
-    image.save(filename, 0, 100);
+    image.save(filename, nullptr, 100);
 
     return filename;
 }
@@ -770,7 +742,7 @@ QString WallpaperGenerator::adaptFileToMonitor(const QString &_file, int _idx, R
 
     QString filename = getTempFilename(_idx, set);
 
-    image.save(filename, 0, 100);
+    image.save(filename, nullptr, 100);
 
     return filename;
 }
@@ -862,11 +834,11 @@ QString WallpaperGenerator::generateFile(const QVector<QString> &_files, Result*
 
         painter2.end();
 
-        image2.save(filename, 0, 100);
+        image2.save(filename, nullptr, 100);
     }
     else
     {
-        image.save(filename, 0, 100);
+        image.save(filename, nullptr, 100);
     }
 
     return filename;
