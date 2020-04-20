@@ -63,5 +63,6 @@
         <file>images/icons/update.png</file>
         <file>images/icon-large.png</file>
         <file>images/icons/broken-image.png</file>
+        <file>images/icons/bullet_time.png</file>
     </qresource>
 </RCC>

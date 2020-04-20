@@ -263,6 +263,15 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
 
     rect = baseRect.adjusted(0, 0, -rightMargin2, 0);
     icon.paint(&painter, rect, Qt::AlignBottom|Qt::AlignRight);
+
+    if (set->recent())
+    {
+        icon = QIcon(":/images/icons/bullet_time.png");
+        rect = baseRect.adjusted(0, 0, -rightMargin2+4, -4);
+        icon.paint(&painter, rect, Qt::AlignBottom|Qt::AlignRight);
+    }
+
+
     rightMargin2+= 16 + 4;
 
 

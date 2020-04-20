@@ -1,5 +1,5 @@
-1     ICON    DISCARDABLE     "images/icon.ico"
-2     ICON    DISCARDABLE     "images/icon-uninst.ico"
+IDI_ICON1      ICON    DISCARDABLE     "images/icon.ico"
+IDI_ICON2      ICON    DISCARDABLE     "images/icon-uninst.ico"
 
 #include <windows.h>
 #include "constants.h"
