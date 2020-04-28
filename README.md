@@ -12,11 +12,7 @@ UMWP Autochanger is a little tool for multi-monitors windows users. I has two ma
 ![screenshot](http://www.strangeplanet.fr/work/umwp-autochanger/src/screenshot-main.png)
 
 ### Requirement
-* Windows 7/8 32/64 bits
-
-
-### Translation
-The application is currently available in English, French and Russian. [A translation page](https://www.transifex.com/projects/p/umwp-autochanger) has been created on Transifex, feel free to register and contribute.
+* Windows 10 32/64 bits (might be compatible with Windows 7 but not tested)
 
 
 ### Compiling

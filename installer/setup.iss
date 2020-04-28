@@ -41,7 +41,6 @@ SolidCompression=yes
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl,lang\en_GB\custom.isl"
 Name: "french"; MessagesFile: "compiler:Languages\French.isl,lang\fr_FR\custom.isl"
-Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl,lang\ru_RU\custom.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -222,6 +221,11 @@ const
   VC_2017_REDIST_X64_MIN = '{F1B0FB3A-E0EA-47A6-9383-3650655403B0}';
   VC_2017_REDIST_X86_ADD = '{7258184A-EC44-4B1A-A7D3-68D85A35BFD0}';
   VC_2017_REDIST_X64_ADD = '{9D29FC96-9EEE-4253-943F-96B3BBFDD0B6}';
+
+  VC_2019_REDIST_X86_MIN = '{2BC3BD4D-FABA-4394-93C7-9AC82A263FE2}';
+  VC_2019_REDIST_X64_MIN = '{EEA66967-97E2-4561-A999-5C22E3CDE428}';
+  VC_2019_REDIST_X86_ADD = '{0FA68574-690B-4B00-89AA-B28946231449}';
+  VC_2019_REDIST_X64_ADD = '{7D0B74C2-C3F8-4AF1-940F-CD79AB4B2DCE}';
 
 function MsiQueryProductState(szProduct: string): INSTALLSTATE; 
   external 'MsiQueryProductState{#AW}@msi.dll stdcall';
