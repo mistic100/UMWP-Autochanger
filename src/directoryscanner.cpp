@@ -37,7 +37,7 @@ bool DirectoryScanner::scan(Set *_set)
     QVector<QString> folders;
 
     filesList(_set->path(), _set->recent(), &files);
-    foldersList(_set->path(), &folders);
+    foldersList(_set->path(), _set->recent(), &folders);
 
     _set->update(lastModif, files, folders);
 
@@ -110,12 +110,15 @@ void DirectoryScanner::filesList(const QString &_path, bool _byDate, QVector<QSt
 /**
  * @brief Construct the list of folders
  * @param string _path
+ * @param bool _byDate
  * @param string[]* _folders
  */
-void DirectoryScanner::foldersList(const QString &_path, QVector<QString>* _folders)
+void DirectoryScanner::foldersList(const QString &_path, bool _byDate, QVector<QString>* _folders)
 {
     QDir dir(_path);
-    QStringList folders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::IgnoreCase);
+    QStringList folders = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, _byDate ? QDir::Time : (QDir::Name | QDir::IgnoreCase));
+
+    QLOG_DEBUG()<<folders;
 
     foreach (const QString path, folders)
     {
