@@ -1,7 +1,4 @@
-`setup.iss`: create installer .exe  
-`package.bat`: create .zip with 7-Zip
-
-Put these files in `data` directory before running `setup.iss` or `package.bat`:
+Put these files in `data` directory before running `setup.iss` :
 
 * UMWP Autochanger.exe (with a space, not an underscore)
 * redist/vcredist_x86.exe ([Visual C++ 2017 Redistributable x86](https://aka.ms/vs/15/release/vc_redist.x86.exe))

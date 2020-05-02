@@ -1,1 +1,0 @@
-"C:\Program Files\7-Zip\7z.exe" a UMWP_Autochanger_2.3.2.zip ./data/* -x!*.ico
