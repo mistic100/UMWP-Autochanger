@@ -1,9 +1,4 @@
 $(function() {
-    $.get('last-version.txt', function(data) {
-        var lastVersion = data.split('\n');
-        $('#version').text(lastVersion[0]);
-    });
-
     var $root = $('html, body');
     $('a').click(function() {
         var href = $.attr(this, 'href');

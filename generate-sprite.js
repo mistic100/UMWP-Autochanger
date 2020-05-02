@@ -8,10 +8,11 @@ require('node-sprite-generator')({
     stylesheetOptions: {
         prefix: 'umwp-'
     },
-    layout: 'packed'
+    layout: 'packed',
+	compositor: 'jimp'
 }, function(err) {
     if (err) {
-        console.error(err.message);
+        console.error(err);
     }
     else {
         console.log('Sprite generated!');
