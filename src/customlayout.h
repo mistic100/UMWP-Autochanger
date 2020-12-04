@@ -59,53 +59,52 @@ public:
             borderWidth = _dom->attribute("borderWidth").toShort();
             borderColor = _dom->attribute("borderColor").toUInt();
         }
-
-        // inner nodes (since 2.2.1)
-        QDomNode node = _dom->firstChild();
-
-        if (!node.isNull())
+        else
         {
+            // inner nodes (since 2.2.1)
+            QDomNode node = _dom->firstChild();
+
             borderEnabled = false;
             mainEnabled = false;
             shadowEnabled = false;
             variationEnabled = false;
-        }
 
-        while (!node.isNull())
-        {
-            if (node.isElement())
+            while (!node.isNull())
             {
-                 QDomElement element = node.toElement();
+                if (node.isElement())
+                {
+                     QDomElement element = node.toElement();
 
-                 if (element.tagName() == "main")
-                 {
-                     mainEnabled = true;
-                     mainRows = element.attribute("rows").toShort();
-                     mainCols = element.attribute("cols").toShort();
-                     mainPos = static_cast<UM::ALIGN>(element.attribute("pos").toInt());
-                 }
-                 else if (element.tagName() == "border")
-                 {
-                     borderEnabled = true;
-                     borderWidth = element.attribute("width").toShort();
-                     borderColor = QColor(element.attribute("color")).rgb();
-                 }
-                 else if (element.tagName() == "shadow")
-                 {
-                     shadowEnabled = true;
-                     shadowWidth = element.attribute("width").toShort();
-                     shadowColor = QColor(element.attribute("color")).rgb();
-                 }
-                 else if (element.tagName() == "variation")
-                 {
-                     variationEnabled = true;
-                     angleVariation = element.attribute("angle").toDouble();
-                     sizeVariation = element.attribute("size").toDouble();
-                     posVariation = element.attribute("pos").toDouble();
-                 }
+                     if (element.tagName() == "main")
+                     {
+                         mainEnabled = true;
+                         mainRows = element.attribute("rows").toShort();
+                         mainCols = element.attribute("cols").toShort();
+                         mainPos = static_cast<UM::ALIGN>(element.attribute("pos").toInt());
+                     }
+                     else if (element.tagName() == "border")
+                     {
+                         borderEnabled = true;
+                         borderWidth = element.attribute("width").toShort();
+                         borderColor = QColor(element.attribute("color")).rgb();
+                     }
+                     else if (element.tagName() == "shadow")
+                     {
+                         shadowEnabled = true;
+                         shadowWidth = element.attribute("width").toShort();
+                         shadowColor = QColor(element.attribute("color")).rgb();
+                     }
+                     else if (element.tagName() == "variation")
+                     {
+                         variationEnabled = true;
+                         angleVariation = element.attribute("angle").toDouble();
+                         sizeVariation = element.attribute("size").toDouble();
+                         posVariation = element.attribute("pos").toDouble();
+                     }
+                }
+
+                node = node.nextSibling();
             }
-
-            node = node.nextSibling();
         }
     }
 
