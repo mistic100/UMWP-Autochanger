@@ -92,6 +92,8 @@ void NewVersionDialog::downloadChangelog()
 {
     QString url = QString(APP_CHANGELOG_URL).arg(m_version.code);
 
+    QLOG_DEBUG() << "Download " << url;
+
     QNetworkAccessManager* manager = new QNetworkAccessManager();
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onChangelogFinished(QNetworkReply*)));
 

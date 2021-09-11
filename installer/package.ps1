@@ -1,0 +1,1 @@
+Compress-Archive -Path 'data\*' -DestinationPath 'UMWP_Autochanger_2.4.1.zip'

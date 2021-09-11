@@ -21,6 +21,8 @@ public:
 public slots:
     void run()
     {
+        QLOG_DEBUG() << "Download " << APP_VERSION_URL;
+
         QNetworkAccessManager* manager = new QNetworkAccessManager();
         connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
 

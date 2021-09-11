@@ -1,10 +1,10 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define CURRENT_YEAR "2020"
+#define CURRENT_YEAR "2021"
 #define APP_NAME "UMWP Autochanger"
-#define APP_VERSION "2.4.0"
-#define APP_VERSION_DW 2,4,0
+#define APP_VERSION "2.4.1"
+#define APP_VERSION_DW 2,4,1
 #define APP_COMPANYNAME "StrangePlanet"
 #define APP_FILEDESCRIPTION "Ultimate Monitor Wallpaper Autochanger"
 #define APP_LEGALCOPYRIGHT "Copyright (c) 2013-" CURRENT_YEAR " StrangePlanet"

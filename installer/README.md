@@ -1,4 +1,4 @@
-Put these files in `data` directory before running `setup.iss` :
+Put these files in `data` directory before running `setup.iss` and `package.ps1` :
 
 * UMWP Autochanger.exe (with a space, not an underscore)
 * redist/vcredist_x86.exe ([Visual C++ 2017 Redistributable x86](https://aka.ms/vs/15/release/vc_redist.x86.exe))

@@ -23,6 +23,10 @@ Environment::Environment()
     QDir dirHelper;
     m_isPortable = !dirHelper.exists(APP_UNINSTALLER_FILENAME);
 
+    if (m_isPortable) {
+        QLOG_DEBUG() << "Running in portable mode";
+    }
+
     // CREATE CACHE DIR
     Environment::APPDATA_DIR = getAppDataFolder();
 
