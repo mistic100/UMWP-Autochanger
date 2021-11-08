@@ -572,7 +572,7 @@ void MainWindow::openPreviewDialog()
         PreviewDialog dialog(this, m_ctrl);
         dialog.exec();
 
-        if (!isPaused) {
+        if (!isPaused && m_ctrl->paused()) {
             m_ctrl->startPause();
         }
     }

@@ -34,7 +34,7 @@ class PreviewWidget : public QWidget
     QPushButton* m_openButton;
 
 public:
-    PreviewWidget(const QString &_path, const QString &_image, int _width, bool _showEdit, bool _showOverlay, PreviewDialog* _parent) :
+    PreviewWidget(const QString &_path, const QString &_image, int _width, bool _showEdit, bool _isFolder, PreviewDialog* _parent) :
         QWidget(_parent),
         m_parent(_parent),
         m_path(_path)
@@ -45,7 +45,8 @@ public:
         layout->setSpacing(0);
 
         // resize image and add blue border
-        QPixmap image = QPixmap(_image).scaledToWidth(_width, Qt::FastTransformation);
+        QPixmap imageOrig = QPixmap(_image);
+        QPixmap image = imageOrig.scaledToWidth(_width, Qt::FastTransformation);
 
         QPen pen(Qt::SolidLine);
         pen.setWidth(borderWidth);
@@ -55,7 +56,7 @@ public:
         painter.setPen(pen);
         painter.drawRect(image.rect().adjusted(1, 1, -1, -1));
 
-        if (_showOverlay)
+        if (_isFolder)
         {
             QImage overlay = QImage(":/images/folder-overlay.png");
             painter.drawImage(image.width()-overlay.width()-5, image.height()-overlay.height()-5, overlay);
@@ -69,7 +70,6 @@ public:
         m_thumb->setIconSize(image.size());
         m_thumb->setStyleSheet("border:none;");
         m_thumb->setCursor(Qt::PointingHandCursor);
-
         layout->addWidget(m_thumb);
         connect(m_thumb, &QPushButton::clicked, _parent, [=]{ _parent->onThumbnailClicked(_path); });
 
@@ -78,7 +78,6 @@ public:
         QLabel* label = new QLabel(text);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         label->setCursor(Qt::IBeamCursor);
-
         layout->addWidget(label);
 
         // buttons
@@ -88,11 +87,15 @@ public:
         buttons->setSpacing(0);
         layout->addLayout(buttons);
 
+        // dimensions
+        QString text2 = _isFolder ? "" : QString::number(imageOrig.width()) + "x" + QString::number(imageOrig.height());
+        QLabel* label2 = new QLabel(text2);
+        buttons->addWidget(label2, Qt::AlignLeft);
+
         // delete button
         m_deleteButton = new QPushButton();
         m_deleteButton->setIcon(QIcon(":/images/icons/cross.png"));
         m_deleteButton->setFlat(true);
-
         buttons->addWidget(m_deleteButton);
         connect(m_deleteButton, SIGNAL(clicked(bool)), this, SLOT(onDelete()));
 
@@ -102,7 +105,6 @@ public:
             m_editButton = new QPushButton();
             m_editButton->setIcon(QIcon(":/images/icons/edit.png"));
             m_editButton->setFlat(true);
-
             buttons->addWidget(m_editButton);
             connect(m_editButton, &QPushButton::clicked, _parent, [=]{ _parent->onEditButtonClicked(_path); });
         }
@@ -114,7 +116,6 @@ public:
         m_openButton = new QPushButton();
         m_openButton->setIcon(QIcon(":/images/icons/folder_go.png"));
         m_openButton->setFlat(true);
-
         buttons->addWidget(m_openButton);
         connect(m_openButton, &QPushButton::clicked, _parent, [=]{ _parent->onOpenButtonClicked(_path); });
 
