@@ -18,12 +18,12 @@ public:
 
     bool perFolder = false;
 
-    bool mainEnabled = true;
+    bool mainEnabled = false;
     short mainRows = 2;
     short mainCols = 4;
     UM::ALIGN mainPos = UM::ALIGN_CENTER_CENTER;
 
-    bool borderEnabled = true;
+    bool borderEnabled = false;
     short borderWidth = 10;
     QRgb borderColor = Qt::black;
 

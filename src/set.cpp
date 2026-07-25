@@ -179,7 +179,16 @@ void Set::init()
  */
 const QString Set::fullName() const
 {
-    return m_name+" ("+QString::number(nbFiles())+")";
+    int counter;
+    if (m_style == UM::IM_CUSTOM && m_custLayout.perFolder)
+    {
+        counter = nbFolders();
+    }
+    else
+    {
+        counter = nbFiles();
+    }
+    return m_name+" ("+QString::number(counter)+")";
 }
 
 /**

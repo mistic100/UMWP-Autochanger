@@ -145,7 +145,17 @@ Set* WallpaperGenerator::getRandomSet(const int _monitor)
     {
         Set* set = sets.at(i);
 
-        int setWeight = qRound(set->nbFiles() * set->frequency());
+        int counter;
+        if (set->style() == UM::IM_CUSTOM && set->custLayout().perFolder)
+        {
+            counter = set->nbFolders();
+        }
+        else
+        {
+            counter = set->nbFiles();
+        }
+
+        int setWeight = qRound(counter * set->frequency());
         if (set->type() == UM::W_DESKTOP && set->style() != UM::IM_CUSTOM)
         {
             setWeight*= m_settings->nbEnabledMonitors();
