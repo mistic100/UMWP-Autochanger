@@ -1,4 +1,5 @@
-/build-*
+/src/build
+/src/.qtcreator
 /old
 /installer/**/*.dll
 /installer/**/*.exe

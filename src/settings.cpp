@@ -328,7 +328,6 @@ bool Settings::save(QString _filename)
     QXmlStreamWriter writer(&file);
     writer.setAutoFormattingIndent(2);
     writer.setAutoFormatting(true);
-    writer.setCodec("UTF-8");
     writer.writeStartDocument();
 
     // settings node

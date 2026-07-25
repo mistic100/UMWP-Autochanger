@@ -10,8 +10,10 @@ RC_FILE = UMWP_Autochanger.rc
 
 include(QsLog/QsLog.pri)
 
+INCLUDEPATH += $$PWD/QHotkey
+DEPENDPATH += $$PWD/QHotkey
+
 SOURCES += \
-    ext/qglobalshortcut.cpp \
     ext/qxtspanslider.cpp \
     main.cpp \
     set.cpp \
@@ -35,14 +37,15 @@ SOURCES += \
     gui/mainlist.cpp \
     gui/customlayoutdialog.cpp \
     gui/delaydialog.cpp \
-    directoryscanner.cpp
+    directoryscanner.cpp \
+    QHotkey/qhotkey.cpp \
+    QHotkey/qhotkey_win.cpp
 
 HEADERS += \
     ext/qlineedithotkey.h \
     ext/qhotkeywidget.h \
     ext/qwidgetblinker.h \
     ext/qcomboboxext.h \
-    ext/qglobalshortcut.h \
     ext/qlineeditcolor.h \
     ext/variable2dmatrix.h \
     ext/qxtspanslider.h \
@@ -78,7 +81,9 @@ HEADERS += \
     gui/previewwidget.h \
     ext/qtabwidgetext.h \
     ext/qchecklist.h \
-    directoryscanner.h
+    directoryscanner.h \
+    QHotkey/qhotkey.h \
+    QHotkey/qhotkey_p.h
 
 FORMS += \
     gui/seteditdialog.ui \

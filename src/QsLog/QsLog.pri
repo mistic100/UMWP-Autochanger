@@ -17,4 +17,6 @@ HEADERS += $$PWD/QsLogDest.h \
     $$PWD/QsLogDestFunctor.h
 
 OTHER_FILES += \
+    $$PWD/QsLogChanges.txt \
+    $$PWD/QsLogReadme.txt \
     $$PWD/LICENSE.txt

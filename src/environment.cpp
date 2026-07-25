@@ -1,9 +1,8 @@
 #include <ShlObj.h>
-#include <atlbase.h>
 #include "lib/createshortcut.h"
-
+#include "qscreen.h"
+#include <atlbase.h>
 #include <QApplication>
-#include <QDesktopWidget>
 
 #include "environment.h"
 
@@ -23,7 +22,8 @@ Environment::Environment()
     QDir dirHelper;
     m_isPortable = !dirHelper.exists(APP_UNINSTALLER_FILENAME);
 
-    if (m_isPortable) {
+    if (m_isPortable)
+    {
         QLOG_DEBUG() << "Running in portable mode";
     }
 
@@ -51,7 +51,7 @@ Environment::Environment()
         it.next();
         m_languages.append(it.fileName());
     }
-    qSort(m_languages);
+    m_languages.sort();
 
     QLOG_DEBUG() << "== LANGUAGES" << m_languages;
 
@@ -119,13 +119,13 @@ void Environment::refreshMonitors()
 {
     m_wpSizes.clear();
 
-    QDesktopWidget* desktop = QApplication::desktop();
+    const QList<QScreen*> screens = QGuiApplication::screens();
 
     int minX=0, maxX=0, minY=0, maxY=0;
 
-    for (int i = 0; i < desktop->numScreens(); i++)
+    for (int i = 0; i < screens.count(); ++i)
     {
-        const QRect wpSize = desktop->screenGeometry(i);
+        const QRect wpSize = screens.at(i)->geometry();
         m_wpSizes.insert(i, wpSize);
 
         minX = qMin(minX, wpSize.left());

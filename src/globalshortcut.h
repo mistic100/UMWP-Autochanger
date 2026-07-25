@@ -1,13 +1,12 @@
 #ifndef GLOBALSHORTCUT_H
 #define GLOBALSHORTCUT_H
 
-#include "ext/qglobalshortcut.h"
-
+#include "qhotkey.h"
 
 /**
- * @brief QGlobalShortcut with custom attributes
+ * @brief QHotkey with custom attributes
  */
-class GlobalShortcut : public QGlobalShortcut
+class GlobalShortcut : public QHotkey
 {
     Q_OBJECT
 
@@ -27,7 +26,7 @@ private:
     GlobalShortcut::Type m_type;
 
 public:
-    GlobalShortcut(QObject* _parent = nullptr) : QGlobalShortcut(_parent), m_type(NOOP) {}
+    GlobalShortcut(const QKeySequence &_shortcut, QObject* _parent = nullptr) : QHotkey(_shortcut, true, _parent), m_type(NOOP) {}
 
     void setSets(const QList<int> &_ai)             { m_sets =_ai; }
     void setType(const GlobalShortcut::Type _type)  { m_type = _type; }

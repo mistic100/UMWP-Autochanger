@@ -131,8 +131,7 @@ void MainWindow::defineHotkeys()
 
         for (QHash<int, QList<int>>::Iterator it=mergedHotkeys.begin(); it!=mergedHotkeys.end(); ++it)
         {
-            shortcut = new GlobalShortcut();
-            shortcut->setShortcut(QKeySequence(it.key()));
+            shortcut = new GlobalShortcut(QKeySequence(it.key()));
             shortcut->setType(GlobalShortcut::SETS);
             shortcut->setSets(it.value());
             connect(shortcut, SIGNAL(activated()), this, SLOT(onHotkey()));
@@ -151,8 +150,7 @@ void MainWindow::defineHotkeys()
         {
             if (it.value()>0)
             {
-                shortcut = new GlobalShortcut();
-                shortcut->setShortcut(QKeySequence(it.value()));
+                shortcut = new GlobalShortcut(QKeySequence(it.value()));
                 shortcut->setType(it.key());
                 connect(shortcut, SIGNAL(activated()), this, SLOT(onHotkey()));
                 m_shortcuts.append(shortcut);

@@ -41,7 +41,7 @@ public:
     {
         QVBoxLayout* layout = new QVBoxLayout();
         layout->setAlignment(Qt::AlignBottom);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
 
         // resize image and add blue border
@@ -83,7 +83,7 @@ public:
         // buttons
         QHBoxLayout* buttons = new QHBoxLayout();
         buttons->setAlignment(Qt::AlignRight);
-        buttons->setMargin(0);
+        buttons->setContentsMargins(0, 0, 0, 0);
         buttons->setSpacing(0);
         layout->addLayout(buttons);
 

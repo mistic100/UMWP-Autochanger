@@ -288,7 +288,7 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
         painter.drawText(rect, Qt::AlignTop|Qt::AlignRight, hotkey);
 
         QFontMetrics metric(painter.font());
-        rightMargin1+= metric.width(hotkey) + 4;
+        rightMargin1+= metric.boundingRect(hotkey).width() + 4;
     }
 
 
@@ -303,7 +303,7 @@ void ListDelegate::paint(QPainter* _painter, const QStyleOptionViewItem &_option
         painter.drawText(rect, Qt::AlignBottom|Qt::AlignRight, frequency);
 
         QFontMetrics metric(painter.font());
-        rightMargin2+= metric.width(frequency) + 4;
+        rightMargin2+= metric.boundingRect(frequency).width() + 4;
     }
 
 

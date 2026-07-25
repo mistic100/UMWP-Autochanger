@@ -89,7 +89,7 @@ QList<int> MainList::getSelectedIndexes() const
         indexes.append(item->data(Qt::UserRole).toInt());
     }
 
-    qSort(indexes);
+    std::sort(indexes.begin(), indexes.end());
     return indexes;
 }
 

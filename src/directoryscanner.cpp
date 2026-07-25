@@ -21,7 +21,7 @@ DirectoryScanner::DirectoryScanner(Controller* _ctrl) :
  */
 bool DirectoryScanner::scan(Set *_set)
 {
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
 
     double lastModif = lastChange(_set->path());
@@ -54,7 +54,7 @@ bool DirectoryScanner::scan(Set *_set)
  */
 double DirectoryScanner::lastChange(const QString &_path, const int _level)
 {
-    double date = QFileInfo(_path).lastModified().toTime_t();
+    double date = QFileInfo(_path).lastModified().toMSecsSinceEpoch();
 
     if (_level < APP_MAX_TRAVERSAL)
     {

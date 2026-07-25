@@ -117,7 +117,6 @@ void NewVersionDialog::onChangelogFinished(QNetworkReply* _reply)
 
         cssFile.open(QIODevice::ReadOnly);
         QTextStream cssContent(&cssFile);
-        cssContent.setCodec("UTF-8");
         html.append(cssContent.readAll());
         cssFile.close();
 

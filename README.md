@@ -14,7 +14,7 @@ UMWP Autochanger is a little tool for multi-monitors windows users. I has two ma
 
 ### Compiling
 You can compile the application yourself with Qt Creator.  
-You will need Qt 5.12
+You will need Qt 6.11 with MSVC2022.
 
 
 ### Branding

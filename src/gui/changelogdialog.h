@@ -40,7 +40,6 @@ public:
 
         cssFile.open(QIODevice::ReadOnly);
         QTextStream cssContent(&cssFile);
-        cssContent.setCodec("UTF-8");
         text.append(cssContent.readAll());
         cssFile.close();
 
@@ -52,7 +51,6 @@ public:
 
         file.open(QIODevice::ReadOnly);
         QTextStream content(&file);
-        content.setCodec("UTF-8");
         text.append(content.readAll());
         file.close();
 

@@ -41,7 +41,7 @@ WallpaperGenerator::~WallpaperGenerator()
  */
 WallpaperGenerator::Result WallpaperGenerator::generate()
 {
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
 
     WallpaperGenerator::Result result;
@@ -819,41 +819,7 @@ QString WallpaperGenerator::generateFile(const QVector<QString> &_files, Result*
 
     QString filename = QDir::toNativeSeparators(QDir::tempPath() + "/" + APP_WALLPAPER_FILE);
 
-    // shift the tile if desktop origin is not at wallpaper origin
-    // only for Windows 7/8
-    if (offset != QPoint(0,0) && QSysInfo::WindowsVersion < QSysInfo::WV_WINDOWS10)
-    {
-        QImage image2(rect.size(), QImage::Format_RGB32);
-        QPainter painter2(&image2);
-
-        // main
-        QRect targRect = rect.translated(-offset);
-        QRect srcRect = rect.translated(-2*offset);
-        painter2.drawImage(targRect, image, srcRect);
-
-        // left
-        targRect = QRect(rect.width()+rect.left(), 0, -rect.left(), rect.height()+rect.top());
-        srcRect = QRect(0, -rect.top(), -rect.left(), rect.height()+rect.top());
-        painter2.drawImage(targRect, image, srcRect);
-
-        // top
-        targRect = QRect(0, rect.height()+rect.top(), rect.width()+rect.left(), -rect.top());
-        srcRect = QRect(-rect.left(), 0, rect.width()+rect.left(), -rect.top());
-        painter2.drawImage(targRect, image, srcRect);
-
-        // left-top
-        targRect = QRect(rect.width()+rect.left(), rect.height()+rect.top(), -rect.left(), -rect.top());
-        srcRect = QRect(0, 0, -rect.left(), -rect.top());
-        painter2.drawImage(targRect, image, srcRect);
-
-        painter2.end();
-
-        image2.save(filename, nullptr, 100);
-    }
-    else
-    {
-        image.save(filename, nullptr, 100);
-    }
+    image.save(filename, nullptr, 100);
 
     return filename;
 }

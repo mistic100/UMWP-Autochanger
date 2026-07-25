@@ -548,14 +548,14 @@ void QxtSpanSlider::setupPainter(QPainter* painter, Qt::Orientation orientation,
 {
     QColor highlight = palette().color(QPalette::Highlight);
     QLinearGradient gradient(x1, y1, x2, y2);
-    gradient.setColorAt(0, highlight.dark(120));
-    gradient.setColorAt(1, highlight.light(108));
+    gradient.setColorAt(0, highlight.darker(120));
+    gradient.setColorAt(1, highlight.lighter(108));
     painter->setBrush(gradient);
 
     if (orientation == Qt::Horizontal)
-        painter->setPen(QPen(highlight.dark(130), 0));
+        painter->setPen(QPen(highlight.darker(130), 0));
     else
-        painter->setPen(QPen(highlight.dark(150), 0));
+        painter->setPen(QPen(highlight.darker(150), 0));
 }
 
 void QxtSpanSlider::drawSpan(QStylePainter* painter, const QRect& rect) const
@@ -571,7 +571,7 @@ void QxtSpanSlider::drawSpan(QStylePainter* painter, const QRect& rect) const
         groove.adjust(0, 0, 0, -1);
 
     // pen & brush
-    painter->setPen(QPen(palette().color(QPalette::Dark).light(110), 0));
+    painter->setPen(QPen(palette().color(QPalette::Dark).lighter(110), 0));
     if (opt.orientation == Qt::Horizontal)
         setupPainter(painter, opt.orientation, groove.center().x(), groove.top(), groove.center().x(), groove.bottom());
     else

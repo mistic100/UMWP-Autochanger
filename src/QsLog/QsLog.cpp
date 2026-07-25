@@ -33,7 +33,6 @@
 #include <QVector>
 #include <QDateTime>
 #include <QtGlobal>
-#include <cassert>
 #include <cstdlib>
 #include <stdexcept>
 
@@ -71,7 +70,7 @@ static const char* LevelToText(Level theLevel)
         case OffLevel:
             return "";
         default: {
-            assert(!"bad log level");
+            Q_ASSERT(!"bad log level");
             return InfoString;
         }
     }
@@ -101,6 +100,8 @@ public:
     QMutex logMutex;
     Level level;
     DestinationList destList;
+    bool includeTimeStamp;
+    bool includeLogLevel;
 };
 
 #ifdef QS_LOG_SEPARATE_THREAD
@@ -120,6 +121,8 @@ void LogWriterRunnable::run()
 
 LoggerImpl::LoggerImpl()
     : level(InfoLevel)
+    , includeTimeStamp(true)
+    , includeLogLevel(true)
 {
     // assume at least file + console
     destList.reserve(2);
@@ -185,7 +188,7 @@ Logger::~Logger()
 
 void Logger::addDestination(DestinationPtr destination)
 {
-    assert(destination.data());
+    Q_ASSERT(destination.data());
     d->destList.push_back(destination);
 }
 
@@ -199,16 +202,43 @@ Level Logger::loggingLevel() const
     return d->level;
 }
 
+void Logger::setIncludeTimestamp(bool e)
+{
+    d->includeTimeStamp = e;
+}
+
+bool Logger::includeTimestamp() const
+{
+    return d->includeTimeStamp;
+}
+
+void Logger::setIncludeLogLevel(bool l)
+{
+    d->includeLogLevel = l;
+}
+
+bool Logger::includeLogLevel() const
+{
+    return d->includeLogLevel;
+}
+
 //! creates the complete log message and passes it to the logger
 void Logger::Helper::writeToLog()
 {
     const char* const levelName = LevelToText(level);
-    const QString completeMessage(QString("%1 %2 %3")
-                                  .arg(levelName)
-                                  .arg(QDateTime::currentDateTime().toString(fmtDateTime))
-                                  .arg(buffer)
-                                  );
-
+    QString completeMessage;
+    Logger &logger = Logger::instance();
+    if (logger.includeLogLevel()) {
+        completeMessage.
+                append(levelName).
+                append(' ');
+    }
+    if (logger.includeTimestamp()) {
+        completeMessage.
+                append(QDateTime::currentDateTime().toString(fmtDateTime)).
+                append(' ');
+    }
+    completeMessage.append(buffer);
     Logger::instance().enqueueWrite(completeMessage, level);
 }
 
@@ -219,8 +249,7 @@ Logger::Helper::~Helper()
     }
     catch(std::exception&) {
         // you shouldn't throw exceptions from a sink
-        assert(!"exception in logger helper destructor");
-        throw;
+        Q_ASSERT(!"exception in logger helper destructor");
     }
 }
 
