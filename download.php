@@ -14,6 +14,7 @@ $versions = array(
   '2.3.2' => 'dist/UMWP_Autochanger_2.3.2_Setup.exe',
   '2.4.0' => 'dist/UMWP_Autochanger_2.4.0_Setup.exe',
   '2.4.1' => 'dist/UMWP_Autochanger_2.4.1_Setup.exe',
+  '2.5.0' => 'dist/UMWP_Autochanger_2.5.0_Setup.exe',
 );
 
 if (empty($_GET['ver']) || $_GET['ver'] == 'latest' || !isset($versions[$_GET['ver']]))
@@ -21,16 +22,6 @@ if (empty($_GET['ver']) || $_GET['ver'] == 'latest' || !isset($versions[$_GET['v
   $keys = array_keys($versions);
   $_GET['ver'] = array_pop($keys);
 }
-
-$json = json_decode(file_get_contents('downloads.json'), true);
-
-if (!isset($json[$_GET['ver']]))
-{
-  $json[$_GET['ver']] = 0;
-}
-$json[$_GET['ver']]++;
-
-file_put_contents('downloads.json', json_encode($json));
 
 $file = $versions[$_GET['ver']];
 
@@ -50,7 +41,7 @@ if (isset($_GET['serve']))
 }
 else
 {
-  header('Location: http://www.strangeplanet.fr/work/umwp-autochanger/'.$file);
+  header('Location: https://strangeplanet.fr/work/umwp-autochanger/'.$file);
 }
 
 function readlargefile($fullfile)
