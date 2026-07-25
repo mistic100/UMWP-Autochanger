@@ -63,10 +63,7 @@ void NewVersionDialog::on_buttonUpdate_clicked()
         QNetworkAccessManager* manager = new QNetworkAccessManager();
 
         QNetworkRequest request(QUrl(m_version.link));
-        if (m_version.link.startsWith("https"))
-        {
-            request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
-        }
+        request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 
         m_reply = manager->get(request);
 
@@ -98,10 +95,7 @@ void NewVersionDialog::downloadChangelog()
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onChangelogFinished(QNetworkReply*)));
 
     QNetworkRequest request = QNetworkRequest(QUrl(url));
-    if (url.startsWith("https"))
-    {
-        request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
-    }
+    request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 
     manager->get(request);
 }

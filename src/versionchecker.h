@@ -27,10 +27,7 @@ public slots:
         connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
 
         QNetworkRequest request(QUrl(APP_VERSION_URL));
-        if (QString(APP_VERSION_URL).startsWith("https"))
-        {
-            request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
-        }
+        request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 
         manager->get(request);
     }
@@ -44,10 +41,6 @@ private slots:
             version.code = _reply->readLine().trimmed();
             version.link = _reply->readLine().trimmed();
             version.hash = _reply->readLine().trimmed();
-            if (QString(APP_VERSION_URL).startsWith("https"))
-            {
-                version.link = version.link.replace("http://", "https://");
-            }
 
             if (version.code.compare(APP_VERSION) > 0)
             {
