@@ -1,17 +1,7 @@
-Put these files in `data` directory before running `setup.iss` and `package.ps1` :
-
-* UMWP Autochanger.exe (with a space, not an underscore)
-* redist/vcredist_x86.exe ([Visual C++ 2017 Redistributable x86](https://aka.ms/vs/15/release/vc_redist.x86.exe))
-* Qt5Core.dll
-* Qt5Concurrent.dll
-* Qt5Gui.dll
-* Qt5Network.dll
-* Qt5Widgets.dll
-* Qt5Xml.dll
-* libeay32.dll
-* ssleay32.dll
-* imageformats/qgif.dll
-* imageformats/qjpeg.dll
-* platforms/qwindows.dll
-
-All DLL must be the 32bits versions.
+1. Use windeployqt to gather necessary DLL
+  ```
+  windeployqt.exe src\build\Desktop_Qt_6_11_1_MSVC2022_64bit_Release\release\UMWP_Autochanger.exe --dir installer\data --release --no-translations --no-system-d3d-compiler --no-opengl-sw --compiler-runtime
+  ```
+2. Copy `UMWP Autochanger.exe` in the `data` directory (with a space, not an underscore)
+3. Copy ([Visual C++ Redistributable x64](https://aka.ms/vc14/vc_redist.x64.exe)) in the `redist` directory
+3. Run `setup.iss` and `package.ps1`

@@ -13,6 +13,7 @@
 #include "../main.h"
 #include "previewdialog.h"
 
+const QFont dimensionFont = QFont("Courier New", 8);
 const int borderWidth = 2;
 const QColor borderColor = QColor(0, 160, 255);
 
@@ -90,6 +91,7 @@ public:
         // dimensions
         QString text2 = _isFolder ? "" : QString::number(imageOrig.width()) + "x" + QString::number(imageOrig.height());
         QLabel* label2 = new QLabel(text2);
+        label2->setFont(dimensionFont);
         buttons->addWidget(label2, Qt::AlignLeft);
 
         // delete button

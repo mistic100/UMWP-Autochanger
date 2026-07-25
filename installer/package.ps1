@@ -1,1 +1,1 @@
-Compress-Archive -Path 'data\*' -DestinationPath 'UMWP_Autochanger_2.4.1.zip'
+Compress-Archive -Path 'data\*','redist\*' -Force -DestinationPath 'UMWP_Autochanger_2.5.0.zip'
