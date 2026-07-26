@@ -9,7 +9,7 @@ UMWP Autochanger is a little tool for multi-monitors windows users. I has two ma
 ![screenshot](https://strangeplanet.fr/work/umwp-autochanger/assets/img/screenshots/main.png)
 
 ### Requirement
-* Windows 10 32/64 bits (might be compatible with Windows 7 but not tested)
+Windows 10 64 bits (might be compatible with Windows 11 but not tested)
 
 
 ### Compiling
